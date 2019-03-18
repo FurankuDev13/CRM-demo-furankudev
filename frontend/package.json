@@ -1,5 +1,5 @@
 {
-  "name": "CRM-Cerberus Front",
+  "name": "crm-cerberus_front",
   "version": "1.0.0",
   "description": "Partie du CRM destinée aux clients/prospects/visiteurs",
   "main": "index.js",
