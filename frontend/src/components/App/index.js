@@ -7,12 +7,17 @@ import React from 'react';
  * Local import
  */
 import './app.scss';
+import Nav from 'src/components/Nav';
+import Footer from 'src/components/Footer';
 
 /**
  * Code
  */
 const App = () => (
-  <div id="app">Hello depuis React</div>
+  <>
+    <Nav />
+    <Footer />
+  </>
 );
 
 /**
