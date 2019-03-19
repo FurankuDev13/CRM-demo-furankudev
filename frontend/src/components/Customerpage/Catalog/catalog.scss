@@ -1,0 +1,48 @@
+.catalog {
+  display: grid;
+  justify-content: stretch;
+  padding : 2rem;
+}
+
+.card{
+  min-width: 300px;
+  margin: 0.8rem;
+}
+
+
+
+@media (min-width: 768px) {
+  .catalog {
+    width: calc(100vw - 195px);
+    grid-template-columns: auto;
+  }
+}
+
+@media (min-width: 1087px) {
+  .catalog {
+    grid-template-columns: auto auto;
+  }
+}
+
+@media (min-width: 1280px) {
+  .catalog {
+    grid-template-columns: auto auto auto;
+  }
+}
+
+@media (min-width: 1472px) {
+  .catalog {
+    grid-template-columns: auto auto auto;
+  }
+}
+
+@media (min-width: 1851px) {
+  .catalog {
+    grid-template-columns: auto auto auto auto;
+  }
+}
+
+/* 1023 1472 */
+
+
+/* 1402 */

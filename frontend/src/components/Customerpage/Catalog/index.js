@@ -8,8 +8,16 @@ import React from 'react';
  */
 import Card from './Card';
 
+import './catalog.scss';
+
 const Catalog = () => (
-  <div className="column">
+  <div className="catalog">
+    <Card />
+    <Card />
+    <Card />
+    <Card />
+    <Card />
+    <Card />
     <Card />
     <Card />
     <Card />
