@@ -8,10 +8,11 @@ import React from 'react';
  */
 const Nav = () => (
   <header>
-    <nav className="navbar is-info">
+    <nav className="navbar has-shadow is-primary is-fixed-top">
       <div className="navbar-brand">
         <a className="navbar-item" href="/">
-          <img src="https://cdn.dribbble.com/users/612987/screenshots/4309700/cerberus-logo.jpg" alt="Logo o'Wine'rs" width="28" height="20" />
+          <img src="cerberus_logo.png" alt="Logo o'Wine'rs" />
+          <h1 className="title is-3 has-text-white">o'Wine'rs</h1>
         </a>
         <div className="navbar-burger burger" data-target="navMenuExample4">
           <span></span>
@@ -21,7 +22,7 @@ const Nav = () => (
       </div>
       <div id="navMenuExample4" className="navbar-menu">
         <div className="navbar-start">
-          <a className="navbar-item is-size-4" href="#">
+          <a className="navbar-item is-size-4 is-active" href="#">
             Home
           </a>
         </div>
@@ -29,12 +30,12 @@ const Nav = () => (
           <div className="navbar-item">
             <div className="field is-grouped">
               <p className="control">
-                <a id="sign-up" className="button is-primary is-size-5">
+                <a id="sign-up" className="button is-transparent is-size-5">
                   <span>S'inscrire</span>
                 </a>
               </p>
               <p className="control">
-                <a className="button is-primary is-size-5">
+                <a className="button is-transparent is-size-5">
                   <span>Se connecter</span>
                 </a>
               </p>
