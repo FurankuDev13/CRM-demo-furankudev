@@ -40,7 +40,6 @@ const Homepage = () => (
         </section>
       </div>
     </div>
-    <br />
     <div className="tile is-ancestor">
       <div className="tile is-parent is-vertical">
         <article className="tile is-child">
