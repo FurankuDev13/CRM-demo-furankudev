@@ -12,7 +12,7 @@ import './app.scss';
  * Code
  */
 const App = () => (
-  <div id="app"></div>
+  <div id="app">Hello depuis React</div>
 );
 
 /**
