@@ -59,12 +59,12 @@ class User implements UserInterface
 
     public function getEmail(): ?string
     {
-        return $this->email;
+        return $this->getPerson()->getEmail();
     }
 
     public function setEmail(string $email): self
     {
-        $this->email = $email;
+        $this->getPerson()->setEmail($email);
 
         return $this;
     }
@@ -76,7 +76,7 @@ class User implements UserInterface
      */
     public function getUsername(): string
     {
-        return (string) $this->email;
+        return (string) $this->getPerson()->getEmail();
     }
 
     /**
@@ -84,8 +84,9 @@ class User implements UserInterface
      */
     public function getRoles(): array
     {
-        $roles = $this->roles;
+        $roles = $this->getUserRole();
         // guarantee every user at least has ROLE_USER
+        
         $roles[] = 'ROLE_USER';
 
         return array_unique($roles);
