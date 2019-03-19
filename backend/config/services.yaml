@@ -26,3 +26,15 @@ services:
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
+
+    #LISTENER DOCTRINE#
+    app.listener.doctrineevent:
+        class: App\EventListener\DoctrineEvent
+        tags:
+            - { name: doctrine.event_listener, event: prePersist, lazy: true }
+            - { name: doctrine.event_listener, event: preUpdate, lazy: true }
+
+    #LISTENER LOGIN#
+    App\EventListener\LoginEvent:
+        tags:
+            - { name: 'kernel.event_listener', event: 'security.interactive_login' }
