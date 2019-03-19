@@ -1,12 +1,30 @@
 <!DOCTYPE html>
-<html>
+<html class="has-navbar-fixed-top">
     <head>
         <meta charset="UTF-8">
-        <title>{% block title %}Welcome!{% endblock %}</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>{% block title %}Cerberus CRM - o'Wine'rs{% endblock %}</title>
+        {# FICHIER CSS Bulma #}
+        <link href="{{ asset('css/bulmaswatch.min.css') }}" rel="stylesheet">
+        {# FICHIER FONTAWESOME #}
+        <script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
+        {# Bloc pour FICHIERS CSS Custom #}
         {% block stylesheets %}{% endblock %}
     </head>
     <body>
-        {% block body %}{% endblock %}
+        <header>
+            {# NAVBAR #}
+            {% include "partial/_navigation.html.twig" %}
+            {# Bloc pour HEADER CUSTOM #}
+            {% block header %}{% endblock %} 
+        </header>
+
+        <main>
+            {# Bloc CONTENU #}
+            {% block content %}{% endblock %}
+        </main>
+
+        {# Bloc pour FICHIERS JS Custom #}
         {% block javascripts %}{% endblock %}
     </body>
 </html>
