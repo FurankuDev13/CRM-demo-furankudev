@@ -1,0 +1,58 @@
+{% extends 'base_with_sidebar.html.twig' %}
+
+{% block title %}{{ parent() }} - {{ page_title }}{% endblock %}
+
+{% block sidebar %}
+    <h2 class="subtitle has-text-primary">Tri</h2>
+    <div class="list is-primary is-hoverable">
+        <a class="list-item">
+            Alphabétique
+        </a>
+        <a class="list-item">
+            Date
+        </a>
+        <a class="list-item">
+            Référence
+        </a>
+        <a class="list-item is-active">
+            Id
+        </a>
+    </div>
+{% endblock %}
+
+{% block content %}
+        <div class="level-left">
+            <div class="level-item">
+                <h2 class="level-item subtitle has-text-info">Produits du catalogue</h2>
+            </div>
+            <button class="level-item button is-info is-small">20 résultats</button>
+        </div>
+        <table class="table is-fullwidth is-hoverable is-striped">
+            <thead>
+                <tr>
+                    <th>id</th>
+                    <th>Produit</th>
+                    <th>Référence</th>
+                    <th>Prix liste</br>(euros)</th>
+                    <th>Image</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for i in 1..20 %}
+                    <tr>
+                        <td>{{ i }}</td>
+                        <td>   
+                            <a href="{{ path('show-test') }}">Produit {{ i }}</a>
+                        </td>
+                        <td>{{ i }}{{ i }}{{ i }}{{ i }}{{ i }}{{ i }}{{ i }}{{ i }}</td>
+                        <td>12{{ i }}&nbsp;€</td>
+                        <td>
+                            <figure class="image is-24x24">
+                                <img src="https://bulma.io/images/placeholders/128x128.png">
+                            </figure>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+{% endblock %}

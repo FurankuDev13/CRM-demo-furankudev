@@ -4,7 +4,7 @@
         <nav class="navbar">
             <div class="container">
                 <div class="navbar-brand">
-                    <a class="navbar-item" href="https://bulma.io">
+                    <a class="navbar-item" href="{{ path('board')}}">
                         <img src="{{ asset('images/cerberus_logo.png') }}" alt="CerberusCRM">
                         <h1 class="title is-3 has-text-white">o'Wine'rs</h1>
                     </a>
@@ -16,10 +16,10 @@
                 </div>
                 <div id="navbarMenuHero9" class="navbar-menu">
                         <div class="navbar-end">
-                            <a class="navbar-item">
+                            <a class="navbar-item is-active" href="{{ path('board')}}">
                                 Tableau de bord
                             </a>
-                            <a class="navbar-item">
+                            <a class="navbar-item" href="{{ path('list-test')}}">
                                 Catalogue
                             </a>
                             <a class="navbar-item">
@@ -46,7 +46,7 @@
                 </div>
             </div>
         </nav>
-        <div class="modal " id="modal-login" >
+        <div class="modal" id="modal-login" >
             <div class="modal-background"></div>
                 <div class="modal-card">
                     <header class="modal-card-head">
