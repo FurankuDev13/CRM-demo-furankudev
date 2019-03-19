@@ -21,12 +21,17 @@ class User implements UserInterface
     private $id;
 
     /**
-     * @ORM\Column(type="json")
+     * @ORM\Column(type="string", length=254, unique=true)
      */
-    private $roles = [];
+    private $email;
 
     /**
-     * @ORM\Column(type="datetime")
+     * @ORM\Column(type="string", length=254)
+     */
+    private $password;
+
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
      */
     private $lastConnnection;
 
@@ -37,19 +42,20 @@ class User implements UserInterface
     private $person;
 
     /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\UserRole")
-     */
-    private $userRole;
-
-    /**
      * @ORM\OneToMany(targetEntity="App\Entity\Company", mappedBy="user")
      */
     private $companies;
+
+    /**
+     * @ORM\ManyToMany(targetEntity="App\Entity\UserRole", inversedBy="users")
+     */
+    private $userRoles;
 
     public function __construct()
     {
         $this->userRole = new ArrayCollection();
         $this->companies = new ArrayCollection();
+        $this->userRoles = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -59,12 +65,12 @@ class User implements UserInterface
 
     public function getEmail(): ?string
     {
-        return $this->getPerson()->getEmail();
+        return $this->email;
     }
 
     public function setEmail(string $email): self
     {
-        $this->getPerson()->setEmail($email);
+        $this->email = $email;
 
         return $this;
     }
@@ -76,7 +82,7 @@ class User implements UserInterface
      */
     public function getUsername(): string
     {
-        return (string) $this->getPerson()->getEmail();
+        return (string) $this->email;
     }
 
     /**
@@ -84,8 +90,7 @@ class User implements UserInterface
      */
     public function getRoles(): array
     {
-        $roles = $this->getUserRole();
-        // guarantee every user at least has ROLE_USER
+        $roles = $this->getUserRoles();
         
         $roles = [];
         foreach($roles as $role) {
@@ -107,12 +112,12 @@ class User implements UserInterface
      */
     public function getPassword(): string
     {
-        return (string) $this->getPerson()->getPassword();
+        return (string) $this->password;
     }
 
     public function setPassword(string $password): self
     {
-        $this->getPerson()->getPassword($password);
+        $this->password = $password;
 
         return $this;
     }
@@ -159,32 +164,6 @@ class User implements UserInterface
     }
 
     /**
-     * @return Collection|UserRole[]
-     */
-    public function getUserRole(): Collection
-    {
-        return $this->userRole;
-    }
-
-    public function addUserRole(UserRole $userRole): self
-    {
-        if (!$this->userRole->contains($userRole)) {
-            $this->userRole[] = $userRole;
-        }
-
-        return $this;
-    }
-
-    public function removeUserRole(UserRole $userRole): self
-    {
-        if ($this->userRole->contains($userRole)) {
-            $this->userRole->removeElement($userRole);
-        }
-
-        return $this;
-    }
-
-    /**
      * @return Collection|Company[]
      */
     public function getCompanies(): Collection
@@ -210,6 +189,32 @@ class User implements UserInterface
             if ($company->getUser() === $this) {
                 $company->setUser(null);
             }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|UserRole[]
+     */
+    public function getUserRoles(): Collection
+    {
+        return $this->userRoles;
+    }
+
+    public function addUserRole(UserRole $userRole): self
+    {
+        if (!$this->userRoles->contains($userRole)) {
+            $this->userRoles[] = $userRole;
+        }
+
+        return $this;
+    }
+
+    public function removeUserRole(UserRole $userRole): self
+    {
+        if ($this->userRoles->contains($userRole)) {
+            $this->userRoles->removeElement($userRole);
         }
 
         return $this;
