@@ -6,18 +6,20 @@ import React from 'react';
 /**
  * Local import
  */
-import './app.scss';
+import { Route } from 'react-router-dom';
 import Nav from 'src/components/Nav';
 import Homepage from 'src/components/Homepage';
+import Customerpage from 'src/components/Customerpage';
 import Footer from 'src/components/Footer';
 
 /**
  * Code
  */
 const App = () => (
-  <div className="container">
+  <div>
     <Nav />
-    <Homepage />
+    <Route exact path="/" component={Homepage} />
+    <Route path="/catalog" component={Customerpage} />
     <Footer />
   </div>
 );
