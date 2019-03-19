@@ -1,17 +1,15 @@
 {% extends 'base.html.twig' %}
 
 {% block main %}
-    <div class="container">
-        <div class="section columns">
-            <div class="column is-one-quarter">
-                {% block sidebar %}
-                {% endblock %}
-            </div>
+    <div class="section columns">
+        <div class="column is-one-quarter">
+            {% block sidebar %}
+            {% endblock %}
+        </div>
 
-            <div class="column">
-                {% block content %}
-                {% endblock %}
-            </div>
+        <div class="column">
+            {% block content %}
+            {% endblock %}
         </div>
     </div>
 {% endblock %}

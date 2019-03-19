@@ -3696,7 +3696,8 @@ button.dropdown-item {
 
 .level-left {
   align-items: center;
-  justify-content: flex-start; }
+  justify-content: flex-start;
+  margin-bottom: 1rem; }
   @media screen and (max-width: 768px) {
     .level-left + .level-right {
       margin-top: 1.5rem; } }

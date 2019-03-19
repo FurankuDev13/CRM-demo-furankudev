@@ -3,19 +3,24 @@
 {% block title %}{{ parent() }} - {{ page_title }}{% endblock %}
 
 {% block sidebar %}
-    <h2 class="subtitle has-text-primary">Tri</h2>
+    <div class="level-left">
+        <div class="level-item">
+            <h2 class="level-item subtitle has-text-info is-3">Catégories</h2>
+        </div>
+        <button class="level-item button is-info is-small is-size-4">4</button>
+    </div>
     <div class="list is-primary is-hoverable">
-        <a class="list-item">
-            Alphabétique
+        <a class="list-item has-text-primary">
+            Rouges
         </a>
-        <a class="list-item">
-            Date
+        <a class="list-item has-text-primary">
+            Blancs
         </a>
-        <a class="list-item">
-            Référence
+        <a class="list-item has-text-primary">
+            Rosés
         </a>
-        <a class="list-item is-active">
-            Id
+        <a class="list-item has-text-primary is-active">
+            Bulles
         </a>
     </div>
 {% endblock %}
@@ -23,9 +28,9 @@
 {% block content %}
         <div class="level-left">
             <div class="level-item">
-                <h2 class="level-item subtitle has-text-info">Produits du catalogue</h2>
+                <h2 class="level-item subtitle has-text-info is-3">Produits du catalogue</h2>
             </div>
-            <button class="level-item button is-info is-small">20 résultats</button>
+            <button class="level-item button is-info is-small is-size-4">20 résultats</button>
         </div>
         <table class="table is-fullwidth is-hoverable is-striped">
             <thead>
