@@ -6,11 +6,13 @@ import React from 'react';
 /**
  * Local import
  */
-import './sidebar.scss';
+import Card from './Card';
 
 const Catalog = () => (
-  <div className="column ">
-    blabla
+  <div className="column">
+    <Card />
+    <Card />
+    <Card />
   </div>
 );
 /**

@@ -6,8 +6,8 @@ import React from 'react';
 /**
  * Local import
  */
+import Catalog from './Catalog/';
 import Sidebar from './Sidebar';
-import Catalog from './Catalog';
 
 const CustomerPage = () => (
   <main className="columns is-gapless is-spaced">

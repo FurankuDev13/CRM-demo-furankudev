@@ -9,22 +9,18 @@ import React from 'react';
 import './sidebar.scss';
 
 const Sidebar = () => (
-  <aside className="menu column is-one-quarter">
-    <a className="control button is-light is-size-5 aside-button">
+  <aside className="menu column">
+    <a className="control button is-light aside-button">
       <span>Poser une question</span>
     </a>
-    <a className="control button is-light is-size-5">
+    <a className="control button is-light">
       <span>Faire une demande<br />de devis</span>
     </a>
-    <a className="control button is-light is-size-5">
+    <a className="control button is-light">
       <span>Consulter nos<br />catégories</span>
     </a>
   </aside>
 );
-/**
- * TODO :
- * - ajouter des alts appropriés lorsqu'on aura ajouté de vrais articles / catégories
- */
 
 /**
  * Export
