@@ -1,5 +1,8 @@
 {
-  "name": "react-modele",
+  "name": "crm-cerberus_front",
+  "version": "1.0.0",
+  "description": "Partie du CRM destinée aux clients/prospects/visiteurs",
+  "main": "index.js",
   "devDependencies": {
     "@babel/core": "^7.3.4",
     "@babel/plugin-proposal-class-properties": "*",
