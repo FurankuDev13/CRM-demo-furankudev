@@ -3,6 +3,11 @@
 */
 import axios from 'axios';
 
+const axiosUp = axios.create({
+  baseURL: '',
+});
+/* base URL à définir quand le back sera prêt */
+
 /**
  * local import
 */
@@ -13,6 +18,14 @@ const ajaxCatalog = store => next => (action) => {
   switch (action.type) {
     case FETCH_CATALOG:
       console.log('Je cherche ! je cherche !');
+      /* axiosUp.get('/catalog')
+        .then((response) => {
+          console.log(response);
+          store.dispatch(fetchSuccess(data)
+        })
+        .catch((error) => {
+          console.log(error);
+        }); */
       break;
 
     default:

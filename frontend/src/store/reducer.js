@@ -10,15 +10,17 @@ const initialState = {
  * Types
  */
 export const FETCH_CATALOG = 'FETCH_CATALOG';
+const FETCH_SUCCESS = 'FETCH_SUCCESS';
 
 /**
  * Reducer
  */
 const reducer = (state = initialState, action = {}) => {
   switch (action.type) {
-    case FETCH_CATALOG:
+    case FETCH_SUCCESS:
       return {
         ...state,
+        catalogList: [...action.data],
       };
 
     default:
@@ -31,6 +33,11 @@ const reducer = (state = initialState, action = {}) => {
  */
 export const fetchCatalog = () => ({
   type: FETCH_CATALOG,
+});
+
+export const fetchSuccess = data => ({
+  type: FETCH_SUCCESS,
+  data,
 });
 
 /**
