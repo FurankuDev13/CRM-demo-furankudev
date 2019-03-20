@@ -2,7 +2,8 @@
  * Initial State
  */
 const initialState = {
-  message: 'Hello',
+  isLogged: false,
+  catalogList: [],
 };
 
 /**
