@@ -23,7 +23,7 @@ security:
                     - App\Security\LoginFormAuthenticator
             logout:
                 path:   app_logout
-                target: board
+                target: board_index
             
             # activate different ways to authenticate
 

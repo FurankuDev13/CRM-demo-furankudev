@@ -2,18 +2,57 @@
 
 namespace App\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use App\Entity\Contact;
+use App\Repository\ContactRepository;
+use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
+/** 
+ *  @Route("/contact", name="contact_") 
+*/
 class ContactController extends AbstractController
 {
     /**
-     * @Route("/contact", name="contact")
+     * @Route("/index", name="index", methods={"GET"})
      */
-    public function index()
+    public function index(ContactRepository $contactRepo)
     {
+        $contacts = $contactRepo->findByIsActive(true);
+
         return $this->render('contact/index.html.twig', [
-            'controller_name' => 'ContactController',
+            'page_title' => 'Liste des contacts (professionnels)',
+            'contacts' => $contacts,
         ]);
+    }
+
+    /**
+     * @Route("/{id}/show", name="show", methods={"GET"}, requirements={"id"="\d+"})
+     */
+    public function show(Contact $contact)
+    {
+        if (!$contact) {
+            throw $this->createNotFoundException("Le contact indiqué n'existe pas"); 
+        }
+
+        return $this->render('contact/show.html.twig', [
+            'page_title' => 'Contact: ' . $contact->getPerson()->getFirstname() . ' ' . $contact->getPerson()->getLastname(),
+            'contact' => $contact,
+        ]);
+    }
+
+    /**
+     * @Route("/{id}/archive", name="archive", methods={"PATCH"}, requirements={"id"="\d+"})
+     */
+    public function archive(Contact $contact, Request $request, EntityManagerInterface $entityManager)
+    {
+        if (!$contact) {
+            throw $this->createNotFoundException("Le contact indiqué n'existe pas"); 
+        }
+
+        $referer = $request->headers->get('referer');
+
+        return $this->redirect($referer);;
     }
 }

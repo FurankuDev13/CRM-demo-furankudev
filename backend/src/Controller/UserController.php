@@ -2,18 +2,81 @@
 
 namespace App\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use App\Entity\User;
+use App\Repository\UserRepository;
+use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
+/** 
+ *  @Route("/user", name="user_") 
+*/
 class UserController extends AbstractController
 {
     /**
-     * @Route("/user", name="user")
+     * @Route("/index", name="index", methods={"GET"})
      */
-    public function index()
+    public function index(UserRepository $userRepo)
     {
+        $users = $userRepo->findByIsActive(true);
+
         return $this->render('user/index.html.twig', [
-            'controller_name' => 'UserController',
+            'page_title' => 'Liste des utilisateurs (collaborateurs)',
+            'users' => $users,
         ]);
+    }
+
+    /**
+     * @Route("/{id}/show", name="show", methods={"GET"}, requirements={"id"="\d+"})
+     */
+    public function show(User $user)
+    {
+        if (!$user) {
+            throw $this->createNotFoundException("L'utilisateur indiqué n'existe pas"); 
+        }
+
+        return $this->render('user/show.html.twig', [
+            'page_title' => 'Utilisateur: ' . $user->getPerson()->getFirstname() . ' ' . $user->getPerson()->getLastname(),
+            'user' => $user,
+        ]);
+    }
+
+    /**
+     * @Route("/new", name="new", methods={"GET", "POST"})
+     */
+    public function new(Request $request, EntityManagerInterface $entityManager)
+    {
+        return $this->render('user/new.html.twig', [
+            'page_title' => 'Ajouter un nouvel utilisateur',
+        ]);
+    }
+
+    /**
+     * @Route("/{id}/edit", name="edit", methods={"GET", "POST"}, requirements={"id"="\d+"})
+     */
+    public function edit(User $user, Request $request, EntityManagerInterface $entityManager)
+    {
+        if (!$user) {
+            throw $this->createNotFoundException("L'utilisateur indiqué n'existe pas"); 
+        }
+
+        return $this->render('user/edit.html.twig', [
+            'page_title' => "Mettre à jour l'utilisateur: " . $user->getPerson()->getFirstname() . ' ' . $user->getPerson()->getLastname(),
+        ]);
+    }
+
+    /**
+     * @Route("/{id}/archive", name="archive", methods={"PATCH"}, requirements={"id"="\d+"})
+     */
+    public function archive(User $user, Request $request, EntityManagerInterface $entityManager)
+    {
+        if (!$user) {
+            throw $this->createNotFoundException("L'utilisateur indiqué n'existe pas"); 
+        }
+
+        $referer = $request->headers->get('referer');
+
+        return $this->redirect($referer);;
     }
 }
