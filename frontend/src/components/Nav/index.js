@@ -11,7 +11,7 @@ const Nav = () => (
     <nav className="navbar has-shadow is-primary is-fixed-top">
       <div className="navbar-brand">
         <a className="navbar-item" href="/">
-          <img src="cerberus_logo.png" alt="Logo o'Wine'rs" />
+          <img src="src/cerberus_logo.png" alt="Logo o'Wine'rs" />
           <h1 className="title is-3 has-text-white">o'Wine'rs</h1>
         </a>
         <div className="navbar-burger burger" data-target="navMenuExample4">

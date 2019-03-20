@@ -1,0 +1,33 @@
+.menu > .control {
+  font-size:1.3rem;
+  margin: 2rem 0;
+  height: auto;
+}
+
+@media (max-width: 768px) {
+  .menu{
+    margin-top: 0 !important;
+    display: flex;
+    justify-content: center;
+  }
+
+   .menu > .control {
+    font-size:2.7vw;
+    margin: 2rem 1rem;
+    height: auto;
+    max-width: 13rem;
+  }
+}
+
+
+@media (min-width: 768px) {
+  .menu {
+    margin-top: 5rem !important;
+    max-width: 210px;
+  }
+
+  .menu > .control {
+    width: 13rem;
+  }
+
+}
