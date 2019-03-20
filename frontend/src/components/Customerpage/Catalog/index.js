@@ -18,17 +18,14 @@ class Catalog extends React.Component {
   }
 
   render() {
+    const { catalogList } = this.props;
     return (
       <div className="catalog">
-        <Card />
-        <Card />
-        <Card />
-        <Card />
-        <Card />
-        <Card />
-        <Card />
-        <Card />
-        <Card />
+        {catalogList.count !== 0 && catalogList.map(item => (
+          <Card
+            {...item}
+          />
+        ))}
       </div>
     );
   }
@@ -36,10 +33,15 @@ class Catalog extends React.Component {
 
 Catalog.propTypes = {
   fetchCatalog: PropTypes.func.isRequired,
+  catalogList: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.string.isRequired,
+    }).isRequired,
+  ).isRequired,
 };
 /**
  * TODO :
- * - ajouter des alts appropriés lorsqu'on aura ajouté de vrais articles / catégories
+ * - a
  */
 
 /**

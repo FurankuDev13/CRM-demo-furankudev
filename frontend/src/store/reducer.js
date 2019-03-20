@@ -1,9 +1,11 @@
+import datas from 'src/Temp-datas/data';
+
 /**
  * Initial State
  */
 const initialState = {
   isLogged: false,
-  catalogList: [],
+  catalogList: datas,
 };
 
 /**
