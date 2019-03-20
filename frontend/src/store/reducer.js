@@ -9,7 +9,7 @@ const initialState = {
 /**
  * Types
  */
-const FETCH_CATALOG = 'FETCH_CATALOG';
+export const FETCH_CATALOG = 'FETCH_CATALOG';
 
 /**
  * Reducer
@@ -31,7 +31,6 @@ const reducer = (state = initialState, action = {}) => {
  */
 export const fetchCatalog = () => ({
   type: FETCH_CATALOG,
-  message,
 });
 
 /**

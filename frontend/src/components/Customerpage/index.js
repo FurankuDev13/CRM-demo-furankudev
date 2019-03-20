@@ -6,7 +6,7 @@ import React from 'react';
 /**
  * Local import
  */
-import Catalog from './Catalog/';
+import Catalog from 'src/containers/Catalog';
 import Sidebar from './Sidebar';
 
 const CustomerPage = () => (

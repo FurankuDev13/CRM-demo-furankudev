@@ -8,7 +8,7 @@ import { createStore, compose, applyMiddleware } from 'redux';
  */
 import reducer from 'src/store/reducer';
 
-import catalogMiddleware from './middlewares/catalog';
+import catalogMiddleware from './middlewares/Catalog';
 
 // composition middleware
 // eslint-disable-next-line no-underscore-dangle
