@@ -23,6 +23,7 @@ class Catalog extends React.Component {
       <div className="catalog">
         {catalogList.count !== 0 && catalogList.map(item => (
           <Card
+            key={item.id}
             {...item}
           />
         ))}
@@ -35,7 +36,7 @@ Catalog.propTypes = {
   fetchCatalog: PropTypes.func.isRequired,
   catalogList: PropTypes.arrayOf(
     PropTypes.shape({
-      id: PropTypes.string.isRequired,
+      id: PropTypes.number.isRequired,
     }).isRequired,
   ).isRequired,
 };
