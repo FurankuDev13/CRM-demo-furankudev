@@ -36,9 +36,15 @@
                             </a>
                             <div class="navbar-item">
                                 <div class="buttons">
-                                    <a class="button is-light" data-target="modal-login">
-                                        Profil
+                                {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+                                    <a class="button is-light" href="{{ path('app_logout') }}">
+                                        Déconnexion
                                     </a>
+                                {% else %}
+                                    <a class="button is-light" href="{{ path('app_login') }}">
+                                        Connexion
+                                    </a>
+                                {% endif %}
                                 </div>
                             </div>
                         </div>
@@ -46,27 +52,19 @@
                 </div>
             </div>
         </nav>
-        <div class="modal" id="modal-login" >
-            <div class="modal-background"></div>
-                <div class="modal-card">
-                    <header class="modal-card-head">
-                        <p class="modal-card-title">Se Connecter</p>
-                        <button class="delete" aria-label="close"></button>
-                    </header>
-                    <section class="modal-card-body">
-                    Coucou
-                    </section>
-                    <footer class="modal-card-foot">
-                        <button class="button is-success">Valider</button>
-                        <button class="button">Annuler</button>
-                    </footer>
-                </div>
-            </div>
-    </div>
     <!-- Hero footer: will stick at the bottom -->
     <div class="hero-foot">
         <div class="box has-background-info">
-            <p class="title has-text-centered is-6"><span class="has-text-weight-bold">Philippe POIRON</span> - Administrateur Système</p>
+            <p class="title has-text-centered is-6"><span class="has-text-weight-bold">
+                {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+                    {{ app.user.person.firstname }} {{ app.user.person.lastname }}</span> - 
+                        {% for role in app.user.userRoles %}
+                            {{ role.title }} 
+                        {% endfor %}
+                {% else %}
+                    Philippe POIRON</span> - Administrateur Système>
+                {% endif %}
+            </p
         </div>
     </div>
 </section>
