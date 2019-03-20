@@ -8,7 +8,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class BoardController extends AbstractController
 {
     /**
-     * @Route("/", name="board")
+     * @Route("/", name="board_index")
      */
     public function index()
     {
