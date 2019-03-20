@@ -3,10 +3,21 @@
 namespace App\EventListener;
 
 use DateTime;
+use App\Entity\Person;
+use App\Entity\Company;
+use App\Entity\Product;
+use App\Entity\Request;
+use App\Entity\Category;
+use App\Entity\Discount;
+use App\Entity\UserRole;
 use Doctrine\ORM\Events;
+use App\Entity\ContactType;
+use App\Entity\RequestType;
+use App\Entity\CompanyAddress;
+use App\Entity\HandlingStatus;
+use App\Entity\CompanyAddressType;
 use Doctrine\Common\EventSubscriber;
 use Doctrine\Common\Persistence\Event\LifecycleEventArgs;
-use App\Entity\HandlingStatus;
 
 class DoctrineEvent implements EventSubscriber
 {
@@ -20,7 +31,9 @@ class DoctrineEvent implements EventSubscriber
 
     public function prePersist(LifecycleEventArgs $args) 
     {
+        $this->setIsActive($args);
         $this->setCreatedAt($args);
+        $this->setCompanyDefaultIsCustomer($args);
     }
     
     public function preUpdate(LifecycleEventArgs $args) 
@@ -28,7 +41,7 @@ class DoctrineEvent implements EventSubscriber
         $this->setUpdatedAt($args);
     }
 
-    public function setCreatedAt(LifecycleEventArgs $args)
+    private function setCreatedAt(LifecycleEventArgs $args)
     {
         $entity = $args->getObject();
         $entityManager = $args->getObjectManager();
@@ -47,11 +60,36 @@ class DoctrineEvent implements EventSubscriber
             || $entity instanceof RequestType
             || $entity instanceof UserRole
             ) {
+
             $entity->setCreatedAt(new DateTime);
         } 
     }
 
-    public function setUpdatedAt(LifecycleEventArgs $args)
+    private function setIsActive(LifecycleEventArgs $args)
+    {
+        $entity = $args->getObject();
+        $entityManager = $args->getObjectManager();
+
+        if (
+            $entity instanceof Category 
+            || $entity instanceof Company
+            || $entity instanceof CompanyAddress
+            || $entity instanceof CompanyAddressType
+            || $entity instanceof ContactType
+            || $entity instanceof Discount
+            || $entity instanceof HandlingStatus
+            || $entity instanceof Person
+            || $entity instanceof Product
+            || $entity instanceof Request
+            || $entity instanceof RequestType
+            || $entity instanceof UserRole
+            ) {
+
+            $entity->setIsActive(true);
+        } 
+    }
+
+    private function setUpdatedAt(LifecycleEventArgs $args)
     {
         $entity = $args->getObject();
         $entityManager = $args->getObjectManager();
@@ -71,6 +109,16 @@ class DoctrineEvent implements EventSubscriber
             || $entity instanceof UserRole
             ) {
             $entity->setUpdatedAt(new DateTime);
+        } 
+    }
+
+    private function setCompanyDefaultIsCustomer(LifecycleEventArgs $args)
+    {
+        $entity = $args->getObject();
+        $entityManager = $args->getObjectManager();
+
+        if ($entity instanceof Company) {
+            $entity->setIsCustomer(false);
         } 
     }
 }
