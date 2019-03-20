@@ -22,12 +22,16 @@ class AppFixtures extends Fixture
         $this->passwordEncoder = $passwordEncoder;
     }
 
-    private function addOneCategory(Category $category, ObjectManager $manager)
+    private function completeCategory(Category $category)
     {
         if (empty($this->categories) OR !in_array($category, $this->categories)) {
             $this->categories[] = $category;
-            $manager->persist($category);
+        } else {
+            foreach ($this->categories as $cat) {
+                $category = ($category == $cat) ? $cat : $category;
+            }
         }
+        return $category;
     }
 
     public function load(ObjectManager $manager)
@@ -46,7 +50,6 @@ class AppFixtures extends Fixture
             $category->setIsActive(true);
             $category->setCreatedAt($dateToSet);
             $category->setUpdatedAt($dateToSet);
-            $this->addOneCategory($category, $manager);
     
             $product->setReference($response->body[$i]->product_id);
             $product->setName($response->body[$i]->name);
@@ -60,9 +63,13 @@ class AppFixtures extends Fixture
             $product->setCreatedAt(new \DateTime());
             $product->setUpdatedAt(new \DateTime());
             
-            $product->addCategory($category);
+            //dd($this->completeCategory($category));
+            $product->addCategory($this->completeCategory($category));
 
             $manager->persist($product);
+        }
+        foreach ($this->categories as $category) {
+            $manager->persist($category);
         }
 
         $salesRole = new UserRole();
