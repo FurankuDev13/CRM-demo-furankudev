@@ -15,7 +15,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class ProductController extends AbstractController
 {
     /**
-     * @Route("/products", name="index")
+     * @Route("/products", name="index", methods={"GET", "OPTIONS"})
      */
     public function index(ProductRepository $productRepo, SerializerInterface $serializer)
     {
@@ -27,6 +27,11 @@ class ProductController extends AbstractController
             }
         ]);
 
-        return new Response($jsonObject, 200, ['Content-Type' => 'application/json']);
+        $response = new Response($jsonObject, 200);
+        
+        $response->headers->set('Content-Type', 'application/json');
+        $response->headers->set('Access-Control-Allow-Origin', '*');
+
+        return $response;
     }
 }
