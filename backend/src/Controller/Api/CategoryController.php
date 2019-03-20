@@ -2,26 +2,25 @@
 
 namespace App\Controller\Api;
 
-use App\Repository\ProductRepository;
+use App\Repository\CategoryRepository;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 /** 
- *  @Route("/api", name="api_product_") 
+ *  @Route("/api", name="api_category_") 
 */
-class ProductController extends AbstractController
+class CategoryController extends AbstractController
 {
     /**
-     * @Route("/products", name="index", methods={"GET"})
+     * @Route("/categories", name="index", methods={"GET"})
      */
-    public function index(ProductRepository $productRepo, SerializerInterface $serializer)
+    public function index(CategoryRepository $categoryRepo, SerializerInterface $serializer)
     {
-        $products = $productRepo->findByIsActive(true);
+        $categories = $categoryRepo->findByIsActive(true);
 
-        $jsonObject = $serializer->serialize($products, 'json', [
+        $jsonObject = $serializer->serialize($categories, 'json', [
             'circular_reference_handler' => function ($object) {
                 return $object->getId();
             }

@@ -8,11 +8,11 @@ use Symfony\Component\Routing\Annotation\Route;
 class BoardController extends AbstractController
 {
     /**
-     * @Route("/", name="board")
+     * @Route("/", name="board_index", methods={"GET"})
      */
     public function index()
     {
-        return $this->render('tests/index.html.twig', [
+        return $this->render('board/index.html.twig', [
             'page_title' => 'Tableau de bord',
         ]);
     }

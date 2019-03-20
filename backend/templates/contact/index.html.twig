@@ -1,0 +1,54 @@
+{% extends 'base_with_sidebar.html.twig' %}
+
+{% block title %}{{ parent() }} - {{ page_title }}{% endblock %}
+
+{% block sidebar %}
+    <div class="level-left">
+        <div class="level-item">
+            <h2 class="level-item subtitle has-text-info is-3">Sociétés</h2>
+        </div>
+        <button class="level-item button is-info is-small is-size-4">{{ companies|length }}</button>
+    </div>
+    <div class="list is-primary is-hoverable">
+        {% for company in companies %}
+            <a class="list-item has-text-primary" href="{{ path('company_show', {'id': company.id}) }}">
+            {{ company.name }}
+            </a>
+        {% endfor %}
+    </div>
+{% endblock %}
+
+{% block content %}
+        <div class="level-left">
+            <div class="level-item">
+                <h2 class="level-item subtitle has-text-info is-3">Les contacts (professionnels)</h2>
+            </div>
+            <button class="level-item button is-info is-small is-size-4">{{ contacts|length }}</button>
+        </div>
+        <table class="table is-fullwidth is-hoverable is-striped">
+            <thead>
+                <tr>
+                    <th>Nom</th>
+                    <th>Prénom</th>
+                    <th>Email</th>
+                    <th>Téléphone</th>
+                    <th>Société</th>
+                    <th>Titre</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for contact in contacts %}
+                    <tr>
+                        <td>   
+                            <a href="{{ path('contact_show', {'id': contact.id}) }}">{{ contact.person.lastname }}</a>
+                        </td>
+                        <td>{{ contact.person.firstname }}</td>
+                        <td>{{ contact.email }}</td>
+                        <td>{{ contact.person.businessPhone }}</td>
+                        <td>{{ contact.company.name }}</td>
+                        <td>{{ contact.contactType.title }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+{% endblock %}

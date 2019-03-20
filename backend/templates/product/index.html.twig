@@ -1,0 +1,56 @@
+{% extends 'base_with_sidebar.html.twig' %}
+
+{% block title %}{{ parent() }} - {{ page_title }}{% endblock %}
+
+{% block sidebar %}
+    <div class="level-left">
+        <div class="level-item">
+            <h2 class="level-item subtitle has-text-info is-3">Catégories</h2>
+        </div>
+        <button class="level-item button is-info is-small is-size-4">{{ categories|length }}</button>
+    </div>
+    <div class="list is-primary is-hoverable">
+        {% for category in categories %}
+            <a class="list-item has-text-primary" href="{{ path('category_show', {'id': category.id}) }}">
+            {{ category.name }}
+            </a>
+        {% endfor %}
+    </div>
+{% endblock %}
+
+{% block content %}
+        <div class="level-left">
+            <div class="level-item">
+                <h2 class="level-item subtitle has-text-info is-3">Les produits du catalogue</h2>
+            </div>
+            <button class="level-item button is-info is-small is-size-4">{{ products|length }}</button>
+        </div>
+        <table class="table is-fullwidth is-hoverable is-striped">
+            <thead>
+                <tr>
+                    <th>Référence</th>
+                    <th>Produit</th>
+                    <th>Description</th>
+                    <th>Prix liste</br>(euros)</th>
+                    <th>Image</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for product in products %}
+                    <tr>
+                        <td>{{ product.reference }}</td>
+                        <td>   
+                            <a href="{{ path('product_show', {'id': product.id}) }}">{{ product.name }}</a>
+                        </td>
+                        <td>{{ product.description|truncate(30) }}</td>
+                        <td>{{ product.listPrice }}&nbsp;€</td>
+                        <td>
+                            <figure class="image is-48x48">
+                                <img src="{{ product.picture ?: "https://stickeramoi.com/3777-large_default/autocollant-point-interrogation-muraux.jpg" }}">
+                            </figure>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+{% endblock %}
