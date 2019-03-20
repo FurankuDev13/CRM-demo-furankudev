@@ -19,19 +19,30 @@
                             <a class="navbar-item is-active" href="{{ path('board_index')}}">
                                 Tableau de bord
                             </a>
-                            <a class="navbar-item" href="{{ path('list-test')}}">
+                            <div class="navbar-item has-dropdown is-hoverable">
+                                <a class="navbar-link" href="{{ path('product_index')}}">
                                 Catalogue
-                            </a>
-                            <a class="navbar-item">
+                                </a>
+
+                                <div class="navbar-dropdown">
+                                    <a class="navbar-item" href="{{ path('product_index')}}">
+                                        Produits
+                                    </a>
+                                    <a class="navbar-item" href="{{ path('category_index')}}">
+                                        Catégories
+                                    </a>
+                                </div>
+                            </div>
+                            <a class="navbar-item" href="{{ path('company_index')}}">
                                 Sociétés
                             </a>
-                            <a class="navbar-item">
+                            <a class="navbar-item" href="{{ path('request_index')}}">
                                 Demandes
                             </a>
-                            <a class="navbar-item">
+                            <a class="navbar-item" href="{{ path('contact_index')}}">
                                 Contacts
                             </a>
-                            <a class="navbar-item">
+                            <a class="navbar-item" href="{{ path('user_index')}}">
                                 Utilisateurs
                             </a>
                             <div class="navbar-item">
@@ -59,10 +70,11 @@
                 {% if is_granted('IS_AUTHENTICATED_FULLY') %}
                     {{ app.user.person.firstname }} {{ app.user.person.lastname }}</span> - 
                         {% for role in app.user.userRoles %}
-                            {{ role.title }} 
+                            {{ role.title }} {% if not loop.last %}, {% endif %}
+                            
                         {% endfor %}
                 {% else %}
-                    Philippe POIRON</span> - Administrateur Système>
+                    Philippe POIRON</span> - Administrateur Système
                 {% endif %}
             </p
         </div>

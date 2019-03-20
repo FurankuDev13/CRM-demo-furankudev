@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Repository\UserRepository;
+use App\Repository\UserRoleRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -17,13 +18,15 @@ class UserController extends AbstractController
     /**
      * @Route("/index", name="index", methods={"GET"})
      */
-    public function index(UserRepository $userRepo)
+    public function index(UserRepository $userRepo, UserRoleRepository $userRoleRepo)
     {
-        $users = $userRepo->findByIsActive(true);
+        $users = $userRepo->findAll(true);
+        $userRoles = $userRoleRepo->findByIsActive(true);
 
         return $this->render('user/index.html.twig', [
             'page_title' => 'Liste des utilisateurs (collaborateurs)',
             'users' => $users,
+            'userRoles' => $userRoles,
         ]);
     }
 

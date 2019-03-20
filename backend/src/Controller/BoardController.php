@@ -12,7 +12,7 @@ class BoardController extends AbstractController
      */
     public function index()
     {
-        return $this->render('tests/index.html.twig', [
+        return $this->render('board/index.html.twig', [
             'page_title' => 'Tableau de bord',
         ]);
     }

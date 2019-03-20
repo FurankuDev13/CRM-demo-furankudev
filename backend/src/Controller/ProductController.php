@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Product;
 use App\Repository\ProductRepository;
+use App\Repository\CategoryRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -17,13 +18,15 @@ class ProductController extends AbstractController
     /**
      * @Route("/index", name="index", methods={"GET"})
      */
-    public function index(ProductRepository $productRepo)
+    public function index(ProductRepository $productRepo, CategoryRepository $categoryRepo)
     {
         $products = $productRepo->findByIsActive(true);
+        $categories = $categoryRepo->findByIsActive(true);
 
         return $this->render('product/index.html.twig', [
             'page_title' => 'Liste des produits du catalogue',
             'products' => $products,
+            'categories' => $categories,
         ]);
     }
 

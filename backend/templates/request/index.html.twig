@@ -1,20 +1,56 @@
-{% extends 'base.html.twig' %}
+{% extends 'base_with_sidebar.html.twig' %}
 
-{% block title %}Hello RequestController!{% endblock %}
+{% block title %}{{ parent() }} - {{ page_title }}{% endblock %}
 
-{% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
+{% block sidebar %}
+    <div class="level-left">
+        <div class="level-item">
+            <h2 class="level-item subtitle has-text-info is-3">Société</h2>
+        </div>
+        <button class="level-item button is-info is-small is-size-4">{{ companies|length }}</button>
+    </div>
+    <div class="list is-primary is-hoverable">
+        {% for company in companies %}
+            <a class="list-item has-text-primary" href="{{ path('company_show', {'id': company.id}) }}">
+            {{ company.name }}
+            </a>
+        {% endfor %}
+    </div>
+{% endblock %}
 
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
-
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code><a href="{{ '/var/www/html/Projet/crm/backend/src/Controller/RequestController.php'|file_link(0) }}">src/Controller/RequestController.php</a></code></li>
-        <li>Your template at <code><a href="{{ '/var/www/html/Projet/crm/backend/templates/request/index.html.twig'|file_link(0) }}">templates/request/index.html.twig</a></code></li>
-    </ul>
-</div>
+{% block content %}
+        <div class="level-left">
+            <div class="level-item">
+                <h2 class="level-item subtitle has-text-info is-3">Les demandes des requests (professionnels)</h2>
+            </div>
+            <button class="level-item button is-info is-small is-size-4">{{ requests|length }}</button>
+        </div>
+        <table class="table is-fullwidth is-hoverable is-striped">
+            <thead>
+                <tr>
+                    <th>Type</th>
+                    <th>Titre</th>
+                    <th>Description</th>
+                    <th>Date</th>
+                    <th>Contact</th>
+                    <th>Société</th>
+                    <th>Statut de traitement</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for request in requests %}
+                    <tr>
+                        <td>{{ request.requestType.title }}</td>
+                        <td>   
+                            <a href="{{ path('request_show', {'id': request.id}) }}">{{ request.title }}</a>
+                        </td>
+                        <td>{{ request.body|truncate(30) }}</td>
+                        <td>{{ request.createdAt|date("d/m/Y") }}</td>
+                        <td>{{ request.contact.person.lastname }}</td>
+                        <td>{{ request.contact.company.name }}</td>
+                        <td>{{ request.handlingStatus.title }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
 {% endblock %}

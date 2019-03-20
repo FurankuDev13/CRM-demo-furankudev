@@ -1,20 +1,42 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello CompanyController!{% endblock %}
+{% block title %}{{ parent() }} - {{ page_title }}{% endblock %}
 
-{% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
-
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
-
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code><a href="{{ '/var/www/html/Projet/crm/backend/src/Controller/CompanyController.php'|file_link(0) }}">src/Controller/CompanyController.php</a></code></li>
-        <li>Your template at <code><a href="{{ '/var/www/html/Projet/crm/backend/templates/company/index.html.twig'|file_link(0) }}">templates/company/index.html.twig</a></code></li>
-    </ul>
-</div>
+{% block main %}
+    <div class="container">
+        <div class="section level-left">
+            <div class="level-item">
+                <h2 class="level-item subtitle has-text-info is-3">Les sociétés (clients et prospects)</h2>
+            </div>
+            <button class="level-item button is-info is-small is-size-4">{{ companies|length }}</button>
+        </div>
+        <table class="table is-fullwidth is-hoverable is-striped">
+            <thead>
+                <tr>
+                    <th>Nom</th>
+                    <th>Description</th>
+                    <th>Image</th>
+                    <th>Client/Prospect</th>
+                    <th>Commercial</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for company in companies %}
+                    <tr>
+                        <td>   
+                            <a href="{{ path('company_show', {'id': company.id}) }}">{{ company.name }}</a>
+                        </td>
+                        <td>{{ company.description|truncate(30) }}</td>
+                        <td>
+                            <figure class="image is-48x48">
+                                <img src="{{ company.picture ?: "https://stickeramoi.com/3777-large_default/autocollant-point-interrogation-muraux.jpg" }}">
+                            </figure>
+                        </td>
+                        <td>{{ company.isCustomer ? 'Client' : 'Prospect' }}</td>
+                        <td>{{ company.user ? company.user.person.lastname : 'Dégun' }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
 {% endblock %}

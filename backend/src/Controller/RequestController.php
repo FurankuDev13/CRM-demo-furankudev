@@ -2,8 +2,9 @@
 
 namespace App\Controller;
 
-use App\Entity\Request as DemandRequest;
+use App\Repository\CompanyRepository;
 use App\Repository\RequestRepository;
+use App\Entity\Request as DemandRequest;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -17,13 +18,15 @@ class RequestController extends AbstractController
     /**
      * @Route("/index", name="index", methods={"GET"})
      */
-    public function index(RequestRepository $requestRepo)
+    public function index(RequestRepository $requestRepo, CompanyRepository $companyRepo)
     {
         $demandRequests = $requestRepo->findByIsActive(true);
+        $companies = $companyRepo->findByIsActive(true);
 
         return $this->render('request/index.html.twig', [
             'page_title' => 'Liste des demandes',
             'requests' => $demandRequests,
+            'companies' => $companies,
         ]);
     }
 

@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Contact;
+use App\Repository\CompanyRepository;
 use App\Repository\ContactRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -17,13 +18,15 @@ class ContactController extends AbstractController
     /**
      * @Route("/index", name="index", methods={"GET"})
      */
-    public function index(ContactRepository $contactRepo)
+    public function index(ContactRepository $contactRepo, CompanyRepository $companyRepo)
     {
-        $contacts = $contactRepo->findByIsActive(true);
+        $contacts = $contactRepo->findAll(true);
+        $companies = $companyRepo->findByIsActive(true);
 
         return $this->render('contact/index.html.twig', [
             'page_title' => 'Liste des contacts (professionnels)',
             'contacts' => $contacts,
+            'companies' => $companies,
         ]);
     }
 
