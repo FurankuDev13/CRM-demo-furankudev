@@ -12,7 +12,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 /** 
  *  @Route("/request", name="request_") 
 */
-class requestController extends AbstractController
+class RequestController extends AbstractController
 {
     /**
      * @Route("/index", name="index", methods={"GET"})
