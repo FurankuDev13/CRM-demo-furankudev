@@ -126,8 +126,8 @@ class AppFixtures extends Fixture
             $contactTypes[$contactType->getTitle()] = $contactType;
             $manager->persist($contactType);
         };
-        //dump($contactTypes);
-
+        
+        //Person
         $person1 = new Person();
         $person1->setFirstname('Franck');
         $person1->setLastname('TANUKI');
@@ -149,6 +149,7 @@ class AppFixtures extends Fixture
         $person3->setCellPhone('0102030405');
         $manager->persist($person3);
 
+        //User
         $user1 = new User();
         $user1->setPerson($person1);
         $user1->addUserRole($salesRole);
@@ -166,6 +167,7 @@ class AppFixtures extends Fixture
         $user2->setPassword($encodedPassword);
         $manager->persist($user2);
 
+        //Contact
         $contact1 = new Contact();
         $contact1->setPerson($person3);
         $contact1->setContactType($contactType);
@@ -259,8 +261,26 @@ class AppFixtures extends Fixture
             'contact' => $contact1
         ));
 
+        //Additional Person puis Users -> Commercial
+        $populator->addEntity(Person::class,10, array(
+            'firstName' => function() use ($generator) { return $generator->firstName(); },
+            'lastName' => function() use ($generator) { return $generator->unique()->lastName(); },
+            'businessPhone' => function() use ($generator) { return $generator->unique()->phoneNumber(); },
+            'cellPhone' => function() use ($generator) { return $generator->unique()->phoneNumber(); },
+        ));
+        
         $insertedEntities = $populator->execute();
-        //dump($insertedEntities['App\Entity\Request']);
+        //dd($insertedEntities['App\Entity\Person']);
+
+        foreach ($insertedEntities['App\Entity\Person'] as $person) {
+            $user = new User();
+            $user->setPerson($person);
+            $user->addUserRole($salesRole);
+            $user->setEmail($generator->email);
+            $encodedPassword = $this->passwordEncoder->encodePassword($user, 'commercial');
+            $user->setPassword($encodedPassword);
+            $manager->persist($user);
+        }
 
 
         $manager->flush();
