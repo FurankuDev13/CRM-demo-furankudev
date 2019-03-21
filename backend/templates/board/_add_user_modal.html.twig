@@ -8,8 +8,9 @@
             </header>
                 <section class="modal-card-body has-text-centered">
                 {% for salesUser in salesUsers %}
-                    <form class="" action='{{ path('user_show', {'id': salesUser.id}) }}' method="GET">
-                        {# <input class="" type="hidden" name="_method" value="PATCH"> #}
+                    <form action='{{ path('company_user_set', {'id': company.id}) }}' method="POST">
+                        <input type="hidden" name="_method" value="PATCH">
+                        <input type="hidden" name="userId" value="{{ salesUser.id }}">
                         <button type="submit" class="button">{{ salesUser.person.firstname }} {{ salesUser.person.lastname }}</button>
                     </form>
                 {% endfor %}
