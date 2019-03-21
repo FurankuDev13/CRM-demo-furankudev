@@ -2,23 +2,25 @@
  * Initial State
  */
 const initialState = {
-  message: 'Hello',
+  isLogged: false,
+  catalogList: [],
 };
 
 /**
  * Types
  */
-const DO_SOMETHING = 'DO_SOMETHING';
+export const FETCH_CATALOG = 'FETCH_CATALOG';
+const FETCH_SUCCESS = 'FETCH_SUCCESS';
 
 /**
  * Reducer
  */
 const reducer = (state = initialState, action = {}) => {
   switch (action.type) {
-    case DO_SOMETHING:
+    case FETCH_SUCCESS:
       return {
         ...state,
-        message: action.message,
+        catalogList: [...action.data],
       };
 
     default:
@@ -29,9 +31,13 @@ const reducer = (state = initialState, action = {}) => {
 /**
  * Action Creators
  */
-export const doSomething = message => ({
-  type: DO_SOMETHING,
-  message,
+export const fetchCatalog = () => ({
+  type: FETCH_CATALOG,
+});
+
+export const fetchSuccess = data => ({
+  type: FETCH_SUCCESS,
+  data,
 });
 
 /**

@@ -27,6 +27,11 @@ class ProductController extends AbstractController
             }
         ]);
 
-        return new Response($jsonObject, 200, ['Content-Type' => 'application/json']);
+        $response = new Response($jsonObject, 200);
+        
+        $response->headers->set('Content-Type', 'application/json');
+        $response->headers->set('Access-Control-Allow-Origin', '*');
+
+        return $response;
     }
 }
