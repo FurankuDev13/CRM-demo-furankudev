@@ -59,6 +59,11 @@ class User implements UserInterface
         $this->userRoles = new ArrayCollection();
     }
 
+    public function __toString()
+    {
+        return $this->getPerson()->getFirstname() . ' ' . $this->getPerson()->getLastname();
+    }
+
     public function getId(): ?int
     {
         return $this->id;

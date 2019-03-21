@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Category;
+use App\Form\CategoryType;
 use App\Repository\CategoryRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -47,8 +48,26 @@ class CategoryController extends AbstractController
      */
     public function new(Request $request, EntityManagerInterface $entityManager)
     {
+        $category = new Category();
+
+        $form = $this->createForm(CategoryType::class, $category);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager->persist($category);
+            $entityManager->flush();
+
+            $this->addFlash(
+                'success',
+                'La catégorie ' . $category->getName() . ' a bien été ajoutée !'
+            );
+            return $this->redirectToRoute('category_show', ['id' => $category->getId()]);
+        }
+
+
         return $this->render('category/new.html.twig', [
             'page_title' => 'Ajouter une nouvelle catégorie',
+            'form' => $form->createView()
         ]);
     }
 
@@ -61,8 +80,23 @@ class CategoryController extends AbstractController
             throw $this->createNotFoundException("La catégorie indiquée n'existe pas"); 
         }
 
+        $form = $this->createForm(CategoryType::class, $category);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager->flush();
+
+            $this->addFlash(
+                'success',
+                'La catégorie ' . $category->getName() . ' a bien été mise à jour !'
+            );
+            return $this->redirectToRoute('category_show', ['id' => $category->getId()]);
+        }
+
         return $this->render('category/edit.html.twig', [
             'page_title' => 'Mettre à jour la catégorie: ' . $category->getName(),
+            'category' => $category,
+            'form' => $form->createView()
         ]);
     }
 

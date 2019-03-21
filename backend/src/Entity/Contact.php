@@ -67,6 +67,11 @@ class Contact implements UserInterface
         return $this->id;
     }
 
+    public function __toString()
+    {
+        return $this->getPerson()->getFirstname() . ' ' . $this->getPerson()->getLastname();
+    }
+
     public function getEmail(): ?string
     {
         return $this->email;
