@@ -96,11 +96,11 @@ class User implements UserInterface
      */
     public function getRoles(): array
     {
-        $roles = $this->getUserRoles();
+        $userRoles = $this->getUserRoles();
         
         $roles = [];
-        foreach($roles as $role) {
-            $roles[] = $role->getCode();
+        foreach($userRoles as $userRole) {
+            $roles[] = $userRole->getCode();
         }
 
         return array_unique($roles);
