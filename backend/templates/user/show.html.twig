@@ -1,0 +1,18 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ parent() }} - {{ page_title }}{% endblock %}
+
+{% block main %}
+    <div class="container">
+        <div class="section level-left">
+            <div class="level-item">
+                <h2 class="level-item subtitle has-text-info is-3">{{ user.person.firstname }} {{ user.person.lastname }}</h2>
+            </div>
+            <button class="level-item button is-info is-small is-size-4">
+                {% for role in user.userRoles %}
+                    {{ role.title }} {% if not loop.last %}, {% endif %}
+                {% endfor %}
+            </button>
+        </div>
+    </div>
+{% endblock %}

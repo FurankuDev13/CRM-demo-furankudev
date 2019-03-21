@@ -7,18 +7,18 @@ import React from 'react';
  * Local import
  */
 
-const Catalog = () => (
+const Catalog = ({ name, listPrice, picture }) => (
   <div className="card">
     <div className="card-image">
       <figure className="image is-4by3">
-        <img src="https://bulma.io/images/placeholders/1280x960.png" alt="Placeholder" />
+        <img src={picture} alt="Placeholder" />
       </figure>
     </div>
     <div className="card-content">
       <div className="media">
         <div className="media-content">
-          <p className="title is-4">Mon article</p>
-          <p className="subtitle is-4">Prix : 32 €</p>
+          <p className="title is-4">{name}</p>
+          <p className="subtitle is-4">Prix : {listPrice} €</p>
         </div>
         <div className="media-right button is-light">
           <span>+</span>

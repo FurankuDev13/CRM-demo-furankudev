@@ -78,6 +78,11 @@ class Product
      */
     private $categories;
 
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $isAvailable;
+
     public function __construct()
     {
         $this->categories = new ArrayCollection();
@@ -242,6 +247,18 @@ class Product
         if ($this->categories->contains($category)) {
             $this->categories->removeElement($category);
         }
+
+        return $this;
+    }
+
+    public function getIsAvailable(): ?bool
+    {
+        return $this->isAvailable;
+    }
+
+    public function setIsAvailable(bool $isAvailable): self
+    {
+        $this->isAvailable = $isAvailable;
 
         return $this;
     }
