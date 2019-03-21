@@ -7,7 +7,7 @@
             <th>Date</th>
             <th>Contact</th>
             <th>Société</th>
-            <th>Statut de traitement</th>
+            <th>Commercial</th>
         </tr>
     </thead>
     <tbody>
@@ -21,7 +21,7 @@
                 <td>{{ request.createdAt|date("d/m/Y") }}</td>
                 <td>{{ request.contact.person.lastname }}</td>
                 <td>{{ request.contact.company.name }}</td>
-                <td>{{ request.handlingStatus.title }}</td>
+                <td>{{ request.contact.company.user ? request.contact.company.user.person.lastname : 'Dégun' }}</td>
             </tr>
         {% endfor %}
     </tbody>
