@@ -78,6 +78,13 @@ class ProductController extends AbstractController
             throw $this->createNotFoundException("Le produit indiqué n'existe pas"); 
         }
 
+        $product->setIsActive(!$product->getIsActive());
+        $this->addFlash(
+            'success',
+            'Le Produit ' . $product->getName() . ' a été archivé !'
+        );
+        $entityManager->flush();
+
         $referer = $request->headers->get('referer');
 
         return $this->redirect($referer);;

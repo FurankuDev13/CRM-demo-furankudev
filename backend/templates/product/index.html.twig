@@ -33,6 +33,10 @@
                     <th>Description</th>
                     <th>Prix liste</br>(euros)</th>
                     <th>Image</th>
+                    {% if is_granted('ROLE_SUPPORT') %}
+                        <th>Actions</th>
+                    {% endif %}
+
                 </tr>
             </thead>
             <tbody>
@@ -49,6 +53,15 @@
                                 <img src="{{ product.picture ?: "https://stickeramoi.com/3777-large_default/autocollant-point-interrogation-muraux.jpg" }}">
                             </figure>
                         </td>
+                        {% if is_granted('ROLE_SUPPORT') %}
+                            <td>
+                                <form class="" action='{{ path('product_archive', {'id': product.id}) }}' method="POST">
+                                    <input class="" type="hidden" name="_method" value="PATCH">
+                                    <button type="submit" class="button is-primary"><i class="fas fa-archive"></i>&nbsp;Archiver</button>
+                                </form>
+                            </td>
+                        {% endif %}
+
                     </tr>
                 {% endfor %}
             </tbody>
