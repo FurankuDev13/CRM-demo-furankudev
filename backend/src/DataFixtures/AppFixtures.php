@@ -2,15 +2,24 @@
 
 namespace App\DataFixtures;
 
+use Faker\Factory;
 use App\Entity\User;
-use Unirest\Request;
 use App\Entity\Person;
 use App\Entity\Company;
 use App\Entity\Contact;
 use App\Entity\Product;
 use App\Entity\Category;
+use App\Entity\Discount;
 use App\Entity\UserRole;
+use Unirest\Request;
 use App\Entity\ContactType;
+use App\Entity\RequestType;
+use App\Entity\CompanyAddress;
+use App\Entity\HandlingStatus;
+use Faker\ORM\Doctrine\Populator;
+use App\Entity\CompanyAddressType;
+use App\Entity\Request as ClientRequest;
+use App\DataFixtures\Faker\DataForFaker;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\Validator\Constraints\DateTime;
@@ -102,9 +111,22 @@ class AppFixtures extends Fixture
         $adminRole->setCode('ROLE_ADMIN');
         $manager->persist($adminRole);
 
-        $ownerType = new ContactType();
-        $ownerType->setTitle('Gérant');
-        $manager->persist($ownerType);
+        //Contact Type
+        $contactTypeList = [
+            'Directeur',
+            'Gérant',
+            'Responsable Commercial',
+            'Commercial',
+            'Responsable des Achats'
+        ];
+        $contactTypes = []; //collection
+        foreach ($contactTypeList as $value) {
+            $contactType = new ContactType();
+            $contactType->setTitle($value);
+            $contactTypes[$contactType->getTitle()] = $contactType;
+            $manager->persist($contactType);
+        };
+        //dump($contactTypes);
 
         $person1 = new Person();
         $person1->setFirstname('Franck');
@@ -146,12 +168,100 @@ class AppFixtures extends Fixture
 
         $contact1 = new Contact();
         $contact1->setPerson($person3);
-        $contact1->setContactType($ownerType);
+        $contact1->setContactType($contactType);
         $contact1->setCompany($company);
         $contact1->setEmail('pf_e@oclock.io');
         $encodedPassword = $this->passwordEncoder->encodePassword($contact1, 'pf');
         $contact1->setPassword($encodedPassword);
         $manager->persist($contact1);
+
+        //Discount
+        $discountList = [
+            '5%' => 5,
+            '10%' => 10,
+            '15%'=> 15,
+            '20%' => 20,
+            '25%' => 25,
+            '30%' => 30
+        ];
+        $discounts = []; //collection
+        foreach ($discountList as $key => $value) {
+            $discount = new Discount();
+            $discount->setTitle($key);
+            $discount->setRate($value);
+            $discounts[$key] = $discount;
+            $manager->persist($discount);
+        }
+
+        //Handling Status
+        $handlingStatusList = [
+            'Initiée',
+            'En cours',
+            'En attente',
+            'Terminée'
+        ];
+        $handlingStatusArray = []; //collection
+        foreach ($handlingStatusList as $value) {
+            $handlingStatus = new HandlingStatus();
+            $handlingStatus->setTitle($value);
+            $handlingStatusArray[$handlingStatus->getTitle()] = $handlingStatus;
+            $manager->persist($handlingStatus);
+        }
+
+        //Request Type
+        $requestTypeList = [
+            'Demande Simple',
+            'Devis Détaillé',
+        ];
+        $requestTypes = []; //collection
+        foreach ($requestTypeList as $value) {
+            $requestType = new RequestType();
+            $requestType->setTitle($value);
+            $requestTypes[$requestType->getTitle()] = $requestType;
+            $manager->persist($requestType);
+        }
+
+        
+        //Populator
+        $generator = Factory::create('fr_FR');
+        $generator->addProvider(new DataForFaker($generator));
+        $populator = new Populator($generator, $manager);
+
+        //Company
+        $populator->addEntity(Company::class,4, array(
+            'name' => function() use ($generator) { return $generator->unique()->company(); },
+            'description' => function() use ($generator) { return $generator->unique()->catchPhrase(); },
+            'sirenNumber' => function() use ($generator) { return $generator->unique()->randomNumber(9); },
+            'picture' => function() use ($generator) { return $generator->imageUrl(320,240); },
+            'isCustomer' => false
+        ));
+
+        //AddressType
+        $populator->addEntity(CompanyAddressType::class,4, array(
+            'title' => function() use ($generator) { return $generator->unique()->setAddressType(); },
+        ));
+
+        //CompanyAddress
+        $populator->addEntity(CompanyAddress::class, 20, array(
+            'firstAddressField' => function() use ($generator) { return $generator->streetAddress(); },
+            'secondAddressField' => null,
+            'postalCode' => function() use ($generator) { return $generator->postcode(); },
+            'city' => function() use ($generator) { return $generator->city(); },
+            'country' => 'France',            
+        ));
+
+        //Request
+        $populator->addEntity(ClientRequest::class, 20, array(
+            'title' => function() use ($generator) { return $generator->realText(50); },
+            'body' => function() use ($generator) { return $generator->realText(500); },
+            'handlingStatus' => $handlingStatusArray['Initiée'],
+            'requestType' => $requestTypes['Demande Simple'],
+            'contact' => $contact1
+        ));
+
+        $insertedEntities = $populator->execute();
+        //dump($insertedEntities['App\Entity\Request']);
+
 
         $manager->flush();
         
