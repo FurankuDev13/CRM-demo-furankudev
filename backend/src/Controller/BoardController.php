@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 
+use App\Repository\UserRepository;
 use App\Repository\CompanyRepository;
 use App\Repository\RequestRepository;
 use Symfony\Component\HttpFoundation\Request;
@@ -14,13 +15,16 @@ class BoardController extends AbstractController
     /**
      * @Route("/", name="board_index", methods={"GET"})
      */
-    public function index(Request $request, CompanyRepository $companyRepo, RequestRepository $requestRepo)
+    public function index(Request $request, CompanyRepository $companyRepo, RequestRepository $requestRepo, UserRepository $userRepo)
     {
         $index = $request->query->get('index', 1);
 
         $orphanCompanies = $companyRepo->findOrphans();
         $companiesWithUnhandledRequests = $companyRepo->findByUnhandledRequests();
         $unhandledRequests = $requestRepo->findUnhandled();
+        $salesUsers = $userRepo->findSalesRoles();
+
+        dump($companiesWithUnhandledRequests );
 
         return $this->render('board/index.html.twig', [
             'page_title' => 'Tableau de bord',
@@ -28,6 +32,7 @@ class BoardController extends AbstractController
             'orphanCompanies' => $orphanCompanies,
             'companiesWithUnhandledRequests' => $companiesWithUnhandledRequests,
             'unhandledRequests' => $unhandledRequests,
+            'salesUsers' => $salesUsers,
         ]);
     }
 

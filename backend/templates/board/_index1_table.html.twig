@@ -24,10 +24,10 @@
                 </td>
                 <td>{{ company.isCustomer ? 'Client' : 'Prospect' }}</td>
                 <td>
-                    {% if is_granted('ROLE_SALESMGR') %}
-                        En attente
+                    {% if is_granted('ROLE_SALES') %}
+                        {% include 'board/_add_user_modal.html.twig' %}
                     {% else %}
-                         {% include 'board/_add_user_modal.html.twig' %}
+                        En attente
                     {% endif %}
                 </td>
             </tr>
