@@ -54,7 +54,12 @@ class User implements UserInterface
 
     public function __construct()
     {
-        $this->userRole = new ArrayCollection();
+        $this->companies = new ArrayCollection();
+        $this->userRoles = new ArrayCollection();
+    }
+
+    public function fakerConstruct()
+    {
         $this->companies = new ArrayCollection();
         $this->userRoles = new ArrayCollection();
     }
