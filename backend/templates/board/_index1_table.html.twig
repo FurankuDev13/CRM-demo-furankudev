@@ -1,0 +1,39 @@
+<table class="table is-fullwidth is-hoverable is-striped">
+    <thead>
+        <tr>
+            <th>Date d'inscription</th>
+            <th>Nom</th>
+            <th>Description</th>
+            <th>Image</th>
+            <th>Client/Prospect</th>
+            <th>Commercial</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for company in orphanCompanies %}
+            <tr>
+                <td>{{ company.createdAt|date("d/m/Y") }}</td>
+                <td>   
+                    <a href="{{ path('company_show', {'id': company.id}) }}">{{ company.name }}</a>
+                </td>
+                <td>{{ company.description|truncate(30) }}</td>
+                <td>
+                    <figure class="image is-48x48">
+                        <img src="{{ company.picture ?: "https://stickeramoi.com/3777-large_default/autocollant-point-interrogation-muraux.jpg" }}">
+                    </figure>
+                </td>
+                <td>{{ company.isCustomer ? 'Client' : 'Prospect' }}</td>
+                <td>
+                    {% if is_granted('ROLE_SALESMGR') %}
+                        En attente
+                    {% else %}
+                         {% include 'board/_add_user_modal.html.twig' %}
+                    {% endif %}
+                </td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+
+
