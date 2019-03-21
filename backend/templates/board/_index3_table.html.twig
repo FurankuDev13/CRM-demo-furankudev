@@ -1,0 +1,28 @@
+<table class="table is-fullwidth is-hoverable is-striped">
+    <thead>
+        <tr>
+            <th>Type</th>
+            <th>Titre</th>
+            <th>Description</th>
+            <th>Date</th>
+            <th>Contact</th>
+            <th>Société</th>
+            <th>Statut de traitement</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for request in unhandledRequests %}
+            <tr>
+                <td>{{ request.requestType.title }}</td>
+                <td>   
+                    <a href="{{ path('request_show', {'id': request.id}) }}">{{ request.title }}</a>
+                </td>
+                <td>{{ request.body|truncate(30) }}</td>
+                <td>{{ request.createdAt|date("d/m/Y") }}</td>
+                <td>{{ request.contact.person.lastname }}</td>
+                <td>{{ request.contact.company.name }}</td>
+                <td>{{ request.handlingStatus.title }}</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>

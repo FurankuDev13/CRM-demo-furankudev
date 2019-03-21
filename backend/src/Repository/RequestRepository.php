@@ -19,6 +19,19 @@ class RequestRepository extends ServiceEntityRepository
         parent::__construct($registry, Request::class);
     }
 
+    public function findUnhandled()
+    {
+        return $this->createQueryBuilder('r')
+            ->join('r.handlingStatus', 'h')
+            ->addSelect('h')
+            ->andWhere('h.title LIKE :val')
+            ->setParameter('val', 'Initiée')
+            ->orderBy('r.createdAt', 'ASC')
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
     // /**
     //  * @return Request[] Returns an array of Request objects
     //  */
