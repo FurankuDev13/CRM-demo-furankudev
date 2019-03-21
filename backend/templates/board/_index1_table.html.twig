@@ -1,6 +1,7 @@
 <table class="table is-fullwidth is-hoverable is-striped">
     <thead>
         <tr>
+            <th>Date d'inscription</th>
             <th>Nom</th>
             <th>Description</th>
             <th>Image</th>
@@ -11,6 +12,7 @@
     <tbody>
         {% for company in orphanCompanies %}
             <tr>
+                <td>{{ company.createdAt|date("d/m/Y") }}</td>
                 <td>   
                     <a href="{{ path('company_show', {'id': company.id}) }}">{{ company.name }}</a>
                 </td>
@@ -21,8 +23,17 @@
                     </figure>
                 </td>
                 <td>{{ company.isCustomer ? 'Client' : 'Prospect' }}</td>
-                <td>{{ company.user ? company.user.person.lastname : 'Dégun' }}</td>
+                <td>
+                    {% if is_granted('ROLE_SALESMGR') %}
+                        En attente
+                    {% else %}
+                         {% include 'board/_add_user_modal.html.twig' %}
+                    {% endif %}
+                </td>
             </tr>
         {% endfor %}
     </tbody>
 </table>
+
+
+
