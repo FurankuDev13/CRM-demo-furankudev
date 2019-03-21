@@ -82,10 +82,12 @@ class AppFixtures extends Fixture
             $manager->persist($category);
         }
 
+        //Company
         $company = new Company();
         $company->setName('Tartenpion SAS');
         $manager->persist($company);
 
+        //User Role
         $salesRole = new UserRole();
         $salesRole->setTitle('Commercial');
         $salesRole->setCode('ROLE_SALES');
@@ -102,7 +104,7 @@ class AppFixtures extends Fixture
         $manager->persist($supportRole);
 
         $managerRole = new UserRole();
-        $managerRole->setTitle('Responsable Commercial');
+        $managerRole->setTitle('Responsable');
         $managerRole->setCode('ROLE_MANAGER');
         $manager->persist($managerRole);
 

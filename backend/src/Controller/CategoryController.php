@@ -109,6 +109,13 @@ class CategoryController extends AbstractController
             throw $this->createNotFoundException("La catégorie indiquée n'existe pas"); 
         }
 
+        $category->setIsActive(!$category->getIsActive());
+        $this->addFlash(
+            'success',
+            'La catégorie ' . $category->getName() . ' a été archivée !'
+        );
+        $entityManager->flush();
+
         $referer = $request->headers->get('referer');
 
         return $this->redirect($referer);;
