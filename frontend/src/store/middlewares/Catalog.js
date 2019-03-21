@@ -3,32 +3,25 @@
 */
 import axios from 'axios';
 
-/* base URL à définir quand le back sera prêt */
-
 /**
  * local import
 */
-import { FETCH_CATALOG } from 'src/store/reducer';
+import { FETCH_CATALOG, fetchSuccess } from 'src/store/reducer';
 
+/* TODO : redéfinir l'URL du backend en mode production juste avant la fin */
 
 const axiosUp = axios.create({
-  baseURL: 'http://localhost:8001',
+  baseURL: 'http://localhost/Apotheose/crm/backend/public/',
 });
 
 // Middleware : ajax : gestion des lettres
 const ajaxCatalog = store => next => (action) => {
   switch (action.type) {
     case FETCH_CATALOG:
-      console.log('Je cherche ! je cherche !');
-      axiosUp.get('/api/products', {
-        headers: {
-          'Access-Control-Allow-Origin': '*',
-          'Access-Control-Allow-Headers': '*',
-        },
-      })
+      axiosUp.get('/api/products')
         .then((response) => {
-          console.log(response);
-          /* store.dispatch(fetchSuccess(data) */
+          const { data } = response;
+          store.dispatch(fetchSuccess(data));
         })
         .catch((error) => {
           console.log(error);

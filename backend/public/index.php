@@ -23,5 +23,13 @@ if ($trustedHosts = $_SERVER['TRUSTED_HOSTS'] ?? $_ENV['TRUSTED_HOSTS'] ?? false
 $kernel = new Kernel($_SERVER['APP_ENV'], (bool) $_SERVER['APP_DEBUG']);
 $request = Request::createFromGlobals();
 $response = $kernel->handle($request);
+
+$responseHeaders = $response->headers;
+
+$responseHeaders->set('Access-Control-Allow-Headers', '*');
+$responseHeaders->set('Access-Control-Allow-Origin', '*');
+$responseHeaders->set('Access-Control-Allow-Methods', 'POST, GET, PUT, DELETE, PATCH, OPTIONS');
+
+
 $response->send();
 $kernel->terminate($request, $response);
