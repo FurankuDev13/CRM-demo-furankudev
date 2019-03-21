@@ -34,6 +34,7 @@ class DoctrineEvent implements EventSubscriber
         $this->setIsActive($args);
         $this->setCreatedAt($args);
         $this->setCompanyDefaultIsCustomer($args);
+        $this->setProductDefaultIsAvailable($args);
     }
     
     public function preUpdate(LifecycleEventArgs $args) 
@@ -119,6 +120,16 @@ class DoctrineEvent implements EventSubscriber
 
         if ($entity instanceof Company) {
             $entity->setIsCustomer(false);
+        } 
+    }
+
+    private function setProductDefaultIsAvailable(LifecycleEventArgs $args)
+    {
+        $entity = $args->getObject();
+        $entityManager = $args->getObjectManager();
+
+        if ($entity instanceof Product) {
+            $entity->setIsAvailable(false);
         } 
     }
 }
