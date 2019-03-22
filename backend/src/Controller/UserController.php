@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Repository\UserRepository;
+use App\Repository\CompanyRepository;
 use App\Repository\UserRoleRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -72,10 +73,19 @@ class UserController extends AbstractController
     /**
      * @Route("/{id}/archive", name="archive", methods={"PATCH"}, requirements={"id"="\d+"})
      */
-    public function archive(User $user, Request $request, EntityManagerInterface $entityManager)
+    public function archive(User $user, Request $request, EntityManagerInterface $entityManager, CompanyRepository $companyRepo)
     {
         if (!$user) {
             throw $this->createNotFoundException("L'utilisateur indiqué n'existe pas"); 
+        }
+
+        //On retire l'utilisateur des Sociétés auxquelles il a été assigné
+        // NE FONCTIONNE PAS === A CORRIGER
+        $userNull = new User();
+        $companies = $companyRepo->findByUser($user->getId());
+        foreach ($companies as $company) {
+            $company->setUser($userNull);
+            $entityManager->persist($company);
         }
 
         $user->getPerson()->setIsActive(!$user->getPerson()->getIsActive());
@@ -83,6 +93,10 @@ class UserController extends AbstractController
             'success',
             'L\'Utilisateur ' . $user->getPerson()->getFirstname() . " " . $user->getPerson()->getLastname() . ' a été archivé !'
         );
+
+
+
+
         $entityManager->flush();
 
 

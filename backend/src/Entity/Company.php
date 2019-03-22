@@ -279,7 +279,7 @@ class Company
             }
         }
 
-        if ($result) {
+        if ($result OR $user == null) {
             $this->user = $user;
         }
         
