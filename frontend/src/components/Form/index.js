@@ -7,18 +7,19 @@ import PropTypes from 'prop-types';
 /**
  * local import
  */
-import Input from './Input';
+import Input from 'src/containers/Input';
 
 /**
  * Code
  */
 
-const Form = ({ tabl }) => (
+const Form = ({ tabl, formOrigin }) => (
   <div>
     {tabl.map(inputEntity => (
       <Input
         key={inputEntity.name}
         {...inputEntity}
+        formOrigin={formOrigin}
       />
     ))}
 
@@ -37,6 +38,7 @@ const Form = ({ tabl }) => (
 
 Form.propTypes = {
   tabl: PropTypes.array.isRequired,
+  formOrigin: PropTypes.string.isRequired,
 };
 
 /**

@@ -21,7 +21,7 @@ import NotFound from 'src/components/NotFound';
  */
 const App = ({ isLogged }) => (
   <div>
-    <Nav 
+    <Nav
       isLogged={isLogged}
     />
     <Switch>
@@ -40,7 +40,9 @@ const App = ({ isLogged }) => (
         path="/login"
         render={() => (
           !isLogged ? (
-            <Loginpage />
+            <Loginpage
+              formOrigin="login"
+            />
           ) : (
             <Redirect to="/catalog" />
           )

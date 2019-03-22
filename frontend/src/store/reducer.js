@@ -32,6 +32,7 @@ const initialState = {
  */
 export const FETCH_CATALOG = 'FETCH_CATALOG';
 const FETCH_SUCCESS = 'FETCH_SUCCESS';
+const INPUT_CHANGE = 'INPUT_CHANGE';
 
 /**
  * Reducer
@@ -42,6 +43,17 @@ const reducer = (state = initialState, action = {}) => {
       return {
         ...state,
         catalogList: [...action.data],
+      };
+    case INPUT_CHANGE:
+      return {
+        ...state,
+        fields: {
+          ...state.fields,
+          [action.fieldInfos.formOrigin]: {
+            ...state.fields[action.fieldInfos.formOrigin],
+            [action.fieldInfos.name]: action.fieldInfos.value,
+          },
+        },
       };
 
     default:
@@ -59,6 +71,11 @@ export const fetchCatalog = () => ({
 export const fetchSuccess = data => ({
   type: FETCH_SUCCESS,
   data,
+});
+
+export const inputChange = fieldInfos => ({
+  type: INPUT_CHANGE,
+  fieldInfos,
 });
 
 /**

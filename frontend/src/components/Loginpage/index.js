@@ -13,7 +13,7 @@ import PropTypes from 'prop-types';
  * Code
  */
 
-const Login = ({ loginFields }) => {
+const Login = ({ loginFields, formOrigin }) => {
   const tabl = [
     {
       name: 'email',
@@ -28,6 +28,7 @@ const Login = ({ loginFields }) => {
     <div>
       <Form
         tabl={tabl}
+        formOrigin={formOrigin}
       />
     </div>
   );
@@ -38,6 +39,7 @@ Login.propTypes = {
     email: PropTypes.string.isRequired,
     password: PropTypes.string.isRequired,
   }).isRequired,
+  formOrigin: PropTypes.string.isRequired,
 };
 
 /**
