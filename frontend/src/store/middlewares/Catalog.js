@@ -11,7 +11,7 @@ import { FETCH_CATALOG, fetchSuccess } from 'src/store/reducer';
 /* TODO : redéfinir l'URL du backend en mode production juste avant la fin */
 
 const axiosUp = axios.create({
-  baseURL: 'http://localhost/Apotheose/crm/backend/public/',
+  baseURL: 'http://philippe-poiron.vpnuser.oclock.io/Apotheose/crm/backend/public/',
 });
 
 // Middleware : ajax : gestion des lettres

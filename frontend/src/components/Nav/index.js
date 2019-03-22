@@ -2,6 +2,7 @@
  * NPM import
  */
 import React from 'react';
+import PropTypes from 'prop-types';
 
 /**
  * Code
@@ -57,6 +58,11 @@ const Nav = ({ isLogged }) => (
     </nav>
   </header>
 );
+
+Nav.propTypes = {
+  isLogged: PropTypes.bool.isRequired,
+};
+
 /**
  * TODO :
  * - configurer le burger avec du JS pour faire apparaitre

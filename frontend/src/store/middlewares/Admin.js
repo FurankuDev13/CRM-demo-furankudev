@@ -11,7 +11,7 @@ import { SEND_LOGIN_REQUEST } from 'src/store/reducer';
 /* TODO : redéfinir l'URL du backend en mode production juste avant la fin */
 
 const axiosUp = axios.create({
-  baseURL: 'http://localhost/Apotheose/crm/backend/public/',
+  baseURL: 'http://127.0.0.1:8001',
 });
 
 // Middleware : ajax : gestion des lettres
@@ -20,14 +20,17 @@ const ajaxAdmin = store => next => (action) => {
     case SEND_LOGIN_REQUEST: {
       const email = store.getState().fields.login.email;
       const password = store.getState().fields.login.password;
-      const login = {
+      const loginDatas = {
         email,
         password,
       };
-      console.log(login);
-      axiosUp.post('/api/login')
+      const stringifiedLoginDatas = JSON.stringify(loginDatas);
+      axiosUp.post('/api/login', stringifiedLoginDatas)
         .then((response) => {
           console.log(response.data);
+          /*
+          
+          */
         })
         .catch((error) => {
           console.log(error);
