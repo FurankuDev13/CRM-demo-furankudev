@@ -6,11 +6,7 @@ import React from 'react';
 /**
  * Local import
  */
-<<<<<<< HEAD
-import { Route, Redirect } from 'react-router-dom';
-=======
 import { Route, Redirect, Switch } from 'react-router-dom';
->>>>>>> structure
 import Nav from 'src/components/Nav';
 import Homepage from 'src/components/Homepage';
 import Customerpage from 'src/components/Customerpage';
@@ -23,21 +19,6 @@ import NotFound from 'src/components/NotFound';
 /**
  * Code
  */
-<<<<<<< HEAD
-const App = isLogged => (
-  <div>
-    <Nav />
-    <Route exact path="/" component={Homepage} />
-    <Route
-      path="/catalog"
-      render={() => (
-        isLogged ? (
-          <Customerpage />
-        ) : (
-          <Redirect to="/" />
-        ))}
-    />
-=======
 const App = ({ isLogged }) => (
   <div>
     <Nav />
@@ -76,7 +57,6 @@ const App = ({ isLogged }) => (
       {/* fallback */}
       <Route component={NotFound} />
     </Switch>
->>>>>>> structure
     <Footer />
   </div>
 );
