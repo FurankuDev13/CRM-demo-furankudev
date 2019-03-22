@@ -19,15 +19,27 @@ class ProductController extends AbstractController
     /**
      * @Route("/index", name="index", methods={"GET"})
      */
-    public function index(ProductRepository $productRepo, CategoryRepository $categoryRepo)
+    public function index(Request $request, ProductRepository $productRepo, CategoryRepository $categoryRepo)
     {
-        $products = $productRepo->findByIsActive(true);
+        $field = $request->query->get('field', 'name');
+        $order = $request->query->get('order', 'ASC');
+        $categoryName = $request->query->get('category', false);
+
+        $category = $categoryRepo->findOneByName($categoryName);
+
+        if ($category) {
+            $products = $category->getProducts();
+        } else {
+            $products = $productRepo->findIsACtiveOrderedByVariable($field , $order);
+        }
+        
         $categories = $categoryRepo->findByIsActive(true);
 
         return $this->render('product/index.html.twig', [
             'page_title' => 'Liste des produits du catalogue',
             'products' => $products,
             'categories' => $categories,
+            'category' => $category,
         ]);
     }
 

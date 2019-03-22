@@ -19,6 +19,17 @@ class ProductRepository extends ServiceEntityRepository
         parent::__construct($registry, Product::class);
     }
 
+    public function findIsACtiveOrderedByVariable($field = 'name', $order = 'ASC')
+    {
+        return $this->createQueryBuilder('p')
+        ->andWhere('p.isActive = :val')
+        ->setParameter('val', true)
+        ->orderBy('p.' . $field, $order)
+        ->getQuery()
+        ->getResult()
+    ;
+    }
+
     // /**
     //  * @return Product[] Returns an array of Product objects
     //  */

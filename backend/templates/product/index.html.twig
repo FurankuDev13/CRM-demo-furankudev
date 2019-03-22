@@ -11,7 +11,7 @@
     </div>
     <div class="list is-primary is-hoverable">
         {% for category in categories %}
-            <a class="list-item has-text-primary" href="{{ path('category_show', {'id': category.id}) }}">
+            <a class="list-item has-text-primary" href="{{ path('product_index', {'category': category.name}) }}">
             {{ category.name }}
             </a>
         {% endfor %}
@@ -35,7 +35,14 @@
         <table class="table is-fullwidth is-hoverable is-striped">
             <thead>
                 <tr>
-                    <th>Référence</th>
+                    <th>Référence&nbsp;
+                            <a href="{{ path('product_index', {'field': 'reference', 'order': 'ASC'}) }}">
+                                <i class="fas fa-sort-up"></i>
+                            </a>
+                            <a href="{{ path('product_index', {'field': 'reference', 'order': 'DESC'}) }}">
+                                <i class="fas fa-sort-down"></i>
+                            </a>
+                        </th>
                     <th>Produit</th>
                     <th>Description</th>
                     <th>Prix liste</br>(euros)</th>
