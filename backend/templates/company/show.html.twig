@@ -40,8 +40,9 @@
                     </article>
                     <article class="tile is-child">
                         <p class="title">Informations</p>
-                        <p>SIREN: <span class="has-text-weight-bold">{{ company.sirenNumber }}</span></p>
-                        <p>Mise à jour: <span class="has-text-weight-bold">{{ company.updatedAt|date('d-m-Y') }}</span></p>
+                        <p>SIREN: &nbsp; <span class="has-text-weight-bold">{{ company.sirenNumber }}</span></p>
+                        <p>Enregistrée: &nbsp; <span class="has-text-weight-bold">{{ company.createdAt|date('d-m-Y') }}</span></p>
+                        <p>Mise à jour: &nbsp; <span class="has-text-weight-bold">{{ company.updatedAt|date('d-m-Y') }}</span></p>
                     </article>
                 </div>
             </div>
