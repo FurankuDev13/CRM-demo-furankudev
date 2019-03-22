@@ -12,23 +12,37 @@
     <div class="list is-primary is-hoverable">
         {% for category in categories %}
             <a class="list-item has-text-primary" href="{{ path('product_index', {'category': category.name}) }}">
-            {{ category.name }}
+                {{ category.name }}
             </a>
+            
         {% endfor %}
     </div>
 {% endblock %}
 
 {% block content %}
+
+{% if category %}
+    {% set orderButtonsIncludePath = 'product/_order_buttons_withcategory.html.twig' %}
+{% else %}
+    {% set orderButtonsIncludePath = 'partial/_order_buttons.html.twig' %}
+{% endif %}
+
         <div class="level">
             <div class="level-left ">
                 <div class="level-item">
                     <h2 class=" level-item subtitle has-text-info is-3">Les produits du catalogue</h2>
+                    {% if category %}
+                        <button class=" level-item button is-primary is-small is-size-4">{{ category.name }}</button>
+                    {% endif %}
                     <button class=" level-item button is-info is-small is-size-4">{{ products|length }}</button>
                 </div>  
             </div> 
             <div class="level-right">
+                <a class="level-item" href="{{ path('product_index')}}">
+                    <button class="level-item button is-primary s-small is-size-3"><i class="fas fa-sort-alpha-down"></i></button>
+                </a>
                 <a class="level-item" href="{{ path('product_new')}}">
-                    <button type="submit" class="level-item button is-success s-small is-size-3"><i class="fas fa-plus-circle"></i></button>
+                    <button class="level-item button is-success s-small is-size-3"><i class="fas fa-plus-circle"></i></button>
                 </a>
             </div>
         </div>
@@ -36,14 +50,14 @@
             <thead>
                 <tr>
                     <th>Référence&nbsp;
-                            {% include 'product/_order_buttons.html.twig' with {'field' : 'reference'} %}
+                            {% include orderButtonsIncludePath with {'field' : 'reference'} %}
                         </th>
                     <th>Produit&nbsp;
-                            {% include 'product/_order_buttons.html.twig' with {'field' : 'name'} %}
+                            {% include orderButtonsIncludePath with {'field' : 'name'} %}
                         </th>
                     <th>Description</th>
                     <th>Prix liste&nbsp;
-                            {% include 'product/_order_buttons.html.twig' with {'field' : 'listPrice'} %}
+                            {% include orderButtonsIncludePath with {'field' : 'listPrice'} %}
                         </th>
                     <th>Image</th>
                     {% if is_granted('ROLE_SUPPORT') %}
@@ -67,14 +81,16 @@
                             </figure>
                         </td>
                         {% if is_granted('ROLE_SUPPORT') %}
-                            <td class="level-left">
+                        <td class="level">
+                            <div class="level-left">
                                 <a class="level-item" href="{{ path('product_edit', {'id' : product.id })}}">
                                     <button type="submit" class="button is-info"><i class="fas fa-edit"></i></button>
                                 </a>
                                 {% include 'product/_available_form.html.twig' %}
                                 {% include 'product/_onhomepage_form.html.twig' %}
                                 {% include 'product/_archive_form.html.twig' %}
-                            </td>
+                            </div>
+                        </td>
                         {% endif %}
                     </tr>
                 {% endfor %}

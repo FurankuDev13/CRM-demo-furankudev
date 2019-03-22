@@ -28,9 +28,9 @@ class ProductController extends AbstractController
         $category = $categoryRepo->findOneByName($categoryName);
 
         if ($category) {
-            $products = $category->getProducts();
+            $products = $productRepo->findIsACtiveByCategoryNameOrderedByField($categoryName ,$field , $order);
         } else {
-            $products = $productRepo->findIsACtiveOrderedByVariable($field , $order);
+            $products = $productRepo->findIsACtiveOrderedByField($field , $order);
         }
         
         $categories = $categoryRepo->findByIsActive(true);
