@@ -80,7 +80,6 @@ class ProductType extends AbstractType
                 'label'    => "Prix liste du produit",
                 'attr' => ['placeholder' => "montant"],
                 'currency' => 'EUR',
-                'divisor' => 1,
             ])
             ->add('maxDiscountRate', PercentType::class, [
                 'label'    => "Taux maximum de remise autorisé",
