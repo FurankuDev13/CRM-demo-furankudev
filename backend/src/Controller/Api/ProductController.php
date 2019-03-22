@@ -19,7 +19,7 @@ class ProductController extends AbstractController
      */
     public function index(ProductRepository $productRepo, SerializerInterface $serializer)
     {
-        $products = $productRepo->findByIsActive(true);
+        $products = $productRepo->findByIsActiveAndIsAvailable(true, false);
 
         $jsonObject = $serializer->serialize($products, 'json', [
             'circular_reference_handler' => function ($object) {

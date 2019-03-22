@@ -19,6 +19,19 @@ class ProductRepository extends ServiceEntityRepository
         parent::__construct($registry, Product::class);
     }
 
+    public function findByIsActiveAndIsAvailable($isActive = true, $isAvailable = true)
+    {
+        return $this->createQueryBuilder('p')
+            ->andWhere('p.isActive = :isActive')
+            ->setParameter('isActive', $isActive)
+            ->andWhere('p.isAvailable = :isAvailable')
+            ->setParameter('isAvailable', $isAvailable)
+            ->orderBy('p.createdAt', 'DESC')
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
     // /**
     //  * @return Product[] Returns an array of Product objects
     //  */

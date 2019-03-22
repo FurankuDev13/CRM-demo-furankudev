@@ -13,6 +13,41 @@ import React from 'react';
 
 const Form = () => (
   <div>
+
+    <div className="field">
+      <label className="label" htmlFor="email">Email</label>
+      <div className="control has-icons-left has-icons-right">
+        <input id="email" className="input is-secondary" type="email" placeholder="Entrez votre adresse mail" value="" />
+      </div>
+    </div>
+
+    <div className="field">
+      <label className="label" htmlFor="password" >Password</label>
+      <div className="control has-icons-left has-icons-right">
+        <input className="input is-secondary" type="password" placeholder="Entrez votre mot de passe" value="" />
+      </div>
+    </div>
+
+    <div className="field is-grouped">
+      <div className="control">
+        <button
+          type="button"
+          className="button is-link"
+        >
+          Submit
+        </button>
+      </div>
+    </div>
+  </div>
+);
+
+/**
+ * Export
+ */
+export default Form;
+
+
+/* <div>
     <div className="field">
       <label className="label">Name</label>
       <div className="control">
@@ -97,10 +132,4 @@ const Form = () => (
         <button className="button is-text">Cancel</button>
       </div>
     </div>
-  </div>
-);
-
-/**
- * Export
- */
-export default Form;
+  </div> */
