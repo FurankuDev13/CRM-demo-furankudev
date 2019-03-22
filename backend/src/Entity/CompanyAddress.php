@@ -68,11 +68,6 @@ class CompanyAddress
      */
     private $company;
 
-    public function __toString()
-    {
-        return $this->firstAddressField . ' ' . $this->secondAddressField . ' ' . $this->postalCode . ' ' . $this->city;
-    }
-
     public function getId(): ?int
     {
         return $this->id;

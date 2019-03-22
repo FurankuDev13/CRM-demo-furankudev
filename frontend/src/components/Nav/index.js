@@ -6,7 +6,7 @@ import React from 'react';
 /**
  * Code
  */
-const Nav = () => (
+const Nav = ({ isLogged }) => (
   <header>
     <nav className="navbar has-shadow is-primary is-fixed-top">
       <div className="navbar-brand">

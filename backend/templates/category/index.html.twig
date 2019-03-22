@@ -16,9 +16,6 @@
                     <th>Nom</th>
                     <th>Description</th>
                     <th>Image</th>
-                    {% if is_granted('ROLE_SUPPORT') %}
-                        <th>Actions</th>
-                    {% endif %}
                 </tr>
             </thead>
             <tbody>
@@ -33,15 +30,6 @@
                                 <img src="{{ category.picture ?: "https://stickeramoi.com/3777-large_default/autocollant-point-interrogation-muraux.jpg" }}">
                             </figure>
                         </td>
-                        {% if is_granted('ROLE_SUPPORT') %}
-                            <td>
-                                <form class="" action='{{ path('category_archive', {'id': category.id}) }}' method="POST">
-                                    <input class="" type="hidden" name="_method" value="PATCH">
-                                    <button type="submit" class="button is-warning"><i class="fas fa-archive"></i></button>
-                                </form>
-                            </td>
-                        {% endif %}
-
                     </tr>
                 {% endfor %}
             </tbody>

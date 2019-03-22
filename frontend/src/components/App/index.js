@@ -21,7 +21,9 @@ import NotFound from 'src/components/NotFound';
  */
 const App = ({ isLogged }) => (
   <div>
-    <Nav />
+    <Nav 
+      isLogged
+    />
     <Switch>
       <Route exact path="/" component={Homepage} />
       <Route

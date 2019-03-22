@@ -62,9 +62,7 @@ class DoctrineEvent implements EventSubscriber
             || $entity instanceof UserRole
             ) {
 
-            if (!$entity->getCreatedAt()) {
-                $entity->setCreatedAt(new DateTime);
-            }
+            $entity->setCreatedAt(new DateTime);
         } 
     }
 

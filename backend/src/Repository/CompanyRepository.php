@@ -3,8 +3,8 @@
 namespace App\Repository;
 
 use App\Entity\Company;
-use Symfony\Bridge\Doctrine\RegistryInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Symfony\Bridge\Doctrine\RegistryInterface;
 
 /**
  * @method Company|null find($id, $lockMode = null, $lockVersion = null)
@@ -17,33 +17,6 @@ class CompanyRepository extends ServiceEntityRepository
     public function __construct(RegistryInterface $registry)
     {
         parent::__construct($registry, Company::class);
-    }
-
-    public function findOrphans()
-    {
-        return $this->createQueryBuilder('c')
-            ->andWhere('c.user IS NULL')
-            ->orderBy('c.createdAt', 'DESC')
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-
-    public function findByUnhandledRequests()
-    {
-        return $this->createQueryBuilder('c')
-            ->join('c.contacts', 'co')
-            ->addSelect('co')
-            ->join('co.requests', 'r')
-            ->addSelect('r')
-            ->join('r.handlingStatus', 'h')
-            ->addSelect('h')
-            ->andWhere('h.title LIKE :val')
-            ->setParameter('val', 'Initiée')
-            ->orderBy('r.createdAt', 'ASC')
-            ->getQuery()
-            ->getResult()
-        ;
     }
 
     // /**

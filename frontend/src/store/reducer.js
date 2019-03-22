@@ -3,7 +3,7 @@
  */
 const initialState = {
   view: 'login',
-  isLogged: false,
+  isLogged: true,
   catalogList: [],
 };
 
