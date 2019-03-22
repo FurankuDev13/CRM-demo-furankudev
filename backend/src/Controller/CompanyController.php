@@ -32,7 +32,7 @@ class CompanyController extends AbstractController
     /**
      * @Route("/{id}/show", name="show", methods={"GET"}, requirements={"id"="\d+"})
      */
-    public function show(Company $company)
+    public function show(Company $company, CompanyRepository $companyRepo)
     {
         if (!$company) {
             throw $this->createNotFoundException("La société indiquée n'existe pas"); 
