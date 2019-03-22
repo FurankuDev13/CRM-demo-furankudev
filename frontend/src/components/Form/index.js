@@ -15,17 +15,19 @@ const Form = () => (
   <div>
 
     <div className="field">
-      <label className="label" htmlFor="email">Email</label>
-      <div className="control has-icons-left has-icons-right">
-        <input id="email" className="input is-secondary" type="email" placeholder="Entrez votre adresse mail" value="" />
-      </div>
+      <label className="label" htmlFor="email">Email
+        <div className="control has-icons-left has-icons-right">
+          <input id="email" className="input is-secondary" type="email" placeholder="Entrez votre adresse mail" value="" />
+        </div>
+      </label>
     </div>
 
     <div className="field">
-      <label className="label" htmlFor="password" >Password</label>
-      <div className="control has-icons-left has-icons-right">
-        <input className="input is-secondary" type="password" placeholder="Entrez votre mot de passe" value="" />
-      </div>
+      <label className="label" htmlFor="password">Password
+        <div className="control has-icons-left has-icons-right">
+          <input className="input is-secondary" type="password" placeholder="Entrez votre mot de passe" value="" />
+        </div>
+      </label>
     </div>
 
     <div className="field is-grouped">

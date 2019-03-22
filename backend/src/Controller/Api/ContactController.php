@@ -21,6 +21,9 @@ class ContactController extends AbstractController
      */
     public function find(Request $request, ContactRepository $contactRepo, SerializerInterface $serializer, UserPasswordEncoderInterface $passwordEncoder)
     {
+        /* $data = $request->getContent();
+        $author = $this->get('serializer')->deserialize($data, 'AppBundle\Entity\Author', 'json'); */
+
         $email = $request->request->get('email', null);
         $password = $request->request->get('password', null);
 

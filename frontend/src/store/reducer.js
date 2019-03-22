@@ -5,6 +5,26 @@ const initialState = {
   view: 'login',
   isLogged: false,
   catalogList: [],
+  fields: {
+    login: {
+      email: '',
+      password: '',
+    },
+    signup: {
+      companyName: '',
+      companySiren: '',
+      companyAddressField: '',
+      companyPostalCode: '',
+      companyCity: '',
+      contactLastname: '',
+      contactFirstname: '',
+      contactBusinessPhone: '',
+      contactEmail: '',
+      contactPassword: '',
+      contactPasswordRepeat: '',
+      contactRequest: '',
+    },
+  },
 };
 
 /**
