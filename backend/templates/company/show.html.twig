@@ -10,5 +10,44 @@
             </div>
             <button class="level-item button is-info is-small is-size-4">{{ company.isCustomer ? 'Client' : 'Prospect' }}</button>
         </div>
+        <div class="tile is-ancestor">
+            {# Début des Tiles #}
+            <div class="tile is-parent is-3 is-vertical">
+                <article class="tile is-child">
+                    <figure class="image is-4by3">
+                        <img src="{{ company.picture }}">
+                    </figure>
+                </article>
+            </div>
+            <div class="tile is-parent is-vertical">
+                <article class="tile is-child notification is-primary">
+                    <p class="title">Description</p>
+                    <p class="subtitle">{{ company.description }}</p>
+                </article>
+                <div class="tile">
+                    <article class="tile is-child is-8">
+                        <p class="title">Contacts</p>
+                        {% for contact in company.contacts %}
+                            <p class="">
+                                <a href="{{ path('contact_show', {'id' : contact.id}) }}">
+                                    <span class="subtitle">{{ contact.person.firstname }} {{ contact.person.lastname }}</span>
+                                </a> &nbsp;-&nbsp;
+                                <span class="has-text-weight-bold">{{ contact.contactType.title }}</span></br>
+                                <i class="fas fa-mobile-alt"></i> {{ contact.person.cellPhone }} &nbsp;&nbsp;&nbsp;
+                                <i class="fas fa-phone"></i> {{ contact.person.businessPhone }}
+                            </p>
+                        {% endfor %}
+                    </article>
+                    <article class="tile is-child">
+                        <p class="title">Informations</p>
+                        <p>SIREN: &nbsp; <span class="has-text-weight-bold">{{ company.sirenNumber }}</span></p>
+                        <p>Enregistrée: &nbsp; <span class="has-text-weight-bold">{{ company.createdAt|date('d-m-Y') }}</span></p>
+                        <p>Mise à jour: &nbsp; <span class="has-text-weight-bold">{{ company.updatedAt|date('d-m-Y') }}</span></p>
+                    </article>
+                </div>
+            </div>
+            {# Fin des Tiles #}
+        </div>
+
     </div>
 {% endblock %}
