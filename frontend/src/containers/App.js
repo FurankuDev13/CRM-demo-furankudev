@@ -12,9 +12,13 @@ import App from 'src/components/App';
 // import { doSomething } from 'src/store/reducer';
 
 // mapping
-const mapStateToProps = state => ({
-  isLogged: state.isLogged,
-});
+const mapStateToProps = (state) => {
+  const { view, isLogged } = state;
+  return ({
+    isLogged,
+    view,
+  });
+};
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
 });
