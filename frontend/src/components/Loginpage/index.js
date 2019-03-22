@@ -6,7 +6,7 @@ import React from 'react';
 /**
  * local import
  */
-import Form from 'src/components/Form';
+import Form from 'src/containers/Form';
 import PropTypes from 'prop-types';
 
 /**
@@ -17,11 +17,15 @@ const Login = ({ loginFields, formOrigin }) => {
   const tabl = [
     {
       name: 'email',
+      type: 'email',
       value: loginFields.email,
+      placeholder: 'Saisissez votre email',
     },
     {
       name: 'password',
+      type: 'password',
       value: loginFields.password,
+      placeholder: 'Saisissez votre mot de passe',
     },
   ];
   return (

@@ -31,6 +31,7 @@ const initialState = {
  * Types
  */
 export const FETCH_CATALOG = 'FETCH_CATALOG';
+export const SEND_LOGIN_REQUEST = 'SEND_LOGIN_REQUEST';
 const FETCH_SUCCESS = 'FETCH_SUCCESS';
 const INPUT_CHANGE = 'INPUT_CHANGE';
 
@@ -76,6 +77,10 @@ export const fetchSuccess = data => ({
 export const inputChange = fieldInfos => ({
   type: INPUT_CHANGE,
   fieldInfos,
+});
+
+export const sendLoginRequest = () => ({
+  type: SEND_LOGIN_REQUEST,
 });
 
 /**

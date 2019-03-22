@@ -6,10 +6,10 @@ import { connect } from 'react-redux';
 /**
  * Local import
  */
-import Input from 'src/components/Form/Input';
+import Form from 'src/components/Form';
 
 // Action Creators
-import { inputChange } from 'src/store/reducer';
+import { sendLoginRequest } from 'src/store/reducer';
 
 /* === State (données) ===
  * - mapStateToProps retroune un objet de props pour le composant de présentation
@@ -27,17 +27,19 @@ const mapStateToProps = () => ({});
  *  - ownProps : les props passées au container
  * Pas de disptach à transmettre ? const mapDispatchToProps = {};
  */
-const mapDispatchToProps = dispatch => ({
-  inputChange: (fieldInfos) => {
-    dispatch(inputChange(fieldInfos));
+const mapDispatchToProps = (dispatch, ownProps) => ({
+  submitForm: () => {
+    if (ownProps.formOrigin === 'login') {
+      dispatch(sendLoginRequest());
+    }
   },
 });
 
 // Container
-const InputContainer = connect(
+const FormContainer = connect(
   mapStateToProps,
   mapDispatchToProps,
-)(Input);
+)(Form);
 
 /* 2 temps
 const createContainer = connect(mapStateToProps, mapDispatchToProps);
@@ -47,4 +49,4 @@ const ExampleContainer = createContainer(Example);
 /**
  * Export
  */
-export default InputContainer;
+export default FormContainer;

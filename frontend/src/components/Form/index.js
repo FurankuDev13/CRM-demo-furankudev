@@ -13,32 +13,47 @@ import Input from 'src/containers/Input';
  * Code
  */
 
-const Form = ({ tabl, formOrigin }) => (
-  <div>
-    {tabl.map(inputEntity => (
-      <Input
-        key={inputEntity.name}
-        {...inputEntity}
-        formOrigin={formOrigin}
-      />
-    ))}
+class Form extends React.Component {
+  formSubmit = (evt) => {
+    const { submitForm } = this.props;
+    evt.preventDefault();
+    submitForm();
+  }
 
-    <div className="field is-grouped">
-      <div className="control">
-        <button
-          type="button"
-          className="button is-link"
-        >
-          Submit
-        </button>
-      </div>
-    </div>
-  </div>
-);
+  render() {
+    const { tabl, formOrigin } = this.props;
+    return (
+      <form
+        id="login"
+        onSubmit={this.formSubmit}
+      >
+        {tabl.map(inputEntity => (
+          <Input
+            key={inputEntity.name}
+            {...inputEntity}
+            formOrigin={formOrigin}
+          />
+        ))}
+
+        <div className="field is-grouped">
+          <div className="control">
+            <button
+              type="submit"
+              className="button is-link"
+            >
+              Submit
+            </button>
+          </div>
+        </div>
+      </form>
+    );
+  }
+}
 
 Form.propTypes = {
   tabl: PropTypes.array.isRequired,
   formOrigin: PropTypes.string.isRequired,
+  submitForm: PropTypes.func.isRequired,
 };
 
 /**

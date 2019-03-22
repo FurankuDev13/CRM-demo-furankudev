@@ -16,7 +16,6 @@ class Input extends React.Component {
   handleChange = (evt) => {
     const { name, formOrigin, inputChange } = this.props;
     const { value } = evt.target;
-    console.log(value);
     inputChange(
       {
         name,
@@ -27,16 +26,22 @@ class Input extends React.Component {
   }
 
   render() {
-    const { name, value } = this.props;
+    const {
+      name,
+      type,
+      value,
+      placeholder,
+    } = this.props;
     return (
       <div className="field">
-        <label className="label" htmlFor={name}>{name}
+        <label className="label" htmlFor={name}>{name} >
           <div className="control has-icons-left has-icons-right">
             <input
               id={name}
               className="input is-secondary"
-              type={name}
-              placeholder="Entrez votre adresse mail"
+              type={type}
+              name={name}
+              placeholder={placeholder}
               value={value}
               onChange={this.handleChange}
             />
@@ -49,6 +54,8 @@ class Input extends React.Component {
 
 Input.propTypes = {
   name: PropTypes.string.isRequired,
+  type: PropTypes.string.isRequired,
+  placeholder: PropTypes.string.isRequired,
   value: PropTypes.string.isRequired,
   formOrigin: PropTypes.string.isRequired,
   inputChange: PropTypes.func.isRequired,

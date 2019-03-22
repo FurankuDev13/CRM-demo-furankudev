@@ -21,10 +21,11 @@ class ContactController extends AbstractController
      */
     public function find(Request $request, ContactRepository $contactRepo, SerializerInterface $serializer, UserPasswordEncoderInterface $passwordEncoder)
     {
-        /* $data = $request->getContent();
-        $author = $this->get('serializer')->deserialize($data, 'AppBundle\Entity\Author', 'json'); */
+        $data = $request->getContent();
+        
+        /* $author = $this->get('serializer')->deserialize($data, 'AppBundle\Entity\Author', 'json'); */
 
-        $email = $request->request->get('email', null);
+        /* $email = $request->request->get('email', null);
         $password = $request->request->get('password', null);
 
         if ($email && $password) {
@@ -40,9 +41,16 @@ class ContactController extends AbstractController
             } else {
                 $jsonObject = null;
             }
-        }
+        } */
 
-        return new Response($jsonObject, 200, ['Content-Type' => 'application/json']);
+        $jsonObject = $data;
+
+        $response = new Response($jsonObject, 200);
+        
+        $response->headers->set('Content-Type', 'application/json');
+        $response->headers->set('Access-Control-Allow-Origin', '*');
+
+        return $response;
     }
 
     /**
