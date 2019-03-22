@@ -2833,7 +2833,10 @@ a.box:active {
   clear: both;
   font-size: 1rem;
   position: relative;
-  text-align: left; }
+  text-align: left;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+ }
   .control.has-icon .icon {
     color: #dee2e5;
     height: 2.25em;
