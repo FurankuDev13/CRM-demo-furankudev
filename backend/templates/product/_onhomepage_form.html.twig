@@ -1,0 +1,8 @@
+<form class="level-item" action='{{ path('product_on_home_page', {'id': product.id}) }}' method="POST">
+    <input class="" type="hidden" name="_method" value="PATCH">
+    {% if product.isOnHomePage %}
+        <button type="submit" class="button is-success"><i class="fas fa-store"></i></button>
+    {% else %}
+        <button type="submit" class="button is-outlined"><i class="fas fa-store"></i></button>
+    {% endif %}
+</form>

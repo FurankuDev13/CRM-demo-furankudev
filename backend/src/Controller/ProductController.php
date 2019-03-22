@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Product;
+use App\Form\ProductType;
 use App\Repository\ProductRepository;
 use App\Repository\CategoryRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -18,15 +19,27 @@ class ProductController extends AbstractController
     /**
      * @Route("/index", name="index", methods={"GET"})
      */
-    public function index(ProductRepository $productRepo, CategoryRepository $categoryRepo)
+    public function index(Request $request, ProductRepository $productRepo, CategoryRepository $categoryRepo)
     {
-        $products = $productRepo->findByIsActive(true);
+        $field = $request->query->get('field', 'name');
+        $order = $request->query->get('order', 'ASC');
+        $categoryName = $request->query->get('category', false);
+
+        $category = $categoryRepo->findOneByName($categoryName);
+
+        if ($category) {
+            $products = $productRepo->findIsACtiveByCategoryNameOrderedByField($categoryName ,$field , $order);
+        } else {
+            $products = $productRepo->findIsACtiveOrderedByField($field , $order);
+        }
+        
         $categories = $categoryRepo->findByIsActive(true);
 
         return $this->render('product/index.html.twig', [
             'page_title' => 'Liste des produits du catalogue',
             'products' => $products,
             'categories' => $categories,
+            'category' => $category,
         ]);
     }
 
@@ -50,8 +63,26 @@ class ProductController extends AbstractController
      */
     public function new(Request $request, EntityManagerInterface $entityManager)
     {
+        $product = new Product();
+
+        $form = $this->createForm(ProductType::class, $product);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager->persist($product);
+            $entityManager->flush();
+
+            $this->addFlash(
+                'success',
+                'Le produit ' . $product->getName() . ' a bien été ajouté !'
+            );
+            return $this->redirectToRoute('product_show', ['id' => $product->getId()]);
+        }
+
+
         return $this->render('product/new.html.twig', [
             'page_title' => 'Ajouter un nouveau produit',
+            'form' => $form->createView()
         ]);
     }
 
@@ -64,8 +95,23 @@ class ProductController extends AbstractController
             throw $this->createNotFoundException("Le produit indiqué n'existe pas"); 
         }
 
+        $form = $this->createForm(ProductType::class, $product);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager->flush();
+
+            $this->addFlash(
+                'success',
+                'Le produit ' . $product->getName() . ' a bien été mis à jour !'
+            );
+            return $this->redirectToRoute('product_show', ['id' => $product->getId()]);
+        }
+
         return $this->render('product/edit.html.twig', [
             'page_title' => 'Mettre à jour le produit: ' . $product->getName(),
+            'product' => $product,
+            'form' => $form->createView()
         ]);
     }
 
