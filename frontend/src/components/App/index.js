@@ -10,7 +10,7 @@ import { Route, Redirect, Switch } from 'react-router-dom';
 import Nav from 'src/components/Nav';
 import Homepage from 'src/components/Homepage';
 import Customerpage from 'src/components/Customerpage';
-import Loginpage from 'src/components/Loginpage';
+import Loginpage from 'src/containers/Loginpage';
 import Signuppage from 'src/components/Signuppage';
 import Footer from 'src/components/Footer';
 import NotFound from 'src/components/NotFound';

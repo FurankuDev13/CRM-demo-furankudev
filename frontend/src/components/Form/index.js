@@ -2,33 +2,25 @@
  * NPM import
  */
 import React from 'react';
+import PropTypes from 'prop-types';
 
 /**
  * local import
  */
+import Input from './Input';
 
 /**
  * Code
  */
 
-const Form = () => (
+const Form = ({ tabl }) => (
   <div>
-
-    <div className="field">
-      <label className="label" htmlFor="email">Email
-        <div className="control has-icons-left has-icons-right">
-          <input id="email" className="input is-secondary" type="email" placeholder="Entrez votre adresse mail" value="" />
-        </div>
-      </label>
-    </div>
-
-    <div className="field">
-      <label className="label" htmlFor="password">Password
-        <div className="control has-icons-left has-icons-right">
-          <input className="input is-secondary" type="password" placeholder="Entrez votre mot de passe" value="" />
-        </div>
-      </label>
-    </div>
+    {tabl.map(inputEntity => (
+      <Input
+        key={inputEntity.name}
+        {...inputEntity}
+      />
+    ))}
 
     <div className="field is-grouped">
       <div className="control">
@@ -42,6 +34,10 @@ const Form = () => (
     </div>
   </div>
 );
+
+Form.propTypes = {
+  tabl: PropTypes.array.isRequired,
+};
 
 /**
  * Export
