@@ -36,26 +36,20 @@ class ContactController extends AbstractController
 
         if ($email && $password) {
             
-            $contact = $contactRepo->findByEmail($email);
-            echo($contact->getEmail());
-        
-            //$validPassword = $passwordEncoder->isPasswordValid($contact->getPassword(),$password);
-            $validPassword = true;
+            $contact = $contactRepo->findOneByEmail($email);
+            $validPassword = $passwordEncoder->isPasswordValid($contact,$password);
             if ($validPassword) {
                 echo('password ok');
-                // $jsonObject = $serializer->serialize($contact, 'json', [
-                //     'circular_reference_handler' => function ($object) {
-                //         return $object->getId();
-                //     }
-                // ]);
-            // } else {
-            //     echo('password NOK');
-            //     //$jsonObject = null;
+                 $jsonObject = $serializer->serialize($contact, 'json', [
+                     'circular_reference_handler' => function ($object) {
+                         return $object->getId();
+                     }
+                 ]);
+             } else {
+                 echo('password NOK');
+                 $jsonObject = null;
             }
         }
-
-        $jsonObject = $data;
-
 
         $response = new Response($jsonObject, 200);
         
