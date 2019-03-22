@@ -1,0 +1,36 @@
+<table class="table is-fullwidth is-hoverable is-striped">
+    <thead>
+        <tr>
+            <th>Nom</th>
+            <th>Image</th>
+            <th>Client/Prospect</th>
+            <th>Demande</th>
+            <th>Commercial</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for company in companiesWithUnhandledRequests %}
+            <tr>
+                <td>   
+                    <a href="{{ path('company_show', {'id': company.id}) }}">{{ company.name }}</a>
+                </td>
+                <td>
+                    <figure class="image is-48x48">
+                        <img src="{{ company.picture ?: "https://stickeramoi.com/3777-large_default/autocollant-point-interrogation-muraux.jpg" }}">
+                    </figure>
+                </td>
+                <td>{{ company.isCustomer ? 'Client' : 'Prospect' }}</td>
+                <td>
+                    {% for contact in company.contacts %}
+                        {% for request in contact.requests %}
+                            <a href="{{ path('request_show', {'id': request.id}) }}">{{ request.title }}</a>
+                            <span>&nbsp; du {{ request.createdAt|date("d/m/Y") }}</span>
+                            {% if not loop.last %}<br>{% endif %}
+                        {% endfor %}
+                    {% endfor %}
+                </td>
+                <td>{{ company.user ? company.user.person.lastname : 'Dégun' }}</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>

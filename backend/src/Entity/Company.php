@@ -84,6 +84,11 @@ class Company
         $this->contacts = new ArrayCollection();
     }
 
+    public function __toString()
+    {
+        return $this->name;
+    }
+
     public function getId(): ?int
     {
         return $this->id;
@@ -266,8 +271,18 @@ class Company
 
     public function setUser(?User $user): self
     {
-        $this->user = $user;
+        $result = false;
 
+        foreach($user->getUserRoles() as $userRole) {
+            if ($userRole->getCode() == 'ROLE_SALES') {
+                $result = true;
+            }
+        }
+
+        if ($result) {
+            $this->user = $user;
+        }
+        
         return $this;
     }
 }

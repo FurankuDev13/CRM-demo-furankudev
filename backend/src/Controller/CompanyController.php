@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Company;
 use App\Entity\CompanyAddress;
+use App\Repository\UserRepository;
 use App\Repository\CompanyRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -82,6 +83,30 @@ class CompanyController extends AbstractController
     }
 
     /**
+     * @Route("/{id}/user/set", name="user_set", methods={"PATCH"}, requirements={"id"="\d+"})
+     */
+    public function setUser(Company $company, Request $request, EntityManagerInterface $entityManager, UserRepository $userRepo)
+    {
+        if (!$company) {
+            throw $this->createNotFoundException("La société indiquée n'existe pas"); 
+        }
+
+        $userId = $request->request->get('userId');
+        $user = $userRepo->find($userId);
+        $company->setUser($user);
+        $entityManager->flush();
+
+        $this->addFlash(
+            'success',
+            $user->getPerson()->getFirstname() . ' ' . $user->getPerson()->getLastname() . ' a bien été attribué à la société ' . $company->getName() . ' !'
+        );
+
+        $referer = $request->headers->get('referer');
+
+        return $this->redirect($referer);
+    }
+
+    /**
      * @Route("/{id}/archive", name="archive", methods={"PATCH"}, requirements={"id"="\d+"})
      */
     public function archive(Company $company, Request $request, EntityManagerInterface $entityManager)
@@ -96,7 +121,7 @@ class CompanyController extends AbstractController
     }
 
     /**
-     * @Route("/new", name="newAddress", methods={"GET", "POST"})
+     * @Route("/new", name="address_new", methods={"GET", "POST"})
      */
     public function newAddress(Request $request, EntityManagerInterface $entityManager)
     {
@@ -106,7 +131,7 @@ class CompanyController extends AbstractController
     }
 
     /**
-     * @Route("/{companyId}/address/{id}/edit", name="editAddress", methods={"GET", "POST"}, requirements={"companyId"="\d+", "id"="\d+"})
+     * @Route("/{companyId}/address/{id}/edit", name="address_edit", methods={"GET", "POST"}, requirements={"companyId"="\d+", "id"="\d+"})
      */
     public function editAddress(CompanyAddress $companyAddress, Request $request, EntityManagerInterface $entityManager)
     {

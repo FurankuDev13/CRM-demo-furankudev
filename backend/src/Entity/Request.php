@@ -59,6 +59,11 @@ class Request
      */
     private $contact;
 
+    public function __toString()
+    {
+        return $this->title;
+    }
+
     public function getId(): ?int
     {
         return $this->id;

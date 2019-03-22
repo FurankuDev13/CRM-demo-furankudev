@@ -2,6 +2,7 @@
  * Initial State
  */
 const initialState = {
+  view: 'login',
   isLogged: false,
   catalogList: [],
 };

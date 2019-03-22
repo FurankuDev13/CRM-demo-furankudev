@@ -70,6 +70,45 @@ class ProductController extends AbstractController
     }
 
     /**
+     * @Route("/{id}/available", name="available", methods={"PATCH"}, requirements={"id"="\d+"})
+     */
+    public function available(Product $product, Request $request, EntityManagerInterface $entityManager)
+    {
+        if (!$product) {
+            throw $this->createNotFoundException("Le produit indiqué n'existe pas"); 
+        }
+
+        $product->setIsAvailable(!$product->getIsAvailable());
+
+        if(!$product->getIsAvailable()) {
+            //si le produit n'est pas dispo à la vente, on ne l'affiche pas en home page front
+            $product->setIsOnHomePage(false);
+        }
+
+        $entityManager->flush();
+
+        $referer = $request->headers->get('referer');
+        return $this->redirect($referer);;
+    }
+
+    /**
+     * @Route("/{id}/on_home_page", name="on_home_page", methods={"PATCH"}, requirements={"id"="\d+"})
+     */
+    public function onHomePage(Product $product, Request $request, EntityManagerInterface $entityManager)
+    {
+        if (!$product) {
+            throw $this->createNotFoundException("Le produit indiqué n'existe pas"); 
+        }
+
+        $product->setIsOnHomePage(!$product->getIsOnHomePage());
+
+        $entityManager->flush();
+
+        $referer = $request->headers->get('referer');
+        return $this->redirect($referer);;
+    }
+
+    /**
      * @Route("/{id}/archive", name="archive", methods={"PATCH"}, requirements={"id"="\d+"})
      */
     public function archive(Product $product, Request $request, EntityManagerInterface $entityManager)
@@ -78,8 +117,14 @@ class ProductController extends AbstractController
             throw $this->createNotFoundException("Le produit indiqué n'existe pas"); 
         }
 
-        $referer = $request->headers->get('referer');
+        $product->setIsActive(!$product->getIsActive());
+        $this->addFlash(
+            'success',
+            'Le Produit ' . $product->getName() . ' a été archivé !'
+        );
+        $entityManager->flush();
 
+        $referer = $request->headers->get('referer');
         return $this->redirect($referer);;
     }
 }
