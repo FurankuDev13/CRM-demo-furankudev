@@ -29,16 +29,27 @@ const Nav = ({ isLogged }) => (
         <div className="navbar-end">
           <div className="navbar-item">
             <div className="field is-grouped">
-              <p className="control">
-                <a id="sign-up" className="button is-transparent is-size-5">
-                  <span>S'inscrire</span>
-                </a>
-              </p>
-              <p className="control">
-                <a className="button is-transparent is-size-5">
-                  <span>Se connecter</span>
-                </a>
-              </p>
+              {isLogged === false && (
+                <>
+                  <p className="control">
+                    <a id="sign-up" className="button is-transparent is-size-5">
+                      <span>S'inscrire</span>
+                    </a>
+                  </p>
+                  <p className="control">
+                    <a className="button is-transparent is-size-5">
+                      <span>Se connecter</span>
+                    </a>
+                  </p>
+                </>
+              )}
+              {isLogged === true && (
+                <p className="control">
+                  <a id="sign-up" className="button is-transparent is-size-5">
+                    <span>Se déconnecter</span>
+                  </a>
+                </p>
+              )}
             </div>
           </div>
         </div>

@@ -22,7 +22,7 @@ import NotFound from 'src/components/NotFound';
 const App = ({ isLogged }) => (
   <div>
     <Nav 
-      isLogged
+      isLogged={isLogged}
     />
     <Switch>
       <Route exact path="/" component={Homepage} />
