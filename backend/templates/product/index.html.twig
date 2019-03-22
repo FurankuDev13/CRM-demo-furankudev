@@ -58,9 +58,17 @@
                                 <form class="" action='{{ path('product_available', {'id': product.id}) }}' method="POST">
                                     <input class="" type="hidden" name="_method" value="PATCH">
                                     {% if product.isAvailable %}
-                                        <button type="submit" class="button is-warning"><i class="fas fa-eye-slash"></i></button>
+                                        <button type="submit" class="button is-success"><i class="fas fa-euro-sign"></i></button>
                                     {% else %}
-                                        <button type="submit" class="button is-success"><i class="fas fa-eye"></i></button>
+                                        <button type="submit" class="button is-outlined"><i class="fas fa-euro-sign"></i></button>
+                                    {% endif %}
+                                </form>
+                                <form class="" action='{{ path('product_on_home_page', {'id': product.id}) }}' method="POST">
+                                    <input class="" type="hidden" name="_method" value="PATCH">
+                                    {% if product.isOnHomePage %}
+                                        <button type="submit" class="button is-success"><i class="fas fa-store"></i></button>
+                                    {% else %}
+                                        <button type="submit" class="button is-outlined"><i class="fas fa-store"></i></button>
                                     {% endif %}
                                 </form>
                                 <form class="" action='{{ path('product_archive', {'id': product.id}) }}' method="POST">
