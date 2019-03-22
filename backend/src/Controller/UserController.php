@@ -20,7 +20,7 @@ class UserController extends AbstractController
      */
     public function index(UserRepository $userRepo, UserRoleRepository $userRoleRepo)
     {
-        $users = $userRepo->findAll(true);
+        $users = $userRepo->findWherePersonIsActive();
         $userRoles = $userRoleRepo->findByIsActive(true);
 
         return $this->render('user/index.html.twig', [
@@ -77,6 +77,14 @@ class UserController extends AbstractController
         if (!$user) {
             throw $this->createNotFoundException("L'utilisateur indiqué n'existe pas"); 
         }
+
+        $user->getPerson()->setIsActive(!$user->getPerson()->getIsActive());
+        $this->addFlash(
+            'success',
+            'L\'Utilisateur ' . $user->getPerson()->getFirstname() . " " . $user->getPerson()->getLastname() . ' a été archivé !'
+        );
+        $entityManager->flush();
+
 
         $referer = $request->headers->get('referer');
 

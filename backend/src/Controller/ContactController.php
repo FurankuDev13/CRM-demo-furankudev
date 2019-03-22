@@ -20,7 +20,7 @@ class ContactController extends AbstractController
      */
     public function index(ContactRepository $contactRepo, CompanyRepository $companyRepo)
     {
-        $contacts = $contactRepo->findAll(true);
+        $contacts = $contactRepo->findWherePersonIsActive();
         $companies = $companyRepo->findByIsActive(true);
 
         return $this->render('contact/index.html.twig', [
@@ -53,6 +53,13 @@ class ContactController extends AbstractController
         if (!$contact) {
             throw $this->createNotFoundException("Le contact indiqué n'existe pas"); 
         }
+
+        $contact->getPerson()->setIsActive(!$contact->getPerson()->getIsActive());
+        $this->addFlash(
+            'success',
+            'Le Contact ' . $contact->getPerson()->getFirstname() . " " . $contact->getPerson()->getLastname() . ' a été archivé !'
+        );
+        $entityManager->flush();
 
         $referer = $request->headers->get('referer');
 

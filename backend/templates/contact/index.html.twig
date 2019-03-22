@@ -34,6 +34,9 @@
                     <th>Téléphone</th>
                     <th>Société</th>
                     <th>Titre</th>
+                    {% if is_granted('ROLE_SALES') %}
+                    <th>Actions</th>
+                    {% endif %}
                 </tr>
             </thead>
             <tbody>
@@ -47,6 +50,17 @@
                         <td>{{ contact.person.businessPhone }}</td>
                         <td>{{ contact.company.name }}</td>
                         <td>{{ contact.contactType.title }}</td>
+                        {% if is_granted('ROLE_SALES') %}
+                        <td class="level">
+                            <div class="level-left">
+                                <form class="level-item" action='{{ path('contact_archive', {'id': contact.id}) }}' method="POST">
+                                    <input class="" type="hidden" name="_method" value="PATCH">
+                                <button type="submit" class="button is-warning"><i class="fas fa-archive"></i></button>
+                                </form>
+                            </div>
+                        </td>
+                        {% endif %}
+
                     </tr>
                 {% endfor %}
             </tbody>
