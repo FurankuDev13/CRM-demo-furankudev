@@ -115,6 +115,13 @@ class CompanyController extends AbstractController
             throw $this->createNotFoundException("La société indiquée n'existe pas"); 
         }
 
+        $company->setIsActive(!$company->getIsActive());
+        $this->addFlash(
+            'success',
+            'La Société ' . $company->getName() . ' a été archivée !'
+        );
+        $entityManager->flush();
+
         $referer = $request->headers->get('referer');
 
         return $this->redirect($referer);;

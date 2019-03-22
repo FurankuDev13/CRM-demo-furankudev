@@ -28,7 +28,7 @@
                     <article class="tile is-child is-8">
                         <p class="title">Contacts</p>
                         {% for contact in company.contacts %}
-                            <p class="">
+                            <p class="content">
                                 <a href="{{ path('contact_show', {'id' : contact.id}) }}">
                                     <span class="subtitle">{{ contact.person.firstname }} {{ contact.person.lastname }}</span>
                                 </a> &nbsp;-&nbsp;
