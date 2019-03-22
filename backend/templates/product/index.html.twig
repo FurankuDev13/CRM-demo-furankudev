@@ -36,16 +36,15 @@
             <thead>
                 <tr>
                     <th>Référence&nbsp;
-                            <a href="{{ path('product_index', {'field': 'reference', 'order': 'ASC'}) }}">
-                                <i class="fas fa-sort-up"></i>
-                            </a>
-                            <a href="{{ path('product_index', {'field': 'reference', 'order': 'DESC'}) }}">
-                                <i class="fas fa-sort-down"></i>
-                            </a>
+                            {% include 'product/_order_buttons.html.twig' with {'field' : 'reference'} %}
                         </th>
-                    <th>Produit</th>
+                    <th>Produit&nbsp;
+                            {% include 'product/_order_buttons.html.twig' with {'field' : 'name'} %}
+                        </th>
                     <th>Description</th>
-                    <th>Prix liste</br>(euros)</th>
+                    <th>Prix liste&nbsp;
+                            {% include 'product/_order_buttons.html.twig' with {'field' : 'listPrice'} %}
+                        </th>
                     <th>Image</th>
                     {% if is_granted('ROLE_SUPPORT') %}
                         <th>Actions</th>
