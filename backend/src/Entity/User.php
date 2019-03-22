@@ -54,9 +54,19 @@ class User implements UserInterface
 
     public function __construct()
     {
-        $this->userRole = new ArrayCollection();
         $this->companies = new ArrayCollection();
         $this->userRoles = new ArrayCollection();
+    }
+
+    public function fakerConstruct()
+    {
+        $this->companies = new ArrayCollection();
+        $this->userRoles = new ArrayCollection();
+    }
+
+    public function __toString()
+    {
+        return $this->getPerson()->getFirstname() . ' ' . $this->getPerson()->getLastname();
     }
 
     public function getId(): ?int
@@ -91,11 +101,11 @@ class User implements UserInterface
      */
     public function getRoles(): array
     {
-        $roles = $this->getUserRoles();
+        $userRoles = $this->getUserRoles();
         
         $roles = [];
-        foreach($roles as $role) {
-            $roles[] = $role->getCode();
+        foreach($userRoles as $userRole) {
+            $roles[] = $userRole->getCode();
         }
 
         return array_unique($roles);

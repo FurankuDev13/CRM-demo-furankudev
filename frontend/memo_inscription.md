@@ -9,4 +9,3 @@
 - **Téléphone du contact** : contactBusinessPhone
 - **Email du contact** : contactEmail
 - **Mot de passe du contact** : contactPassword
-

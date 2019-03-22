@@ -33,6 +33,11 @@ security:
             form_login: true
             # https://symfony.com/doc/current/security/form_login_setup.html
 
+    role_hierarchy:
+        ROLE_SALESMGR: ROLE_SALES
+        ROLE_MANAGER: [ROLE_SUPPORT, ROLE_SALESMGR]
+        ROLE_ADMIN: ROLE_MANAGER
+
     # Easy way to control access for large sections of your site
     # Note: Only the *first* access control that matches will be used
     access_control:

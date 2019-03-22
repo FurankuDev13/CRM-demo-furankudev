@@ -1,0 +1,42 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ parent() }} - {{ page_title }}{% endblock %}
+
+{% block main %}
+    <div class="container">
+        <div class="section level-left">
+            <div class="level-item">
+                <h2 class="level-item subtitle has-text-info is-3">Les sociétés (clients et prospects)</h2>
+            </div>
+            <button class="level-item button is-info is-small is-size-4">{{ companies|length }}</button>
+        </div>
+        <table class="table is-fullwidth is-hoverable is-striped">
+            <thead>
+                <tr>
+                    <th>Nom</th>
+                    <th>Description</th>
+                    <th>Image</th>
+                    <th>Client/Prospect</th>
+                    <th>Commercial</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for company in companies %}
+                    <tr>
+                        <td>   
+                            <a href="{{ path('company_show', {'id': company.id}) }}">{{ company.name }}</a>
+                        </td>
+                        <td>{{ company.description|truncate(30) }}</td>
+                        <td>
+                            <figure class="image is-48x48">
+                                <img src="{{ company.picture ?: "https://stickeramoi.com/3777-large_default/autocollant-point-interrogation-muraux.jpg" }}">
+                            </figure>
+                        </td>
+                        <td>{{ company.isCustomer ? 'Client' : 'Prospect' }}</td>
+                        <td>{{ company.user ? company.user.person.lastname : 'Dégun' }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}
