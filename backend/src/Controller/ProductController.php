@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Product;
+use App\Form\ProductType;
 use App\Repository\ProductRepository;
 use App\Repository\CategoryRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -50,8 +51,26 @@ class ProductController extends AbstractController
      */
     public function new(Request $request, EntityManagerInterface $entityManager)
     {
+        $product = new Product();
+
+        $form = $this->createForm(ProductType::class, $product);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager->persist($product);
+            $entityManager->flush();
+
+            $this->addFlash(
+                'success',
+                'Le produit ' . $product->getName() . ' a bien été ajouté !'
+            );
+            return $this->redirectToRoute('product_show', ['id' => $product->getId()]);
+        }
+
+
         return $this->render('product/new.html.twig', [
             'page_title' => 'Ajouter un nouveau produit',
+            'form' => $form->createView()
         ]);
     }
 
@@ -64,8 +83,23 @@ class ProductController extends AbstractController
             throw $this->createNotFoundException("Le produit indiqué n'existe pas"); 
         }
 
+        $form = $this->createForm(ProductType::class, $product);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager->flush();
+
+            $this->addFlash(
+                'success',
+                'Le produit ' . $product->getName() . ' a bien été mis à jour !'
+            );
+            return $this->redirectToRoute('product_show', ['id' => $product->getId()]);
+        }
+
         return $this->render('product/edit.html.twig', [
             'page_title' => 'Mettre à jour le produit: ' . $product->getName(),
+            'product' => $product,
+            'form' => $form->createView()
         ]);
     }
 

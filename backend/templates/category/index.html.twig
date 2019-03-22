@@ -4,11 +4,18 @@
 
 {% block main %}
     <div class="container">
-        <div class="section level-left">
-            <div class="level-item">
-                <h2 class="level-item subtitle has-text-info is-3">Les catégories du catalogue</h2>
+        <div class="section level">
+            <div class="level-left ">
+                <div class="level-item">
+                    <h2 class=" level-item subtitle has-text-info is-3">Les catégories du catalogue</h2>
+                    <button class=" level-item button is-info is-small is-size-4">{{ categories|length }}</button>
+                </div>  
+            </div> 
+            <div class="level-right">
+                <a class="level-item" href="{{ path('category_new')}}">
+                    <button type="submit" class="level-item button is-success s-small is-size-3"><i class="fas fa-plus-circle"></i></button>
+                </a>
             </div>
-            <button class="level-item button is-info is-small is-size-4">{{ categories|length }}</button>
         </div>
         <table class="table is-fullwidth is-hoverable is-striped">
             <thead>
@@ -34,11 +41,11 @@
                             </figure>
                         </td>
                         {% if is_granted('ROLE_SUPPORT') %}
-                            <td>
-                                <form class="" action='{{ path('category_archive', {'id': category.id}) }}' method="POST">
-                                    <input class="" type="hidden" name="_method" value="PATCH">
-                                    <button type="submit" class="button is-warning"><i class="fas fa-archive"></i></button>
-                                </form>
+                            <td class="level-left">
+                                <a class="level-item" href="{{ path('category_edit', {'id' : category.id })}}">
+                                    <button type="submit" class="button is-info"><i class="fas fa-edit"></i></button>
+                                </a>
+                                {% include 'category/_archive_form.html.twig' %}
                             </td>
                         {% endif %}
 
