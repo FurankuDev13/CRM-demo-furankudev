@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Repository\UserRepository;
+use App\Repository\CompanyRepository;
 use App\Repository\UserRoleRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -20,7 +21,7 @@ class UserController extends AbstractController
      */
     public function index(UserRepository $userRepo, UserRoleRepository $userRoleRepo)
     {
-        $users = $userRepo->findAll(true);
+        $users = $userRepo->findWherePersonIsActive();
         $userRoles = $userRoleRepo->findByIsActive(true);
 
         return $this->render('user/index.html.twig', [
@@ -72,11 +73,27 @@ class UserController extends AbstractController
     /**
      * @Route("/{id}/archive", name="archive", methods={"PATCH"}, requirements={"id"="\d+"})
      */
-    public function archive(User $user, Request $request, EntityManagerInterface $entityManager)
+    public function archive(User $user, Request $request, EntityManagerInterface $entityManager, CompanyRepository $companyRepo)
     {
         if (!$user) {
             throw $this->createNotFoundException("L'utilisateur indiqué n'existe pas"); 
         }
+
+        //On retire l'utilisateur des Sociétés auxquelles il a été assigné
+        $userNull = new User();
+        $userNull = NULL;
+        $companies = $companyRepo->findByUser($user->getId());
+        foreach ($companies as $company) {
+            $company->setUser($userNull);
+        }
+
+        $user->getPerson()->setIsActive(!$user->getPerson()->getIsActive());
+        $this->addFlash(
+            'success',
+            'L\'Utilisateur ' . $user->getPerson()->getFirstname() . " " . $user->getPerson()->getLastname() . ' a été archivé !'
+        );
+
+        $entityManager->flush();
 
         $referer = $request->headers->get('referer');
 

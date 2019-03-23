@@ -34,6 +34,18 @@ class UserRepository extends ServiceEntityRepository
         ;
     }
 
+    public function findWherePersonIsActive()
+    {
+        return $this->createQueryBuilder('u')
+            ->join('u.person', 'p')
+            ->addSelect('p')
+            ->andWhere('p.isActive = true')
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
+
     // /**
     //  * @return User[] Returns an array of User objects
     //  */

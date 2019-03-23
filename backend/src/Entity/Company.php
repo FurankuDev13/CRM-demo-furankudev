@@ -273,13 +273,17 @@ class Company
     {
         $result = false;
 
-        foreach($user->getUserRoles() as $userRole) {
-            if ($userRole->getCode() == 'ROLE_SALES') {
-                $result = true;
+        //un $user peut être NULL dans le cas où on désassigne un Commercial d'une société (phil)
+        if ($user != NULL) {
+            foreach($user->getUserRoles() as $userRole) {
+                if ($userRole->getCode() == 'ROLE_SALES') {
+                    $result = true;
+                }
             }
-        }
-
-        if ($result) {
+            if ($result) {
+                $this->user = $user;
+            }
+        } else {
             $this->user = $user;
         }
         
