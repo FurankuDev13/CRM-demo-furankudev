@@ -36,16 +36,18 @@
                         </td>
                         <td>{{ category.description|truncate(30) }}</td>
                         <td>
-                            <figure class="image is-48x48">
-                                <img src="{{ category.picture ?: "https://stickeramoi.com/3777-large_default/autocollant-point-interrogation-muraux.jpg" }}">
+                            <figure class="image is-32x32">
+                                <img src="{{ category.picture ? : "https://stickeramoi.com/3777-large_default/autocollant-point-interrogation-muraux.jpg" }}">
                             </figure>
                         </td>
                         {% if is_granted('ROLE_SUPPORT') %}
-                            <td class="level-left">
-                                <a class="level-item" href="{{ path('category_edit', {'id' : category.id })}}">
-                                    <button type="submit" class="button is-info"><i class="fas fa-edit"></i></button>
-                                </a>
-                                {% include 'category/_archive_form.html.twig' %}
+                            <td class="level">
+                                <div class="level-left">
+                                    <a class="level-item" href="{{ path('category_edit', {'id' : category.id })}}">
+                                        <button type="submit" class="button is-info"><i class="fas fa-edit"></i></button>
+                                    </a>
+                                    {% include 'category/_archive_form.html.twig' %}
+                                </div>
                             </td>
                         {% endif %}
                     </tr>
