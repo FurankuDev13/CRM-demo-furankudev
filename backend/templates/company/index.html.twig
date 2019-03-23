@@ -36,7 +36,7 @@
                             </figure>
                         </td>
                         <td>{{ company.isCustomer ? 'Client' : 'Prospect' }}</td>
-                        <td>{{ company.user ? company.user.person.lastname : 'Dégun' }}</td>
+                        <td>{{ company.user ? (company.user.person.firstname ~ ' ' ~ company.user.person.lastname) }}</td>
                         {% if is_granted('ROLE_SALES') %}
                             <td class="level">
                                 <form class="level-left" action='{{ path('company_archive', {'id': company.id}) }}' method="POST">
