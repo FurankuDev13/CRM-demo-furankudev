@@ -80,12 +80,11 @@ class UserController extends AbstractController
         }
 
         //On retire l'utilisateur des Sociétés auxquelles il a été assigné
-        // NE FONCTIONNE PAS === A CORRIGER
         $userNull = new User();
+        $userNull = NULL;
         $companies = $companyRepo->findByUser($user->getId());
         foreach ($companies as $company) {
             $company->setUser($userNull);
-            $entityManager->persist($company);
         }
 
         $user->getPerson()->setIsActive(!$user->getPerson()->getIsActive());
@@ -94,11 +93,7 @@ class UserController extends AbstractController
             'L\'Utilisateur ' . $user->getPerson()->getFirstname() . " " . $user->getPerson()->getLastname() . ' a été archivé !'
         );
 
-
-
-
         $entityManager->flush();
-
 
         $referer = $request->headers->get('referer');
 

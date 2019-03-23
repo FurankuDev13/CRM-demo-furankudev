@@ -24,8 +24,6 @@ class BoardController extends AbstractController
         $unhandledRequests = $requestRepo->findUnhandled();
         $salesUsers = $userRepo->findSalesRoles();
 
-        dump($companiesWithUnhandledRequests );
-
         return $this->render('board/index.html.twig', [
             'page_title' => 'Tableau de bord',
             'index' => $index,
