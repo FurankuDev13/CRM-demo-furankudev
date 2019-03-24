@@ -7,7 +7,7 @@ import PropTypes from 'prop-types';
 /**
  * local import
  */
-import Form from 'src/components/Form';
+import Form from 'src/containers/Form';
 
 /**
  * Code
