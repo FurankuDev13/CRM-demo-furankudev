@@ -2,6 +2,7 @@
  * NPM import
  */
 import React from 'react';
+import PropTypes from 'prop-types';
 
 /**
  * Local import
@@ -11,7 +12,7 @@ const Catalog = ({ name, listPrice, picture }) => (
   <div className="card">
     <div className="card-image">
       <figure className="image is-4by3">
-        <img src={picture} alt="Placeholder" />
+        <img src={picture} alt={name} />
       </figure>
     </div>
     <div className="card-content">
@@ -27,10 +28,12 @@ const Catalog = ({ name, listPrice, picture }) => (
     </div>
   </div>
 );
-/**
- * TODO :
- * - ajouter des alts appropriés lorsqu'on aura ajouté de vrais articles / catégories
- */
+
+Catalog.propTypes = {
+  name: PropTypes.string.isRequired,
+  listPrice: PropTypes.number.isRequired,
+  picture: PropTypes.string.isRequired,
+};
 
 /**
  * Export

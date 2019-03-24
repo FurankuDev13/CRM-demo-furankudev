@@ -2,6 +2,7 @@
  * NPM import
  */
 import React from 'react';
+import PropTypes from 'prop-types';
 
 /**
  * Local import
@@ -64,10 +65,10 @@ const App = ({ isLogged }) => (
     <Footer />
   </div>
 );
-/**
- * TODO : quand la page de connexion sera faite, rediriger depuis la page catalogue
- * vers la page de connexion et non la page d'accueil
- */
+
+App.propTypes = {
+  isLogged: PropTypes.bool.isRequired,
+};
 
 /**
  * Export

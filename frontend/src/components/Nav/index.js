@@ -15,10 +15,10 @@ const Nav = ({ isLogged }) => (
           <img src="src/cerberus_logo.png" alt="Logo o'Wine'rs" />
           <h1 className="title is-3 has-text-white">o'Wine'rs</h1>
         </a>
-        <div className="navbar-burger burger" data-target="navMenuExample4">
-          <span></span>
-          <span></span>
-          <span></span>
+        <div className="navbar-burger burger has-dropdown" data-target="navMenuExample4">
+          <span />
+          <span />
+          <span />
         </div>
       </div>
       <div id="navMenuExample4" className="navbar-menu">
@@ -67,7 +67,6 @@ Nav.propTypes = {
  * TODO :
  * - configurer le burger avec du JS pour faire apparaitre
  * les liens home s'inscrire et se connecter quand on clique dessus avec React
- * - remettre le style flatly convenu au dapart qui a disparu à l'encapsulation React
  */
 
 /**
