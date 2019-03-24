@@ -139,27 +139,21 @@ class ContactController extends AbstractController
     /**
      * @Route("/contact/{id}", name="edit", methods={"PATCH"})
      */
-    public function edit(Contact $contact, Request $request, SerializerInterface $serializer, EntityManagerInterface $entityManager, UserPasswordEncoderInterface $passwordEncoder)
+    public function edit(Contact $contact, Request $request, SerializerInterface $serializer, EntityManagerInterface $entityManager, UserPasswordEncoderInterface $passwordEncoder, ContactRepository $contactRepo)
     {
         if (!$contact) {
             throw $this->createNotFoundException("Le contact indiqué n'existe pas"); 
         }
-        $email = $request->request->get('email', null);
-        $password = $request->request->get('password', null);
-        if ($email && $password) {
-            $contact->setEmail($email);
-            $encodedPassword = $this->passwordEncoder->encodePassword($contact, $password);
-            $contact->setPassword($encodedPassword);
-            $entityManager->flush();
-            if ($contact) {
-                $jsonObject = $serializer->serialize($contact, 'json', [
-                    'circular_reference_handler' => function ($object) {
-                        return $object->getId();
-                    }
-                ]);
-            } else {
-                $jsonObject = null;
-            }
+
+        $data = $serializer->deserialize($request->getContent(), Contact::class, 'json');
+        
+        if ($data) {
+            /* if (!$data->getEmail()) {
+                $savedContact = $contactRepo->findOneByEmail($data->getEmail());
+            } */
+            /* $entityManager->flush(); */
+
+            $jsonObject = $serializer->serialize($contact, 'json',['groups' => 'user_group']);
         }
         return new Response($jsonObject, 200, ['Content-Type' => 'application/json']);
     }
