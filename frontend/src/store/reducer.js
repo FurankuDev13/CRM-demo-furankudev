@@ -39,6 +39,7 @@ const INPUT_CHANGE = 'INPUT_CHANGE';
  * Reducer
  */
 const reducer = (state = initialState, action = {}) => {
+  console.log(action);
   switch (action.type) {
     case FETCH_SUCCESS:
       return {
@@ -50,9 +51,9 @@ const reducer = (state = initialState, action = {}) => {
         ...state,
         fields: {
           ...state.fields,
-          [action.fieldInfos.formOrigin]: {
-            ...state.fields[action.fieldInfos.formOrigin],
-            [action.fieldInfos.name]: action.fieldInfos.value,
+          [action.formOrigin]: {
+            ...state.fields[action.formOrigin],
+            [action.name]: action.value,
           },
         },
       };
@@ -74,9 +75,11 @@ export const fetchSuccess = data => ({
   data,
 });
 
-export const inputChange = fieldInfos => ({
+export const inputChange = (value, formOrigin, name) => ({
   type: INPUT_CHANGE,
-  fieldInfos,
+  value,
+  formOrigin,
+  name,
 });
 
 export const sendLoginRequest = () => ({

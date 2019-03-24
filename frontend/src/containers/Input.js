@@ -27,11 +27,14 @@ const mapStateToProps = () => ({});
  *  - ownProps : les props passées au container
  * Pas de disptach à transmettre ? const mapDispatchToProps = {};
  */
-const mapDispatchToProps = dispatch => ({
-  inputChange: (fieldInfos) => {
-    dispatch(inputChange(fieldInfos));
-  },
-});
+const mapDispatchToProps = (dispatch, ownProps) => {
+  const { formOrigin, name } = ownProps;
+  return ({
+    inputChange: (fieldInfos) => {
+      dispatch(inputChange(fieldInfos, formOrigin, name));
+    },
+  });
+};
 
 // Container
 const InputContainer = connect(

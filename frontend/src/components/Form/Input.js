@@ -14,15 +14,9 @@ import PropTypes from 'prop-types';
 
 class Input extends React.Component {
   handleChange = (evt) => {
-    const { name, formOrigin, inputChange } = this.props;
+    const { inputChange } = this.props;
     const { value } = evt.target;
-    inputChange(
-      {
-        name,
-        value,
-        formOrigin,
-      },
-    );
+    inputChange(value);
   }
 
   render() {
@@ -57,7 +51,6 @@ Input.propTypes = {
   type: PropTypes.string.isRequired,
   placeholder: PropTypes.string.isRequired,
   value: PropTypes.string.isRequired,
-  formOrigin: PropTypes.string.isRequired,
   inputChange: PropTypes.func.isRequired,
 };
 
