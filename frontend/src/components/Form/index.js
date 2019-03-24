@@ -24,7 +24,7 @@ class Form extends React.Component {
     const { tabl, formOrigin } = this.props;
     return (
       <form
-        id="login"
+        id={formOrigin}
         onSubmit={this.formSubmit}
       >
         {tabl.map(inputEntity => (

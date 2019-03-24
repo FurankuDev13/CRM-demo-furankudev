@@ -32,6 +32,7 @@ const initialState = {
  */
 export const FETCH_CATALOG = 'FETCH_CATALOG';
 export const SEND_LOGIN_REQUEST = 'SEND_LOGIN_REQUEST';
+export const SEND_REGISTER_REQUEST = 'SEND_REGISTER_REQUEST';
 const FETCH_SUCCESS = 'FETCH_SUCCESS';
 const INPUT_CHANGE = 'INPUT_CHANGE';
 
@@ -39,7 +40,6 @@ const INPUT_CHANGE = 'INPUT_CHANGE';
  * Reducer
  */
 const reducer = (state = initialState, action = {}) => {
-  console.log(action);
   switch (action.type) {
     case FETCH_SUCCESS:
       return {
@@ -84,6 +84,10 @@ export const inputChange = (value, formOrigin, name) => ({
 
 export const sendLoginRequest = () => ({
   type: SEND_LOGIN_REQUEST,
+});
+
+export const sendRegisterRequest = () => ({
+  type: SEND_REGISTER_REQUEST,
 });
 
 /**

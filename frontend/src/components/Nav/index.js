@@ -13,7 +13,7 @@ const Nav = ({ isLogged }) => (
       <div className="navbar-brand">
         <a className="navbar-item" href="/">
           <img src="src/cerberus_logo.png" alt="Logo o'Wine'rs" />
-          <h1 className="title is-3 has-text-white">o'Wine'rs</h1>
+          <h1 className="title is-3 has-text-white">o'beer</h1>
         </a>
         <div className="navbar-burger burger has-dropdown" data-target="navMenuExample4">
           <span />

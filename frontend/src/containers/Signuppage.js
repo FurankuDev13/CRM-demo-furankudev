@@ -6,10 +6,9 @@ import { connect } from 'react-redux';
 /**
  * Local import
  */
-import Form from 'src/components/Form';
+import Signuppage from 'src/components/Signuppage';
 
 // Action Creators
-import { sendLoginRequest, sendRegisterRequest } from 'src/store/reducer';
 
 /* === State (données) ===
  * - mapStateToProps retroune un objet de props pour le composant de présentation
@@ -18,7 +17,9 @@ import { sendLoginRequest, sendRegisterRequest } from 'src/store/reducer';
  *  - ownProps : les props passées au container
  * Pas de data à transmettre ? const mapStateToProps = null;
  */
-const mapStateToProps = () => ({});
+const mapStateToProps = state => ({
+  signupFields: state.fields.signup,
+});
 
 /* === Actions ===
  * - mapDispatchToProps retroune un objet de props pour le composant de présentation
@@ -27,34 +28,15 @@ const mapStateToProps = () => ({});
  *  - ownProps : les props passées au container
  * Pas de disptach à transmettre ? const mapDispatchToProps = {};
  */
-const mapDispatchToProps = (dispatch, ownProps) => ({
-  submitForm: () => {
-    const { formOrigin } = ownProps;
-    switch (formOrigin) {
-      case 'login':
-        dispatch(sendLoginRequest());
-        break;
-      case 'signup':
-        dispatch(sendRegisterRequest());
-        break;
-
-      default:
-    }
-  },
-});
+const mapDispatchToProps = () => ({});
 
 // Container
-const FormContainer = connect(
+const SignuppageContainer = connect(
   mapStateToProps,
   mapDispatchToProps,
-)(Form);
-
-/* 2 temps
-const createContainer = connect(mapStateToProps, mapDispatchToProps);
-const ExampleContainer = createContainer(Example);
-*/
+)(Signuppage);
 
 /**
  * Export
  */
-export default FormContainer;
+export default SignuppageContainer;

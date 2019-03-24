@@ -21,6 +21,7 @@ class Input extends React.Component {
 
   render() {
     const {
+      label,
       name,
       type,
       value,
@@ -28,7 +29,7 @@ class Input extends React.Component {
     } = this.props;
     return (
       <div className="field">
-        <label className="label" htmlFor={name}>{name} >
+        <label className="label" htmlFor={name}>{label} >
           <div className="control has-icons-left has-icons-right">
             <input
               id={name}
@@ -47,6 +48,7 @@ class Input extends React.Component {
 }
 
 Input.propTypes = {
+  label: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
   type: PropTypes.string.isRequired,
   placeholder: PropTypes.string.isRequired,

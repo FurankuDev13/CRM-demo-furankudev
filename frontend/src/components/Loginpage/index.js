@@ -14,17 +14,20 @@ import PropTypes from 'prop-types';
  */
 
 const Login = ({ loginFields, formOrigin }) => {
+  const { email, password } = loginFields;
   const tabl = [
     {
       name: 'email',
+      label: 'Email',
       type: 'email',
-      value: loginFields.email,
+      value: email,
       placeholder: 'Saisissez votre email',
     },
     {
       name: 'password',
+      label: 'mot de passe',
       type: 'password',
-      value: loginFields.password,
+      value: password,
       placeholder: 'Saisissez votre mot de passe',
     },
   ];

@@ -12,7 +12,7 @@ import Nav from 'src/components/Nav';
 import Homepage from 'src/components/Homepage';
 import Customerpage from 'src/components/Customerpage';
 import Loginpage from 'src/containers/Loginpage';
-import Signuppage from 'src/components/Signuppage';
+import Signuppage from 'src/containers/Signuppage';
 import Footer from 'src/components/Footer';
 import NotFound from 'src/components/NotFound';
 
@@ -53,7 +53,9 @@ const App = ({ isLogged }) => (
         path="/signup"
         render={() => (
           !isLogged ? (
-            <Signuppage />
+            <Signuppage
+              formOrigin="signup"
+            />
           ) : (
             <Redirect to="/catalog" />
           )
