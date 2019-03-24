@@ -2,9 +2,10 @@
 
 namespace App\Entity;
 
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
@@ -16,44 +17,52 @@ class Contact implements UserInterface
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
+     * @Groups({"user_group"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
+     * @Groups({"user_group"})
      */
     private $lastConnection;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Person", inversedBy="contacts")
      * @ORM\JoinColumn(nullable=false)
+     * @Groups({"user_group"})
      */
     private $person;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\ContactType", inversedBy="contacts")
      * @ORM\JoinColumn(nullable=false)
+     * @Groups({"user_group"})
      */
     private $contactType;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Company", inversedBy="contacts")
      * @ORM\JoinColumn(nullable=false)
+     * @Groups({"user_group"})
      */
     private $company;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Request", mappedBy="contact")
+     * @Groups({"user_group"})
      */
     private $requests;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"user_group"})
      */
     private $email;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"user_group"})
      */
     private $password;
 
