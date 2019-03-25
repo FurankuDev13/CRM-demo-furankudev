@@ -6,7 +6,13 @@ import axios from 'axios';
 /**
  * local import
 */
-import { SEND_LOGIN_REQUEST, SEND_REGISTER_REQUEST } from 'src/store/reducer';
+import {
+  SEND_LOGIN_REQUEST,
+  SEND_REGISTER_REQUEST,
+  sendLoginRequest,
+  setProfile,
+  SET_PROFILE,
+} from 'src/store/reducer';
 
 /* TODO : redéfinir l'URL du backend en mode production juste avant la fin */
 
@@ -16,17 +22,17 @@ const axiosUp = axios.create({
 
 // Middleware : ajax : gestion des lettres
 const ajaxAdmin = store => next => (action) => {
+  const { dispatch } = store;
   switch (action.type) {
     case SEND_LOGIN_REQUEST: {
       const { loginDatas } = action;
-      console.log(loginDatas);
       const stringifiedLoginDatas = JSON.stringify(loginDatas);
       axiosUp.post('/api/login', stringifiedLoginDatas)
         .then((response) => {
-          console.log(response.data);
-          /*
-
-          */
+          const { data } = response;
+          console.log(data);
+          console.log('je suis loggé !');
+          dispatch(setProfile(data));
         })
         .catch((error) => {
           console.log(error);
@@ -63,16 +69,14 @@ const ajaxAdmin = store => next => (action) => {
         contactPasswordRepeat,
         contactRequest: '',
       };
-      console.log(registerDatas);
       const stringifiedLoginDatas = JSON.stringify(registerDatas);
       axiosUp.post('/api/contact', stringifiedLoginDatas)
-        .then((response) => {
-          console.log(response.data);
+        .then(() => {
           const loginDatas = {
             email: contactEmail,
             password: contactPassword,
           };
-          console.log(loginDatas);
+          dispatch(sendLoginRequest(loginDatas));
         })
         .catch((error) => {
           console.log(error);
@@ -80,6 +84,12 @@ const ajaxAdmin = store => next => (action) => {
       break;
     }
 
+    case SET_PROFILE: {
+      const { email } = action.userData;
+      localStorage.setItem('email', email);
+
+      break;
+    }
     default:
       break;
   }
