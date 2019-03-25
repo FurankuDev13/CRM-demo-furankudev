@@ -8,20 +8,21 @@ import { connect } from 'react-redux';
  */
 import App from 'src/components/App';
 
-// Action Creators
-// import { doSomething } from 'src/store/reducer';
-
 // mapping
 const mapStateToProps = (state) => {
-  const { view, isLogged } = state;
+  const {
+    view,
+    logEmail,
+    isLogged,
+  } = state;
   return ({
     isLogged,
+    logEmail,
     view,
   });
 };
 
-const mapDispatchToProps = (dispatch, ownProps) => ({
-});
+const mapDispatchToProps = () => ({});
 
 // Container
 const AppContainer = connect(

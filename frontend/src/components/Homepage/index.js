@@ -2,6 +2,7 @@
  * NPM import
  */
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 /**
  * Local import
@@ -15,7 +16,7 @@ const Homepage = () => (
         <section className="hero is-bold is-medium">
           <div className="hero-body">
             <h1 className="title is-2 is-spaced has-text-primary is-uppercase has-text-weight-bold">
-              o'Wine'rs
+              o'Beer
             </h1>
             <p className="subtitle is-4 is-spaced">
               Lorem, ipsum dolor sit amet consectetur adipisicing elit. Consectetur quod esse perferendis animi soluta, quia ea deserunt vero minus magnam fugit autem porro inventore ipsam exercitationem corrupti et cumque dolorum.
@@ -25,10 +26,10 @@ const Homepage = () => (
             </p>
             <div className="level">
               <button className="level-item has-text-centered button is-primary is-outlined is-medium" type="button">
-                <a className="link is-info">Créer un compte</a>
+                <Link to="/signup" className="link is-info">Créer un compte</Link>
               </button>
               <p className="level-item has-text-centered is-medium">
-                <span className="is-size-5">Déjà client ? &nbsp;</span><a className="link is-info is-size-5">Se connecter</a>
+                <span className="is-size-5">Déjà client ? &nbsp;</span><Link to="/login" className="link is-info is-size-5">Se connecter</Link>
               </p>
             </div>
           </div>

@@ -16,31 +16,31 @@ class Person
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
-     * @Groups({"user_group"})
+     * @Groups({"contact_group"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=128)
-     * @Groups({"user_group"})
+     * @Groups({"contact_group"})
      */
     private $firstname;
 
     /**
      * @ORM\Column(type="string", length=128)
-     * @Groups({"user_group"})
+     * @Groups({"contact_group"})
      */
     private $lastname;
 
     /**
      * @ORM\Column(type="string", length=128, nullable=true)
-     * @Groups({"user_group"})
+     * @Groups({"contact_group"})
      */
     private $businessPhone;
 
     /**
      * @ORM\Column(type="string", length=128, nullable=true)
-     * @Groups({"user_group"})
+     * @Groups({"contact_group"})
      */
     private $cellPhone;
 
