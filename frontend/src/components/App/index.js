@@ -8,7 +8,7 @@ import PropTypes from 'prop-types';
  * Local import
  */
 import { Route, Redirect, Switch } from 'react-router-dom';
-import Nav from 'src/components/Nav';
+import Nav from 'src/containers/Nav';
 import Homepage from 'src/components/Homepage';
 import Customerpage from 'src/components/Customerpage';
 import Loginpage from 'src/containers/Loginpage';
@@ -22,9 +22,7 @@ import NotFound from 'src/components/NotFound';
  */
 const App = ({ isLogged }) => (
   <div>
-    <Nav
-      isLogged={isLogged}
-    />
+    <Nav />
     <Switch>
       <Route exact path="/" component={Homepage} />
       <Route
@@ -70,6 +68,7 @@ const App = ({ isLogged }) => (
 
 App.propTypes = {
   isLogged: PropTypes.bool.isRequired,
+  logEmail: PropTypes.string.isRequired,
 };
 
 /**

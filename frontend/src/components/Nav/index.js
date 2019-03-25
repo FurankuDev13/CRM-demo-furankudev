@@ -8,7 +8,7 @@ import PropTypes from 'prop-types';
 /**
  * Code
  */
-const Nav = ({ isLogged }) => (
+const Nav = ({ isLogged, logOut }) => (
   <header>
     <nav className="navbar has-shadow is-primary is-fixed-top">
       <div className="navbar-brand">
@@ -46,7 +46,7 @@ const Nav = ({ isLogged }) => (
                 </>
               )}
               {isLogged === true && (
-                <p className="control">
+                <p className="control" onClick={logOut}>
                   <a id="sign-up" className="button is-transparent is-size-5">
                     <span>Se déconnecter</span>
                   </a>
@@ -62,6 +62,7 @@ const Nav = ({ isLogged }) => (
 
 Nav.propTypes = {
   isLogged: PropTypes.bool.isRequired,
+  logOut: PropTypes.func.isRequired,
 };
 
 /**

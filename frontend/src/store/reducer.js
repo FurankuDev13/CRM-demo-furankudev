@@ -3,6 +3,7 @@
  */
 const initialState = {
   view: 'login',
+  logEmail: '',
   isLogged: false,
   catalogList: [],
   fields: {
@@ -36,6 +37,7 @@ export const SEND_REGISTER_REQUEST = 'SEND_REGISTER_REQUEST';
 export const SET_PROFILE = 'SET_PROFILE';
 const FETCH_SUCCESS = 'FETCH_SUCCESS';
 const INPUT_CHANGE = 'INPUT_CHANGE';
+const LOGOUT = 'LOGOUT';
 
 /**
  * Reducer
@@ -57,6 +59,25 @@ const reducer = (state = initialState, action = {}) => {
             [action.name]: action.value,
           },
         },
+      };
+
+    case SET_PROFILE:
+      if ((localStorage.getItem('email') !== null)) {
+        return {
+          ...state,
+          logEmail: localStorage.getItem('email'),
+          isLogged: true,
+        };
+      }
+      return {
+        ...state,
+      };
+
+    case LOGOUT:
+      return {
+        ...state,
+        logEmail: '',
+        isLogged: false,
       };
 
     default:
@@ -92,10 +113,12 @@ export const sendRegisterRequest = () => ({
   type: SEND_REGISTER_REQUEST,
 });
 
-
-export const setProfile = userData => ({
+export const setProfile = () => ({
   type: SET_PROFILE,
-  userData,
+});
+
+export const logOut = () => ({
+  type: LOGOUT,
 });
 
 /**

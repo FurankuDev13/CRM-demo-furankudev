@@ -11,7 +11,6 @@ import {
   SEND_REGISTER_REQUEST,
   sendLoginRequest,
   setProfile,
-  SET_PROFILE,
 } from 'src/store/reducer';
 
 /* TODO : redéfinir l'URL du backend en mode production juste avant la fin */
@@ -31,8 +30,10 @@ const ajaxAdmin = store => next => (action) => {
         .then((response) => {
           const { data } = response;
           console.log(data);
+          const { email } = data;
+          localStorage.setItem('email', email);
           console.log('je suis loggé !');
-          dispatch(setProfile(data));
+          dispatch(setProfile(email));
         })
         .catch((error) => {
           console.log(error);
@@ -84,12 +85,6 @@ const ajaxAdmin = store => next => (action) => {
       break;
     }
 
-    case SET_PROFILE: {
-      const { email } = action.userData;
-      localStorage.setItem('email', email);
-
-      break;
-    }
     default:
       break;
   }
