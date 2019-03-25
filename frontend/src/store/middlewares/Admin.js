@@ -18,11 +18,8 @@ const axiosUp = axios.create({
 const ajaxAdmin = store => next => (action) => {
   switch (action.type) {
     case SEND_LOGIN_REQUEST: {
-      const { email, password } = store.getState().fields.login;
-      const loginDatas = {
-        email,
-        password,
-      };
+      const { loginDatas } = action;
+      console.log(loginDatas);
       const stringifiedLoginDatas = JSON.stringify(loginDatas);
       axiosUp.post('/api/login', stringifiedLoginDatas)
         .then((response) => {
@@ -70,7 +67,12 @@ const ajaxAdmin = store => next => (action) => {
       const stringifiedLoginDatas = JSON.stringify(registerDatas);
       axiosUp.post('/api/contact', stringifiedLoginDatas)
         .then((response) => {
-          console.log(response);
+          console.log(response.data);
+          const loginDatas = {
+            email: contactEmail,
+            password: contactPassword,
+          };
+          console.log(loginDatas);
         })
         .catch((error) => {
           console.log(error);

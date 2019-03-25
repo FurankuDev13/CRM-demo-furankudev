@@ -132,7 +132,7 @@ class ContactController extends AbstractController
 
             $entityManager->flush();
 
-            $jsonObject = $serializer->serialize($contact, 'json',['groups' => 'user_group']);
+            $jsonObject = $serializer->serialize($contact, 'json',['groups' => 'contact_group']);
         }
 
         return new Response($jsonObject, 200, ['Content-Type' => 'application/json']);

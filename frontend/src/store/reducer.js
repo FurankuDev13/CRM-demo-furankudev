@@ -82,8 +82,9 @@ export const inputChange = (value, formOrigin, name) => ({
   name,
 });
 
-export const sendLoginRequest = () => ({
+export const sendLoginRequest = loginDatas => ({
   type: SEND_LOGIN_REQUEST,
+  loginDatas,
 });
 
 export const sendRegisterRequest = () => ({

@@ -31,8 +31,15 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
   submitForm: () => {
     const { formOrigin } = ownProps;
     switch (formOrigin) {
-      case 'login':
-        dispatch(sendLoginRequest());
+      case 'login': {
+        const email = ownProps.tabl.find(element => element.name === 'email').value;
+        const password = ownProps.tabl.find(element => element.name === 'password').value;
+        const loginDatas = {
+          email,
+          password,
+        };
+        dispatch(sendLoginRequest(loginDatas));
+      }
         break;
       case 'signup':
         dispatch(sendRegisterRequest());
