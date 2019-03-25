@@ -15,6 +15,9 @@ import App from 'src/containers/App';
 
 import store from 'src/store';
 
+import { setProfile } from 'src/store/reducer';
+
+
 /**
  * Render
  */
@@ -31,3 +34,5 @@ const target = document.getElementById('root');
 
 // rendu de react-dom : react VERS dom
 render(rootComponent, target);
+
+store.dispatch(setProfile());

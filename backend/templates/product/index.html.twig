@@ -50,14 +50,14 @@
             <thead>
                 <tr>
                     <th>Référence&nbsp;
-                            {% include orderButtonsIncludePath with {'field' : 'reference'} %}
-                        </th>
+                        {% include orderButtonsIncludePath with {'entity' : 'product', 'field' : 'reference'} %}
+                    </th>
                     <th>Produit&nbsp;
-                            {% include orderButtonsIncludePath with {'field' : 'name'} %}
+                            {% include orderButtonsIncludePath with {'entity' : 'product', 'field' : 'name'} %}
                         </th>
                     <th>Description</th>
                     <th>Prix liste&nbsp;
-                            {% include orderButtonsIncludePath with {'field' : 'listPrice'} %}
+                            {% include orderButtonsIncludePath with {'entity' : 'product', 'field' : 'listPrice'} %}
                         </th>
                     <th>Image</th>
                     {% if is_granted('ROLE_SUPPORT') %}

@@ -2,30 +2,66 @@
  * NPM import
  */
 import React from 'react';
+import { Link } from 'react-router-dom';
+import classNames from 'classnames';
 import PropTypes from 'prop-types';
 
 /**
  * Code
  */
-const Nav = ({ isLogged }) => (
+const Nav = ({
+  isLogged,
+  logOut,
+  navbarIsActive,
+  toggleNavBar,
+}) => (
   <header>
     <nav className="navbar has-shadow is-primary is-fixed-top">
       <div className="navbar-brand">
-        <a className="navbar-item" href="/">
+        <Link to="/" className="navbar-item">
           <img src="src/cerberus_logo.png" alt="Logo o'Wine'rs" />
           <h1 className="title is-3 has-text-white">o'beer</h1>
-        </a>
-        <div className="navbar-burger burger has-dropdown" data-target="navMenuExample4">
+        </Link>
+        <div
+          className={classNames(
+            'navbar-burger',
+            'burger',
+            {
+              'is-active': navbarIsActive,
+            },
+          )}
+          data-target="navMenuExample4"
+          onClick={toggleNavBar}
+        >
           <span />
           <span />
           <span />
         </div>
       </div>
-      <div id="navMenuExample4" className="navbar-menu">
+      <div
+        id="navMenuExample4"
+        className={classNames(
+          'navbar-menu',
+          {
+            'is-active': navbarIsActive,
+          },
+        )}
+      >
         <div className="navbar-start">
-          <a className="navbar-item is-size-4 is-active" href="#">
-            Home
-          </a>
+          {
+          !isLogged && (
+            <Link to="/" className="navbar-item is-size-4 is-active">
+              Home
+            </Link>
+          )
+          }
+          {
+          isLogged && (
+            <Link to="/profile" className="navbar-item is-size-4 is-active">
+              Mon Profil
+            </Link>
+          )
+          }
         </div>
         <div className="navbar-end">
           <div className="navbar-item">
@@ -33,19 +69,19 @@ const Nav = ({ isLogged }) => (
               {isLogged === false && (
                 <>
                   <p className="control">
-                    <a id="sign-up" className="button is-transparent is-size-5">
+                    <Link to="/signup" id="sign-up" className="button is-transparent is-size-5">
                       <span>S'inscrire</span>
-                    </a>
+                    </Link>
                   </p>
                   <p className="control">
-                    <a className="button is-transparent is-size-5">
+                    <Link to="/login" className="button is-transparent is-size-5">
                       <span>Se connecter</span>
-                    </a>
+                    </Link>
                   </p>
                 </>
               )}
               {isLogged === true && (
-                <p className="control">
+                <p className="control" onClick={logOut}>
                   <a id="sign-up" className="button is-transparent is-size-5">
                     <span>Se déconnecter</span>
                   </a>
@@ -61,6 +97,9 @@ const Nav = ({ isLogged }) => (
 
 Nav.propTypes = {
   isLogged: PropTypes.bool.isRequired,
+  navbarIsActive: PropTypes.bool.isRequired,
+  logOut: PropTypes.func.isRequired,
+  toggleNavBar: PropTypes.func.isRequired,
 };
 
 /**

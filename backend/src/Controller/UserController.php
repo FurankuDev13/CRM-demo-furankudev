@@ -3,12 +3,16 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use App\Entity\Person;
 use App\Repository\UserRepository;
 use App\Repository\CompanyRepository;
 use App\Repository\UserRoleRepository;
+use App\Form\UserType;
+use App\Form\PersonType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 /** 
@@ -25,7 +29,7 @@ class UserController extends AbstractController
         $userRoles = $userRoleRepo->findByIsActive(true);
 
         return $this->render('user/index.html.twig', [
-            'page_title' => 'Liste des utilisateurs (collaborateurs)',
+            'page_title' => 'Utilisateurs',
             'users' => $users,
             'userRoles' => $userRoles,
         ]);
@@ -39,7 +43,7 @@ class UserController extends AbstractController
         if (!$user) {
             throw $this->createNotFoundException("L'utilisateur indiqué n'existe pas"); 
         }
-
+        dump($user);
         return $this->render('user/show.html.twig', [
             'page_title' => 'Utilisateur: ' . $user->getPerson()->getFirstname() . ' ' . $user->getPerson()->getLastname(),
             'user' => $user,
@@ -49,24 +53,79 @@ class UserController extends AbstractController
     /**
      * @Route("/new", name="new", methods={"GET", "POST"})
      */
-    public function new(Request $request, EntityManagerInterface $entityManager)
+    public function new(Request $request, EntityManagerInterface $entityManager, UserPasswordEncoderInterface $passwordEncoder)
     {
+        $user = new User();
+        $person = new Person();
+
+        $userForm = $this->createForm(UserType::class, $user, ['user' => $this->getUser()]);
+        $personForm = $this->createForm(PersonType::class, $person);
+
+        $userForm->handleRequest($request);
+        $personForm->handleRequest($request);
+
+        if ($userForm->isSubmitted() && $userForm->isValid()) {
+            $entityManager->persist($person);
+            $encodedPassword = $passwordEncoder->encodePassword($user, $user->getPassword());
+            $user->setPassword($encodedPassword);
+            $user->setPerson($person);
+            $entityManager->persist($user);
+            $entityManager->flush();
+
+            $this->addFlash(
+                'success',
+                "L'utilisateur " . $user->getPerson()->getFirstname() . ' ' . $user->getPerson()->getLastname() . ' a bien été ajouté !'
+            );
+            return $this->redirectToRoute('user_show', ['id' => $user->getId()]);
+        }
+
         return $this->render('user/new.html.twig', [
             'page_title' => 'Ajouter un nouvel utilisateur',
+            'userForm' => $userForm->createView(),
+            'personForm' => $personForm->createView()
         ]);
     }
 
     /**
      * @Route("/{id}/edit", name="edit", methods={"GET", "POST"}, requirements={"id"="\d+"})
      */
-    public function edit(User $user, Request $request, EntityManagerInterface $entityManager)
+    public function edit(User $user, Request $request, EntityManagerInterface $entityManager, UserPasswordEncoderInterface $passwordEncoder)
     {
         if (!$user) {
             throw $this->createNotFoundException("L'utilisateur indiqué n'existe pas"); 
         }
 
+        $person = $user->getPerson();
+        $savedPassword = $user->getPassword();
+
+        $userForm = $this->createForm(UserType::class, $user, ['user' => $this->getUser()]);
+        $personForm = $this->createForm(PersonType::class, $person);
+
+        $userForm->handleRequest($request);
+        $personForm->handleRequest($request);
+
+        if ($userForm->isSubmitted() && $userForm->isValid()) {
+            if($user->getPassword() == ''){
+                $encodedPassword = $savedPassword;
+            } else {
+                $encodedPassword = $passwordEncoder->encodePassword($user, $user->getPassword());
+            }
+
+            $user->setPassword($encodedPassword);
+            $entityManager->flush();
+
+            $this->addFlash(
+                'success',
+                "L'utilisateur " . $user->getPerson()->getFirstname() . ' ' . $user->getPerson()->getLastname() . ' a bien été mis à jour !'
+            );
+            return $this->redirectToRoute('user_show', ['id' => $user->getId()]);
+        }
+
         return $this->render('user/edit.html.twig', [
             'page_title' => "Mettre à jour l'utilisateur: " . $user->getPerson()->getFirstname() . ' ' . $user->getPerson()->getLastname(),
+            'user' => $user,
+            'userForm' => $userForm->createView(),
+            'personForm' => $personForm->createView()
         ]);
     }
 

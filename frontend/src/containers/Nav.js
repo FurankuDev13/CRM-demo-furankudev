@@ -6,10 +6,10 @@ import { connect } from 'react-redux';
 /**
  * Local import
  */
-import Form from 'src/components/Form';
+import Nav from 'src/components/Nav';
 
 // Action Creators
-import { sendLoginRequest, sendRegisterRequest } from 'src/store/reducer';
+import { logOut, toggleNavBar } from 'src/store/reducer';
 
 /* === State (données) ===
  * - mapStateToProps retroune un objet de props pour le composant de présentation
@@ -18,7 +18,14 @@ import { sendLoginRequest, sendRegisterRequest } from 'src/store/reducer';
  *  - ownProps : les props passées au container
  * Pas de data à transmettre ? const mapStateToProps = null;
  */
-const mapStateToProps = () => ({});
+const mapStateToProps = (state) => {
+  const { isLogged, logEmail, navbarIsActive } = state;
+  return ({
+    isLogged,
+    logEmail,
+    navbarIsActive,
+  });
+};
 
 /* === Actions ===
  * - mapDispatchToProps retroune un objet de props pour le composant de présentation
@@ -27,34 +34,21 @@ const mapStateToProps = () => ({});
  *  - ownProps : les props passées au container
  * Pas de disptach à transmettre ? const mapDispatchToProps = {};
  */
-const mapDispatchToProps = (dispatch, ownProps) => ({
-  submitForm: () => {
-    const { formOrigin } = ownProps;
-    switch (formOrigin) {
-      case 'login': {
-        const email = ownProps.tabl.find(element => element.name === 'email').value;
-        const password = ownProps.tabl.find(element => element.name === 'password').value;
-        const loginDatas = {
-          email,
-          password,
-        };
-        dispatch(sendLoginRequest(loginDatas));
-      }
-        break;
-      case 'signup':
-        dispatch(sendRegisterRequest());
-        break;
-
-      default:
-    }
+const mapDispatchToProps = dispatch => ({
+  logOut: () => {
+    localStorage.removeItem('email');
+    dispatch(logOut());
+  },
+  toggleNavBar: () => {
+    dispatch(toggleNavBar());
   },
 });
 
 // Container
-const FormContainer = connect(
+const CatalogContainer = connect(
   mapStateToProps,
   mapDispatchToProps,
-)(Form);
+)(Nav);
 
 /* 2 temps
 const createContainer = connect(mapStateToProps, mapDispatchToProps);
@@ -64,4 +58,4 @@ const ExampleContainer = createContainer(Example);
 /**
  * Export
  */
-export default FormContainer;
+export default CatalogContainer;

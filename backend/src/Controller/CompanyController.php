@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Company;
 use App\Entity\CompanyAddress;
+use App\Form\CompanyType as CompanyFormType;
 use App\Repository\UserRepository;
 use App\Repository\CompanyRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -24,7 +25,7 @@ class CompanyController extends AbstractController
         $companies = $companyRepo->findByIsActive(true);
 
         return $this->render('company/index.html.twig', [
-            'page_title' => 'Liste des sociétés',
+            'page_title' => 'Sociétés',
             'companies' => $companies,
         ]);
     }
@@ -49,8 +50,25 @@ class CompanyController extends AbstractController
      */
     public function new(Request $request, EntityManagerInterface $entityManager)
     {
+        $company = new Company();
+
+        $form = $this->createForm(CompanyFormType::class, $company);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager->persist($company);
+            $entityManager->flush();
+
+            $this->addFlash(
+                'success',
+                'La société ' . $company->getName() . ' a bien été ajoutée !'
+            );
+            return $this->redirectToRoute('company_show', ['id' => $company->getId()]);
+        }
+
         return $this->render('company/new.html.twig', [
             'page_title' => 'Ajouter une nouvelle société',
+            'form' => $form->createView()
         ]);
     }
 
@@ -63,8 +81,23 @@ class CompanyController extends AbstractController
             throw $this->createNotFoundException("La société indiquée n'existe pas"); 
         }
 
+        $form = $this->createForm(CompanyFormType::class, $company);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager->flush();
+
+            $this->addFlash(
+                'success',
+                'La société ' . $company->getName() . ' a bien été mise à jour !'
+            );
+            return $this->redirectToRoute('company_show', ['id' => $company->getId()]);
+        }
+
         return $this->render('company/edit.html.twig', [
             'page_title' => 'Mettre à jour la société: ' . $company->getName(),
+            'company' => $company,
+            'form' => $form->createView()
         ]);
     }
 

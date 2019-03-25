@@ -6,7 +6,12 @@ import axios from 'axios';
 /**
  * local import
 */
-import { SEND_LOGIN_REQUEST, SEND_REGISTER_REQUEST } from 'src/store/reducer';
+import {
+  SEND_LOGIN_REQUEST,
+  SEND_REGISTER_REQUEST,
+  sendLoginRequest,
+  setProfile,
+} from 'src/store/reducer';
 
 /* TODO : redéfinir l'URL du backend en mode production juste avant la fin */
 
@@ -16,20 +21,19 @@ const axiosUp = axios.create({
 
 // Middleware : ajax : gestion des lettres
 const ajaxAdmin = store => next => (action) => {
+  const { dispatch } = store;
   switch (action.type) {
     case SEND_LOGIN_REQUEST: {
-      const { email, password } = store.getState().fields.login;
-      const loginDatas = {
-        email,
-        password,
-      };
+      const { loginDatas } = action;
       const stringifiedLoginDatas = JSON.stringify(loginDatas);
       axiosUp.post('/api/login', stringifiedLoginDatas)
         .then((response) => {
-          console.log(response.data);
-          /*
-
-          */
+          const { data } = response;
+          console.log(data);
+          const { email } = data;
+          localStorage.setItem('email', email);
+          console.log('je suis loggé !');
+          dispatch(setProfile(email));
         })
         .catch((error) => {
           console.log(error);
@@ -50,7 +54,6 @@ const ajaxAdmin = store => next => (action) => {
         contactEmail,
         contactPassword,
         contactPasswordRepeat,
-        contactRequest,
       } = store.getState().fields.signup;
 
       const registerDatas = {
@@ -65,19 +68,20 @@ const ajaxAdmin = store => next => (action) => {
         contactEmail,
         contactPassword,
         contactPasswordRepeat,
-        contactRequest,
+        contactRequest: '',
       };
-      console.log(registerDatas);
-      /*
-        const stringifiedLoginDatas = JSON.stringify(loginDatas);
-        axiosUp.post('/api/login', stringifiedLoginDatas)
-          .then((response) => {
-            console.log(response.data);
-
-          })
-          .catch((error) => {
-            console.log(error);
-          }); */
+      const stringifiedLoginDatas = JSON.stringify(registerDatas);
+      axiosUp.post('/api/contact', stringifiedLoginDatas)
+        .then(() => {
+          const loginDatas = {
+            email: contactEmail,
+            password: contactPassword,
+          };
+          dispatch(sendLoginRequest(loginDatas));
+        })
+        .catch((error) => {
+          console.log(error);
+        });
       break;
     }
 

@@ -8,7 +8,45 @@
             <div class="level-item">
                 <h2 class="level-item subtitle has-text-info is-3">{{ request.title }}</h2>
             </div>
-            <button class="level-item button is-info is-small is-size-4">{{ request.requestType.title }}, {{ request.handlingStatus.title }}</button>
+            <button class="level-item button is-info is-small is-size-4">{{ request.requestType.title }}</button>
+            <button class="level-item button is-info is-small is-size-4">{{ request.handlingStatus.title }}</button>
         </div>
+        <div class="tile is-ancestor">
+            {# Début des Tiles #}
+            <div class="tile is-parent is-3 is-vertical">
+                <article class="tile is-child">
+                    <figure class="image is-4by3">
+                        <img src="{{ request.contact.company.picture }}">
+                    </figure>
+                </article>
+            </div>
+            <div class="tile is-parent is-vertical">
+                <article class="tile is-child notification is-primary">
+                    <p class="title">Description</p>
+                    <p class="subtitle">{{ request.body }}</p>
+                </article>
+                <div class="tile">
+                    <article class="tile is-child is-8">
+                        <p class="title">Contact</p>
+                            <p class="content">
+                                <a href="{{ path('contact_show', {'id' : request.contact.id}) }}">
+                                    <span class="subtitle">{{ request.contact.person.firstname }} {{ request.contact.person.lastname }}</span>
+                                </a> &nbsp;-&nbsp;
+                                <span class="has-text-weight-bold">{{ request.contact.contactType.title }}</span></br>
+                                <i class="fas fa-mobile-alt"></i> {{ request.contact.person.cellPhone }} &nbsp;&nbsp;&nbsp;
+                                <i class="fas fa-phone"></i> {{ request.contact.person.businessPhone }}
+                            </p>
+                        
+                    </article>
+                    <article class="tile is-child">
+                        <p class="title">Informations</p>
+                        <p>Enregistrement: &nbsp; <span class="has-text-weight-bold">{{ request.createdAt|date('d-m-Y') }}</span></p>
+                        <p>Mise à jour: &nbsp; <span class="has-text-weight-bold">{{ request.updatedAt|date('d-m-Y') }}</span></p>
+                    </article>
+                </div>
+            </div>
+            {# Fin des Tiles #}
+        </div>
+
     </div>
 {% endblock %}
