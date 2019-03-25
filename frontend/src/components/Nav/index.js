@@ -48,9 +48,20 @@ const Nav = ({
         )}
       >
         <div className="navbar-start">
-          <Link to="/" className="navbar-item is-size-4 is-active">
-            Home
-          </Link>
+          {
+          !isLogged && (
+            <Link to="/" className="navbar-item is-size-4 is-active">
+              Home
+            </Link>
+          )
+          }
+          {
+          isLogged && (
+            <Link to="/profile" className="navbar-item is-size-4 is-active">
+              Mon Profil
+            </Link>
+          )
+          }
         </div>
         <div className="navbar-end">
           <div className="navbar-item">
