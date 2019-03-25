@@ -24,7 +24,17 @@ const App = ({ isLogged }) => (
   <div>
     <Nav />
     <Switch>
-      <Route exact path="/" component={Homepage} />
+      <Route
+        exact
+        path="/"
+        render={() => (
+          !isLogged ? (
+            <Homepage />
+          ) : (
+            <Redirect to="/catalog" />
+          )
+        )}
+      />
       <Route
         path="/catalog"
         render={() => (
