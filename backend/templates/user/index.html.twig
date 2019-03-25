@@ -34,6 +34,10 @@
                     <th>Téléphone</th>
                     <th>Role(s)</th>
                     <th>Société(s)</th>
+                    {% if is_granted('ROLE_MANAGER') %}
+                    <th>Actions</th>
+                    {% endif %}
+
                 </tr>
             </thead>
             <tbody>
@@ -55,6 +59,20 @@
                                 {{ company.name }} {% if not loop.last %}, {% endif %}
                             {% endfor %}
                         </td>
+                        {% if is_granted('ROLE_MANAGER') %}
+                        <td class="level">
+                            <div class="level-left">
+                                <form class="level-item" action='{{ path('user_archive', {'id': user.id}) }}' method="POST">
+                                    <input class="" type="hidden" name="_method" value="PATCH">
+                                    {# Modal de confirmation d'opération #}
+                                    {% include 'partial/_confirm_cancel_modal.html.twig' with {'message': 'Confirmation d\'Archivage'} %}
+                                    <button class="button showModalConfirm is-warning"><i class="fas fa-archive"></i></button>
+
+                                </form>
+                            </div>
+                        </td>
+                        {% endif %}
+
                     </tr>
                 {% endfor %}
             </tbody>

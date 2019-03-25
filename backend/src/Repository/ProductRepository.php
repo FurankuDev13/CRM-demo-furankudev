@@ -3,8 +3,9 @@
 namespace App\Repository;
 
 use App\Entity\Product;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use App\Entity\Category;
 use Symfony\Bridge\Doctrine\RegistryInterface;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 
 /**
  * @method Product|null find($id, $lockMode = null, $lockVersion = null)
@@ -19,6 +20,7 @@ class ProductRepository extends ServiceEntityRepository
         parent::__construct($registry, Product::class);
     }
 
+
     public function findByIsActiveAndIsAvailable($isActive = true, $isAvailable = true)
     {
         return $this->createQueryBuilder('p')
@@ -30,6 +32,31 @@ class ProductRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult()
         ;
+
+    public function findIsACtiveOrderedByField($field = 'name', $order = 'ASC')
+    {
+        return $this->createQueryBuilder('p')
+        ->andWhere('p.isActive = :val')
+        ->setParameter('val', true)
+        ->orderBy('p.' . $field, $order)
+        ->getQuery()
+        ->getResult()
+    ;
+    }
+
+    public function findIsACtiveByCategoryNameOrderedByField($categoryName, $field = 'name', $order = 'ASC')
+    {
+        return $this->createQueryBuilder('p')
+        ->join('p.categories', 'c')
+        ->addSelect('c')
+        ->where('c.name = :categoryName')
+        ->setParameter('categoryName', $categoryName)
+        ->andWhere('p.isActive = :val')
+        ->setParameter('val', true)
+        ->orderBy('p.' . $field, $order)
+        ->getQuery()
+        ->getResult()
+    ;
     }
 
     // /**

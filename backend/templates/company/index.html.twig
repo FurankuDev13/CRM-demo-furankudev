@@ -18,11 +18,14 @@
                     <th>Image</th>
                     <th>Client/Prospect</th>
                     <th>Commercial</th>
+                    {% if is_granted('ROLE_SALES') %}
+                        <th>Actions</th>
+                    {% endif %}    
                 </tr>
             </thead>
             <tbody>
                 {% for company in companies %}
-                    <tr>
+                    <tr class="">
                         <td>   
                             <a href="{{ path('company_show', {'id': company.id}) }}">{{ company.name }}</a>
                         </td>
@@ -33,7 +36,16 @@
                             </figure>
                         </td>
                         <td>{{ company.isCustomer ? 'Client' : 'Prospect' }}</td>
-                        <td>{{ company.user ? company.user.person.lastname : 'Dégun' }}</td>
+                        <td>{{ company.user ? (company.user.person.firstname ~ ' ' ~ company.user.person.lastname) }}</td>
+                        {% if is_granted('ROLE_SALES') %}
+                            <td class="level">
+                                <form class="level-left" action='{{ path('company_archive', {'id': company.id}) }}' method="POST">
+                                    <input class="" type="hidden" name="_method" value="PATCH">
+                                    {% include 'partial/_confirm_cancel_modal.html.twig' with {'message': 'Confirmation d\'Archivage'} %}
+                                    <button class="button showModalConfirm is-warning"><i class="fas fa-archive"></i></button>
+                                </form>
+                            </td>
+                        {% endif %}
                     </tr>
                 {% endfor %}
             </tbody>

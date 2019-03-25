@@ -1,0 +1,8 @@
+<form class="level-item" action='{{ path('product_available', {'id': product.id}) }}' method="POST">
+    <input class="" type="hidden" name="_method" value="PATCH">
+    {% if product.isAvailable %}
+        <button type="submit" class="button is-success"><i class="fas fa-euro-sign"></i></button>
+    {% else %}
+        <button type="submit" class="button is-outlined"><i class="fas fa-euro-sign"></i></button>
+    {% endif %}
+</form>

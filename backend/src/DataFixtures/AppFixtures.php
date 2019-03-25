@@ -72,7 +72,7 @@ class AppFixtures extends Fixture
             $product->setPicture($response->body[$i]->image_url);
             $product->setListPrice($response->body[$i]->price);
             $product->setMaxDiscountRate(15);
-            $product->setIsOnHomePage(true);
+            $product->setIsOnHomePage(false);
             $product->setRank(10);
             
             //dd($this->completeCategory($category));
