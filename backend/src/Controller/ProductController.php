@@ -36,7 +36,7 @@ class ProductController extends AbstractController
         $categories = $categoryRepo->findByIsActive(true);
 
         return $this->render('product/index.html.twig', [
-            'page_title' => 'Liste des produits du catalogue',
+            'page_title' => 'Catalogue Produits',
             'products' => $products,
             'categories' => $categories,
             'category' => $category,

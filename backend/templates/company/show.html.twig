@@ -51,8 +51,9 @@
                     </article>
                     <article class="tile is-child">
                         <p class="title">Informations</p>
+                        <p>Discount sur catalogue: &nbsp; <span class="has-text-weight-bold">{{ (company.discount is not null) ? company.discount.title : '0%' }}</span></p>
                         <p>SIREN: &nbsp; <span class="has-text-weight-bold">{{ company.sirenNumber }}</span></p>
-                        <p>Enregistrée: &nbsp; <span class="has-text-weight-bold">{{ company.createdAt|date('d-m-Y') }}</span></p>
+                        <p>Enregistrement: &nbsp; <span class="has-text-weight-bold">{{ company.createdAt|date('d-m-Y') }}</span></p>
                         <p>Mise à jour: &nbsp; <span class="has-text-weight-bold">{{ company.updatedAt|date('d-m-Y') }}</span></p>
                     </article>
                 </div>

@@ -16,33 +16,33 @@
                 </div>
                 <div id="navbarMenuHero9" class="navbar-menu">
                         <div class="navbar-end">
-                            <a class="navbar-item is-active" href="{{ path('board_index')}}">
+                            <a class="navbar-item {{ (app.request.attributes.get('_route') == 'board_index') ? 'is-active' }}" href="{{ path('board_index')}}">
                                 Tableau de bord
                             </a>
                             <div class="navbar-item has-dropdown is-hoverable">
-                                <a class="navbar-link" href="{{ path('product_index')}}">
+                                <a class="navbar-link {{ (app.request.attributes.get('_route') == 'product_index' or app.request.attributes.get('_route') == 'category_index') ? 'is-active' }} " href="{{ path('product_index')}}">
                                 Catalogue
                                 </a>
 
                                 <div class="navbar-dropdown">
-                                    <a class="navbar-item" href="{{ path('product_index')}}">
+                                    <a class="navbar-item {{ (app.request.attributes.get('_route') == 'product_index') ? 'is-active' }} " href="{{ path('product_index')}}">
                                         Produits
                                     </a>
-                                    <a class="navbar-item" href="{{ path('category_index')}}">
+                                    <a class="navbar-item {{ (app.request.attributes.get('_route') == 'category_index') ? 'is-active' }} " href="{{ path('category_index')}}">
                                         Catégories
                                     </a>
                                 </div>
                             </div>
-                            <a class="navbar-item" href="{{ path('company_index')}}">
+                            <a class="navbar-item {{ (app.request.attributes.get('_route') == 'company_index') ? 'is-active' }} " href="{{ path('company_index')}}">
                                 Sociétés
                             </a>
-                            <a class="navbar-item" href="{{ path('request_index')}}">
+                            <a class="navbar-item {{ (app.request.attributes.get('_route') == 'request_index') ? 'is-active' }} " href="{{ path('request_index')}}">
                                 Demandes
                             </a>
-                            <a class="navbar-item" href="{{ path('contact_index')}}">
+                            <a class="navbar-item {{ (app.request.attributes.get('_route') == 'contact_index') ? 'is-active' }} " href="{{ path('contact_index')}}">
                                 Contacts
                             </a>
-                            <a class="navbar-item" href="{{ path('user_index')}}">
+                            <a class="navbar-item {{ (app.request.attributes.get('_route') == 'user_index') ? 'is-active' }} " href="{{ path('user_index')}}">
                                 Utilisateurs
                             </a>
                             <div class="navbar-item">

@@ -24,7 +24,7 @@ class ContactController extends AbstractController
         $companies = $companyRepo->findByIsActive(true);
 
         return $this->render('contact/index.html.twig', [
-            'page_title' => 'Liste des contacts (professionnels)',
+            'page_title' => 'Contacts',
             'contacts' => $contacts,
             'companies' => $companies,
         ]);
