@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Entity\User;
 use App\Entity\Company;
 use App\Entity\HandlingStatus;
 use Symfony\Bridge\Doctrine\RegistryInterface;
@@ -43,6 +44,43 @@ class CompanyRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult()
         ;
+    }
+
+    public function findIsActiveOrderedByField($field = 'name', $order = 'ASC')
+    {
+        return $this->createQueryBuilder('c')
+        ->andWhere('c.isActive = :val')
+        ->setParameter('val', true)
+        ->orderBy('c.' . $field, $order)
+        ->getQuery()
+        ->getResult()
+    ;
+    }
+
+    public function findIsActiveByIsCustomerOrderedByField($isCustomer = true, $field = 'name', $order = 'ASC')
+    {
+        return $this->createQueryBuilder('c')
+        ->andWhere('c.isCustomer = :isCustomer')
+        ->setParameter('isCustomer', $isCustomer)
+        ->andWhere('c.isActive = :val')
+        ->setParameter('val', true)
+        ->orderBy('c.' . $field, $order)
+        ->getQuery()
+        ->getResult()
+    ;
+    }
+
+    public function findIsActiveByUserOrderedByField(User $user, $field = 'name', $order = 'ASC')
+    {
+        return $this->createQueryBuilder('c')
+        ->andWhere('c.user = :user')
+        ->setParameter('user', $user)
+        ->andWhere('c.isActive = :val')
+        ->setParameter('val', true)
+        ->orderBy('c.' . $field, $order)
+        ->getQuery()
+        ->getResult()
+    ;
     }
 
     // /**

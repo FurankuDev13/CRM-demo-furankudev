@@ -20,13 +20,44 @@ class CompanyController extends AbstractController
     /**
      * @Route("/index", name="index", methods={"GET"})
      */
-    public function index(CompanyRepository $companyRepo)
+    public function index(Request $request, CompanyRepository $companyRepo, UserRepository $userRepo)
     {
-        $companies = $companyRepo->findByIsActive(true);
+        $filter = $request->query->get('filter', null);
+        $salesUser = $request->query->get('salesUser', null);
+        $field = $request->query->get('field', 'name');
+        $order = $request->query->get('order', 'ASC');
+
+        $salesUsers = $userRepo->findSalesRoles();
+        $prospects = $companyRepo->findIsActiveByIsCustomerOrderedByField(false, $field, $order);
+        $customers = $companyRepo->findIsActiveByIsCustomerOrderedByField(true, $field, $order);
+
+        if ($salesUser) {
+            $user = $userRepo->find($salesUser);
+            $companies = $companyRepo->findIsActiveByUserOrderedByField($user, $field, $order);
+            $filterValue = $salesUser;
+        } else {
+            $companies = $companyRepo->findIsACtiveOrderedByField($field, $order);
+            $filterValue = null;
+        }
+
+        if ($filter == "isCustomer") {
+            $companies = $customers;
+            $filterValue = "isCustomer";
+        }
+
+        if ($filter == "isNotCustomer") {
+            $companies = $prospects;
+            $filterValue = "isNotCustomer";
+        }
 
         return $this->render('company/index.html.twig', [
             'page_title' => 'Sociétés',
             'companies' => $companies,
+            'salesUsers' => $salesUsers,
+            'prospects' => $prospects,
+            'customers' => $customers,
+            'filterType' => $filter,
+            'filterValue' => $filterValue,
         ]);
     }
 

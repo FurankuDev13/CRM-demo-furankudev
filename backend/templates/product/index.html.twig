@@ -5,7 +5,9 @@
 {% block sidebar %}
     <div class="level-left">
         <div class="level-item">
-            <h2 class="level-item subtitle has-text-info is-3">Catégories</h2>
+            <a href="{{ path('category_index')}}">
+                <h2 class="level-item subtitle has-text-info is-3">Catégories</h2>
+            </a>
         </div>
         <button class="level-item button is-info is-small is-size-4">{{ categories|length }}</button>
     </div>
@@ -55,7 +57,9 @@
                     <th>Produit&nbsp;
                             {% include orderButtonsIncludePath with {'entity' : 'product', 'field' : 'name'} %}
                         </th>
-                    <th>Description</th>
+                    <th>Description&nbsp;
+                            {% include orderButtonsIncludePath with {'entity' : 'product', 'field' : 'description'} %}
+                        </th>
                     <th>Prix liste&nbsp;
                             {% include orderButtonsIncludePath with {'entity' : 'product', 'field' : 'listPrice'} %}
                         </th>
