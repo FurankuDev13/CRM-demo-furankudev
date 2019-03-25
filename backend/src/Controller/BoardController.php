@@ -38,9 +38,9 @@ class BoardController extends AbstractController
         }
 
         if ($index == 3) {
-            $unhandledRequests = $requestRepo->findByHandlingStatus($unhandledStatus, $table?:'r', $field?:'createdAt', $order?:'DESC'); 
+            $unhandledRequests = $requestRepo->findisActiveByHandlingStatus($unhandledStatus, $table?:'r', $field?:'createdAt', $order?:'DESC'); 
         } else {
-            $unhandledRequests = $requestRepo->findByHandlingStatus($unhandledStatus); 
+            $unhandledRequests = $requestRepo->findisActiveByHandlingStatus($unhandledStatus); 
         }
 
         if ($index != 1 && $index != 2 && $index != 3) {

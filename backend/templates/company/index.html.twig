@@ -6,18 +6,18 @@
     <div class="level-left">
         <div class="level-item">
             <a  href="{{ path('company_index', {'filter': 'isNotCustomer'}) }}">
-                <h2 class="level-item subtitle has-text-info is-3">Prospects</h2>
+                <h2 class="level-item subtitle has-text-primary is-3">Prospects</h2>
             </a>
         </div>
-        <button class="level-item button is-info is-small is-size-4">{{ prospects|length }}</button>
+        <button class="level-item button is-primary is-small is-size-4">{{ prospects|length }}</button>
     </div>
     <div class="level-left">
         <div class="level-item">
             <a  href="{{ path('company_index', {'filter': 'isCustomer'}) }}">
-                <h2 class="level-item subtitle has-text-info is-3">Clients</h2>
+                <h2 class="level-item subtitle has-text-primary is-3">Clients</h2>
             </a>
         </div>
-        <button class="level-item button is-info is-small is-size-4">{{ customers|length }}</button>
+        <button class="level-item button is-primary is-small is-size-4">{{ customers|length }}</button>
     </div>
 
     <div class="level-left">
