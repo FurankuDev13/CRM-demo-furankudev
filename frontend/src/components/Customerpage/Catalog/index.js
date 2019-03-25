@@ -20,11 +20,12 @@ class Catalog extends React.Component {
   render() {
     const { catalogList } = this.props;
     return (
-      <div className="catalog">
+      <div className="list">
         {catalogList.count !== 0 && catalogList.map(item => (
           <Card
             key={item.id}
             {...item}
+            source="catalog"
           />
         ))}
       </div>

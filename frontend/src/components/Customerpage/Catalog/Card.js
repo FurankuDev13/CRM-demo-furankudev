@@ -8,7 +8,13 @@ import PropTypes from 'prop-types';
  * Local import
  */
 
-const Catalog = ({ name, listPrice, picture }) => (
+const Card = ({
+  name,
+  listPrice,
+  picture,
+  source,
+  description,
+}) => (
   <div className="card">
     <div className="card-image">
       <figure className="image is-4by3">
@@ -19,23 +25,37 @@ const Catalog = ({ name, listPrice, picture }) => (
       <div className="media">
         <div className="media-content">
           <p className="title is-4">{name}</p>
-          <p className="subtitle is-4">Prix : {listPrice} €</p>
+          {source === 'catalog' && (
+            <p className="subtitle is-4">Prix : {listPrice} €</p>
+          )}
         </div>
+        {source === 'catalog' && (
         <div className="media-right button is-light">
           <span>+</span>
         </div>
+        )}
       </div>
+      {source === 'categories' && (
+        <div className="content">
+          {description}
+        </div>
+      )}
     </div>
   </div>
 );
 
-Catalog.propTypes = {
+Card.propTypes = {
   name: PropTypes.string.isRequired,
-  listPrice: PropTypes.number.isRequired,
+  description: PropTypes.string.isRequired,
+  listPrice: PropTypes.number,
   picture: PropTypes.string.isRequired,
+  source: PropTypes.string.isRequired,
 };
 
+Card.defaultProps = {
+  listPrice: null,
+};
 /**
  * Export
  */
-export default Catalog;
+export default Card;

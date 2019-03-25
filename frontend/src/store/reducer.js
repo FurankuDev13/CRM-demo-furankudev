@@ -6,6 +6,7 @@ const initialState = {
   logEmail: '',
   isLogged: false,
   navbarIsActive: false,
+  categoryList: [],
   catalogList: [],
   fields: {
     login: {
@@ -33,6 +34,7 @@ const initialState = {
  * Types
  */
 export const FETCH_CATALOG = 'FETCH_CATALOG';
+export const FETCH_CATEGORIES = 'FETCH_CATEGORIES';
 export const SEND_LOGIN_REQUEST = 'SEND_LOGIN_REQUEST';
 export const SEND_REGISTER_REQUEST = 'SEND_REGISTER_REQUEST';
 export const SET_PROFILE = 'SET_PROFILE';
@@ -47,10 +49,19 @@ const TOGGLE_NAV_BAR = 'TOGGLE_NAV_BAR';
 const reducer = (state = initialState, action = {}) => {
   switch (action.type) {
     case FETCH_SUCCESS:
-      return {
-        ...state,
-        catalogList: [...action.data],
-      };
+      switch (action.list) {
+        case 'catalogList':
+          return {
+            ...state,
+            catalogList: [...action.data],
+          };
+        case 'categoryList':
+          return {
+            ...state,
+            categoryList: [...action.data],
+          };
+        default: return state;
+      }
     case INPUT_CHANGE:
       return {
         ...state,
@@ -100,9 +111,14 @@ export const fetchCatalog = () => ({
   type: FETCH_CATALOG,
 });
 
-export const fetchSuccess = data => ({
+export const fetchCategories = () => ({
+  type: FETCH_CATEGORIES,
+});
+
+export const fetchSuccess = (data, list) => ({
   type: FETCH_SUCCESS,
   data,
+  list,
 });
 
 export const inputChange = (value, formOrigin, name) => ({
