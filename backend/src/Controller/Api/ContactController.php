@@ -137,7 +137,7 @@ class ContactController extends AbstractController
 
         return new Response($jsonObject, 200, ['Content-Type' => 'application/json']);
     }
-    
+
     /**
      * @Route("/contact/{id}", name="edit", methods={"PATCH"})
      */

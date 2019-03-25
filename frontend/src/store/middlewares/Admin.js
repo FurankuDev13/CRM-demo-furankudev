@@ -50,7 +50,6 @@ const ajaxAdmin = store => next => (action) => {
         contactEmail,
         contactPassword,
         contactPasswordRepeat,
-        contactRequest,
       } = store.getState().fields.signup;
 
       const registerDatas = {
@@ -65,19 +64,16 @@ const ajaxAdmin = store => next => (action) => {
         contactEmail,
         contactPassword,
         contactPasswordRepeat,
-        contactRequest,
       };
       console.log(registerDatas);
-      /*
-        const stringifiedLoginDatas = JSON.stringify(loginDatas);
-        axiosUp.post('/api/login', stringifiedLoginDatas)
-          .then((response) => {
-            console.log(response.data);
-
-          })
-          .catch((error) => {
-            console.log(error);
-          }); */
+      const stringifiedLoginDatas = JSON.stringify(registerDatas);
+      axiosUp.post('/api/contact', stringifiedLoginDatas)
+        .then((response) => {
+          console.log(response.data);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
       break;
     }
 

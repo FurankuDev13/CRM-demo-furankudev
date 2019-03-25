@@ -26,7 +26,6 @@ const Signup = ({ signupFields, formOrigin }) => {
     contactEmail,
     contactPassword,
     contactPasswordRepeat,
-    contactRequest,
   } = signupFields;
 
   const tabl = [
@@ -104,16 +103,9 @@ const Signup = ({ signupFields, formOrigin }) => {
     {
       name: 'contactPasswordRepeat',
       label: 'passwordRepeat',
-      type: 'email',
+      type: 'password',
       value: contactPasswordRepeat,
       placeholder: 'Confirmez votre mot de passe',
-    },
-    {
-      name: 'contactRequest',
-      label: 'contactRequest',
-      type: 'email',
-      value: contactRequest,
-      placeholder: 'Saisissez votre email',
     },
   ];
   return (

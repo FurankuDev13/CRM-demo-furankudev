@@ -25,13 +25,11 @@ const Homepage = () => (
               Lorem, ipsum dolor sit amet consectetur adipisicing elit. Consectetur quod esse perferendis animi soluta, quia ea deserunt vero minus magnam fugit autem porro inventore ipsam exercitationem corrupti et cumque dolorum.
             </p>
             <div className="level">
-              <Link to="/signup">
-                <button className="level-item has-text-centered button is-primary is-outlined is-medium" type="button">
-                  <a className="link is-info">Créer un compte</a>
-                </button>
-              </Link>
+              <button className="level-item has-text-centered button is-primary is-outlined is-medium" type="button">
+                <Link to="/signup" className="link is-info">Créer un compte</Link>
+              </button>
               <p className="level-item has-text-centered is-medium">
-                <span className="is-size-5">Déjà client ? &nbsp;</span><Link to="/login"><a className="link is-info is-size-5">Se connecter</a></Link>
+                <span className="is-size-5">Déjà client ? &nbsp;</span><Link to="/login" className="link is-info is-size-5">Se connecter</Link>
               </p>
             </div>
           </div>

@@ -12,11 +12,9 @@ const Nav = ({ isLogged }) => (
   <header>
     <nav className="navbar has-shadow is-primary is-fixed-top">
       <div className="navbar-brand">
-        <Link to="/">
-          <a className="navbar-item">
-            <img src="src/cerberus_logo.png" alt="Logo o'Wine'rs" />
-            <h1 className="title is-3 has-text-white">o'beer</h1>
-          </a>
+        <Link to="/" className="navbar-item">
+          <img src="src/cerberus_logo.png" alt="Logo o'Wine'rs" />
+          <h1 className="title is-3 has-text-white">o'beer</h1>
         </Link>
         <div className="navbar-burger burger has-dropdown" data-target="navMenuExample4">
           <span />
@@ -26,10 +24,8 @@ const Nav = ({ isLogged }) => (
       </div>
       <div id="navMenuExample4" className="navbar-menu">
         <div className="navbar-start">
-          <Link to="/">
-            <a className="navbar-item is-size-4 is-active">
-              Home
-            </a>
+          <Link to="/" className="navbar-item is-size-4 is-active">
+            Home
           </Link>
         </div>
         <div className="navbar-end">
@@ -38,17 +34,13 @@ const Nav = ({ isLogged }) => (
               {isLogged === false && (
                 <>
                   <p className="control">
-                    <Link to="/signup">
-                      <a id="sign-up" className="button is-transparent is-size-5">
-                        <span>S'inscrire</span>
-                      </a>
+                    <Link to="/signup" id="sign-up" className="button is-transparent is-size-5">
+                      <span>S'inscrire</span>
                     </Link>
                   </p>
                   <p className="control">
-                    <Link to="/login">
-                      <a className="button is-transparent is-size-5">
-                        <span>Se connecter</span>
-                      </a>
+                    <Link to="/login" className="button is-transparent is-size-5">
+                      <span>Se connecter</span>
                     </Link>
                   </p>
                 </>
