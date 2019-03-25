@@ -33,6 +33,11 @@
                             {% endfor %}
                         </p>
                     </article>
+                    <article class="tile is-child">
+                        <p class="title">Informations</p>
+                        <p>Enregistrement: <span class="has-text-weight-bold">{{ category.createdAt|date('d-m-Y') }}</span></p>
+                        <p>Mise à jour: <span class="has-text-weight-bold">{{ category.updatedAt|date('d-m-Y') }}</span></p>
+                    </article>
                 </div>
             </div>
             {# Fin des Tiles #}

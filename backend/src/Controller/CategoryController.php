@@ -23,7 +23,7 @@ class CategoryController extends AbstractController
         $categories = $categoryRepo->findByIsActive(true);
 
         return $this->render('category/index.html.twig', [
-            'page_title' => 'Liste des catégories du catalogue',
+            'page_title' => 'Catalogue Catégories',
             'categories' => $categories,
         ]);
     }
