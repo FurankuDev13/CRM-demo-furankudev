@@ -64,12 +64,13 @@ const ajaxAdmin = store => next => (action) => {
         contactEmail,
         contactPassword,
         contactPasswordRepeat,
+        contactRequest: '',
       };
       console.log(registerDatas);
       const stringifiedLoginDatas = JSON.stringify(registerDatas);
       axiosUp.post('/api/contact', stringifiedLoginDatas)
         .then((response) => {
-          console.log(response.data);
+          console.log(response);
         })
         .catch((error) => {
           console.log(error);
