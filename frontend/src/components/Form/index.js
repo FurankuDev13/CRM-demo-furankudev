@@ -2,17 +2,67 @@
  * NPM import
  */
 import React from 'react';
+import PropTypes from 'prop-types';
 
 /**
  * local import
  */
+import Input from 'src/containers/Input';
 
 /**
  * Code
  */
 
-const Form = () => (
-  <div>
+class Form extends React.Component {
+  formSubmit = (evt) => {
+    const { submitForm } = this.props;
+    evt.preventDefault();
+    submitForm();
+  }
+
+  render() {
+    const { tabl, formOrigin } = this.props;
+    return (
+      <form
+        id={formOrigin}
+        onSubmit={this.formSubmit}
+      >
+        {tabl.map(inputEntity => (
+          <Input
+            key={inputEntity.name}
+            {...inputEntity}
+            formOrigin={formOrigin}
+          />
+        ))}
+
+        <div className="field is-grouped">
+          <div className="control">
+            <button
+              type="submit"
+              className="button is-link"
+            >
+              Submit
+            </button>
+          </div>
+        </div>
+      </form>
+    );
+  }
+}
+
+Form.propTypes = {
+  tabl: PropTypes.array.isRequired,
+  formOrigin: PropTypes.string.isRequired,
+  submitForm: PropTypes.func.isRequired,
+};
+
+/**
+ * Export
+ */
+export default Form;
+
+
+/* <div>
     <div className="field">
       <label className="label">Name</label>
       <div className="control">
@@ -97,10 +147,4 @@ const Form = () => (
         <button className="button is-text">Cancel</button>
       </div>
     </div>
-  </div>
-);
-
-/**
- * Export
- */
-export default Form;
+  </div> */

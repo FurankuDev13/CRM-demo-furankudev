@@ -4,11 +4,16 @@
 import React from 'react';
 
 /**
+ * Local import
+ */
+import './NotFound.scss';
+
+/**
  * Code
  */
 
 const NotFound = () => (
-  <div className="has-text-centered">
+  <div id="notfound" className="has-text-centered">
     404 Not found
   </div>
 );

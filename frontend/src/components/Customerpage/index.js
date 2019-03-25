@@ -15,10 +15,6 @@ const CustomerPage = () => (
     <Catalog />
   </main>
 );
-/**
- * TODO :
- * - ajouter des alts appropriés lorsqu'on aura ajouté de vrais articles / catégories
- */
 
 /**
  * Export

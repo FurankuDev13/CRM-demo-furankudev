@@ -2,6 +2,7 @@
  * NPM import
  */
 import React from 'react';
+import PropTypes from 'prop-types';
 
 /**
  * Local import
@@ -10,8 +11,8 @@ import { Route, Redirect, Switch } from 'react-router-dom';
 import Nav from 'src/components/Nav';
 import Homepage from 'src/components/Homepage';
 import Customerpage from 'src/components/Customerpage';
-import Loginpage from 'src/components/Loginpage';
-import Signuppage from 'src/components/Signuppage';
+import Loginpage from 'src/containers/Loginpage';
+import Signuppage from 'src/containers/Signuppage';
 import Footer from 'src/components/Footer';
 import NotFound from 'src/components/NotFound';
 
@@ -21,7 +22,9 @@ import NotFound from 'src/components/NotFound';
  */
 const App = ({ isLogged }) => (
   <div>
-    <Nav />
+    <Nav
+      isLogged={isLogged}
+    />
     <Switch>
       <Route exact path="/" component={Homepage} />
       <Route
@@ -38,7 +41,9 @@ const App = ({ isLogged }) => (
         path="/login"
         render={() => (
           !isLogged ? (
-            <Loginpage />
+            <Loginpage
+              formOrigin="login"
+            />
           ) : (
             <Redirect to="/catalog" />
           )
@@ -48,7 +53,9 @@ const App = ({ isLogged }) => (
         path="/signup"
         render={() => (
           !isLogged ? (
-            <Signuppage />
+            <Signuppage
+              formOrigin="signup"
+            />
           ) : (
             <Redirect to="/catalog" />
           )
@@ -60,10 +67,10 @@ const App = ({ isLogged }) => (
     <Footer />
   </div>
 );
-/**
- * TODO : quand la page de connexion sera faite, rediriger depuis la page catalogue
- * vers la page de connexion et non la page d'accueil
- */
+
+App.propTypes = {
+  isLogged: PropTypes.bool.isRequired,
+};
 
 /**
  * Export

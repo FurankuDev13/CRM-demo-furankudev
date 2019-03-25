@@ -16,6 +16,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use App\Repository\CompanyAddressTypeRepository;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\SerializerInterface;
+use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 /** 
@@ -28,6 +29,7 @@ class ContactController extends AbstractController
      */
     public function find(Request $request, ContactRepository $contactRepo, SerializerInterface $serializer, UserPasswordEncoderInterface $passwordEncoder)
     {
+
         $jsonObject = null;
         $data = $request->getContent();
         $decodedData = json_decode($data, true);

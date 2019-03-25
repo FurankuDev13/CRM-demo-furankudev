@@ -40,10 +40,6 @@ Catalog.propTypes = {
     }).isRequired,
   ).isRequired,
 };
-/**
- * TODO :
- * - a
- */
 
 /**
  * Export
