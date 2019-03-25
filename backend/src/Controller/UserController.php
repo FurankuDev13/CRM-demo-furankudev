@@ -58,7 +58,7 @@ class UserController extends AbstractController
         $user = new User();
         $person = new Person();
 
-        $userForm = $this->createForm(UserType::class, $user);
+        $userForm = $this->createForm(UserType::class, $user, ['user' => $this->getUser()]);
         $personForm = $this->createForm(PersonType::class, $person);
 
         $userForm->handleRequest($request);

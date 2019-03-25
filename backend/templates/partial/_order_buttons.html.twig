@@ -1,6 +1,6 @@
-<a href="{{ path('product_index', {'field': field, 'order': 'ASC'}) }}">
+<a href="{{ path(entity ~ '_index', {'field': field, 'order': 'ASC'}) }}">
     <i class="fas fa-sort-up"></i>
 </a>
-<a href="{{ path('product_index', {'field': field, 'order': 'DESC'}) }}">
+<a href="{{ path(entity ~ '_index', {'field': field, 'order': 'DESC'}) }}">
     <i class="fas fa-sort-down"></i>
 </a>
