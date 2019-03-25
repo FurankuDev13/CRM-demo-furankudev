@@ -1,11 +1,19 @@
 <table class="table is-fullwidth is-hoverable is-striped">
     <thead>
         <tr>
-            <th>Date d'inscription</th>
-            <th>Nom</th>
-            <th>Description</th>
+            <th>Date d'inscription&nbsp;
+                {% include 'board/_order_buttons.html.twig' with {'index': '1', 'table': 'c', 'field' : 'createdAt'} %}
+            </th>
+            <th>Nom&nbsp;
+                {% include 'board/_order_buttons.html.twig' with {'index': '1', 'table': 'c', 'field' : 'name'} %}
+            </th>
+            <th>Description&nbsp;
+                {% include 'board/_order_buttons.html.twig' with {'index': '1', 'table': 'c', 'field' : 'description'} %}
+            </th>
             <th>Image</th>
-            <th>Client/Prospect</th>
+            <th>Client/Prospect&nbsp;
+                {% include 'board/_order_buttons.html.twig' with {'index': '1', 'table': 'c', 'field' : 'isCustomer'} %}
+            </th>
             <th>Commercial</th>
         </tr>
     </thead>

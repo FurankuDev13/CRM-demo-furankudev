@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Company;
+use App\Entity\HandlingStatus;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 
@@ -19,28 +20,26 @@ class CompanyRepository extends ServiceEntityRepository
         parent::__construct($registry, Company::class);
     }
 
-    public function findOrphans()
+    public function findIsACtiveWithoutUserOrderedByField($table = 'c', $field = 'name', $order = 'ASC')
     {
         return $this->createQueryBuilder('c')
             ->andWhere('c.user IS NULL')
-            ->orderBy('c.createdAt', 'DESC')
+            ->orderBy($table . '.' . $field, $order)
             ->getQuery()
             ->getResult()
         ;
     }
 
-    public function findByUnhandledRequests()
+    public function findIsActiveByHandlingStatus(HandlingStatus $handlingStatus, $table = 'r', $field = 'createdAt', $order = 'DESC')
     {
         return $this->createQueryBuilder('c')
             ->join('c.contacts', 'co')
             ->addSelect('co')
             ->join('co.requests', 'r')
             ->addSelect('r')
-            ->join('r.handlingStatus', 'h')
-            ->addSelect('h')
-            ->andWhere('h.title LIKE :val')
-            ->setParameter('val', 'Initiée')
-            ->orderBy('r.createdAt', 'ASC')
+            ->andWhere('r.handlingStatus = :val')
+            ->setParameter('val', $handlingStatus)
+            ->orderBy($table . '.' . $field, $order)
             ->getQuery()
             ->getResult()
         ;
