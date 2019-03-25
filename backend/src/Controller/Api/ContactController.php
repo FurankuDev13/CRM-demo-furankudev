@@ -16,7 +16,6 @@ use Symfony\Component\Routing\Annotation\Route;
 use App\Repository\CompanyAddressTypeRepository;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\SerializerInterface;
-use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 /** 
@@ -42,7 +41,7 @@ class ContactController extends AbstractController
             if ($contact && $password) {
                 $validPassword = $passwordEncoder->isPasswordValid($contact,$password);
                 if ($validPassword) {
-                    $jsonObject = $serializer->serialize($contact, 'json',['groups' => 'user_group']);
+                    $jsonObject = $serializer->serialize($contact, 'json',['groups' => 'contact_group']);
                 }
             }
         }
@@ -138,6 +137,7 @@ class ContactController extends AbstractController
 
         return new Response($jsonObject, 200, ['Content-Type' => 'application/json']);
     }
+    
     /**
      * @Route("/contact/{id}", name="edit", methods={"PATCH"})
      */

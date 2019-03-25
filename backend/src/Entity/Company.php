@@ -16,31 +16,31 @@ class Company
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
-     * @Groups({"user_group"})
+     * @Groups({"contact_group"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=128)
-     * @Groups({"user_group"})
+     * @Groups({"contact_group"})
      */
     private $name;
 
     /**
      * @ORM\Column(type="text", nullable=true)
-     * @Groups({"user_group"})
+     * @Groups({"contact_group"})
      */
     private $description;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Groups({"user_group"})
+     * @Groups({"contact_group"})
      */
     private $picture;
 
     /**
      * @ORM\Column(type="string", length=128, nullable=true)
-     * @Groups({"user_group"})
+     * @Groups({"contact_group"})
      */
     private $sirenNumber;
 

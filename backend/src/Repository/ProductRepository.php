@@ -32,6 +32,7 @@ class ProductRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult()
         ;
+    }
 
     public function findIsACtiveOrderedByField($field = 'name', $order = 'ASC')
     {
@@ -58,6 +59,7 @@ class ProductRepository extends ServiceEntityRepository
         ->getResult()
     ;
     }
+
 
     // /**
     //  * @return Product[] Returns an array of Product objects
