@@ -9,7 +9,7 @@ import { connect } from 'react-redux';
 import Nav from 'src/components/Nav';
 
 // Action Creators
-import { logOut } from 'src/store/reducer';
+import { logOut, toggleNavBar } from 'src/store/reducer';
 
 /* === State (données) ===
  * - mapStateToProps retroune un objet de props pour le composant de présentation
@@ -19,10 +19,11 @@ import { logOut } from 'src/store/reducer';
  * Pas de data à transmettre ? const mapStateToProps = null;
  */
 const mapStateToProps = (state) => {
-  const { isLogged, logEmail } = state;
+  const { isLogged, logEmail, navbarIsActive } = state;
   return ({
     isLogged,
     logEmail,
+    navbarIsActive,
   });
 };
 
@@ -37,6 +38,9 @@ const mapDispatchToProps = dispatch => ({
   logOut: () => {
     localStorage.removeItem('email');
     dispatch(logOut());
+  },
+  toggleNavBar: () => {
+    dispatch(toggleNavBar());
   },
 });
 

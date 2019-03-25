@@ -78,7 +78,6 @@ const App = ({ isLogged }) => (
 
 App.propTypes = {
   isLogged: PropTypes.bool.isRequired,
-  logEmail: PropTypes.string.isRequired,
 };
 
 /**

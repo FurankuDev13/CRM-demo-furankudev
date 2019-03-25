@@ -3,12 +3,18 @@
  */
 import React from 'react';
 import { Link } from 'react-router-dom';
+import classNames from 'classnames';
 import PropTypes from 'prop-types';
 
 /**
  * Code
  */
-const Nav = ({ isLogged, logOut }) => (
+const Nav = ({
+  isLogged,
+  logOut,
+  navbarIsActive,
+  toggleNavBar,
+}) => (
   <header>
     <nav className="navbar has-shadow is-primary is-fixed-top">
       <div className="navbar-brand">
@@ -16,13 +22,31 @@ const Nav = ({ isLogged, logOut }) => (
           <img src="src/cerberus_logo.png" alt="Logo o'Wine'rs" />
           <h1 className="title is-3 has-text-white">o'beer</h1>
         </Link>
-        <div className="navbar-burger burger has-dropdown" data-target="navMenuExample4">
+        <div
+          className={classNames(
+            'navbar-burger',
+            'burger',
+            {
+              'is-active': navbarIsActive,
+            },
+          )}
+          data-target="navMenuExample4"
+          onClick={toggleNavBar}
+        >
           <span />
           <span />
           <span />
         </div>
       </div>
-      <div id="navMenuExample4" className="navbar-menu">
+      <div
+        id="navMenuExample4"
+        className={classNames(
+          'navbar-menu',
+          {
+            'is-active': navbarIsActive,
+          },
+        )}
+      >
         <div className="navbar-start">
           <Link to="/" className="navbar-item is-size-4 is-active">
             Home
@@ -62,7 +86,9 @@ const Nav = ({ isLogged, logOut }) => (
 
 Nav.propTypes = {
   isLogged: PropTypes.bool.isRequired,
+  navbarIsActive: PropTypes.bool.isRequired,
   logOut: PropTypes.func.isRequired,
+  toggleNavBar: PropTypes.func.isRequired,
 };
 
 /**

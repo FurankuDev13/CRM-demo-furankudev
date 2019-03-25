@@ -5,6 +5,7 @@ const initialState = {
   view: 'login',
   logEmail: '',
   isLogged: false,
+  navbarIsActive: false,
   catalogList: [],
   fields: {
     login: {
@@ -38,6 +39,7 @@ export const SET_PROFILE = 'SET_PROFILE';
 const FETCH_SUCCESS = 'FETCH_SUCCESS';
 const INPUT_CHANGE = 'INPUT_CHANGE';
 const LOGOUT = 'LOGOUT';
+const TOGGLE_NAV_BAR = 'TOGGLE_NAV_BAR';
 
 /**
  * Reducer
@@ -80,6 +82,12 @@ const reducer = (state = initialState, action = {}) => {
         isLogged: false,
       };
 
+    case TOGGLE_NAV_BAR:
+      return {
+        ...state,
+        navbarIsActive: !state.navbarIsActive,
+      };
+
     default:
       return state;
   }
@@ -119,6 +127,10 @@ export const setProfile = () => ({
 
 export const logOut = () => ({
   type: LOGOUT,
+});
+
+export const toggleNavBar = () => ({
+  type: TOGGLE_NAV_BAR,
 });
 
 /**
