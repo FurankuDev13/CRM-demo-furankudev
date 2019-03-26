@@ -6,7 +6,10 @@ import { connect } from 'react-redux';
 /**
  * Local import
  */
-import Categories from 'src/components/Customerpage/Categories';
+import Customepage from 'src/components/Customerpage';
+
+// Action Creators
+import { fetchCatalog, fetchCategories } from 'src/store/reducer';
 
 /* === State (données) ===
  * - mapStateToProps retroune un objet de props pour le composant de présentation
@@ -15,9 +18,7 @@ import Categories from 'src/components/Customerpage/Categories';
  *  - ownProps : les props passées au container
  * Pas de data à transmettre ? const mapStateToProps = null;
  */
-const mapStateToProps = state => ({
-  categoryList: state.categoryList,
-});
+const mapStateToProps = () => ({});
 
 /* === Actions ===
  * - mapDispatchToProps retroune un objet de props pour le composant de présentation
@@ -26,14 +27,20 @@ const mapStateToProps = state => ({
  *  - ownProps : les props passées au container
  * Pas de disptach à transmettre ? const mapDispatchToProps = {};
  */
-
-const mapDispatchToProps = () => ({});
+const mapDispatchToProps = dispatch => ({
+  fetchCatalog: () => {
+    dispatch(fetchCatalog());
+  },
+  fetchCategories: () => {
+    dispatch(fetchCategories());
+  },
+});
 
 // Container
-const CatalogContainer = connect(
+const CustomerpageContainer = connect(
   mapStateToProps,
   mapDispatchToProps,
-)(Categories);
+)(Customepage);
 
 /* 2 temps
 const createContainer = connect(mapStateToProps, mapDispatchToProps);
@@ -43,4 +50,4 @@ const ExampleContainer = createContainer(Example);
 /**
  * Export
  */
-export default CatalogContainer;
+export default CustomerpageContainer;

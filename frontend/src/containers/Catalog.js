@@ -8,9 +8,6 @@ import { connect } from 'react-redux';
  */
 import Catalog from 'src/components/Customerpage/Catalog';
 
-// Action Creators
-import { fetchCatalog } from 'src/store/reducer';
-
 /* === State (données) ===
  * - mapStateToProps retroune un objet de props pour le composant de présentation
  * - mapStateToProps met à dispo 2 params
@@ -29,11 +26,7 @@ const mapStateToProps = state => ({
  *  - ownProps : les props passées au container
  * Pas de disptach à transmettre ? const mapDispatchToProps = {};
  */
-const mapDispatchToProps = dispatch => ({
-  fetchCatalog: () => {
-    dispatch(fetchCatalog());
-  },
-});
+const mapDispatchToProps = () => ({});
 
 // Container
 const CatalogContainer = connect(
