@@ -1,0 +1,30 @@
+<div class="modal level-item">
+    <div class="modal-background"></div>
+    <div class="modal-card">
+        <header class="modal-card-head">
+            <p class="modal-card-title">Modifier les rôles d'un utilisateur</p>
+            <button class="modal-close is-large" aria-label="close"></button>
+        </header>
+        <section class="modal-card-body has-text-centered">
+            {% for userRole in userRoles %}
+                {% set roleMatch = false %}
+                {% for role in user.userRoles %}
+                    {% if role.id == userRole.id %}
+                        {% set roleMatch = true %}
+                    {% endif %}
+                {% endfor %}
+                <form action='{{ path('user_userRole_toggle', {'id': user.id}) }}' method="POST">
+                    <input type="hidden" name="_method" value="PATCH">
+                    <input type="hidden" name="userRoleId" value="{{ userRole.id }}">
+                    <input type="hidden" name="userRoleMatch" value="{{ roleMatch }}">
+                    <button type="submit" class="button">
+                        
+                        {{ roleMatch ? '<i class="has-text-danger fas fa-minus-circle"></i>':'<i class="fas fa-plus-circle">'}}
+                        </i>&nbsp;{{ userRole.title }}
+                    </button> 
+                </form>    
+            {% endfor %}
+        </section>
+    </div>
+</div>
+<button class="button showModal level-item"><i class="fas fa-user-tag"></i></i></button>

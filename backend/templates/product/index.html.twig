@@ -3,31 +3,15 @@
 {% block title %}{{ parent() }} - {{ page_title }}{% endblock %}
 
 {% block sidebar %}
-    <div class="level-left">
-        <div class="level-item">
-            <a href="{{ path('category_index')}}">
-                <h2 class="level-item subtitle has-text-info is-3">Catégories</h2>
-            </a>
-        </div>
-        <button class="level-item button is-info is-small is-size-4">{{ categories|length }}</button>
-    </div>
-    <div class="list is-primary is-hoverable">
-        {% for category in categories %}
-            <a class="list-item has-text-primary" href="{{ path('product_index', {'category': category.name}) }}">
-                {{ category.name }}
-            </a>
-            
-        {% endfor %}
-    </div>
+    {% include 'product/_sidebar.html.twig' %}
 {% endblock %}
 
 {% block content %}
-
-{% if category %}
-    {% set orderButtonsIncludePath = 'product/_order_buttons_withcategory.html.twig' %}
-{% else %}
-    {% set orderButtonsIncludePath = 'partial/_order_buttons.html.twig' %}
-{% endif %}
+    {% if category %}
+        {% set orderButtonsIncludePath = 'product/_order_buttons_withcategory.html.twig' %}
+    {% else %}
+        {% set orderButtonsIncludePath = 'partial/_order_buttons.html.twig' %}
+    {% endif %}
 
         <div class="level">
             <div class="level-left ">
