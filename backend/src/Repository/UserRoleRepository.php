@@ -19,6 +19,21 @@ class UserRoleRepository extends ServiceEntityRepository
         parent::__construct($registry, UserRole::class);
     }
 
+    public function findWherePersonIsActive()
+    {
+        return $this->createQueryBuilder('r')
+            ->join('r.users', 'u')
+            ->addSelect('u')
+            ->join('u.person', 'p')
+            ->addSelect('p')
+            ->andWhere('p.isActive = :isActive')
+            ->setParameter('isActive', true)
+            ->orderBy('r.title', 'ASC')
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
     // /**
     //  * @return UserRole[] Returns an array of UserRole objects
     //  */

@@ -3,8 +3,10 @@
 namespace App\Repository;
 
 use App\Entity\User;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use App\Entity\Company;
+use App\Entity\UserRole;
 use Symfony\Bridge\Doctrine\RegistryInterface;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 
 /**
  * @method User|null find($id, $lockMode = null, $lockVersion = null)
@@ -45,6 +47,56 @@ class UserRepository extends ServiceEntityRepository
         ;
     }
 
+    public function findisActiveOrderedByField($table = 'p', $field = 'lastname', $order = 'ASC')
+    {
+        return $this->createQueryBuilder('u')
+            ->join('u.userRoles', 'r')
+            ->addSelect('r')
+            ->join('u.person', 'p')
+            ->addSelect('p')
+            ->andWhere('p.isActive = :isActive')
+            ->setParameter('isActive', true)
+            ->orderBy($table . '.' . $field, $order)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
+    public function findIsActiveByUserRole($userRoleTitle, $table = 'p', $field = 'lastname', $order = 'ASC')
+    {
+        return $this->createQueryBuilder('u')
+            ->join('u.userRoles', 'r')
+            ->addSelect('r')
+            ->join('u.person', 'p')
+            ->addSelect('p')
+            ->andWhere('r.title = :userRoleTitle')
+            ->setParameter('userRoleTitle', $userRoleTitle)
+            ->andWhere('p.isActive = :isActive')
+            ->setParameter('isActive', true)
+            ->orderBy($table . '.' . $field, $order)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
+    public function findIsActiveByCompany($companyName, $table = 'p', $field = 'lastname', $order = 'ASC')
+    {
+        return $this->createQueryBuilder('u')
+            ->join('u.userRoles', 'r')
+            ->addSelect('r')
+            ->join('u.person', 'p')
+            ->addSelect('p')
+            ->join('u.companies', 'c')
+            ->addSelect('c')
+            ->andWhere('c.name = :companyName')
+            ->setParameter('companyName', $companyName)
+            ->andWhere('p.isActive = :isActive')
+            ->setParameter('isActive', true)
+            ->orderBy($table . '.' . $field, $order)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
 
     // /**
     //  * @return User[] Returns an array of User objects

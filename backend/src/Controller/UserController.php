@@ -23,15 +23,33 @@ class UserController extends AbstractController
     /**
      * @Route("/index", name="index", methods={"GET"})
      */
-    public function index(UserRepository $userRepo, UserRoleRepository $userRoleRepo)
+    public function index(Request $request, UserRepository $userRepo, UserRoleRepository $userRoleRepo, CompanyRepository $companyRepo)
     {
-        $users = $userRepo->findWherePersonIsActive();
-        $userRoles = $userRoleRepo->findByIsActive(true);
+        $filter = $request->query->get('filter', null);
+        $filterName = $request->query->get('filterName', null);
+
+        $table = $request->query->get('table', 'p');
+        $field = $request->query->get('field', 'lastname');
+        $order = $request->query->get('order', 'ASC');
+
+        $userRoles = $userRoleRepo->findWherePersonIsActive();
+        $companies = $companyRepo->findWherePersonIsActive();
+
+        if ($filter == 'userRole') {
+            $users = $userRepo->findIsActiveByUserRole($filterName, $table, $field, $order);
+        } elseif ($filter == 'company') {
+            $users = $userRepo->findIsActiveByCompany($filterName, $table, $field, $order);
+        } else {
+            $users = $userRepo->findIsActiveOrderedByField($table, $field, $order);
+        }
 
         return $this->render('user/index.html.twig', [
             'page_title' => 'Utilisateurs',
             'users' => $users,
             'userRoles' => $userRoles,
+            'companies' => $companies,
+            'filter' => $filter,
+            'filterName' => $filterName,
         ]);
     }
 
