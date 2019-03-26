@@ -8,9 +8,9 @@
 
 {% block content %}
 
-{% if filterType == 'salesUser' %}
+{% if filterType == 'Commercial' %}
     {% set orderButtonsIncludePath = 'company/_order_buttons_withsalesuser.twig' %}
-{% elseif  filterType == 'isCustomer' or filterType == 'isNotCustomer' %}
+{% elseif  filterType == 'Clients' or filterType == 'Prospects' %}
     {% set orderButtonsIncludePath = 'company/_order_buttons_withfilter.html.twig' %}
 {% else %}
     {% set orderButtonsIncludePath = 'partial/_order_buttons.html.twig' %}
@@ -20,9 +20,9 @@
         <div class="level-left ">
             <div class="level-item">
                 <h2 class=" level-item subtitle has-text-info is-3">Les sociétés</h2>
-                {% if filterType == 'salesUser' %}
+                {% if filterType == 'Commercial' %}
                     <button class=" level-item button is-primary is-small is-size-4">{{ filterValue }}</button>
-                {% elseif  filterType == 'isCustomer' or filterType == 'isNotCustomer' %}
+                {% elseif  filterType == 'Clients' or filterType == 'Prospects' %}
                     <button class=" level-item button is-primary is-small is-size-4">{{ filterValue }}</button>
                 {% endif %}
                 <button class=" level-item button is-info is-small is-size-4">{{ companies|length }}</button>

@@ -1,35 +1,76 @@
-<div class="level-left">
-    <div class="level-item">
-        <h2 class="level-item subtitle has-text-info is-3">Filtres</h2>
+<div class="level dropdown is-hoverable">
+    <div class="dropdown-trigger level-left">
+        <div class="level-item">
+            <h2 class="level-item subtitle has-text-info is-4">Filtrer par type</h2>
+        </div>
     </div>
-</div>
-<div class="level-left">
-    <div class="level-item">
-        <a  href="{{ path('company_index', {'filter': 'isNotCustomer'}) }}">
-            <h2 class="level-item subtitle has-text-primary is-5">Prospects</h2>
-        </a>
+
+    <div class="dropdown-menu">
+        <div class="dropdown-content">
+            <table class="table is-fullwidth is-hoverable">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                        <tr>
+                            <td>   
+                                <a href="{{ path('company_index', {'filter': 'Prospects'}) }}">
+                                    <h2 class="has-text-left subtitle has-text-primary is-6">Prospect</h2>
+                                </a>
+                            </td>
+                            <td>
+                                <button class="has-text-left button is-primary is-small is-outlined is-size-6">{{ prospects|length }}</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>   
+                                <a href="{{ path('company_index', {'filter': 'Clients'}) }}">
+                                    <h2 class="has-text-left subtitle has-text-primary is-6">Client</h2>
+                                </a>
+                            </td>
+                            <td>
+                                <button class="has-text-left button is-primary is-small is-outlined is-size-6">{{ customers|length }}</button>
+                            </td>
+                        </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
-    <button class="level-item button is-primary is-small is-size-6">{{ prospects|length }}</button>
-</div>
-<div class="level-left">
-    <div class="level-item">
-        <a  href="{{ path('company_index', {'filter': 'isCustomer'}) }}">
-            <h2 class="level-item subtitle has-text-primary is-5">Clients</h2>
-        </a>
-    </div>
-    <button class="level-item button is-primary is-small is-size-6">{{ customers|length }}</button>
 </div>
 
-<div class="level-left">
-    <div class="level-item">
-        <h2 class="level-item subtitle has-text-info is-3">Commerciaux</h2>
+<div class="level dropdown is-hoverable">
+    <div class="level-left">
+        <div class="level-item">
+            <h2 class="level-item subtitle has-text-info is-4">Filtrer par commercial</h2>
+        </div>
     </div>
-    <button class="level-item button is-info is-small is-size-4">{{ salesUsers|length }}</button>
-</div>
-<div class="list is-primary is-hoverable">
-    {% for salesUser in salesUsers %}
-        <a class="list-item has-text-primary" href="{{ path('company_index', {'filter': 'salesUser', 'salesUser': salesUser.id}) }}">
-        {{ salesUser.person.firstname }} {{ salesUser.person.lastname }}
-        </a>
-    {% endfor %}
+    <div class="dropdown-menu">
+        <div class="dropdown-content">
+            <table class="table is-fullwidth is-hoverable">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for salesUser in salesUsers %}
+                        <tr>
+                            <td>   
+                                <a href="{{ path('company_index', {'filter': 'Commercial', 'salesUser': salesUser.id}) }}">
+                                    <h2 class="has-text-left subtitle has-text-primary is-6">{{ salesUser.person.firstname }} {{ salesUser.person.lastname }}</h2>
+                                </a>
+                            </td>
+                            <td>
+                                <button class="has-text-left button is-primary is-small is-outlined is-size-6">{{ salesUser.companies|length }}</button>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
 </div>
