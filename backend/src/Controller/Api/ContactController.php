@@ -42,11 +42,15 @@ class ContactController extends AbstractController
                 $validPassword = $passwordEncoder->isPasswordValid($contact,$password);
                 if ($validPassword) {
                     $jsonObject = $serializer->serialize($contact, 'json',['groups' => 'contact_group']);
+
+                    $response = new Response($jsonObject, 200);
                 }
             }
         }
 
-        $response = new Response($jsonObject, 200);
+        if (!isset($response)) {
+            $response = new Response([], 404);
+        }
         
         $response->headers->set('Content-Type', 'application/json');
         $response->headers->set('Access-Control-Allow-Origin', '*');
