@@ -3,17 +3,19 @@
  */
 import React from 'react';
 import PropTypes from 'prop-types';
+import { withRouter } from 'react-router';
 
 /**
  * Local import
  */
 import Card from './Card';
 
+
 import './catalog.scss';
 
-const Catalog = ({ catalogList }) => (
+const Catalog = ({ currentList }) => (
   <div className="list">
-    {catalogList.count !== 0 && catalogList.map(item => (
+    {currentList.count !== 0 && currentList.map(item => (
       <Card
         key={item.id}
         {...item}
@@ -23,15 +25,18 @@ const Catalog = ({ catalogList }) => (
   </div>
 );
 
+
 Catalog.propTypes = {
-  catalogList: PropTypes.arrayOf(
+  currentList: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.number.isRequired,
     }).isRequired,
   ).isRequired,
 };
 
+const CatalogWithRouter = withRouter(Catalog);
+
 /**
  * Export
  */
-export default Catalog;
+export default CatalogWithRouter;

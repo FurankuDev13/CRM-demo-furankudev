@@ -29,6 +29,10 @@ class CustomerPage extends React.Component {
           component={Catalog}
         />
         <Route
+          path="/category/:slug"
+          component={Catalog}
+        />
+        <Route
           path="/categories"
           component={Categories}
         />

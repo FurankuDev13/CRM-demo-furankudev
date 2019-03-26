@@ -36,7 +36,27 @@ const App = ({ isLogged }) => (
         )}
       />
       <Route
-        path="/(catalog|categories)"
+        path="/catalog"
+        render={() => (
+          isLogged ? (
+            <Customerpage />
+          ) : (
+            <Redirect to="/login" />
+          )
+        )}
+      />
+      <Route
+        path="/categories"
+        render={() => (
+          isLogged ? (
+            <Customerpage />
+          ) : (
+            <Redirect to="/login" />
+          )
+        )}
+      />
+      <Route
+        path="/category/:slug"
         render={() => (
           isLogged ? (
             <Customerpage />

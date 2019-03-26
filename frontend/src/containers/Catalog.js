@@ -7,6 +7,7 @@ import { connect } from 'react-redux';
  * Local import
  */
 import Catalog from 'src/components/Customerpage/Catalog';
+import { getCurrentCategory } from 'src/store/reducer';
 
 /* === State (données) ===
  * - mapStateToProps retroune un objet de props pour le composant de présentation
@@ -15,9 +16,24 @@ import Catalog from 'src/components/Customerpage/Catalog';
  *  - ownProps : les props passées au container
  * Pas de data à transmettre ? const mapStateToProps = null;
  */
-const mapStateToProps = state => ({
-  catalogList: state.catalogList,
-});
+const mapStateToProps = (state, ownProps) => {
+  let currentList;
+  switch (ownProps.location.pathname) {
+    case '/catalog': {
+      currentList = state.catalogList;
+      break;
+    }
+    default: {
+      const { params } = ownProps.match;
+      currentList = getCurrentCategory(state.catalogList, params.slug);
+      break;
+    }
+  }
+  console.log(currentList.length);
+  return {
+    currentList,
+  };
+};
 
 /* === Actions ===
  * - mapDispatchToProps retroune un objet de props pour le composant de présentation

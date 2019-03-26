@@ -1,4 +1,9 @@
 /**
+ * Import
+ */
+import { getSlug } from 'src/utils/url';
+
+/**
  * Initial State
  */
 const initialState = {
@@ -114,6 +119,12 @@ export const fetchCatalog = () => ({
 export const fetchCategories = () => ({
   type: FETCH_CATEGORIES,
 });
+
+export const ProductIsInCategory = (product, slug) => (product.categories.find(category => getSlug(category.name) === slug) !== undefined);
+
+export const getCurrentCategory = (list, slug) => (
+  list.filter(product => ProductIsInCategory(product, slug))
+);
 
 export const fetchSuccess = (data, list) => ({
   type: FETCH_SUCCESS,
