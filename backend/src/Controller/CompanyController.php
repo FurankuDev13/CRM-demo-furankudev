@@ -72,9 +72,11 @@ class CompanyController extends AbstractController
             throw $this->createNotFoundException("La société indiquée n'existe pas"); 
         }
 
+        $companyFiltered = $companyRepo->findAddressIsActiveByCompany($company);
+
         return $this->render('company/show.html.twig', [
-            'page_title' => 'Société: ' . $company->getName(),
-            'company' => $company,
+            'page_title' => 'Société: ' . $companyFiltered[0]->getName(),
+            'company' => $companyFiltered[0],
         ]);
     }
 
@@ -264,7 +266,7 @@ class CompanyController extends AbstractController
         $companyAddress->setIsActive(!$companyAddress->getIsActive());
         $this->addFlash(
             'success',
-            'L\'adresse a été archivée !'
+            'L\'adresse de ' . $companyAddress->getCity() . ' a été archivée !'
         );
         $entityManager->flush();
 

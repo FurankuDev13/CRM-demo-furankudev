@@ -34,6 +34,7 @@ class ContactTypeRepository extends ServiceEntityRepository
         ;
     }
 
+
     // /**
     //  * @return ContactType[] Returns an array of ContactType objects
     //  */
