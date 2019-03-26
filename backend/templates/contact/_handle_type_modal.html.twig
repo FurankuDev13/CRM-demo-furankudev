@@ -1,0 +1,19 @@
+<div class="modal level-item">
+    <div class="modal-background"></div>
+    <div class="modal-card">
+        <header class="modal-card-head">
+            <p class="modal-card-title">Modifier le Type du Contact</p>
+            <button class="modal-close is-large" aria-label="close"></button>
+        </header>
+            <section class="modal-card-body has-text-centered">
+            {% for contactType in contactTypeList %}
+                <form action='{{ path('contact_editType', {'id': contact.id}) }}' method="POST">
+                    <input type="hidden" name="_method" value="PATCH">
+                    <input type="hidden" name="contactTypeId" value="{{ contactType.id }}">
+                    <button type="submit" class="button">{{ contactType.title }}</button>
+                </form>
+            {% endfor %}
+        </section>
+    </div>
+</div>
+<button class="button showModal level-item"><i class="fas fa-exchange-alt"></i></button>
