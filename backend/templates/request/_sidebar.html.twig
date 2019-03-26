@@ -1,0 +1,68 @@
+<div class="level dropdown is-hoverable">
+    <div class="dropdown-trigger level-left">
+        <div class="level-item">
+            <h2 class="level-item subtitle has-text-info is-4">Filtrer par type</h2>
+        </div>
+    </div>
+
+    <div class="dropdown-menu">
+        <div class="dropdown-content">
+            <table class="table is-fullwidth is-hoverable">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for requestType in requestTypes %}
+                        <tr>
+                            <td>   
+                                <a href="{{ path('request_index', {'filter': 'requestType', 'filterId': requestType.title }) }}">
+                                    <h2 class="has-text-left subtitle has-text-primary is-6">{{ requestType.title }}</h2>
+                                </a>
+                            </td>
+                            <td>
+                                <button class="has-text-left button is-primary is-small is-outlined is-size-6">{{ requestType.requests|length }}</button>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div class="level dropdown is-hoverable">
+    <div class="level-left">
+        <div class="level-item">
+            <h2 class="level-item subtitle has-text-info is-4">Filtrer par statut</h2>
+        </div>
+    </div>
+    <div class="dropdown-menu">
+        <div class="dropdown-content">
+            <table class="table is-fullwidth is-hoverable">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for handlingStatus in handlingStatuses %}
+                        <tr>
+                            <td>   
+                                <a href="{{ path('request_index', {'filter': 'handlingStatus', 'filterId': handlingStatus.title}) }}">
+                                    <h2 class="has-text-left subtitle has-text-primary is-6">{{ handlingStatus.title }}</h2>
+                                </a>
+                            </td>
+                            <td>
+                                <button class="has-text-left button is-primary is-small is-outlined is-size-6">{{ handlingStatus.requests|length }}</button>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div> 

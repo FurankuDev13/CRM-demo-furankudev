@@ -3,35 +3,7 @@
 {% block title %}{{ parent() }} - {{ page_title }}{% endblock %}
 
 {% block sidebar %}
-    <div class="level-left">
-        <div class="level-item">
-            <h2 class="level-item subtitle has-text-info is-3">Filtres</h2>
-        </div>
-    </div>
-    {% for requestType in requestTypes %}
-        <div class="level-left">
-            <div class="level-item">
-                <a  href="{{ path('request_index', {'filter': 'requestType', 'filterId': requestType.id }) }}">
-                    <h2 class="level-item subtitle has-text-primary is-5">{{ requestType.title }}</h2>
-                </a>
-            </div>
-            <button class="level-item button is-primary is-small is-size-6">{{ requestType.requests|length }}</button>
-        </div>
-    {% endfor %}
-
-    <div class="level-left">
-        <div class="level-item">
-            <h2 class="level-item subtitle has-text-info is-3">Statuts</h2>
-        </div>
-        <button class="level-item button is-info is-small is-size-4">{{ handlingStatuses|length }}</button>
-    </div>
-    <div class="list is-primary is-hoverable">
-        {% for handlingStatus in handlingStatuses %}
-            <a class="list-item has-text-primary" href="{{ path('request_index', {'filter': 'handlingStatus', 'filterId': handlingStatus.id}) }}">
-            {{ handlingStatus.title }}
-            </a>
-        {% endfor %}
-    </div>
+    {% include 'request/_sidebar.html.twig' %}
 {% endblock %}
 
 {% block content %}
@@ -43,7 +15,10 @@
         <div class="level">
             <div class="level-left ">
                 <div class="level-item">
-                    <h2 class=" level-item subtitle has-text-info is-3">Les demandes des requests (professionnels)</h2>
+                    <h2 class=" level-item subtitle has-text-info is-3">Les demandes</h2>
+                    {% if filter %}
+                        <button class=" level-item button is-primary is-small is-size-4">{{ filterId }}</button>
+                    {% endif %}
                     <button class=" level-item button is-info is-small is-size-4">{{ requests|length }}</button>
                 </div>  
             </div> 

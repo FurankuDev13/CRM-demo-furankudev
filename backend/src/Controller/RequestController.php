@@ -32,11 +32,11 @@ class RequestController extends AbstractController
         $requestTypes = $requestTypeRepo->findByIsActive(true);
 
         if ($filter == 'handlingStatus') {
-            $handlingStatus = $handlingStatusRepo->find($filterId);
+            $handlingStatus = $handlingStatusRepo->findOneByTitle($filterId);
             $demandRequests = $requestRepo->findIsActiveByHandlingStatus($handlingStatus, $table, $field, $order);
 
         } elseif ($filter == 'requestType') {
-            $requestType = $requestTypeRepo->find($filterId);
+            $requestType = $requestTypeRepo->findOneByTitle($filterId);
             $demandRequests = $requestRepo->findIsActiveByRequestType($requestType, $table, $field, $order);
         } else {
             $demandRequests = $requestRepo->findIsActiveOrderedByField($table, $field, $order);
