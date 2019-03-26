@@ -1,4 +1,4 @@
-<div class="modal level-left">
+<div class="modal level-item">
     <div class="modal-background"></div>
     <div class="modal-card">
         <header class="modal-card-head">
@@ -6,7 +6,7 @@
             <button class="modal-close is-large" aria-label="close"></button>
         </header>
             <section class="modal-card-body has-text-centered">
-            {% for status in handlingStatus %}
+            {% for status in handlingStatuses %}
                 <form action='{{ path('request_editHandlingStatus', {'id': request.id}) }}' method="POST">
                     <input type="hidden" name="_method" value="PATCH">
                     <input type="hidden" name="handlingStatusId" value="{{ status.id }}">
@@ -16,4 +16,4 @@
         </section>
     </div>
 </div>
-<button class="button showModal"><i class="fas fa-exchange-alt"></i></button>
+<button class="button showModal level-item"><i class="fas fa-exchange-alt"></i></button>
