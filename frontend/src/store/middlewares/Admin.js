@@ -91,13 +91,12 @@ const ajaxAdmin = store => next => (action) => {
       } = store.getState().fields.question;
 
       const questionDatas = {
-        contact_id: 19,
         request_title: title,
         request_body: content,
         request_type: 'Devis simple',
       };
       const stringifiedLoginDatas = JSON.stringify(questionDatas);
-      axiosUp.post('/api/contact/19/products', stringifiedLoginDatas)
+      axiosUp.post('/api/contact/19/request', stringifiedLoginDatas)
         .then((response) => {
           console.log(response);
         })
