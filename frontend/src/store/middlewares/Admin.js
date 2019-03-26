@@ -30,9 +30,10 @@ const ajaxAdmin = store => next => (action) => {
       axiosUp.post('/api/login', stringifiedLoginDatas)
         .then((response) => {
           const { data } = response;
-          const { email } = data;
+          const { email, id } = data;
           localStorage.setItem('email', email);
-          dispatch(setProfile(email));
+          localStorage.setItem('id', id);
+          dispatch(setProfile(id));
         })
         .catch((error) => {
           console.log(error);
@@ -89,6 +90,9 @@ const ajaxAdmin = store => next => (action) => {
         title,
         content,
       } = store.getState().fields.question;
+      const {
+        logId,
+      } = store.getState();
 
       const questionDatas = {
         request_title: title,
@@ -96,7 +100,7 @@ const ajaxAdmin = store => next => (action) => {
         request_type: 'Devis simple',
       };
       const stringifiedLoginDatas = JSON.stringify(questionDatas);
-      axiosUp.post('/api/contact/19/request', stringifiedLoginDatas)
+      axiosUp.post(`/api/contact/${logId}/request`, stringifiedLoginDatas)
         .then((response) => {
           console.log(response);
         })

@@ -17,8 +17,9 @@ const axiosUp = axios.create({
 // Middleware : ajax : gestion des lettres
 const ajaxCatalog = store => next => (action) => {
   switch (action.type) {
-    case FETCH_CATALOG:
-      axiosUp.get('/api/contact/3/products')
+    case FETCH_CATALOG: {
+      const { logId } = store.getState();
+      axiosUp.get(`/api/contact/${logId}/products`)
         .then((response) => {
           const { data } = response;
           store.dispatch(fetchSuccess(data, 'catalogList'));
@@ -27,6 +28,7 @@ const ajaxCatalog = store => next => (action) => {
           console.log(error);
         });
       break;
+    }
 
     case FETCH_CATEGORIES:
       axiosUp.get('/api/categories')

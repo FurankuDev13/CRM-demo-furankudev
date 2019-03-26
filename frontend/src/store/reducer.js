@@ -8,7 +8,7 @@ import { getSlug } from 'src/utils/url';
  */
 const initialState = {
   view: 'login',
-  logEmail: '',
+  logId: '',
   isLogged: false,
   navbarIsActive: false,
   askQuestionElementIsActive: false,
@@ -87,10 +87,10 @@ const reducer = (state = initialState, action = {}) => {
       };
 
     case SET_PROFILE:
-      if ((localStorage.getItem('email') !== null)) {
+      if ((localStorage.getItem('id') !== null)) {
         return {
           ...state,
-          logEmail: localStorage.getItem('email'),
+          logId: localStorage.getItem('id'),
           isLogged: true,
         };
       }
@@ -134,7 +134,9 @@ export const fetchCategories = () => ({
   type: FETCH_CATEGORIES,
 });
 
-export const ProductIsInCategory = (product, slug) => (product.categories.find(category => getSlug(category.name) === slug) !== undefined);
+export const ProductIsInCategory = (product, slug) => (
+  product.categories.find(category => getSlug(category.name) === slug) !== undefined
+);
 
 export const getCurrentCategory = (list, slug) => (
   list.filter(product => ProductIsInCategory(product, slug))
@@ -166,8 +168,9 @@ export const sendQuestion = () => ({
   type: SEND_QUESTION,
 });
 
-export const setProfile = () => ({
+export const setProfile = profileData => ({
   type: SET_PROFILE,
+  profileData,
 });
 
 export const logOut = () => ({
