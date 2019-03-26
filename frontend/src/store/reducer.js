@@ -33,6 +33,10 @@ const initialState = {
       contactPasswordRepeat: '',
       contactRequest: '',
     },
+    question: {
+      title: '',
+      content: '',
+    },
   },
 };
 

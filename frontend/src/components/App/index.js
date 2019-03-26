@@ -15,12 +15,13 @@ import Loginpage from 'src/containers/Loginpage';
 import Signuppage from 'src/containers/Signuppage';
 import Footer from 'src/components/Footer';
 import NotFound from 'src/components/NotFound';
+import QuestionForm from 'src/containers/QuestionForm';
 
 
 /**
  * Code
  */
-const App = ({ isLogged }) => (
+const App = ({ isLogged, askQuestionElementIsActive }) => (
   <div>
     <Nav />
     <Switch>
@@ -69,9 +70,7 @@ const App = ({ isLogged }) => (
         path="/login"
         render={() => (
           !isLogged ? (
-            <Loginpage
-              formOrigin="login"
-            />
+            <Loginpage />
           ) : (
             <Redirect to="/catalog" />
           )
@@ -81,9 +80,7 @@ const App = ({ isLogged }) => (
         path="/signup"
         render={() => (
           !isLogged ? (
-            <Signuppage
-              formOrigin="signup"
-            />
+            <Signuppage />
           ) : (
             <Redirect to="/catalog" />
           )
@@ -93,11 +90,15 @@ const App = ({ isLogged }) => (
       <Route component={NotFound} />
     </Switch>
     <Footer />
+    {askQuestionElementIsActive && (
+      <QuestionForm />
+    )}
   </div>
 );
 
 App.propTypes = {
   isLogged: PropTypes.bool.isRequired,
+  askQuestionElementIsActive: PropTypes.bool.isRequired,
 };
 
 /**

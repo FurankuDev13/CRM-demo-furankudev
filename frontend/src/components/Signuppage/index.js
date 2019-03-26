@@ -13,7 +13,7 @@ import Form from 'src/containers/Form';
  * Code
  */
 
-const Signup = ({ signupFields, formOrigin }) => {
+const Signup = ({ signupFields }) => {
   const {
     companyName,
     companySiren,
@@ -112,7 +112,7 @@ const Signup = ({ signupFields, formOrigin }) => {
     <div>
       <Form
         tabl={tabl}
-        formOrigin={formOrigin}
+        formOrigin="signup"
       />
     </div>
   );
@@ -133,7 +133,6 @@ Signup.propTypes = {
     contactPasswordRepeat: PropTypes.string.isRequired,
     contactRequest: PropTypes.string.isRequired,
   }).isRequired,
-  formOrigin: PropTypes.string.isRequired,
 };
 
 

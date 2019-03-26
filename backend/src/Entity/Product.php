@@ -22,6 +22,7 @@ class Product
 
     /**
      * @ORM\Column(type="string", length=128, unique=true)
+     * @Groups({"product_group"})
      */
     private $reference;
 
