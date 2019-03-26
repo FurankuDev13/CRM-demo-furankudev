@@ -18,7 +18,7 @@ const Nav = ({
   <header>
     <nav className="navbar has-shadow is-primary is-fixed-top">
       <div className="navbar-brand">
-        <Link to="/" className="navbar-item">
+        <Link to={(isLogged && '/catalog') || '/'} className="navbar-item">
           <img src="src/cerberus_logo.png" alt="Logo o'Wine'rs" />
           <h1 className="title is-3 has-text-white">o'beer</h1>
         </Link>

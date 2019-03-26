@@ -2,6 +2,7 @@
  * NPM import
  */
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 /**
  * Local import
@@ -16,9 +17,9 @@ const Sidebar = () => (
     <a className="control button is-light">
       <span>Faire une demande<br />de devis</span>
     </a>
-    <a className="control button is-light">
+    <Link to="/categories" className="control button is-light">
       <span>Consulter nos<br />catégories</span>
-    </a>
+    </Link>
   </aside>
 );
 
