@@ -5,6 +5,7 @@ use App\Entity\Company;
 use App\Entity\Contact;
 use App\Entity\CompanyAddress;
 use App\Repository\ContactRepository;
+use App\Repository\ProductRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Entity\Request as ContactRequest;
 use App\Repository\ContactTypeRepository;
@@ -159,4 +160,37 @@ class ContactController extends AbstractController
         }
         return new Response($jsonObject, 200, ['Content-Type' => 'application/json']);
     }
+
+    /**
+     * @Route("/contact/{id}/products", name="productIndex", methods={"GET"})
+     */
+    public function index(Contact $contact, ProductRepository $productRepo, SerializerInterface $serializer)
+    {
+
+        $products = $productRepo->findByIsActiveAndIsAvailable(true, false);
+        if ($contact->getCompany()->getDiscount() == null) {
+            $discountGranted = 0;
+        } else {
+            $discountGranted = $contact->getCompany()->getDiscount()->getRate();
+        }
+
+        foreach ($products as $product) {
+            $maxDiscount = $product->getMaxDiscountRate();
+            $discount = min($discountGranted, $maxDiscount);
+            $listPrice = $product->getListPrice();
+            $sellingPrice = round($listPrice * (100-$discount)/100, 0);
+            $product->setListPrice($sellingPrice);
+        }
+        
+        //dd($products);
+        $jsonObject = $serializer->serialize($products, 'json', ['groups' => 'product_group']);
+
+        $response = new Response($jsonObject, 200);
+        
+        $response->headers->set('Content-Type', 'application/json');
+        $response->headers->set('Access-Control-Allow-Origin', '*');
+
+        return $response;
+    }
+
 }
