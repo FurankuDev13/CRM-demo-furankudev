@@ -29,6 +29,7 @@ class ContactController extends AbstractController
         $order = $request->query->get('order', 'ASC');
 
         $contactTypes = $contactTypeRepo->findWherePersonIsActive();
+        $contactTypeList = $contactTypeRepo->findByIsActive(true);
         $companies = $companyRepo->findWherePersonIsActive();
 
         if ($filter == 'contactType') {
@@ -45,6 +46,7 @@ class ContactController extends AbstractController
             'page_title' => 'Contacts',
             'contacts' => $contacts,
             'contactTypes' => $contactTypes,
+            'contactTypeList' => $contactTypeList,
             'companies' => $companies,
             'filter' => $filter,
             'filterName' => $filterName,
@@ -86,4 +88,30 @@ class ContactController extends AbstractController
 
         return $this->redirect($referer);;
     }
+
+    /**
+     * @Route("/{id}/edit-type", name="editType", methods={"PATCH"}, requirements={"id"="\d+"})
+     */
+    public function editType(Contact $contact, Request $request, EntityManagerInterface $entityManager, ContactTypeRepository $contactTypeRepo)
+    {
+        if (!$contact) {
+            throw $this->createNotFoundException("Le contact indiqué n'existe pas"); 
+        }
+        
+        $contactTypeId = $request->request->get('contactTypeId');
+        $contactType = $contactTypeRepo->find($contactTypeId);
+        $contact->setContactType($contactType);
+        $entityManager->flush();
+
+        $this->addFlash(
+            'success',
+            'Le titre ' . $contactType->getTitle() . ' a bien été attribué au contact ' . $contact->getPerson()->getLastName() . ' ' . $contact->getPerson()->getFirstName() . ' !'
+        );
+
+        $referer = $request->headers->get('referer');
+
+        return $this->redirect($referer);
+    }
+
+
 }
