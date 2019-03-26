@@ -3,20 +3,25 @@
 {% block title %}{{ parent() }} - {{ page_title }}{% endblock %}
 
 {% block sidebar %}
+    <div class="level-left">
+        <div class="level-item">
+            <h2 class="level-item subtitle has-text-info is-3">Filtres</h2>
+        </div>
+    </div>
     {% for requestType in requestTypes %}
         <div class="level-left">
             <div class="level-item">
                 <a  href="{{ path('request_index', {'filter': 'requestType', 'filterId': requestType.id }) }}">
-                    <h2 class="level-item subtitle has-text-primary is-3">{{ requestType.title }}</h2>
+                    <h2 class="level-item subtitle has-text-primary is-5">{{ requestType.title }}</h2>
                 </a>
             </div>
-            <button class="level-item button is-primary is-small is-size-4">{{ requestType.requests|length }}</button>
+            <button class="level-item button is-primary is-small is-size-6">{{ requestType.requests|length }}</button>
         </div>
     {% endfor %}
 
     <div class="level-left">
         <div class="level-item">
-            <h2 class="level-item subtitle has-text-info is-3">Status</h2>
+            <h2 class="level-item subtitle has-text-info is-3">Statuts</h2>
         </div>
         <button class="level-item button is-info is-small is-size-4">{{ handlingStatuses|length }}</button>
     </div>
@@ -35,13 +40,23 @@
 {% else %}
     {% set orderButtonsIncludePath = 'request/_order_buttons.html.twig' %}
 {% endif %}
-
-        <div class="level-left">
-            <div class="level-item">
-                <h2 class="level-item subtitle has-text-info is-3">Les demandes des requests (professionnels)</h2>
+        <div class="level">
+            <div class="level-left ">
+                <div class="level-item">
+                    <h2 class=" level-item subtitle has-text-info is-3">Les demandes des requests (professionnels)</h2>
+                    <button class=" level-item button is-info is-small is-size-4">{{ requests|length }}</button>
+                </div>  
+            </div> 
+            <div class="level-right">
+                <a class="level-item" href="{{ path('request_index')}}">
+                    <button class="level-item button is-primary s-small is-size-3"><i class="fas fa-sort-alpha-down"></i></button>
+                </a>
+                {# <a class="level-item" href="{{ path('request_new')}}">
+                    <button type="submit" class="level-item button is-success s-small is-size-3"><i class="fas fa-plus-circle"></i></button>
+                </a> #}
             </div>
-            <button class="level-item button is-info is-small is-size-4">{{ requests|length }}</button>
         </div>
+
         <table class="table is-fullwidth is-hoverable is-striped">
             <thead>
                 <tr>
@@ -63,7 +78,7 @@
                     <th>Société 
                         {% include orderButtonsIncludePath with {'table': 'c', 'field' : 'name'} %}
                     </th>
-                    <th>Statut de traitement 
+                    <th>Traitement 
                         {% include orderButtonsIncludePath with {'table': 'r', 'field' : 'handlingStatus'} %}
                     </th>
                     {% if is_granted('ROLE_SALES') %}
@@ -86,12 +101,14 @@
                         <td>{{ request.handlingStatus.title }}</td>
                         {% if is_granted('ROLE_SALES') %}
                             <td class="level">
-                                {% include 'request/_handle_status_modal.html.twig' %}
-                                <form class="level-left" action='{{ path('request_archive', {'id': request.id}) }}' method="POST">
-                                    <input class="" type="hidden" name="_method" value="PATCH">
-                                    {% include 'partial/_confirm_cancel_modal.html.twig' with {'message': 'Confirmation d\'Archivage'} %}
-                                    <button class="button showModalConfirm is-warning"><i class="fas fa-archive"></i></button>
-                                </form>
+                                <div class="level-left">
+                                    {% include 'request/_handle_status_modal.html.twig' %}
+                                    <form class="level-item" action='{{ path('request_archive', {'id': request.id}) }}' method="POST">
+                                        <input class="" type="hidden" name="_method" value="PATCH">
+                                        {% include 'partial/_confirm_cancel_modal.html.twig' with {'message': 'Confirmation d\'Archivage'} %}
+                                        <button class="button showModalConfirm is-warning level-item"><i class="fas fa-archive"></i></button>
+                                    </form>
+                                </div>
                             </td>
                         {% endif %}
 

@@ -2,9 +2,11 @@
 
 namespace App\Repository;
 
+use App\Entity\Company;
 use App\Entity\Contact;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use App\Entity\ContactType;
 use Symfony\Bridge\Doctrine\RegistryInterface;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 
 /**
  * @method Contact|null find($id, $lockMode = null, $lockVersion = null)
@@ -25,6 +27,61 @@ class ContactRepository extends ServiceEntityRepository
             ->join('c.person', 'p')
             ->addSelect('p')
             ->andWhere('p.isActive = true')
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
+    public function findisActiveOrderedByField($table = 'p', $field = 'lastname', $order = 'ASC')
+    {
+        return $this->createQueryBuilder('co')
+            ->join('co.company', 'c')
+            ->addSelect('c')
+            ->join('co.contactType', 'ct')
+            ->addSelect('ct')
+            ->join('co.person', 'p')
+            ->addSelect('p')
+            ->andWhere('p.isActive = :isActive')
+            ->setParameter('isActive', true)
+            ->orderBy($table . '.' . $field, $order)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
+    public function findIsActiveByContactType(ContactType $contactType, $table = 'p', $field = 'lastname', $order = 'ASC')
+    {
+        return $this->createQueryBuilder('co')
+            ->join('co.company', 'c')
+            ->addSelect('c')
+            ->join('co.contactType', 'ct')
+            ->addSelect('ct')
+            ->join('co.person', 'p')
+            ->addSelect('p')
+            ->andWhere('co.contactType = :contactType')
+            ->setParameter('contactType', $contactType)
+            ->andWhere('p.isActive = :isActive')
+            ->setParameter('isActive', true)
+            ->orderBy($table . '.' . $field, $order)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
+    public function findIsActiveByCompany(Company $company, $table = 'p', $field = 'lastname', $order = 'ASC')
+    {
+        return $this->createQueryBuilder('co')
+            ->join('co.company', 'c')
+            ->addSelect('c')
+            ->join('co.contactType', 'ct')
+            ->addSelect('ct')
+            ->join('co.person', 'p')
+            ->addSelect('p')
+            ->andWhere('co.company = :company')
+            ->setParameter('company', $company)
+            ->andWhere('p.isActive = :isActive')
+            ->setParameter('isActive', true)
+            ->orderBy($table . '.' . $field, $order)
             ->getQuery()
             ->getResult()
         ;
