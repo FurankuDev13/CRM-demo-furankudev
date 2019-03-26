@@ -91,7 +91,7 @@ const ajaxAdmin = store => next => (action) => {
       } = store.getState().fields.question;
 
       const questionDatas = {
-        id: 19,
+        contact_id: 19,
         request_title: title,
         request_body: content,
         request_type: 'Devis simple',
