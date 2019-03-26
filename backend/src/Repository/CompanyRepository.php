@@ -83,6 +83,21 @@ class CompanyRepository extends ServiceEntityRepository
     ;
     }
 
+    public function findWherePersonIsActive()
+    {
+        return $this->createQueryBuilder('c')
+            ->join('c.contacts', 'co')
+            ->addSelect('co')
+            ->join('co.person', 'p')
+            ->addSelect('p')
+            ->andWhere('p.isActive = :isActive')
+            ->setParameter('isActive', true)
+            ->orderBy('c.name', 'ASC')
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
     // /**
     //  * @return Company[] Returns an array of Company objects
     //  */

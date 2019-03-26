@@ -19,6 +19,21 @@ class ContactTypeRepository extends ServiceEntityRepository
         parent::__construct($registry, ContactType::class);
     }
 
+    public function findWherePersonIsActive()
+    {
+        return $this->createQueryBuilder('ct')
+            ->join('ct.contacts', 'co')
+            ->addSelect('co')
+            ->join('co.person', 'p')
+            ->addSelect('p')
+            ->andWhere('p.isActive = :isActive')
+            ->setParameter('isActive', true)
+            ->orderBy('ct.title', 'ASC')
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
     // /**
     //  * @return ContactType[] Returns an array of ContactType objects
     //  */
