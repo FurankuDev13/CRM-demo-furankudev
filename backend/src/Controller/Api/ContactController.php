@@ -168,7 +168,7 @@ class ContactController extends AbstractController
     /**
      * @Route("/contact/{id}/products", name="productIndex", methods={"GET"})
      */
-    public function index(Contact $contact, ProductRepository $productRepo, SerializerInterface $serializer)
+    public function productIndex(Contact $contact, ProductRepository $productRepo, SerializerInterface $serializer)
     {
 
         $products = $productRepo->findByIsActiveAndIsAvailable(true, false);
@@ -187,6 +187,8 @@ class ContactController extends AbstractController
         }
         
         //dd($products);
+        
+
         $jsonObject = $serializer->serialize($products, 'json', ['groups' => 'product_group']);
 
         $response = new Response($jsonObject, 200);
@@ -196,5 +198,46 @@ class ContactController extends AbstractController
 
         return $response;
     }
+
+    /**
+     * @Route("/contact/{id}/request", name="requestCreate", methods={"POST"})
+     */
+    public function requestCreate(Contact $contact, Request $request, EntityManagerInterface $entityManager, HandlingStatusRepository $handlingStatusRepo, RequestTypeRepository $requestTypeRepo, SerializerInterface $serializer)
+    {
+        if (!$contact) {
+            throw $this->createNotFoundException("Le contact indiqué n'existe pas"); 
+        }
+
+        $jsonObject = null;
+        $data = json_decode($request->getContent(), true);
+
+        $handlingStatus = $handlingStatusRepo->findOneByTitle("Initiée");
+
+        $carryOn = false;
+        if ($requestTypeRepo->findOneByTitle($data["request_type"])) {
+            $carryOn = true;
+        }
+
+        if ($carryOn) {
+            
+            $contactRequest = new ContactRequest();
+            $contactRequest->setTitle($data["request_title"]);
+            $contactRequest->setBody($data["request_body"]);
+            $contactRequest->setHandlingStatus($handlingStatus);
+            $requestType = $requestTypeRepo->findOneByTitle($data["request_type"]);
+            $contactRequest->setRequestType($requestType);
+            $contactRequest->setContact($contact);
+            
+            $jsonObject = $serializer->serialize($contactRequest, 'json', ['groups' => 'contact_group']);
+        }
+
+        $response = new Response($jsonObject, 200);
+        
+        $response->headers->set('Content-Type', 'application/json');
+        $response->headers->set('Access-Control-Allow-Origin', '*');
+
+        return $response;
+    }
+
 
 }
