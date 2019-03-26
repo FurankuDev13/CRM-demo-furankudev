@@ -29,10 +29,8 @@ const ajaxAdmin = store => next => (action) => {
       axiosUp.post('/api/login', stringifiedLoginDatas)
         .then((response) => {
           const { data } = response;
-          console.log(data);
           const { email } = data;
           localStorage.setItem('email', email);
-          console.log('je suis loggé !');
           dispatch(setProfile(email));
         })
         .catch((error) => {

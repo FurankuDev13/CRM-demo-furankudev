@@ -32,7 +32,6 @@ const ajaxCatalog = store => next => (action) => {
       axiosUp.get('/api/categories')
         .then((response) => {
           const { data } = response;
-          console.log(data);
           store.dispatch(fetchSuccess(data, 'categoryList'));
         })
         .catch((error) => {

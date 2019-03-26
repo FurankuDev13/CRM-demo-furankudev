@@ -8,7 +8,9 @@ import { connect } from 'react-redux';
  */
 import App from 'src/components/App';
 
-// mapping
+/**
+ * Mapping
+ */
 const mapStateToProps = (state) => {
   const {
     view,
@@ -24,16 +26,11 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = () => ({});
 
-// Container
+
 const AppContainer = connect(
   mapStateToProps,
   mapDispatchToProps,
 )(App);
-
-/* 2 temps
-const createContainer = connect(mapStateToProps, mapDispatchToProps);
-const ExampleContainer = createContainer(Example);
-*/
 
 /**
  * Export
