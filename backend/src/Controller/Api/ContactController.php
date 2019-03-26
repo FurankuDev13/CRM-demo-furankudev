@@ -223,6 +223,9 @@ class ContactController extends AbstractController
             $requestType = $requestTypeRepo->findOneByTitle($data["request_type"]);
             $contactRequest->setRequestType($requestType);
             $contactRequest->setContact($contact);
+
+            $entityManager->persist($contactRequest);
+            $entityManager->flush();
             
             $jsonObject = $serializer->serialize($contactRequest, 'json', ['groups' => 'contact_group']);
         }

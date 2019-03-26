@@ -56,6 +56,7 @@ class Product
 
     /**
      * @ORM\Column(type="boolean")
+     * @Groups({"product_group"})
      */
     private $isOnHomePage;
 
