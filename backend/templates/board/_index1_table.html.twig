@@ -28,10 +28,10 @@
                     </figure>
                 </td>
                 <td>
-                    {% if is_granted('ROLE_SALES') %}
+                    {% if is_granted('ROLE_SALESMGR') %}
                         {% include 'partial/_add_user_modal.html.twig' %}
                     {% else %}
-                        En attente
+                        <button type="submit" class="button is-danger"><i class="fas fa-shield-alt"></i></button> 
                     {% endif %}
                 </td>
             </tr>
