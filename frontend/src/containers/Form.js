@@ -9,7 +9,7 @@ import { connect } from 'react-redux';
 import Form from 'src/components/Form';
 
 // Action Creators
-import { sendLoginRequest, sendRegisterRequest } from 'src/store/reducer';
+import { sendLoginRequest, sendRegisterRequest, sendQuestion } from 'src/store/reducer';
 
 /**
  * Mapping
@@ -32,6 +32,10 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
         break;
       case 'signup':
         dispatch(sendRegisterRequest());
+        break;
+
+      case 'question':
+        dispatch(sendQuestion());
         break;
 
       default:

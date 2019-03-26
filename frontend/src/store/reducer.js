@@ -47,6 +47,7 @@ export const FETCH_CATALOG = 'FETCH_CATALOG';
 export const FETCH_CATEGORIES = 'FETCH_CATEGORIES';
 export const SEND_LOGIN_REQUEST = 'SEND_LOGIN_REQUEST';
 export const SEND_REGISTER_REQUEST = 'SEND_REGISTER_REQUEST';
+export const SEND_QUESTION = 'SEND_QUESTION';
 export const SET_PROFILE = 'SET_PROFILE';
 const FETCH_SUCCESS = 'FETCH_SUCCESS';
 const INPUT_CHANGE = 'INPUT_CHANGE';
@@ -158,6 +159,10 @@ export const sendLoginRequest = loginDatas => ({
 
 export const sendRegisterRequest = () => ({
   type: SEND_REGISTER_REQUEST,
+});
+
+export const sendQuestion = () => ({
+  type: SEND_QUESTION,
 });
 
 export const setProfile = () => ({
