@@ -11,6 +11,7 @@ const initialState = {
   logEmail: '',
   isLogged: false,
   navbarIsActive: false,
+  askQuestionElementIsActive: false,
   categoryList: [],
   catalogList: [],
   fields: {
@@ -47,6 +48,7 @@ const FETCH_SUCCESS = 'FETCH_SUCCESS';
 const INPUT_CHANGE = 'INPUT_CHANGE';
 const LOGOUT = 'LOGOUT';
 const TOGGLE_NAV_BAR = 'TOGGLE_NAV_BAR';
+const TOGGLE_QUESTION_FORM = 'TOGGLE_QUESTION_FORM';
 
 /**
  * Reducer
@@ -102,6 +104,12 @@ const reducer = (state = initialState, action = {}) => {
       return {
         ...state,
         navbarIsActive: !state.navbarIsActive,
+      };
+
+    case TOGGLE_QUESTION_FORM:
+      return {
+        ...state,
+        askQuestionElementIsActive: !state.askQuestionElementIsActive,
       };
 
     default:
@@ -160,6 +168,9 @@ export const toggleNavBar = () => ({
   type: TOGGLE_NAV_BAR,
 });
 
+export const toggleQuestionForm = () => ({
+  type: TOGGLE_QUESTION_FORM,
+});
 /**
  * Selectors
  */

@@ -16,11 +16,13 @@ const mapStateToProps = (state) => {
     view,
     logEmail,
     isLogged,
+    askQuestionElementIsActive,
   } = state;
   return ({
     isLogged,
     logEmail,
     view,
+    askQuestionElementIsActive,
   });
 };
 

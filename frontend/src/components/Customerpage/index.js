@@ -11,7 +11,7 @@ import { Route } from 'react-router-dom';
  */
 import Catalog from 'src/containers/Catalog';
 import Categories from 'src/containers/Categories';
-import Sidebar from 'src/components/Side';
+import Sidebar from 'src/containers/Sidebar';
 
 class CustomerPage extends React.Component {
   componentDidMount() {
