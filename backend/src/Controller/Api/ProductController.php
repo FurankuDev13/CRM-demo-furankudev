@@ -21,11 +21,7 @@ class ProductController extends AbstractController
     {
         $products = $productRepo->findByIsActiveAndIsAvailable(true, false);
 
-        $jsonObject = $serializer->serialize($products, 'json', [
-            'circular_reference_handler' => function ($object) {
-                return $object->getId();
-            }
-        ]);
+        $jsonObject = $serializer->serialize($products, 'json', ['groups' => 'product_group']);
 
         $response = new Response($jsonObject, 200);
         

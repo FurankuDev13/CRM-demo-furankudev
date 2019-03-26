@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -15,6 +16,7 @@ class Product
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
+     * @Groups({"product_group"})
      */
     private $id;
 
@@ -25,21 +27,25 @@ class Product
 
     /**
      * @ORM\Column(type="string", length=128)
+     * @Groups({"product_group"})
      */
     private $name;
 
     /**
      * @ORM\Column(type="text", nullable=true)
+     * @Groups({"product_group"})
      */
     private $description;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups({"product_group"})
      */
     private $picture;
 
     /**
      * @ORM\Column(type="integer")
+     * @Groups({"product_group"})
      */
     private $listPrice;
 
@@ -75,6 +81,7 @@ class Product
 
     /**
      * @ORM\ManyToMany(targetEntity="App\Entity\Category", inversedBy="products")
+     * @Groups({"product_group"})
      */
     private $categories;
 
