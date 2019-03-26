@@ -6,6 +6,7 @@ use App\Entity\Contact;
 use App\Repository\CompanyRepository;
 use App\Repository\ContactRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use App\Repository\ContactTypeRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -18,15 +19,35 @@ class ContactController extends AbstractController
     /**
      * @Route("/index", name="index", methods={"GET"})
      */
-    public function index(ContactRepository $contactRepo, CompanyRepository $companyRepo)
+    public function index(Request $request, ContactRepository $contactRepo, ContactTypeRepository $contactTypeRepo, CompanyRepository $companyRepo)
     {
-        $contacts = $contactRepo->findWherePersonIsActive();
-        $companies = $companyRepo->findByIsActive(true);
+        $filter = $request->query->get('filter', null);
+        $filterName = $request->query->get('filterName', null);
+
+        $table = $request->query->get('table', 'p');
+        $field = $request->query->get('field', 'lastname');
+        $order = $request->query->get('order', 'ASC');
+
+        $contactTypes = $contactTypeRepo->findWherePersonIsActive();
+        $companies = $companyRepo->findWherePersonIsActive();
+
+        if ($filter == 'contactType') {
+            $contactType = $contactTypeRepo->findOneByTitle($filterName);
+            $contacts = $contactRepo->findIsActiveByContactType($contactType, $table, $field, $order);
+        } elseif ($filter == 'company') {
+            $company = $companyRepo->findOneByName($filterName);
+            $contacts = $contactRepo->findIsActiveByCompany($company, $table, $field, $order);
+        } else {
+            $contacts = $contactRepo->findIsActiveOrderedByField($table, $field, $order);
+        }
 
         return $this->render('contact/index.html.twig', [
             'page_title' => 'Contacts',
             'contacts' => $contacts,
+            'contactTypes' => $contactTypes,
             'companies' => $companies,
+            'filter' => $filter,
+            'filterName' => $filterName,
         ]);
     }
 

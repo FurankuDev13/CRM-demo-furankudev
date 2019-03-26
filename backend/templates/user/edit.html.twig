@@ -6,14 +6,14 @@
     <div class="container">
         <div class="section level-left">
             <div class="level-item">
-                <h2 class="level-item subtitle has-text-info is-3">Mettre à jour l'utilisateur: {{ user.person.firstname }} {{ user.person.lastname }}</h2>
+                <h2 class="level-item subtitle has-text-info is-3">{{ user.person.firstname }} {{ user.person.lastname }}</h2>
             </div>
-            <button class="level-item button is-info is-small is-size-4">UPDATE</button>
+            <button class="level-item button is-info is-small is-size-4">MISE A JOUR</button>
         </div>
         {{ form_start(userForm, {'attr': {'novalidate': 'novalidate'}}) }}
         {{ form_widget(personForm) }}
         {{ form_widget(userForm) }}
-            <button type="submit" class="button is-info">Ajouter</button>
+            <button type="submit" class="button is-info">Mettre à Jour</button>
         {{ form_end(userForm) }}
     </div>
 {% endblock %}

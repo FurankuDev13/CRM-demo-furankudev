@@ -57,6 +57,7 @@ class Category
 
     /**
      * @ORM\ManyToMany(targetEntity="App\Entity\Product", mappedBy="categories")
+     * @ORM\OrderBy({"name" = "ASC"})
      */
     private $products;
 

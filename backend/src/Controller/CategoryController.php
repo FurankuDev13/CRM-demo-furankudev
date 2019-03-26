@@ -18,9 +18,12 @@ class CategoryController extends AbstractController
     /**
      * @Route("/index", name="index", methods={"GET"})
      */
-    public function index(CategoryRepository $categoryRepo)
+    public function index(Request $request, CategoryRepository $categoryRepo)
     {
-        $categories = $categoryRepo->findByIsActive(true);
+        $field = $request->query->get('field', 'name');
+        $order = $request->query->get('order', 'ASC');
+
+        $categories = $categoryRepo->findIsACtiveOrderedByField($field , $order);
 
         return $this->render('category/index.html.twig', [
             'page_title' => 'Catalogue Catégories',

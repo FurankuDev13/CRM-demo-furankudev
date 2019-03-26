@@ -1,27 +1,50 @@
 <table class="table is-fullwidth is-hoverable is-striped">
     <thead>
         <tr>
-            <th>Type</th>
-            <th>Titre</th>
-            <th>Description</th>
-            <th>Date</th>
-            <th>Contact</th>
-            <th>Société</th>
-            <th>Commercial</th>
+            <th>Date&nbsp;
+                {% include 'board/_order_buttons.html.twig' with {'index': '3', 'table': 'r', 'field' : 'createdAt'} %}
+            </th>
+            <th>Type&nbsp;
+                {% include 'board/_order_buttons.html.twig' with {'index': '3', 'table': 'r', 'field' : 'requestType'} %}
+            </th>
+            <th>Titre&nbsp;
+                {% include 'board/_order_buttons.html.twig' with {'index': '3', 'table': 'r', 'field' : 'title'} %}
+            </th>
+            <th>Description&nbsp;
+                {% include 'board/_order_buttons.html.twig' with {'index': '3', 'table': 'r', 'field' : 'body'} %}
+            </th>
+            <th>Contact&nbsp;
+                {% include 'board/_order_buttons.html.twig' with {'index': '3', 'table': 'p', 'field' : 'lastname'} %}
+            </th>
+            <th>Société&nbsp;
+                {% include 'board/_order_buttons.html.twig' with {'index': '3', 'table': 'c', 'field' : 'name'} %}
+            </th>
+            <th>Commercial&nbsp;
+                {% include 'board/_order_buttons.html.twig' with {'index': '3', 'table': 'c', 'field' : 'user'} %}
+            </th>
         </tr>
     </thead>
     <tbody>
         {% for request in unhandledRequests %}
             <tr>
+                <td>{{ request.createdAt|date("d/m/Y") }}</td>
                 <td>{{ request.requestType.title }}</td>
                 <td>   
                     <a href="{{ path('request_show', {'id': request.id}) }}">{{ request.title }}</a>
                 </td>
                 <td>{{ request.body|truncate(30) }}</td>
-                <td>{{ request.createdAt|date("d/m/Y") }}</td>
-                <td>{{ request.contact.person.lastname }}</td>
-                <td>{{ request.contact.company.name }}</td>
-                <td>{{ request.contact.company.user ? request.contact.company.user.person.lastname : 'Dégun' }}</td>
+                
+                <td>
+                    <a href="{{ path('contact_show', {'id': request.contact.id}) }}">
+                        {{ request.contact.person.lastname }}
+                    </a>
+                </td>
+                <td>
+                    <a href="{{ path('company_show', {'id': request.contact.company.id}) }}">
+                        {{ request.contact.company.name }}
+                    </a>
+                </td>
+                <td>{{ request.contact.company.user ? request.contact.company.user.person.lastname : '' }}</td>
             </tr>
         {% endfor %}
     </tbody>

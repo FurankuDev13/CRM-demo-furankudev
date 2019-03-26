@@ -3,37 +3,56 @@
 {% block title %}{{ parent() }} - {{ page_title }}{% endblock %}
 
 {% block sidebar %}
-    <div class="level-left">
-        <div class="level-item">
-            <h2 class="level-item subtitle has-text-info is-3">Sociétés</h2>
-        </div>
-        <button class="level-item button is-info is-small is-size-4">{{ companies|length }}</button>
-    </div>
-    <div class="list is-primary is-hoverable">
-        {% for company in companies %}
-            <a class="list-item has-text-primary" href="{{ path('company_show', {'id': company.id}) }}">
-            {{ company.name }}
-            </a>
-        {% endfor %}
-    </div>
+    {% include 'contact/_sidebar.html.twig' %}
 {% endblock %}
 
 {% block content %}
-        <div class="level-left">
-            <div class="level-item">
-                <h2 class="level-item subtitle has-text-info is-3">Les contacts (professionnels)</h2>
+    {% if filterName %}
+        {% set orderButtonsIncludePath = 'contact/_order_buttons_withfilter.twig' %}
+    {% else %}
+        {% set orderButtonsIncludePath = 'contact/_order_buttons.html.twig' %}
+    {% endif %}
+        <div class="level">
+            <div class="level-left ">
+                <div class="level-item">
+                    <h2 class=" level-item subtitle has-text-info is-3">Les contacts (professionnels)</h2>
+                    {% if filter %}
+                        <button class=" level-item button is-primary is-small is-size-4">{{ filterName }}</button>
+                    {% endif %}
+                    <button class=" level-item button is-info is-small is-size-4">{{ contacts|length }}</button>
+                </div>  
+            </div> 
+            <div class="level-right">
+                <a class="level-item" href="{{ path('contact_index')}}">
+                    <button class="level-item button is-primary s-small is-size-3"><i class="fas fa-sort-alpha-down"></i></button>
+                </a>
+                {# <a class="level-item" href="{{ path('contact_new')}}">
+                    <button type="submit" class="level-item button is-success s-small is-size-3"><i class="fas fa-plus-circle"></i></button>
+                </a> #}
             </div>
-            <button class="level-item button is-info is-small is-size-4">{{ contacts|length }}</button>
         </div>
+
         <table class="table is-fullwidth is-hoverable is-striped">
             <thead>
                 <tr>
-                    <th>Nom</th>
-                    <th>Prénom</th>
-                    <th>Email</th>
-                    <th>Téléphone</th>
-                    <th>Société</th>
-                    <th>Titre</th>
+                    <th>Nom 
+                        {% include orderButtonsIncludePath with {'table': 'p', 'field' : 'lastname'} %}
+                    </th>
+                    <th>Prénom 
+                        {% include orderButtonsIncludePath with {'table': 'p', 'field' : 'firstname'} %}
+                    </th>
+                    <th>Email 
+                        {% include orderButtonsIncludePath with {'table': 'co', 'field' : 'email'} %}
+                    </th>
+                    <th>Téléphone 
+                        {% include orderButtonsIncludePath with {'table': 'p', 'field' : 'businessPhone'} %}
+                    </th>
+                    <th>Société 
+                        {% include orderButtonsIncludePath with {'table': 'c', 'field' : 'name'} %}
+                    </th>
+                    <th>Titre 
+                        {% include orderButtonsIncludePath with {'table': 'ct', 'field' : 'title'} %}
+                    </th>
                     {% if is_granted('ROLE_SALES') %}
                     <th>Actions</th>
                     {% endif %}

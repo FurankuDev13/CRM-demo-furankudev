@@ -4,13 +4,15 @@ namespace App\Controller;
 
 use App\Entity\Company;
 use App\Entity\CompanyAddress;
-use App\Form\CompanyType as CompanyFormType;
 use App\Repository\UserRepository;
+use App\Form\CompanyAddressFormType;
 use App\Repository\CompanyRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use App\Form\CompanyType as CompanyFormType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 
 /** 
  *  @Route("/company", name="company_") 
@@ -20,13 +22,44 @@ class CompanyController extends AbstractController
     /**
      * @Route("/index", name="index", methods={"GET"})
      */
-    public function index(CompanyRepository $companyRepo)
+    public function index(Request $request, CompanyRepository $companyRepo, UserRepository $userRepo)
     {
-        $companies = $companyRepo->findByIsActive(true);
+        $filter = $request->query->get('filter', null);
+        $salesUser = $request->query->get('salesUser', null);
+        $field = $request->query->get('field', 'name');
+        $order = $request->query->get('order', 'ASC');
+
+        $salesUsers = $userRepo->findSalesRoles();
+        $prospects = $companyRepo->findIsActiveByIsCustomerOrderedByField(false, $field, $order);
+        $customers = $companyRepo->findIsActiveByIsCustomerOrderedByField(true, $field, $order);
+
+        if ($salesUser) {
+            $user = $userRepo->find($salesUser);
+            $companies = $companyRepo->findIsActiveByUserOrderedByField($user, $field, $order);
+            $filterValue = $salesUser;
+        } else {
+            $companies = $companyRepo->findIsACtiveOrderedByField($field, $order);
+            $filterValue = null;
+        }
+
+        if ($filter == "isCustomer") {
+            $companies = $customers;
+            $filterValue = "isCustomer";
+        }
+
+        if ($filter == "isNotCustomer") {
+            $companies = $prospects;
+            $filterValue = "isNotCustomer";
+        }
 
         return $this->render('company/index.html.twig', [
             'page_title' => 'Sociétés',
             'companies' => $companies,
+            'salesUsers' => $salesUsers,
+            'prospects' => $prospects,
+            'customers' => $customers,
+            'filterType' => $filter,
+            'filterValue' => $filterValue,
         ]);
     }
 
@@ -102,7 +135,7 @@ class CompanyController extends AbstractController
     }
 
     /**
-     * @Route("/{id}/toggle-is-customer", name="toggleIsCustomer", methods={"PATCH"}, requirements={"id"="\d+"})
+     * @Route("/{id}/toggleIsCustomer", name="toggleIsCustomer", methods={"PATCH"}, requirements={"id"="\d+"})
      */
     public function toggleIsCustomer(Company $company, Request $request, EntityManagerInterface $entityManager)
     {
@@ -161,26 +194,82 @@ class CompanyController extends AbstractController
     }
 
     /**
-     * @Route("/new", name="address_new", methods={"GET", "POST"})
+     * @Route("/{id}/address/new", name="address_new", methods={"GET", "POST"})
      */
-    public function newAddress(Request $request, EntityManagerInterface $entityManager)
+    public function newAddress(Request $request, EntityManagerInterface $entityManager, Company $company)
     {
+        $companyAddress = new CompanyAddress();
+        $companyAddressForm = $this->createForm(CompanyAddressFormType::class, $companyAddress);
+        $companyAddressForm->handleRequest($request);
+
+        if ($companyAddressForm->isSubmitted() && $companyAddressForm->isValid()) {
+            $companyAddress->setCompany($company);
+            $entityManager->persist($companyAddress);
+            $entityManager->flush();
+
+            $this->addFlash(
+                'success',
+                "La nouvelle adresse a bien été ajoutée et associée à " . $company->getName()
+            );
+            return $this->redirectToRoute('company_show', ['id' => $company->getId()]);
+        }
+
         return $this->render('company/new_address.html.twig', [
             'page_title' => 'Ajouter une nouvelle adresse',
+            'form' => $companyAddressForm->createView(),
+            'company' => $company,
         ]);
     }
 
     /**
-     * @Route("/{companyId}/address/{id}/edit", name="address_edit", methods={"GET", "POST"}, requirements={"companyId"="\d+", "id"="\d+"})
+     * @Route("/{id}/address/{address_id}/edit", name="address_edit", methods={"GET", "POST"}, requirements={"id"="\d+", "id"="\d+"})
+     * @ParamConverter("companyAddress", options={"id" = "address_id"})
      */
-    public function editAddress(CompanyAddress $companyAddress, Request $request, EntityManagerInterface $entityManager)
+    public function editAddress(Request $request, EntityManagerInterface $entityManager, Company $company, CompanyAddress $companyAddress)
     {
         if (!$companyAddress) {
             throw $this->createNotFoundException("L'adresse' indiquée n'existe pas"); 
         }
 
+        $companyAddressForm = $this->createForm(CompanyAddressFormType::class, $companyAddress);
+        $companyAddressForm->handleRequest($request);
+
+        if ($companyAddressForm->isSubmitted() && $companyAddressForm->isValid()) {
+            $companyAddress->setCompany($company);
+            $entityManager->flush();
+
+            $this->addFlash(
+                'success',
+                "L'adresse a bien été mise à jour pour la société " . $company->getName()
+            );
+            return $this->redirectToRoute('company_show', ['id' => $company->getId()]);
+        }
+
         return $this->render('company/edit_address.html.twig', [
             'page_title' => "Mettre à jour l'adresse de la société: " . $company->getName(),
+            'form' => $companyAddressForm->createView(),
+            'company' => $company
         ]);
+    }
+
+    /**
+     * @Route("/address/{id}/archive", name="address_archive", methods={"PATCH"}, requirements={"id"="\d+", "id"="\d+"})
+     */
+    public function archiveAddress(Request $request, EntityManagerInterface $entityManager, CompanyAddress $companyAddress)
+    {
+        if (!$companyAddress) {
+            throw $this->createNotFoundException("L'adresse' indiquée n'existe pas"); 
+        }
+
+        $companyAddress->setIsActive(!$companyAddress->getIsActive());
+        $this->addFlash(
+            'success',
+            'L\'adresse a été archivée !'
+        );
+        $entityManager->flush();
+
+        $referer = $request->headers->get('referer');
+
+        return $this->redirect($referer);;
     }
 }
