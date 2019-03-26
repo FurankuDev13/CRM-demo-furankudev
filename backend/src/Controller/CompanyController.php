@@ -6,12 +6,14 @@ use App\Entity\Company;
 use App\Entity\CompanyAddress;
 use App\Repository\UserRepository;
 use App\Repository\PersonRepository;
+use App\Form\CompanyAddressFormType;
 use App\Repository\CompanyRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Form\CompanyType as CompanyFormType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 
 /** 
  *  @Route("/company", name="company_") 
@@ -71,9 +73,11 @@ class CompanyController extends AbstractController
             throw $this->createNotFoundException("La société indiquée n'existe pas"); 
         }
 
+        $companyFiltered = $companyRepo->find($company);
+
         return $this->render('company/show.html.twig', [
-            'page_title' => 'Société: ' . $company->getName(),
-            'company' => $company,
+            'page_title' => 'Société: ' . $companyFiltered->getName(),
+            'company' => $companyFiltered,
         ]);
     }
 
@@ -134,7 +138,7 @@ class CompanyController extends AbstractController
     }
 
     /**
-     * @Route("/{id}/toggle-is-customer", name="toggleIsCustomer", methods={"PATCH"}, requirements={"id"="\d+"})
+     * @Route("/{id}/toggleIsCustomer", name="toggleIsCustomer", methods={"PATCH"}, requirements={"id"="\d+"})
      */
     public function toggleIsCustomer(Company $company, Request $request, EntityManagerInterface $entityManager)
     {
@@ -193,26 +197,82 @@ class CompanyController extends AbstractController
     }
 
     /**
-     * @Route("/new", name="address_new", methods={"GET", "POST"})
+     * @Route("/{id}/address/new", name="address_new", methods={"GET", "POST"})
      */
-    public function newAddress(Request $request, EntityManagerInterface $entityManager)
+    public function newAddress(Request $request, EntityManagerInterface $entityManager, Company $company)
     {
+        $companyAddress = new CompanyAddress();
+        $companyAddressForm = $this->createForm(CompanyAddressFormType::class, $companyAddress);
+        $companyAddressForm->handleRequest($request);
+
+        if ($companyAddressForm->isSubmitted() && $companyAddressForm->isValid()) {
+            $companyAddress->setCompany($company);
+            $entityManager->persist($companyAddress);
+            $entityManager->flush();
+
+            $this->addFlash(
+                'success',
+                "La nouvelle adresse a bien été ajoutée et associée à " . $company->getName()
+            );
+            return $this->redirectToRoute('company_show', ['id' => $company->getId()]);
+        }
+
         return $this->render('company/new_address.html.twig', [
             'page_title' => 'Ajouter une nouvelle adresse',
+            'form' => $companyAddressForm->createView(),
+            'company' => $company,
         ]);
     }
 
     /**
-     * @Route("/{companyId}/address/{id}/edit", name="address_edit", methods={"GET", "POST"}, requirements={"companyId"="\d+", "id"="\d+"})
+     * @Route("/{id}/address/{address_id}/edit", name="address_edit", methods={"GET", "POST"}, requirements={"id"="\d+", "id"="\d+"})
+     * @ParamConverter("companyAddress", options={"id" = "address_id"})
      */
-    public function editAddress(CompanyAddress $companyAddress, Request $request, EntityManagerInterface $entityManager)
+    public function editAddress(Request $request, EntityManagerInterface $entityManager, Company $company, CompanyAddress $companyAddress)
     {
         if (!$companyAddress) {
             throw $this->createNotFoundException("L'adresse' indiquée n'existe pas"); 
         }
 
+        $companyAddressForm = $this->createForm(CompanyAddressFormType::class, $companyAddress);
+        $companyAddressForm->handleRequest($request);
+
+        if ($companyAddressForm->isSubmitted() && $companyAddressForm->isValid()) {
+            $companyAddress->setCompany($company);
+            $entityManager->flush();
+
+            $this->addFlash(
+                'success',
+                "L'adresse a bien été mise à jour pour la société " . $company->getName()
+            );
+            return $this->redirectToRoute('company_show', ['id' => $company->getId()]);
+        }
+
         return $this->render('company/edit_address.html.twig', [
             'page_title' => "Mettre à jour l'adresse de la société: " . $company->getName(),
+            'form' => $companyAddressForm->createView(),
+            'company' => $company
         ]);
+    }
+
+    /**
+     * @Route("/address/{id}/archive", name="address_archive", methods={"PATCH"}, requirements={"id"="\d+", "id"="\d+"})
+     */
+    public function archiveAddress(Request $request, EntityManagerInterface $entityManager, CompanyAddress $companyAddress)
+    {
+        if (!$companyAddress) {
+            throw $this->createNotFoundException("L'adresse' indiquée n'existe pas"); 
+        }
+
+        $companyAddress->setIsActive(!$companyAddress->getIsActive());
+        $this->addFlash(
+            'success',
+            'L\'adresse de ' . $companyAddress->getCity() . ' a été archivée !'
+        );
+        $entityManager->flush();
+
+        $referer = $request->headers->get('referer');
+
+        return $this->redirect($referer);;
     }
 }

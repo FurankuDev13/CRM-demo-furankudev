@@ -6,23 +6,23 @@ import { connect } from 'react-redux';
 /**
  * Local import
  */
-import Signuppage from 'src/components/Signuppage';
+import QuestionForm from 'src/components/QuestionForm';
 
 /**
  * Mapping
  */
 const mapStateToProps = state => ({
-  signupFields: state.fields.signup,
+  questionFields: state.fields.question,
 });
 
 const mapDispatchToProps = () => ({});
 
-const SignuppageContainer = connect(
+const QuestionFormContainer = connect(
   mapStateToProps,
   mapDispatchToProps,
-)(Signuppage);
+)(QuestionForm);
 
 /**
  * Export
  */
-export default SignuppageContainer;
+export default QuestionFormContainer;

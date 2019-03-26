@@ -1,11 +1,18 @@
 /**
+ * Import
+ */
+import { getSlug } from 'src/utils/url';
+
+/**
  * Initial State
  */
 const initialState = {
   view: 'login',
-  logEmail: '',
+  logId: '',
   isLogged: false,
   navbarIsActive: false,
+  askQuestionElementIsActive: false,
+  categoryList: [],
   catalogList: [],
   fields: {
     login: {
@@ -26,6 +33,10 @@ const initialState = {
       contactPasswordRepeat: '',
       contactRequest: '',
     },
+    question: {
+      title: '',
+      content: '',
+    },
   },
 };
 
@@ -33,13 +44,16 @@ const initialState = {
  * Types
  */
 export const FETCH_CATALOG = 'FETCH_CATALOG';
+export const FETCH_CATEGORIES = 'FETCH_CATEGORIES';
 export const SEND_LOGIN_REQUEST = 'SEND_LOGIN_REQUEST';
 export const SEND_REGISTER_REQUEST = 'SEND_REGISTER_REQUEST';
+export const SEND_QUESTION = 'SEND_QUESTION';
 export const SET_PROFILE = 'SET_PROFILE';
 const FETCH_SUCCESS = 'FETCH_SUCCESS';
 const INPUT_CHANGE = 'INPUT_CHANGE';
 const LOGOUT = 'LOGOUT';
 const TOGGLE_NAV_BAR = 'TOGGLE_NAV_BAR';
+const TOGGLE_QUESTION_FORM = 'TOGGLE_QUESTION_FORM';
 
 /**
  * Reducer
@@ -47,10 +61,19 @@ const TOGGLE_NAV_BAR = 'TOGGLE_NAV_BAR';
 const reducer = (state = initialState, action = {}) => {
   switch (action.type) {
     case FETCH_SUCCESS:
-      return {
-        ...state,
-        catalogList: [...action.data],
-      };
+      switch (action.list) {
+        case 'catalogList':
+          return {
+            ...state,
+            catalogList: [...action.data],
+          };
+        case 'categoryList':
+          return {
+            ...state,
+            categoryList: [...action.data],
+          };
+        default: return state;
+      }
     case INPUT_CHANGE:
       return {
         ...state,
@@ -64,10 +87,10 @@ const reducer = (state = initialState, action = {}) => {
       };
 
     case SET_PROFILE:
-      if ((localStorage.getItem('email') !== null)) {
+      if ((localStorage.getItem('id') !== null)) {
         return {
           ...state,
-          logEmail: localStorage.getItem('email'),
+          logId: localStorage.getItem('id'),
           isLogged: true,
         };
       }
@@ -79,6 +102,7 @@ const reducer = (state = initialState, action = {}) => {
       return {
         ...state,
         logEmail: '',
+        askQuestionElementIsActive: false,
         isLogged: false,
       };
 
@@ -86,6 +110,12 @@ const reducer = (state = initialState, action = {}) => {
       return {
         ...state,
         navbarIsActive: !state.navbarIsActive,
+      };
+
+    case TOGGLE_QUESTION_FORM:
+      return {
+        ...state,
+        askQuestionElementIsActive: !state.askQuestionElementIsActive,
       };
 
     default:
@@ -100,9 +130,22 @@ export const fetchCatalog = () => ({
   type: FETCH_CATALOG,
 });
 
-export const fetchSuccess = data => ({
+export const fetchCategories = () => ({
+  type: FETCH_CATEGORIES,
+});
+
+export const ProductIsInCategory = (product, slug) => (
+  product.categories.find(category => getSlug(category.name) === slug) !== undefined
+);
+
+export const getCurrentCategory = (list, slug) => (
+  list.filter(product => ProductIsInCategory(product, slug))
+);
+
+export const fetchSuccess = (data, list) => ({
   type: FETCH_SUCCESS,
   data,
+  list,
 });
 
 export const inputChange = (value, formOrigin, name) => ({
@@ -121,8 +164,13 @@ export const sendRegisterRequest = () => ({
   type: SEND_REGISTER_REQUEST,
 });
 
-export const setProfile = () => ({
+export const sendQuestion = () => ({
+  type: SEND_QUESTION,
+});
+
+export const setProfile = profileData => ({
   type: SET_PROFILE,
+  profileData,
 });
 
 export const logOut = () => ({
@@ -133,6 +181,9 @@ export const toggleNavBar = () => ({
   type: TOGGLE_NAV_BAR,
 });
 
+export const toggleQuestionForm = () => ({
+  type: TOGGLE_QUESTION_FORM,
+});
 /**
  * Selectors
  */

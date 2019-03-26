@@ -1,4 +1,4 @@
-.catalog {
+.list {
   display: grid;
   justify-content: stretch;
   padding : 2rem;
@@ -12,32 +12,32 @@
 
 
 @media (min-width: 768px) {
-  .catalog {
+  .list {
     width: calc(100vw - 195px);
     grid-template-columns: auto;
   }
 }
 
 @media (min-width: 1087px) {
-  .catalog {
+  .list {
     grid-template-columns: auto auto;
   }
 }
 
 @media (min-width: 1280px) {
-  .catalog {
+  .list {
     grid-template-columns: auto auto auto;
   }
 }
 
 @media (min-width: 1472px) {
-  .catalog {
+  .list {
     grid-template-columns: auto auto auto;
   }
 }
 
 @media (min-width: 1851px) {
-  .catalog {
+  .list {
     grid-template-columns: auto auto auto auto;
   }
 }

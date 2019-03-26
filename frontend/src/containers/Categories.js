@@ -6,23 +6,23 @@ import { connect } from 'react-redux';
 /**
  * Local import
  */
-import Signuppage from 'src/components/Signuppage';
+import Categories from 'src/components/Customerpage/Categories';
 
 /**
  * Mapping
  */
 const mapStateToProps = state => ({
-  signupFields: state.fields.signup,
+  categoryList: state.categoryList,
 });
 
 const mapDispatchToProps = () => ({});
 
-const SignuppageContainer = connect(
+const CatalogContainer = connect(
   mapStateToProps,
   mapDispatchToProps,
-)(Signuppage);
+)(Categories);
 
 /**
  * Export
  */
-export default SignuppageContainer;
+export default CatalogContainer;

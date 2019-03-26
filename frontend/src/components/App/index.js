@@ -10,17 +10,18 @@ import PropTypes from 'prop-types';
 import { Route, Redirect, Switch } from 'react-router-dom';
 import Nav from 'src/containers/Nav';
 import Homepage from 'src/components/Homepage';
-import Customerpage from 'src/components/Customerpage';
+import Customerpage from 'src/containers/Customerpage';
 import Loginpage from 'src/containers/Loginpage';
 import Signuppage from 'src/containers/Signuppage';
 import Footer from 'src/components/Footer';
 import NotFound from 'src/components/NotFound';
+import QuestionForm from 'src/containers/QuestionForm';
 
 
 /**
  * Code
  */
-const App = ({ isLogged }) => (
+const App = ({ isLogged, askQuestionElementIsActive }) => (
   <div>
     <Nav />
     <Switch>
@@ -46,12 +47,30 @@ const App = ({ isLogged }) => (
         )}
       />
       <Route
+        path="/categories"
+        render={() => (
+          isLogged ? (
+            <Customerpage />
+          ) : (
+            <Redirect to="/login" />
+          )
+        )}
+      />
+      <Route
+        path="/category/:slug"
+        render={() => (
+          isLogged ? (
+            <Customerpage />
+          ) : (
+            <Redirect to="/login" />
+          )
+        )}
+      />
+      <Route
         path="/login"
         render={() => (
           !isLogged ? (
-            <Loginpage
-              formOrigin="login"
-            />
+            <Loginpage />
           ) : (
             <Redirect to="/catalog" />
           )
@@ -61,9 +80,7 @@ const App = ({ isLogged }) => (
         path="/signup"
         render={() => (
           !isLogged ? (
-            <Signuppage
-              formOrigin="signup"
-            />
+            <Signuppage />
           ) : (
             <Redirect to="/catalog" />
           )
@@ -73,11 +90,15 @@ const App = ({ isLogged }) => (
       <Route component={NotFound} />
     </Switch>
     <Footer />
+    {askQuestionElementIsActive && (
+      <QuestionForm />
+    )}
   </div>
 );
 
 App.propTypes = {
   isLogged: PropTypes.bool.isRequired,
+  askQuestionElementIsActive: PropTypes.bool.isRequired,
 };
 
 /**

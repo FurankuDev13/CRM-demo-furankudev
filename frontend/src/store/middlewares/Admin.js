@@ -9,6 +9,7 @@ import axios from 'axios';
 import {
   SEND_LOGIN_REQUEST,
   SEND_REGISTER_REQUEST,
+  SEND_QUESTION,
   sendLoginRequest,
   setProfile,
 } from 'src/store/reducer';
@@ -29,11 +30,10 @@ const ajaxAdmin = store => next => (action) => {
       axiosUp.post('/api/login', stringifiedLoginDatas)
         .then((response) => {
           const { data } = response;
-          console.log(data);
-          const { email } = data;
+          const { email, id } = data;
           localStorage.setItem('email', email);
-          console.log('je suis loggé !');
-          dispatch(setProfile(email));
+          localStorage.setItem('id', id);
+          dispatch(setProfile(id));
         })
         .catch((error) => {
           console.log(error);
@@ -70,14 +70,39 @@ const ajaxAdmin = store => next => (action) => {
         contactPasswordRepeat,
         contactRequest: '',
       };
-      const stringifiedLoginDatas = JSON.stringify(registerDatas);
-      axiosUp.post('/api/contact', stringifiedLoginDatas)
+      const stringifiedRegisterDatas = JSON.stringify(registerDatas);
+      axiosUp.post('/api/contact', stringifiedRegisterDatas)
         .then(() => {
           const loginDatas = {
             email: contactEmail,
             password: contactPassword,
           };
           dispatch(sendLoginRequest(loginDatas));
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+      break;
+    }
+
+    case SEND_QUESTION: {
+      const {
+        title,
+        content,
+      } = store.getState().fields.question;
+      const {
+        logId,
+      } = store.getState();
+
+      const questionDatas = {
+        request_title: title,
+        request_body: content,
+        request_type: 'Devis simple',
+      };
+      const stringifiedLoginDatas = JSON.stringify(questionDatas);
+      axiosUp.post(`/api/contact/${logId}/request`, stringifiedLoginDatas)
+        .then((response) => {
+          console.log(response);
         })
         .catch((error) => {
           console.log(error);
