@@ -1,13 +1,27 @@
 <table class="table is-fullwidth is-hoverable is-striped">
     <thead>
         <tr>
-            <th>Type</th>
-            <th>Titre</th>
-            <th>Description</th>
-            <th>Date</th>
-            <th>Contact</th>
-            <th>Société</th>
-            <th>Commercial</th>
+            <th>Type&nbsp;
+                {% include 'board/_order_buttons.html.twig' with {'index': '3', 'table': 'r', 'field' : 'requestType'} %}
+            </th>
+            <th>Titre&nbsp;
+                {% include 'board/_order_buttons.html.twig' with {'index': '3', 'table': 'r', 'field' : 'title'} %}
+            </th>
+            <th>Description&nbsp;
+                {% include 'board/_order_buttons.html.twig' with {'index': '3', 'table': 'r', 'field' : 'body'} %}
+            </th>
+            <th>Date&nbsp;
+                {% include 'board/_order_buttons.html.twig' with {'index': '3', 'table': 'r', 'field' : 'createdAt'} %}
+            </th>
+            <th>Contact&nbsp;
+                {% include 'board/_order_buttons.html.twig' with {'index': '3', 'table': 'p', 'field' : 'lastname'} %}
+            </th>
+            <th>Société&nbsp;
+                {% include 'board/_order_buttons.html.twig' with {'index': '3', 'table': 'c', 'field' : 'name'} %}
+            </th>
+            <th>Commercial&nbsp;
+                {% include 'board/_order_buttons.html.twig' with {'index': '3', 'table': 'c', 'field' : 'user'} %}
+            </th>
         </tr>
     </thead>
     <tbody>

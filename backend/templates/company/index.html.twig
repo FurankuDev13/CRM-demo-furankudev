@@ -1,10 +1,52 @@
-{% extends 'base.html.twig' %}
+{% extends 'base_with_sidebar.html.twig' %}
 
 {% block title %}{{ parent() }} - {{ page_title }}{% endblock %}
 
-{% block main %}
+{% block sidebar %}
+    <div class="level-left">
+        <div class="level-item">
+            <a  href="{{ path('company_index', {'filter': 'isNotCustomer'}) }}">
+                <h2 class="level-item subtitle has-text-primary is-3">Prospects</h2>
+            </a>
+        </div>
+        <button class="level-item button is-primary is-small is-size-4">{{ prospects|length }}</button>
+    </div>
+    <div class="level-left">
+        <div class="level-item">
+            <a  href="{{ path('company_index', {'filter': 'isCustomer'}) }}">
+                <h2 class="level-item subtitle has-text-primary is-3">Clients</h2>
+            </a>
+        </div>
+        <button class="level-item button is-primary is-small is-size-4">{{ customers|length }}</button>
+    </div>
+
+    <div class="level-left">
+        <div class="level-item">
+            <h2 class="level-item subtitle has-text-info is-3">Commerciaux</h2>
+        </div>
+        <button class="level-item button is-info is-small is-size-4">{{ salesUsers|length }}</button>
+    </div>
+    <div class="list is-primary is-hoverable">
+        {% for salesUser in salesUsers %}
+            <a class="list-item has-text-primary" href="{{ path('company_index', {'filter': 'salesUser', 'salesUser': salesUser.id}) }}">
+            {{ salesUser.person.firstname }} {{ salesUser.person.lastname }}
+            </a>
+        {% endfor %}
+    </div>
+{% endblock %}
+
+{% block content %}
+
+{% if filterType == 'salesUser' %}
+    {% set orderButtonsIncludePath = 'company/_order_buttons_withsalesuser.twig' %}
+{% elseif  filterType == 'isCustomer' or filterType == 'isNotCustomer' %}
+    {% set orderButtonsIncludePath = 'company/_order_buttons_withfilter.html.twig' %}
+{% else %}
+    {% set orderButtonsIncludePath = 'partial/_order_buttons.html.twig' %}
+{% endif %}
+
     <div class="container">
-        <div class="section level">
+        <div class="level">
             <div class="level-left ">
                 <div class="level-item">
                     <h2 class=" level-item subtitle has-text-info is-3">Les sociétés (clients et prospects)</h2>
@@ -20,11 +62,19 @@
         <table class="table is-fullwidth is-hoverable is-striped">
             <thead>
                 <tr>
-                    <th>Nom</th>
-                    <th>Description</th>
+                    <th>Nom&nbsp;
+                        {% include orderButtonsIncludePath with {'entity' : 'company', 'field' : 'name'} %}
+                    </th>
+                    <th>Description&nbsp;
+                        {% include orderButtonsIncludePath with {'entity' : 'company', 'field' : 'description'} %}
+                    </th>
                     <th>Image</th>
-                    <th>Client/Prospect</th>
-                    <th>Commercial</th>
+                    <th>Client/Prospect&nbsp;
+                        {% include orderButtonsIncludePath with {'entity' : 'company', 'field' : 'isCustomer'} %}
+                    </th>
+                    <th>Commercial&nbsp;
+                        {% include orderButtonsIncludePath with {'entity' : 'company', 'field' : 'user'} %}
+                    </th>
                     {% if is_granted('ROLE_SALES') %}
                         <th>Actions</th>
                     {% endif %}    

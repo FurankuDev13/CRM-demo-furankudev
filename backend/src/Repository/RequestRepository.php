@@ -3,8 +3,10 @@
 namespace App\Repository;
 
 use App\Entity\Request;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use App\Entity\RequestType;
+use App\Entity\HandlingStatus;
 use Symfony\Bridge\Doctrine\RegistryInterface;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 
 /**
  * @method Request|null find($id, $lockMode = null, $lockVersion = null)
@@ -19,14 +21,56 @@ class RequestRepository extends ServiceEntityRepository
         parent::__construct($registry, Request::class);
     }
 
-    public function findUnhandled()
+    public function findisActiveOrderedByField($table = 'r', $field = 'createdAt', $order = 'DESC')
     {
         return $this->createQueryBuilder('r')
-            ->join('r.handlingStatus', 'h')
-            ->addSelect('h')
-            ->andWhere('h.title LIKE :val')
-            ->setParameter('val', 'Initiée')
-            ->orderBy('r.createdAt', 'ASC')
+            ->join('r.contact', 'co')
+            ->addSelect('co')
+            ->join('co.person', 'p')
+            ->addSelect('p')
+            ->join('co.company', 'c')
+            ->addSelect('c')
+            ->andWhere('r.isActive = :isActive')
+            ->setParameter('isActive', true)
+            ->orderBy($table . '.' . $field, $order)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
+    public function findIsActiveByHandlingStatus(HandlingStatus $handlingStatus, $table = 'r', $field = 'createdAt', $order = 'DESC')
+    {
+        return $this->createQueryBuilder('r')
+            ->join('r.contact', 'co')
+            ->addSelect('co')
+            ->join('co.person', 'p')
+            ->addSelect('p')
+            ->join('co.company', 'c')
+            ->addSelect('c')
+            ->andWhere('r.handlingStatus = :val')
+            ->setParameter('val', $handlingStatus)
+            ->andWhere('r.isActive = :isActive')
+            ->setParameter('isActive', true)
+            ->orderBy($table . '.' . $field, $order)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
+    public function findIsActiveByRequestType(RequestType $requestType, $table = 'r', $field = 'createdAt', $order = 'DESC')
+    {
+        return $this->createQueryBuilder('r')
+            ->join('r.contact', 'co')
+            ->addSelect('co')
+            ->join('co.person', 'p')
+            ->addSelect('p')
+            ->join('co.company', 'c')
+            ->addSelect('c')
+            ->andWhere('r.requestType = :val')
+            ->setParameter('val', $requestType)
+            ->andWhere('r.isActive = :isActive')
+            ->setParameter('isActive', true)
+            ->orderBy($table . '.' . $field, $order)
             ->getQuery()
             ->getResult()
         ;

@@ -6,6 +6,7 @@ use App\Repository\CompanyRepository;
 use App\Repository\RequestRepository;
 use App\Entity\Request as DemandRequest;
 use Doctrine\ORM\EntityManagerInterface;
+use App\Repository\RequestTypeRepository;
 use App\Repository\HandlingStatusRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -19,17 +20,35 @@ class RequestController extends AbstractController
     /**
      * @Route("/index", name="index", methods={"GET"})
      */
-    public function index(RequestRepository $requestRepo, CompanyRepository $companyRepo, HandlingStatusRepository $handlingStatusRepo)
+    public function index(Request $request, RequestRepository $requestRepo, CompanyRepository $companyRepo, HandlingStatusRepository $handlingStatusRepo, RequestTypeRepository $requestTypeRepo)
     {
-        $demandRequests = $requestRepo->findByIsActive(true);
-        $companies = $companyRepo->findByIsActive(true);
-        $handlingStatus = $handlingStatusRepo->findByIsActive(true);
+        $filter = $request->query->get('filter', null);
+        $filterId = $request->query->get('filterId', null);
+        $table = $request->query->get('table', 'r');
+        $field = $request->query->get('field', 'createdAt');
+        $order = $request->query->get('order', 'DESC');
+
+        $handlingStatuses = $handlingStatusRepo->findByIsActive(true);
+        $requestTypes = $requestTypeRepo->findByIsActive(true);
+
+        if ($filter == 'handlingStatus') {
+            $handlingStatus = $handlingStatusRepo->find($filterId);
+            $demandRequests = $requestRepo->findIsActiveByHandlingStatus($handlingStatus, $table, $field, $order);
+
+        } elseif ($filter == 'requestType') {
+            $requestType = $requestTypeRepo->find($filterId);
+            $demandRequests = $requestRepo->findIsActiveByRequestType($requestType, $table, $field, $order);
+        } else {
+            $demandRequests = $requestRepo->findIsActiveOrderedByField($table, $field, $order);
+        }
 
         return $this->render('request/index.html.twig', [
             'page_title' => 'Demandes',
             'requests' => $demandRequests,
-            'companies' => $companies,
-            'handlingStatus' => $handlingStatus
+            'requestTypes' => $requestTypes,
+            'handlingStatuses' => $handlingStatuses,
+            'filter' => $filter,
+            'filterId' => $filterId,
         ]);
     }
 
