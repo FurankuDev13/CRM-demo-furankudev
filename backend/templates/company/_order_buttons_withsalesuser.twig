@@ -1,6 +1,6 @@
-<a href="{{ path('company_index', {'field': field, 'order': 'ASC', 'filter': filterType, 'salesUser': filterValue}) }}">
+<a href="{{ path('company_index', {'field': field, 'order': 'ASC', 'filter': filterType, 'salesUser': filterValue.id}) }}">
     <i class="fas fa-sort-up"></i>
 </a>
-<a href="{{ path('company_index', {'field': field, 'order': 'DESC', 'filter': filterType, 'salesUser': filterValue}) }}">
+<a href="{{ path('company_index', {'field': field, 'order': 'DESC', 'filter': filterType, 'salesUser': filterValue.id}) }}">
     <i class="fas fa-sort-down"></i>
 </a>

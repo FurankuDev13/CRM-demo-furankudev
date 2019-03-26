@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Company;
 use App\Entity\CompanyAddress;
 use App\Repository\UserRepository;
+use App\Repository\PersonRepository;
 use App\Form\CompanyAddressFormType;
 use App\Repository\CompanyRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -22,7 +23,7 @@ class CompanyController extends AbstractController
     /**
      * @Route("/index", name="index", methods={"GET"})
      */
-    public function index(Request $request, CompanyRepository $companyRepo, UserRepository $userRepo)
+    public function index(Request $request, CompanyRepository $companyRepo, UserRepository $userRepo, PersonRepository $personRepo)
     {
         $filter = $request->query->get('filter', null);
         $salesUser = $request->query->get('salesUser', null);
@@ -36,20 +37,20 @@ class CompanyController extends AbstractController
         if ($salesUser) {
             $user = $userRepo->find($salesUser);
             $companies = $companyRepo->findIsActiveByUserOrderedByField($user, $field, $order);
-            $filterValue = $salesUser;
+            $filterValue = $user;
         } else {
             $companies = $companyRepo->findIsACtiveOrderedByField($field, $order);
             $filterValue = null;
         }
 
-        if ($filter == "isCustomer") {
+        if ($filter == "Clients") {
             $companies = $customers;
-            $filterValue = "isCustomer";
+            $filterValue = $filter;
         }
 
-        if ($filter == "isNotCustomer") {
+        if ($filter == "Prospects") {
             $companies = $prospects;
-            $filterValue = "isNotCustomer";
+            $filterValue = $filter;
         }
 
         return $this->render('company/index.html.twig', [

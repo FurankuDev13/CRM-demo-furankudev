@@ -83,6 +83,7 @@ class Product
 
     /**
      * @ORM\ManyToMany(targetEntity="App\Entity\Category", inversedBy="products")
+     * @ORM\OrderBy({"name" = "ASC"})
      * @Groups({"product_group"})
      */
     private $categories;

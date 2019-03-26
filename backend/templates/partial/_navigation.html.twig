@@ -42,9 +42,11 @@
                             <a class="navbar-item {{ (app.request.attributes.get('_route') == 'contact_index') ? 'is-active' }} " href="{{ path('contact_index')}}">
                                 Contacts
                             </a>
-                            <a class="navbar-item {{ (app.request.attributes.get('_route') == 'user_index') ? 'is-active' }} " href="{{ path('user_index')}}">
-                                Utilisateurs
-                            </a>
+                            {% if is_granted('ROLE_MANAGER') %}
+                                <a class="navbar-item {{ (app.request.attributes.get('_route') == 'user_index') ? 'is-active' }} " href="{{ path('user_index')}}">
+                                    Utilisateurs
+                                </a>
+                            {% endif %}
                             <div class="navbar-item">
                                 <div class="buttons">
                                 {% if is_granted('IS_AUTHENTICATED_FULLY') %}

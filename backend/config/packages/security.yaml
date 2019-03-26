@@ -41,5 +41,33 @@ security:
     # Easy way to control access for large sections of your site
     # Note: Only the *first* access control that matches will be used
     access_control:
-        # - { path: ^/admin, roles: ROLE_ADMIN }
-        # - { path: ^/profile, roles: ROLE_USER }
+        
+        - { path: '^\/user\/[0-9]+\/[a-z]+', roles: ROLE_MANAGER, methods: [GET, POST, PATCH] } 
+        - { path: '^\/user\/index', roles: ROLE_MANAGER, methods: [GET] }
+        - { path: '^\/user\/new', roles: ROLE_MANAGER, methods: [GET, POST] }
+
+        - { path: '^\/[a-z]+\/[0-9]+\/show', roles: [ROLE_SALES, ROLE_SUPPORT], methods: [GET] }
+        - { path: '^\/[a-z]+\/index', roles: [ROLE_SALES, ROLE_SUPPORT], methods: [GET] }
+
+        - { path: '^\/request\/[0-9]+\/[a-z]+', roles: [ROLE_SALES, ROLE_SUPPORT], methods: [GET, POST, PATCH] } 
+        - { path: '^\/request\/new', roles: [ROLE_SALES, ROLE_SUPPORT], methods: [GET, POST] }
+
+        - { path: '^\/product\/[0-9]+\/[a-z]+', roles: ROLE_SUPPORT, methods: [GET, POST, PATCH] }
+        - { path: '^\/product\/new', roles: ROLE_SUPPORT, methods: [GET, POST] }
+
+        - { path: '^\/category\/[0-9]+\/[a-z]+', roles: ROLE_SUPPORT, methods: [GET, POST, PATCH] }
+        - { path: '^\/category\/new', roles: ROLE_SUPPORT, methods: [GET, POST] }
+
+        - { path: '^\/company\/address\/[0-9]+\/[a-z]+', roles: ROLE_SALES, methods: [GET, POST, PATCH] }
+        - { path: '^\/company\/address\/new', roles: ROLE_SALES, methods: [GET, POST] }
+        - { path: '^\/company\/[0-9]+\/user\/set', roles: ROLE_SALESMGR, methods: [PATCH] }
+        - { path: '^\/company\/[0-9]+\/[a-z]+', roles: ROLE_SALES, methods: [GET, POST, PATCH] }
+        - { path: '^\/company\/new', roles: ROLE_SALES, methods: [GET, POST] }
+        
+
+        - { path: '^\/contact\/[0-9]+\/[a-z]+', roles: ROLE_SALES, methods: [GET, POST, PATCH] }
+        - { path: '^\/contact\/new', roles: ROLE_SALES, methods: [GET, POST] }
+
+        - { path: '^\/login', roles: IS_AUTHENTICATED_ANONYMOUSLY, methods: [GET, POST] } #
+        - { path: '^\/', roles: [ROLE_SALES, ROLE_SUPPORT], methods: [GET] } #
+

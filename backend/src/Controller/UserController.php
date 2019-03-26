@@ -176,4 +176,30 @@ class UserController extends AbstractController
 
         return $this->redirect($referer);;
     }
+
+    /**
+     * @Route("/{id}/toggleUserRole", name="userRole_toggle", methods={"PATCH"}, requirements={"id"="\d+"})
+     */
+    public function toggleUserRole(User $user, Request $request, EntityManagerInterface $entityManager, UserRoleRepository $userRoleRepo)
+    {
+        if (!$user) {
+            throw $this->createNotFoundException("L'utilisateur indiqué n'existe pas"); 
+        }
+
+        $userRoleId = $request->request->get('userRoleId');
+        $userRoleMatch = $request->request->get('userRoleMatch');
+
+        $userRole = $userRoleRepo->find($userRoleId);
+
+        if ($userRoleMatch) {
+            $user->removeUserRole($userRole);
+        } else {
+            $user->addUserRole($userRole);
+        }
+
+        $entityManager->flush();
+
+        $referer = $request->headers->get('referer');
+        return $this->redirect($referer);;
+    }
 }

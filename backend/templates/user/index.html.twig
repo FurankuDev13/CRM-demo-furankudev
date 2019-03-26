@@ -80,6 +80,7 @@
                     {% if is_granted('ROLE_MANAGER') %}
                     <td class="level">
                         <div class="level-left">
+                            {% include 'user/_roles_modal.html.twig' %}
                             <a class="level-item" href="{{ path('user_edit', {'id' : user.id })}}">
                                 <button type="submit" class="button is-info"><i class="fas fa-edit"></i></button>
                             </a>
