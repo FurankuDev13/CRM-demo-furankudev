@@ -37,7 +37,7 @@
                         {% endfor %}
                     {% endfor %}
                 </td>
-                <td>{{ company.user ? company.user.person.lastname : 'Dégun' }}</td>
+                <td>{{ company.user ? company.user.person.lastname : '' }}</td>
             </tr>
         {% endfor %}
     </tbody>

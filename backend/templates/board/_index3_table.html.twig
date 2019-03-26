@@ -35,7 +35,7 @@
                 <td>{{ request.createdAt|date("d/m/Y") }}</td>
                 <td>{{ request.contact.person.lastname }}</td>
                 <td>{{ request.contact.company.name }}</td>
-                <td>{{ request.contact.company.user ? request.contact.company.user.person.lastname : 'Dégun' }}</td>
+                <td>{{ request.contact.company.user ? request.contact.company.user.person.lastname : '' }}</td>
             </tr>
         {% endfor %}
     </tbody>

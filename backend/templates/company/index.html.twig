@@ -59,6 +59,9 @@
             </div>  
         </div> 
         <div class="level-right">
+            <a class="level-item" href="{{ path('company_index')}}">
+                <button class="level-item button is-primary s-small is-size-3"><i class="fas fa-sort-alpha-down"></i></button>
+            </a>
             <a class="level-item" href="{{ path('company_new')}}">
                 <button type="submit" class="level-item button is-success s-small is-size-3"><i class="fas fa-plus-circle"></i></button>
             </a>
@@ -98,7 +101,18 @@
                         </figure>
                     </td>
                     <td>{{ company.isCustomer ? 'Client' : 'Prospect' }}</td>
-                    <td>{{ company.user ? (company.user.person.firstname ~ ' ' ~ company.user.person.lastname) }}</td>
+                    <td>
+                        {% if company.user %}
+                            {{ company.user ? (company.user.person.firstname ~ ' ' ~ company.user.person.lastname) }}
+                        {% else %}
+                            {% if is_granted('ROLE_SALES') %}
+                                {% include 'partial/_add_user_modal.html.twig' %}
+                            {% else %}
+                                
+                            {% endif %}
+                        {% endif %}
+                        
+                    </td>
                     {% if is_granted('ROLE_SALES') %}
                         <td class="level">
                             <div class="level-left">

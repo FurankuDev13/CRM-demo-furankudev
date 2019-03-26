@@ -40,13 +40,23 @@
 {% else %}
     {% set orderButtonsIncludePath = 'request/_order_buttons.html.twig' %}
 {% endif %}
-
-        <div class="level-left">
-            <div class="level-item">
-                <h2 class="level-item subtitle has-text-info is-3">Les demandes des requests (professionnels)</h2>
+        <div class="level">
+            <div class="level-left ">
+                <div class="level-item">
+                    <h2 class=" level-item subtitle has-text-info is-3">Les demandes des requests (professionnels)</h2>
+                    <button class=" level-item button is-info is-small is-size-4">{{ requests|length }}</button>
+                </div>  
+            </div> 
+            <div class="level-right">
+                <a class="level-item" href="{{ path('request_index')}}">
+                    <button class="level-item button is-primary s-small is-size-3"><i class="fas fa-sort-alpha-down"></i></button>
+                </a>
+                {# <a class="level-item" href="{{ path('request_new')}}">
+                    <button type="submit" class="level-item button is-success s-small is-size-3"><i class="fas fa-plus-circle"></i></button>
+                </a> #}
             </div>
-            <button class="level-item button is-info is-small is-size-4">{{ requests|length }}</button>
         </div>
+
         <table class="table is-fullwidth is-hoverable is-striped">
             <thead>
                 <tr>
@@ -68,7 +78,7 @@
                     <th>Société 
                         {% include orderButtonsIncludePath with {'table': 'c', 'field' : 'name'} %}
                     </th>
-                    <th>Statut de traitement 
+                    <th>Traitement 
                         {% include orderButtonsIncludePath with {'table': 'r', 'field' : 'handlingStatus'} %}
                     </th>
                     {% if is_granted('ROLE_SALES') %}
