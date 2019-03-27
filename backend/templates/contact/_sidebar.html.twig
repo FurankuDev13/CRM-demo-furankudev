@@ -75,7 +75,7 @@
 <div class="level dropdown is-hoverable">
     <div class="dropdown-trigger level-left">
         <div class="level-item">
-            <h2 class="level-item subtitle has-text-info is-4">Filtrer par type</h2>
+            <h2 class="level-item subtitle has-text-info is-4">Filtrer par titre</h2>
         </div>
     </div>
 
@@ -97,7 +97,9 @@
                                 </a>
                             </td>
                             <td>
-                                <button class="has-text-left button is-primary is-small is-outlined is-size-6">{{ contactType.contacts|length }}</button>
+                                <a href="{{ path('contact_index', {'filter': 'contactType', 'filterName': contactType.title }) }}">
+                                    <button class="has-text-left button is-primary is-small is-outlined is-size-6">{{ contactType.contacts|length }}</button>
+                                </a>
                             </td>
                         </tr>
                     {% endfor %}
@@ -131,7 +133,9 @@
                                 </a>
                             </td>
                             <td>
-                                <button class="has-text-left button is-primary is-small is-outlined is-size-6">{{ company.contacts|length }}</button>
+                                <a href="{{ path('contact_index', {'filter': 'company', 'filterName': company.name }) }}">
+                                    <button class="has-text-left button is-primary is-small is-outlined is-size-6">{{ company.contacts|length }}</button>
+                                </a>
                             </td>
                         </tr>
                     {% endfor %}

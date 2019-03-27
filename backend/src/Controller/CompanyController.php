@@ -5,11 +5,12 @@ namespace App\Controller;
 use App\Entity\Company;
 use App\Entity\CompanyAddress;
 use App\Repository\UserRepository;
-use App\Repository\PersonRepository;
 use App\Form\CompanyAddressFormType;
+use App\Repository\PersonRepository;
 use App\Repository\CompanyRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Form\CompanyType as CompanyFormType;
+use App\Repository\CompanyAddressRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -67,17 +68,18 @@ class CompanyController extends AbstractController
     /**
      * @Route("/{id}/show", name="show", methods={"GET"}, requirements={"id"="\d+"})
      */
-    public function show(Company $company, CompanyRepository $companyRepo)
+    public function show(Company $company, CompanyRepository $companyRepo, CompanyAddressRepository $companyAddressRepo)
     {
         if (!$company) {
             throw $this->createNotFoundException("La société indiquée n'existe pas"); 
         }
 
-        $companyFiltered = $companyRepo->find($company);
+        $companyAddresses = $companyAddressRepo->findAddressIsActiveByCompany($company);
 
         return $this->render('company/show.html.twig', [
-            'page_title' => 'Société: ' . $companyFiltered->getName(),
-            'company' => $companyFiltered,
+            'page_title' => 'Société: ' . $company->getName(),
+            'company' => $company,
+            'companyAddresses' => $companyAddresses,
         ]);
     }
 

@@ -98,20 +98,6 @@ class CompanyRepository extends ServiceEntityRepository
         ;
     }
 
-    public function findAddressIsActiveByCompany(Company $company)
-    {
-        return $this->createQueryBuilder('c')
-            ->join('c.companyAddresses', 'a')
-            ->addSelect('a')
-            ->where('c.id = :companyId')
-            ->setParameter('companyId', $company->getId())
-            ->andWhere('a.isActive IN (:isActive)')
-            ->setParameter('isActive', true)
-            ->orderBy('c.name', 'ASC')
-            ->getQuery()
-            ->getResult()
-        ;
-    }
 
     // /**
     //  * @return Company[] Returns an array of Company objects
