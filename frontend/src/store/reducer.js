@@ -118,6 +118,19 @@ const reducer = (state = initialState, action = {}) => {
         askQuestionElementIsActive: !state.askQuestionElementIsActive,
       };
 
+    case SEND_QUESTION:
+      return {
+        ...state,
+        askQuestionElementIsActive: false,
+        fields: {
+          ...state.fields,
+          question: {
+            title: '',
+            content: '',
+          },
+        },
+      };
+
     default:
       return state;
   }
