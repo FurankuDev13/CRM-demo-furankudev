@@ -75,7 +75,7 @@ class ContactController extends AbstractController
     /**
      * @Route("/contact", name="new", methods={"POST"})
      */
-    public function new(Request $request, SerializerInterface $serializer, EntityManagerInterface $entityManager, UserPasswordEncoderInterface $passwordEncoder, CompanyAddressTypeRepository $companyAddressTypeRepo, ContactTypeRepository $contactTypeRepo, RequestTypeRepository $requestTypeRepo, HandlingStatusRepository $handlingStatusRepo)
+    public function new(Request $request, SerializerInterface $serializer, EntityManagerInterface $entityManager, UserPasswordEncoderInterface $passwordEncoder, CompanyAddressTypeRepository $companyAddressTypeRepo, ContactTypeRepository $contactTypeRepo, RequestTypeRepository $requestTypeRepo, HandlingStatusRepository $handlingStatusRepo, \Swift_Mailer $mailer)
     {
         // $data = $serializer->deserialize($request->getContent(), Contact::class, 'json');
         // var_dump($data);
@@ -134,6 +134,18 @@ class ContactController extends AbstractController
                 $contact->setContactType($contactType);
                 $contact->setCompany($company);
                 $entityManager->persist($contact);
+
+                $message = (new \Swift_Message("Bienvenue chez Beer'oClock"))
+                ->setFrom('sith13160@gmail.com')
+                ->setTo('sith13160@gmail.com', $contact->getEmail())
+                ->setBody(
+                    $this->renderView(
+                        'emails/notification.html.twig',
+                        ['contactFullName' => $contact->getPerson()->getFirstname() . $contact->getPerson()->getLastname()]
+                    ),
+                    'text/html'
+                );
+                $mailer->send($message);
             }
 
             if ($contactRequest) {
