@@ -105,7 +105,7 @@ class CompanyRepository extends ServiceEntityRepository
             ->addSelect('a')
             ->where('c.id = :companyId')
             ->setParameter('companyId', $company->getId())
-            ->andWhere('a.isActive = :isActive')
+            ->andWhere('a.isActive IN (:isActive)')
             ->setParameter('isActive', true)
             ->orderBy('c.name', 'ASC')
             ->getQuery()

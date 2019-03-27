@@ -34,6 +34,21 @@ class ProductRepository extends ServiceEntityRepository
         ;
     }
 
+    public function findByIsActiveAndIsAvailableAndIsOnHomePage($isActive = true, $isAvailable = true, $isOnHomePage = true)
+    {
+        return $this->createQueryBuilder('p')
+            ->andWhere('p.isActive = :isActive')
+            ->setParameter('isActive', $isActive)
+            ->andWhere('p.isAvailable = :isAvailable')
+            ->setParameter('isAvailable', $isAvailable)
+            ->andWhere('p.isOnHomePage = :isOnHomePage')
+            ->setParameter('isOnHomePage', $isOnHomePage)
+            ->orderBy('p.createdAt', 'DESC')
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
     public function findIsACtiveOrderedByField($field = 'name', $order = 'ASC')
     {
         return $this->createQueryBuilder('p')

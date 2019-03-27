@@ -197,7 +197,14 @@ class UserController extends AbstractController
             $user->addUserRole($userRole);
         }
 
-        $entityManager->flush();
+        if ($user->getUserRoles()->count() != 0) {
+            $entityManager->flush();
+        } else {
+            $this->addFlash(
+                'warning',
+                "Le rôle de " . $user->getPerson()->getFirstname() . ' ' . $user->getPerson()->getLastname() . ' ne peut être retiré, un utilisateur doit avoir au moins un rôle !'
+            );
+        }
 
         $referer = $request->headers->get('referer');
         return $this->redirect($referer);;

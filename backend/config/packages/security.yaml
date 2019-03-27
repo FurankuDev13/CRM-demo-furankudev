@@ -42,6 +42,10 @@ security:
     # Note: Only the *first* access control that matches will be used
     access_control:
         
+        - { path: '^\/api\/[a-z]+\/[0-9]+\/[a-z]+', roles: IS_AUTHENTICATED_ANONYMOUSLY, methods: [GET, POST, PATCH] } #
+        - { path: '^\/api\/[a-z]+\/[0-9]+', roles: IS_AUTHENTICATED_ANONYMOUSLY, methods: [GET, POST, PATCH] } #
+        - { path: '^\/api\/[a-z]+', roles: IS_AUTHENTICATED_ANONYMOUSLY, methods: [GET, POST, PATCH] } #
+        
         - { path: '^\/user\/[0-9]+\/[a-z]+', roles: ROLE_MANAGER, methods: [GET, POST, PATCH] } 
         - { path: '^\/user\/index', roles: ROLE_MANAGER, methods: [GET] }
         - { path: '^\/user\/new', roles: ROLE_MANAGER, methods: [GET, POST] }
