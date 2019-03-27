@@ -61,7 +61,7 @@ class UserController extends AbstractController
         if (!$user) {
             throw $this->createNotFoundException("L'utilisateur indiqué n'existe pas"); 
         }
-        dump($user);
+
         return $this->render('user/show.html.twig', [
             'page_title' => 'Utilisateur: ' . $user->getPerson()->getFirstname() . ' ' . $user->getPerson()->getLastname(),
             'user' => $user,

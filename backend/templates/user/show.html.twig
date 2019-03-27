@@ -34,9 +34,9 @@
                 </article>
                 <div class="tile">
                     <article class="tile is-child is-8">
-                        <p class="title">Contacts</p>
+                        <p class="title">Sociétés en contact</p>
                         {% for company in user.companies %}
-                            <p class="content">
+                            <p class="">
                                 <a href="{{ path('company_show', {'id' : company.id}) }}">
                                     <span class="subtitle">{{ company.name }}</span>
                                 </a>
