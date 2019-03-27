@@ -42,6 +42,9 @@
     <table class="table is-fullwidth is-hoverable is-striped">
         <thead>
             <tr>
+                <th>Ajout&nbsp;
+                    {% include orderButtonsIncludePath with {'entity' : 'company', 'field' : 'createdAt'} %}
+                </th>
                 <th>Nom&nbsp;
                     {% include orderButtonsIncludePath with {'entity' : 'company', 'field' : 'name'} %}
                 </th>
@@ -63,8 +66,9 @@
         <tbody>
             {% for company in companies %}
                 <tr class="">
+                    <td>{{ company.createdAt|date("d/m/Y") }}</td>
                     <td>   
-                        <a href="{{ path('company_show', {'id': company.id}) }}">{{ company.name }}</a>
+                        <a class="has-text-weight-bold" href="{{ path('company_show', {'id': company.id}) }}">{{ company.name }}</a>
                     </td>
                     <td>{{ company.description|truncate(30) }}</td>
                     <td>

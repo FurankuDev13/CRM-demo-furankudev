@@ -19,7 +19,7 @@
             <tr>
                 <td>{{ company.createdAt|date("d/m/Y") }}</td>
                 <td>   
-                    <a href="{{ path('company_show', {'id': company.id}) }}">{{ company.name }}</a>
+                    <a class="has-text-weight-bold" href="{{ path('company_show', {'id': company.id}) }}">{{ company.name }}</a>
                 </td>
                 <td>{{ company.description|truncate(30) }}</td>
                 <td>

@@ -61,7 +61,7 @@
                     <tr>
                         <td>{{ product.reference }}</td>
                         <td>   
-                            <a href="{{ path('product_show', {'id': product.id}) }}">{{ product.name }}</a>
+                            <a class="has-text-weight-bold" href="{{ path('product_show', {'id': product.id}) }}">{{ product.name }}</a>
                         </td>
                         <td>{{ product.description|truncate(30) }}</td>
                         <td>{{ product.listPrice }}&nbsp;€</td>
