@@ -21,7 +21,7 @@ class Form extends React.Component {
   }
 
   render() {
-    const { tabl, formOrigin } = this.props;
+    const { tabl, formOrigin, children } = this.props;
     return (
       <form
         id={formOrigin}
@@ -45,6 +45,7 @@ class Form extends React.Component {
             </button>
           </div>
         </div>
+        {children}
       </form>
     );
   }
@@ -54,6 +55,7 @@ Form.propTypes = {
   tabl: PropTypes.array.isRequired,
   formOrigin: PropTypes.string.isRequired,
   submitForm: PropTypes.func.isRequired,
+  children: PropTypes.node,
 };
 
 /**
