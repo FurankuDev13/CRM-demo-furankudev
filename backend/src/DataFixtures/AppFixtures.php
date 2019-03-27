@@ -114,10 +114,9 @@ class AppFixtures extends Fixture
         $company->setPicture('https://static.thespicehouse.com/images/file/1454/large_square_Hungarian_Half-Sharp_Paprika__close.jpg');
         $this->manager->persist($company);
 
-        //===== supprimé car traité dans Populator
-        // $contactType = new ContactType();
-        // $contactType->setTitle('Gérant');
-        // $this->manager->persist($contactType);
+        $contactType = new ContactType();
+        $contactType->setTitle('Contact');
+        $this->manager->persist($contactType);
 
         //User Role
         $salesRole = new UserRole();
