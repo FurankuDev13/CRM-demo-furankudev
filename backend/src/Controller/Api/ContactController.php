@@ -48,10 +48,6 @@ class ContactController extends AbstractController
                 }
             }
         }
-
-        if (!isset($response)) {
-            $response = new Response([], 404);
-        }
         
         $response->headers->set('Content-Type', 'application/json');
         $response->headers->set('Access-Control-Allow-Origin', '*');
