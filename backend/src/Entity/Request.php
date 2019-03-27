@@ -13,7 +13,7 @@ class Request
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="integer", length=128, unique=true)
      * @Groups({"contact_group"})
      */
     private $id;

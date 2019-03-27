@@ -15,7 +15,7 @@ class Category
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="integer", length=128, unique=true)
      */
     private $id;
 
