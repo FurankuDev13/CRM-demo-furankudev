@@ -172,7 +172,7 @@ class ContactController extends AbstractController
      */
     public function productIndex(Contact $contact, ProductRepository $productRepo, SerializerInterface $serializer)
     {
-        $products = $productRepo->findByIsActiveAndIsAvailable(true, false);
+        $products = $productRepo->findByIsActiveAndIsAvailable(true, true);
         if ($contact->getCompany()->getDiscount() == null) {
             $discountGranted = 0;
         } else {
