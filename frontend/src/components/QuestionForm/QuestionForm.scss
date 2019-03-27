@@ -9,3 +9,20 @@
   left: 50%;
   transform: translate(-50%, -50%);
 }
+
+#question-toggle {
+  height: 1.5em;
+  width: 1.3em;
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  font-weight: 700;
+  cursor: pointer;
+
+  & > p {
+    position: relative;
+    bottom:6px;
+    transform: rotate(45deg);
+  }
+
+}
