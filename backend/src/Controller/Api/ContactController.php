@@ -32,29 +32,23 @@ class ContactController extends AbstractController
         $responseCode = 400 ;
         $errorCode = 'no_data_sent';
         $errorDescription = "Les données transmises sont insuffisantes, la demande ne peut être traitée";
-
         $data = $request->getContent();
         $decodedData = json_decode($data, true);
-
         $email = array_key_exists('email', $decodedData) ? $decodedData['email'] : null;
         $password = array_key_exists('password', $decodedData) ? $decodedData['password'] : null;
         
-
         if ($email) {
             $errorCode = 'no_user_found';
             $errorDescription = "Les données transmises ne correspondent à aucun utilisateur, la demande ne peut être traitée";
-
             $contact = $contactRepo->findOneByEmail($email);
-
             if ($contact && $password) {
                 $validPassword = $passwordEncoder->isPasswordValid($contact,$password);
                 if ($validPassword) {
                     $responseCode = 200;
                     $jsonObject = $serializer->serialize($contact, 'json',['groups' => 'contact_group']);
-                }
+                } 
             } 
         } 
-
         if ($responseCode == 400) {
             $jsonObject = $serializer->serialize(
                 [
@@ -66,10 +60,8 @@ class ContactController extends AbstractController
         }
         
         $response = new Response($jsonObject, $responseCode);
-
         $response->headers->set('Content-Type', 'application/json');
         $response->headers->set('Access-Control-Allow-Origin', '*');
-
         return $response; 
     }
     /**
@@ -79,10 +71,8 @@ class ContactController extends AbstractController
     {
         // $data = $serializer->deserialize($request->getContent(), Contact::class, 'json');
         // var_dump($data);
-
         $jsonObject = null;
         $data = json_decode($request->getContent(), true);
-
         $companyName = $data['companyName'];
         $companySiren = $data['companySiren'];
         $companyAddressField = $data['companyAddressField'];
@@ -97,10 +87,8 @@ class ContactController extends AbstractController
         $contactRequest = $data['contactRequest'];
         
         if ($contactPassword == $contactPasswordRepeat) {
-
             if ($companyName && $companySiren && $companyAddressField && $companyPostalCode && $companyCity) {
                 $companyAddressType = $companyAddressTypeRepo->findOneByTitle('contact');
-
                 $companyAddress = new CompanyAddress();
                 $companyAddress->setFirstAddressField($companyAddressField);
                 $companyAddress->setPostalCode($companyAddressField);
@@ -109,14 +97,12 @@ class ContactController extends AbstractController
                 $companyAddress->setCountry('France');
                 $companyAddress->setCompanyAddressType($companyAddressType);
                 $entityManager->persist($companyAddress);
-
                 $company = new Company();
                 $company->setName($companyName);
                 $company->setSirenNumber($companySiren);
                 $company->addCompanyAddress($companyAddress);
                 $entityManager->persist($company);
             }
-
             if ($contactLastname && $contactFirstname && $contactBusinessPhone && $contactEmail && $contactPassword) {
                 $contactType = $contactTypeRepo->findOneByTitle('Commercial');
                 
@@ -125,7 +111,6 @@ class ContactController extends AbstractController
                 $person->setLastname($contactLastname);
                 $person->setBusinessPhone($contactBusinessPhone);
                 $entityManager->persist($person);
-
                 $contact = new Contact();
                 $contact->setEmail($contactEmail);
                 $encodedPassword = $passwordEncoder->encodePassword($contact, $contactPassword);
@@ -135,11 +120,9 @@ class ContactController extends AbstractController
                 $contact->setCompany($company);
                 $entityManager->persist($contact);
             }
-
             if ($contactRequest) {
                 $requestType = $requestTypeRepo->findOneByTitle('Informations');
                 $handlingStatus = $handlingStatusRepo->findOneByTitle('Initiée');
-
                 $currentRequest = new ContactRequest();
                 $currentRequest->setTitle('Demande internet - nouveau contact');
                 $currentRequest->setBody($contactRequest);
@@ -148,15 +131,11 @@ class ContactController extends AbstractController
                 $currentRequest->setContact($contact);
                 $entityManager->persist($currentRequest);
             }
-
             $entityManager->flush();
-
             $jsonObject = $serializer->serialize($contact, 'json',['groups' => 'contact_group']);
         }
-
         return new Response($jsonObject, 200, ['Content-Type' => 'application/json']);
     }
-
     /**
      * @Route("/contact/{id}", name="edit", methods={"PATCH"})
      */
@@ -165,7 +144,6 @@ class ContactController extends AbstractController
         if (!$contact) {
             throw $this->createNotFoundException("Le contact indiqué n'existe pas"); 
         }
-
         $data = $serializer->deserialize($request->getContent(), Contact::class, 'json');
         
         if ($data) {
@@ -173,25 +151,21 @@ class ContactController extends AbstractController
                 $savedContact = $contactRepo->findOneByEmail($data->getEmail());
             } */
             /* $entityManager->flush(); */
-
             $jsonObject = $serializer->serialize($contact, 'json',['groups' => 'user_group']);
         }
         return new Response($jsonObject, 200, ['Content-Type' => 'application/json']);
     }
-
     /**
      * @Route("/contact/{id}/products", name="productIndex", methods={"GET"})
      */
     public function productIndex(Contact $contact, ProductRepository $productRepo, SerializerInterface $serializer)
     {
-
         $products = $productRepo->findByIsActiveAndIsAvailable(true, false);
         if ($contact->getCompany()->getDiscount() == null) {
             $discountGranted = 0;
         } else {
             $discountGranted = $contact->getCompany()->getDiscount()->getRate();
         }
-
         foreach ($products as $product) {
             $maxDiscount = $product->getMaxDiscountRate();
             $discount = min($discountGranted, $maxDiscount);
@@ -202,17 +176,13 @@ class ContactController extends AbstractController
         
         //dd($products);
         
-
         $jsonObject = $serializer->serialize($products, 'json', ['groups' => 'product_group']);
-
         $response = new Response($jsonObject, 200);
         
         $response->headers->set('Content-Type', 'application/json');
         $response->headers->set('Access-Control-Allow-Origin', '*');
-
         return $response;
     }
-
     /**
      * @Route("/contact/{id}/request", name="requestCreate", methods={"POST"})
      */
@@ -221,17 +191,13 @@ class ContactController extends AbstractController
         if (!$contact) {
             throw $this->createNotFoundException("Le contact indiqué n'existe pas"); 
         }
-
         $jsonObject = null;
         $data = json_decode($request->getContent(), true);
-
         $handlingStatus = $handlingStatusRepo->findOneByTitle("Initiée");
-
         $carryOn = false;
         if ($requestTypeRepo->findOneByTitle($data["request_type"])) {
             $carryOn = true;
         }
-
         if ($carryOn) {
             
             $contactRequest = new ContactRequest();
@@ -241,20 +207,15 @@ class ContactController extends AbstractController
             $requestType = $requestTypeRepo->findOneByTitle($data["request_type"]);
             $contactRequest->setRequestType($requestType);
             $contactRequest->setContact($contact);
-
             $entityManager->persist($contactRequest);
             $entityManager->flush();
             
             $jsonObject = $serializer->serialize($contactRequest, 'json', ['groups' => 'contact_group']);
         }
-
         $response = new Response($jsonObject, 200);
         
         $response->headers->set('Content-Type', 'application/json');
         $response->headers->set('Access-Control-Allow-Origin', '*');
-
         return $response;
     }
-
-
 }
