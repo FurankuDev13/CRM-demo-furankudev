@@ -29,26 +29,44 @@ class ContactController extends AbstractController
      */
     public function find(Request $request, ContactRepository $contactRepo, SerializerInterface $serializer, UserPasswordEncoderInterface $passwordEncoder)
     {
+        $responseCode = 400 ;
+        $errorCode = 'no_data_sent';
+        $errorDescription = "Les données transmises sont insuffisantes, la demande ne peut être traitée";
 
-        $jsonObject = null;
         $data = $request->getContent();
         $decodedData = json_decode($data, true);
 
-        $email = $decodedData['email'];
-        $password = $decodedData['password'];
+        $email = array_key_exists('email', $decodedData) ? $decodedData['email'] : null;
+        $password = array_key_exists('password', $decodedData) ? $decodedData['password'] : null;
+        
 
         if ($email) {
+            $errorCode = 'no_user_found';
+            $errorDescription = "Les données transmises ne correspondent à aucun utilisateur, la demande ne peut être traitée";
+
             $contact = $contactRepo->findOneByEmail($email);
+
             if ($contact && $password) {
                 $validPassword = $passwordEncoder->isPasswordValid($contact,$password);
                 if ($validPassword) {
+                    $responseCode = 200;
                     $jsonObject = $serializer->serialize($contact, 'json',['groups' => 'contact_group']);
-
-                    $response = new Response($jsonObject, 200);
                 }
-            }
+            } 
+        } 
+
+        if ($responseCode == 400) {
+            $jsonObject = $serializer->serialize(
+                [
+                "error" => $errorCode,
+                "error_description"  => $errorDescription
+                ], 
+                'json'
+            );
         }
         
+        $response = new Response($jsonObject, $responseCode);
+
         $response->headers->set('Content-Type', 'application/json');
         $response->headers->set('Access-Control-Allow-Origin', '*');
 
