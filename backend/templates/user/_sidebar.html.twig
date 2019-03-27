@@ -99,7 +99,9 @@
                                 </a>
                             </td>
                             <td>
-                                <button class="has-text-left button is-primary is-small is-outlined is-size-6">{{ userRole.users|length }}</button>
+                                <a href="{{ path('user_index', {'filter': 'userRole', 'filterName': userRole.title }) }}">
+                                    <button class="has-text-left button is-primary is-small is-outlined is-size-6">{{ userRole.users|length }}</button>
+                                </a>
                             </td>
                         </tr>
                     {% endfor %}
@@ -112,7 +114,7 @@
 <div class="level dropdown is-hoverable">
     <div class="level-left">
         <div class="level-item">
-            <h2 class="level-item subtitle has-text-info is-4">Filtrer par client</h2>
+            <h2 class="level-item subtitle has-text-info is-4">Filtrer par société</h2>
         </div>
     </div>
     <div class="dropdown-menu">
@@ -134,7 +136,9 @@
                                     </a>
                                 </td>
                                 <td>
-                                    <button class="has-text-left button is-primary is-small is-outlined is-size-6">1</button>
+                                    <a href="{{ path('user_index', {'filter': 'company', 'filterName': company.name }) }}">
+                                        <button class="has-text-left button is-primary is-small is-outlined is-size-6">1</button>
+                                    </a>
                                 </td>
                             </tr>
                         {% endif %}

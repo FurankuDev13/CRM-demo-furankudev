@@ -114,9 +114,10 @@ class AppFixtures extends Fixture
         $company->setPicture('https://static.thespicehouse.com/images/file/1454/large_square_Hungarian_Half-Sharp_Paprika__close.jpg');
         $this->manager->persist($company);
 
-        $contactType = new ContactType();
-        $contactType->setTitle('Gérant');
-        $this->manager->persist($contactType);
+        //===== supprimé car traité dans Populator
+        // $contactType = new ContactType();
+        // $contactType->setTitle('Gérant');
+        // $this->manager->persist($contactType);
 
         //User Role
         $salesRole = new UserRole();
@@ -207,10 +208,12 @@ class AppFixtures extends Fixture
         $generator->addProvider(new DataProvider($generator));
         $populator = new Populator($generator, $this->manager);
 
+        //Contact Type
         $populator->addEntity(ContactType::class,5, array(
             'title' => function() use ($generator) { return $generator->unique()->SetContactType(); },
         ));
 
+        //Discounts
         $populator->addEntity(Discount::class,6, array(
             'rate' => function() use ($generator) { return $generator->unique()->SetDiscount(); },
         ), array(
@@ -219,10 +222,12 @@ class AppFixtures extends Fixture
             },
         ));
 
+        //Handling Status des Demandes
         $populator->addEntity(HandlingStatus::class,4, array(
             'title' => function() use ($generator) { return $generator->unique()->SetHandlingStatus(); },
         ));
-        
+
+        //Types des Demandes        
         $populator->addEntity(RequestType::class,4, array(
             'title' => function() use ($generator) { return $generator->unique()->SetRequestType(); },
         ));
@@ -274,6 +279,7 @@ class AppFixtures extends Fixture
             'country' => 'France',            
         ));
 
+        //Contact
         $populator->addEntity(Contact::class,10, array(
             'email' => function() use ($generator) { return $generator->unique()->email(); },
         ), array(

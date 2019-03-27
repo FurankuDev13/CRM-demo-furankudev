@@ -67,7 +67,7 @@
                         <td>{{ contact.person.firstname }}</td>
                         <td>{{ contact.email }}</td>
                         <td>{{ contact.person.businessPhone }}</td>
-                        <td>{{ contact.company.name }}</td>
+                        <td><a href="{{ path('company_show', {'id': contact.company.id}) }}">{{ contact.company.name }}</a></td>
                         <td>{{ contact.contactType.title }}</td>
                         {% if is_granted('ROLE_SALES') %}
                         <td class="level">

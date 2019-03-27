@@ -2,9 +2,10 @@
 
 namespace App\Repository;
 
+use App\Entity\Company;
 use App\Entity\CompanyAddress;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 
 /**
  * @method CompanyAddress|null find($id, $lockMode = null, $lockVersion = null)
@@ -17,6 +18,21 @@ class CompanyAddressRepository extends ServiceEntityRepository
     public function __construct(RegistryInterface $registry)
     {
         parent::__construct($registry, CompanyAddress::class);
+    }
+
+    public function findAddressIsActiveByCompany(Company $company)
+    {
+        return $this->createQueryBuilder('a')
+            ->join('a.company', 'c')
+            ->addSelect('c')
+            ->where('c.id = :companyId')
+            ->setParameter('companyId', $company->getId())
+            ->andWhere('a.isActive IN (:isActive)')
+            ->setParameter('isActive', true)
+            ->orderBy('c.name', 'ASC')
+            ->getQuery()
+            ->getResult();
+        ;
     }
 
     // /**
