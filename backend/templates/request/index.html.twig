@@ -35,6 +35,9 @@
         <table class="table is-fullwidth is-hoverable is-striped">
             <thead>
                 <tr>
+                    <th>Date 
+                        {% include orderButtonsIncludePath with {'table': 'r', 'field' : 'createdAt'} %}
+                    </th>
                     <th>Type 
                         {% include orderButtonsIncludePath with {'table': 'r', 'field' : 'requestType'} %}
                     </th>
@@ -44,9 +47,7 @@
                     <th>Description 
                         {% include orderButtonsIncludePath with {'table': 'r', 'field' : 'body'} %}
                     </th>
-                    <th>Date 
-                        {% include orderButtonsIncludePath with {'table': 'r', 'field' : 'createdAt'} %}
-                    </th>
+                    
                     <th>Contact 
                         {% include orderButtonsIncludePath with {'table': 'p', 'field' : 'lastname'} %}
                     </th>
@@ -65,14 +66,18 @@
             <tbody>
                 {% for request in requests %}
                     <tr>
+                        <td>{{ request.createdAt|date("d/m/Y") }}</td>
                         <td>{{ request.requestType.title }}</td>
                         <td>   
-                            <a href="{{ path('request_show', {'id': request.id}) }}">{{ request.title }}</a>
+                            <a class="has-text-weight-bold" href="{{ path('request_show', {'id': request.id}) }}">{{ request.title }}</a>
                         </td>
                         <td>{{ request.body|truncate(10) }}</td>
-                        <td>{{ request.createdAt|date("d/m/Y") }}</td>
-                        <td>{{ request.contact.person.lastname }}</td>
-                        <td>{{ request.contact.company.name }}</td>
+                        <td>   
+                            <a class="has-text-weight-bold" href="{{ path('contact_show', {'id': request.contact.id}) }}">{{ request.contact.person.lastname }}</a>
+                        </td>
+                        <td>   
+                            <a class="has-text-weight-bold" href="{{ path('company_show', {'id': request.contact.company.id}) }}">{{ request.contact.company.name }}</a>
+                        </td>
                         <td>{{ request.handlingStatus.title }}</td>
                         {% if is_granted('ROLE_SALES') %}
                             <td class="level">

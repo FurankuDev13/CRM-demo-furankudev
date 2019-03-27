@@ -36,6 +36,9 @@
     <table class="table is-fullwidth is-hoverable is-striped">
         <thead>
             <tr>
+                <th>Ajout 
+                    {% include orderButtonsIncludePath with {'table': 'p', 'field' : 'createdAt'} %}
+                </th>
                 <th>Nom 
                         {% include orderButtonsIncludePath with {'table': 'p', 'field' : 'lastname'} %}
                     </th>
@@ -61,8 +64,9 @@
         <tbody>
             {% for user in users %}
                 <tr>
+                    <td>{{ user.person.createdAt|date("d/m/Y") }}</td>
                     <td>   
-                        <a href="{{ path('user_show', {'id': user.id}) }}">{{ user.person.lastname }}</a>
+                        <a class="has-text-weight-bold" href="{{ path('user_show', {'id': user.id}) }}">{{ user.person.lastname }}</a>
                     </td>
                     <td>{{ user.person.firstname }}</td>
                     <td>{{ user.email }}</td>
@@ -73,12 +77,22 @@
                         {% endfor %}
                     </td>
                     <td>
-                        {% for company in user.companies %}
-                            <a href="{{ path('company_show', {'id' : company.id}) }}">
-                                {{ company.name }}
-                            </a>
-                            {% if not loop.last %}, {% endif %}
-                        {% endfor %}
+                        {% if user.companies|length %}
+                            <div class="dropdown is-hoverable">
+                                <a class="dropdown-trigger button is-primary s-small is-size-5" href="{{ path('company_index') }}">
+                                    {{ user.companies|length }}
+                                </a>
+                                <div class="dropdown-menu">
+                                    <div class="dropdown-content">
+                                        {% for company in user.companies %}
+                                            <a class="dropdown-item" href="{{ path('company_show', {'id': company.id}) }}">
+                                                    {{ company.name }}
+                                                </a>
+                                        {% endfor %}  
+                                    </div>
+                                    </div>
+                            </div>
+                        {% endif %}
                     </td>
                     {% if is_granted('ROLE_MANAGER') %}
                     <td class="level">

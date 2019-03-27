@@ -35,6 +35,9 @@
         <table class="table is-fullwidth is-hoverable is-striped">
             <thead>
                 <tr>
+                    <th>Ajout 
+                        {% include orderButtonsIncludePath with {'table': 'p', 'field' : 'createdAt'} %}
+                    </th>
                     <th>Nom 
                         {% include orderButtonsIncludePath with {'table': 'p', 'field' : 'lastname'} %}
                     </th>
@@ -61,13 +64,16 @@
             <tbody>
                 {% for contact in contacts %}
                     <tr>
+                        <td>{{ contact.person.createdAt|date("d/m/Y") }}</td>
                         <td>   
-                            <a href="{{ path('contact_show', {'id': contact.id}) }}">{{ contact.person.lastname }}</a>
+                            <a class="has-text-weight-bold" href="{{ path('contact_show', {'id': contact.id}) }}">{{ contact.person.lastname }}</a>
                         </td>
                         <td>{{ contact.person.firstname }}</td>
                         <td>{{ contact.email }}</td>
                         <td>{{ contact.person.businessPhone }}</td>
-                        <td><a href="{{ path('company_show', {'id': contact.company.id}) }}">{{ contact.company.name }}</a></td>
+                        <td>   
+                            <a class="has-text-weight-bold" href="{{ path('company_show', {'id': contact.company.id}) }}">{{ contact.company.name }}</a>
+                        </td>
                         <td>{{ contact.contactType.title }}</td>
                         {% if is_granted('ROLE_SALES') %}
                         <td class="level">

@@ -67,7 +67,7 @@ class ContactController extends AbstractController
     /**
      * @Route("/contact", name="new", methods={"POST"})
      */
-    public function new(Request $request, SerializerInterface $serializer, EntityManagerInterface $entityManager, UserPasswordEncoderInterface $passwordEncoder, CompanyAddressTypeRepository $companyAddressTypeRepo, ContactTypeRepository $contactTypeRepo, RequestTypeRepository $requestTypeRepo, HandlingStatusRepository $handlingStatusRepo)
+    public function new(Request $request, SerializerInterface $serializer, EntityManagerInterface $entityManager, UserPasswordEncoderInterface $passwordEncoder, CompanyAddressTypeRepository $companyAddressTypeRepo, ContactTypeRepository $contactTypeRepo, RequestTypeRepository $requestTypeRepo, HandlingStatusRepository $handlingStatusRepo, \Swift_Mailer $mailer)
     {
         // $data = $serializer->deserialize($request->getContent(), Contact::class, 'json');
         // var_dump($data);
@@ -119,6 +119,18 @@ class ContactController extends AbstractController
                 $contact->setContactType($contactType);
                 $contact->setCompany($company);
                 $entityManager->persist($contact);
+
+                $message = (new \Swift_Message("Bienvenue chez Beer'oClock"))
+                ->setFrom('sith13160@gmail.com')
+                ->setTo('sith13160@gmail.com', $contact->getEmail())
+                ->setBody(
+                    $this->renderView(
+                        'emails/registration_notification.html.twig',
+                        ['contactFullName' => $contact->getPerson()->getFirstname() . $contact->getPerson()->getLastname()]
+                    ),
+                    'text/html'
+                );
+                $mailer->send($message);
             }
             if ($contactRequest) {
                 $requestType = $requestTypeRepo->findOneByTitle('Informations');
@@ -186,7 +198,7 @@ class ContactController extends AbstractController
     /**
      * @Route("/contact/{id}/request", name="requestCreate", methods={"POST"})
      */
-    public function requestCreate(Contact $contact, Request $request, EntityManagerInterface $entityManager, HandlingStatusRepository $handlingStatusRepo, RequestTypeRepository $requestTypeRepo, SerializerInterface $serializer)
+    public function requestCreate(Contact $contact, Request $request, EntityManagerInterface $entityManager, HandlingStatusRepository $handlingStatusRepo, RequestTypeRepository $requestTypeRepo, SerializerInterface $serializer, \Swift_Mailer $mailer)
     {
         if (!$contact) {
             throw $this->createNotFoundException("Le contact indiqué n'existe pas"); 
@@ -209,6 +221,19 @@ class ContactController extends AbstractController
             $contactRequest->setContact($contact);
             $entityManager->persist($contactRequest);
             $entityManager->flush();
+
+            $message = (new \Swift_Message("Votre demande a été prise en compte"))
+                ->setFrom('sith13160@gmail.com')
+                ->setTo('sith13160@gmail.com', $contact->getEmail())
+                ->setBody(
+                    $this->renderView(
+                        'emails/request_notification.html.twig',
+                        ['contactFullName' => $contact->getPerson()->getFirstname() . $contact->getPerson()->getLastname()]
+                    ),
+                    'text/html'
+                );
+
+            $mailer->send($message);
             
             $jsonObject = $serializer->serialize($contactRequest, 'json', ['groups' => 'contact_group']);
         }

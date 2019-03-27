@@ -30,17 +30,17 @@
                 <td>{{ request.createdAt|date("d/m/Y") }}</td>
                 <td>{{ request.requestType.title }}</td>
                 <td>   
-                    <a href="{{ path('request_show', {'id': request.id}) }}">{{ request.title }}</a>
+                    <a class="has-text-weight-bold" href="{{ path('request_show', {'id': request.id}) }}">{{ request.title }}</a>
                 </td>
                 <td>{{ request.body|truncate(30) }}</td>
                 
                 <td>
-                    <a href="{{ path('contact_show', {'id': request.contact.id}) }}">
+                    <a class="has-text-weight-bold" href="{{ path('contact_show', {'id': request.contact.id}) }}">
                         {{ request.contact.person.lastname }}
                     </a>
                 </td>
                 <td>
-                    <a href="{{ path('company_show', {'id': request.contact.company.id}) }}">
+                    <a class="has-text-weight-bold" href="{{ path('company_show', {'id': request.contact.company.id}) }}">
                         {{ request.contact.company.name }}
                     </a>
                 </td>
