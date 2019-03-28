@@ -8,6 +8,9 @@ use App\Repository\UserRepository;
 use App\Form\CompanyAddressFormType;
 use App\Repository\PersonRepository;
 use App\Repository\CompanyRepository;
+use App\Repository\ContactRepository;
+use App\Repository\RequestRepository;
+use App\Entity\Request as DemandRequest;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Form\CompanyType as CompanyFormType;
 use App\Repository\CompanyAddressRepository;
@@ -187,17 +190,59 @@ class CompanyController extends AbstractController
     /**
      * @Route("/{id}/archive", name="archive", methods={"PATCH"}, requirements={"id"="\d+"})
      */
-    public function archive(Company $company, Request $request, EntityManagerInterface $entityManager)
+    public function archive(Company $company, Request $request, EntityManagerInterface $entityManager, RequestRepository $requestRepo, CompanyAddressRepository $companyAddressRepo, ContactRepository $contactRepo)
     {
         if (!$company) {
             throw $this->createNotFoundException("La société indiquée n'existe pas"); 
         }
 
+        // avant d'archiver une société, il faut vérifier que tous ses demandes/devis sont Terminés
+        $demandRequests = $requestRepo->findAllByOneCompany($company);
+        $allCompleted = true;
+        foreach ($demandRequests as $demandRequest) {
+            if ($demandRequest->getHandlingStatus()->getTitle() != "Terminée") {
+                $allCompleted = false;
+            }
+        }
+        if (!$allCompleted) {
+            $this->addFlash(
+                'warning',
+                'Toutes les demandes de la société ne sont pas Terminées, la société ne peut pas être archivée !'
+            );
+            $referer = $request->headers->get('referer');
+            return $this->redirect($referer);;
+        }
+        
+        // archiver la société
         $company->setIsActive(!$company->getIsActive());
+        
+        // archiver également les adresses de la société
+        $companyAddresses = $companyAddressRepo->findAllByOneCompany($company);
+        foreach ($companyAddresses as $companyAddress) {
+            $companyAddress->setIsActive(false);
+        }
+
+        // archiver également les personnes en contact de la société
+        $contacts = $contactRepo->findAllByOneCompany($company);
+        foreach ($contacts as $contact) {
+            $contact->getPerson()->setIsActive(false);
+        }
+        
+        // archiver également, pour toutes les personnes en contact de la société, les demandes de ces contacts
+        $demandRequests = $requestRepo->findAllByOneCompany($company);
+        foreach ($demandRequests as $demandRequest) {
+            $demandRequest->setIsActive(false);
+        }
+
+        // flash message global
         $this->addFlash(
             'success',
-            'La Société ' . $company->getName() . ' a été archivée !'
+            'La Société ' . $company->getName() . ' a été archivée, '.
+            'ainsi que ses ' . count($companyAddresses) . ' adresses,' . 
+            'ses ' . count($contacts) . ' personnes en contact,' . 
+            'ses ' . count($demandRequests) . ' demandes.'
         );
+        
         $entityManager->flush();
 
         $referer = $request->headers->get('referer');

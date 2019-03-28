@@ -4,12 +4,21 @@
 
 {% block main %}
     <div class="container">
-        <div class="section level-left">
-            <div class="level-item">
-                <h2 class="level-item subtitle has-text-info is-3">{{ product.name }}</h2>
-                <p class="level-item button is-size-3">{{ product.listPrice }}&nbsp;€</p>
+        <div class="level">
+            <div class="section level-left">
+                <div class="level-item">
+                    <h2 class="level-item subtitle has-text-info is-3">{{ product.name }}</h2>
+                    <p class="level-item button is-size-3">{{ product.listPrice }}&nbsp;€</p>
+                </div>
+                <button class="level-item button is-info is-small is-size-4">Réf: {{ product.reference }}</button>
             </div>
-            <button class="level-item button is-info is-small is-size-4">Réf: {{ product.reference }}</button>
+            {% if is_granted('ROLE_SUPPORT') %}
+                <div class="level-right">
+                    <a class="level-item" href="{{ path('product_edit', {'id' : product.id })}}">
+                        <button type="submit" class="button is-info is-large"><i class="fas fa-edit"></i></button>
+                    </a>
+                </div>
+            {% endif %}
         </div>
         <div class="tile is-ancestor">
             {# Début des Tiles #}
@@ -30,7 +39,8 @@
                         <p class="title">Catégories</p>
                         <p class="subtitle">
                             {% for category in product.categories %}
-                                {{ category.name }} {% if not loop.last %}, {% endif %}
+                                <a class="has-text-weight-bold" href="{{ path('category_show', {'id': category.id}) }}">{{ category.name }}</a>
+                                {% if not loop.last %}, {% endif %}
                             {% endfor %}
                         </p>
                     </article>

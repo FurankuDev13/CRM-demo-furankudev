@@ -20,7 +20,7 @@
         {% for company in companiesWithUnhandledRequests %}
             <tr>
                 <td>   
-                    <a href="{{ path('company_show', {'id': company.id}) }}">{{ company.name }}</a>
+                    <a class="has-text-weight-bold" href="{{ path('company_show', {'id': company.id}) }}">{{ company.name }}</a>
                 </td>
                 <td>
                     <figure class="image is-48x48">
@@ -39,7 +39,11 @@
                         {% endfor %}
                     {% endfor %}
                 </td>
-                <td>{{ company.user ? company.user.person.lastname : '' }}</td>
+                <td>
+                    {% if company.user %}
+                        <a class="" href="{{ path('user_show', {'id': company.user.id}) }}">{{ company.user.person.firstname ~ ' ' ~ company.user.person.lastname }}</a>
+                    {% endif %}
+                </td>
             </tr>
         {% endfor %}
     </tbody>

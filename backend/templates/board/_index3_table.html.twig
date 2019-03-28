@@ -35,16 +35,20 @@
                 <td>{{ request.body|truncate(30) }}</td>
                 
                 <td>
-                    <a class="has-text-weight-bold" href="{{ path('contact_show', {'id': request.contact.id}) }}">
-                        {{ request.contact.person.lastname }}
+                    <a class="" href="{{ path('contact_show', {'id': request.contact.id}) }}">
+                        {{ request.contact.person.firstname ~ ' ' ~ request.contact.person.lastname }}
                     </a>
                 </td>
                 <td>
-                    <a class="has-text-weight-bold" href="{{ path('company_show', {'id': request.contact.company.id}) }}">
+                    <a class="" href="{{ path('company_show', {'id': request.contact.company.id}) }}">
                         {{ request.contact.company.name }}
                     </a>
                 </td>
-                <td>{{ request.contact.company.user ? request.contact.company.user.person.lastname : '' }}</td>
+                <td>
+                    {% if request.contact.company.user %}
+                        <a class="" href="{{ path('user_show', {'id': request.contact.company.user.id}) }}">{{ request.contact.company.user.person.firstname ~ ' ' ~ request.contact.company.user.person.lastname }}</a>
+                    {% endif %}
+                </td>
             </tr>
         {% endfor %}
     </tbody>

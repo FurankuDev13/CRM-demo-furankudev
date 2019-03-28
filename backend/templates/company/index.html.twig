@@ -79,7 +79,7 @@
                     <td>{{ company.isCustomer ? 'Client' : 'Prospect' }}</td>
                     <td>
                         {% if company.user %}
-                            {{ company.user ? (company.user.person.firstname ~ ' ' ~ company.user.person.lastname) }}
+                            <a class="has-text-weight-bold" href="{{ path('user_show', {'id': company.user.id}) }}">{{ company.user.person.firstname ~ ' ' ~ company.user.person.lastname }}</a>
                         {% else %}
                             {% if is_granted('ROLE_SALES') %}
                                 {% include 'partial/_add_user_modal.html.twig' %}
