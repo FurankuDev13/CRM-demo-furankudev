@@ -10,7 +10,7 @@ import classNames from 'classnames';
  */
 import { Route, Redirect, Switch } from 'react-router-dom';
 import Nav from 'src/containers/Nav';
-import Homepage from 'src/components/Homepage';
+import Homepage from 'src/containers/Homepage';
 import Customerpage from 'src/containers/Customerpage';
 import Loginpage from 'src/containers/Loginpage';
 import Signuppage from 'src/containers/Signuppage';

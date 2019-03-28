@@ -6,7 +6,12 @@ import axios from 'axios';
 /**
  * local import
 */
-import { FETCH_CATALOG, FETCH_CATEGORIES, fetchSuccess } from 'src/store/reducer';
+import {
+  FETCH_CATALOG,
+  FETCH_CATEGORIES,
+  FETCH_HOME_PAGE,
+  fetchSuccess,
+} from 'src/store/reducer';
 
 /* TODO : redéfinir l'URL du backend en mode production juste avant la fin */
 
@@ -36,6 +41,17 @@ const ajaxCatalog = store => next => (action) => {
         .then((response) => {
           const { data } = response;
           store.dispatch(fetchSuccess(data, 'categoryList'));
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+      break;
+
+    case FETCH_HOME_PAGE:
+      axiosUp.get('/api/products?isOnHomePage=1')
+        .then((response) => {
+          const { data } = response;
+          store.dispatch(fetchSuccess(data, 'articlesOnHomePage'));
         })
         .catch((error) => {
           console.log(error);

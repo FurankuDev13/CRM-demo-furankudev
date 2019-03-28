@@ -14,6 +14,7 @@ const initialState = {
   questionModalIsActive: false,
   categoryList: [],
   catalogList: [],
+  articlesOnHomePage: [],
   fields: {
     login: {
       email: '',
@@ -45,6 +46,7 @@ const initialState = {
  */
 export const FETCH_CATALOG = 'FETCH_CATALOG';
 export const FETCH_CATEGORIES = 'FETCH_CATEGORIES';
+export const FETCH_HOME_PAGE = 'FETCH_HOME_PAGE';
 export const SEND_LOGIN_REQUEST = 'SEND_LOGIN_REQUEST';
 export const SEND_REGISTER_REQUEST = 'SEND_REGISTER_REQUEST';
 export const SEND_QUESTION = 'SEND_QUESTION';
@@ -72,6 +74,11 @@ const reducer = (state = initialState, action = {}) => {
           return {
             ...state,
             categoryList: [...action.data],
+          };
+        case 'articlesOnHomePage':
+          return {
+            ...state,
+            articlesOnHomePage: [...action.data],
           };
         default: return state;
       }
@@ -146,6 +153,10 @@ const reducer = (state = initialState, action = {}) => {
 /**
  * Action Creators
  */
+export const fetchHomePageArticles = () => ({
+  type: FETCH_HOME_PAGE,
+});
+
 export const fetchCatalog = () => ({
   type: FETCH_CATALOG,
 });
