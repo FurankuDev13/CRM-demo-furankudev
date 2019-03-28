@@ -79,8 +79,7 @@ const FETCH_SUCCESS = 'FETCH_SUCCESS';
 const INPUT_CHANGE = 'INPUT_CHANGE';
 const LOGOUT = 'LOGOUT';
 const TOGGLE_NAV_BAR = 'TOGGLE_NAV_BAR';
-const OPEN_QUESTION_MODAL = 'OPEN_QUESTION_MODAL';
-const CLOSE_QUESTION_MODAL = 'CLOSE_QUESTION_MODAL';
+const TOGGLE_QUESTION_MODAL = 'TOGGLE_QUESTION_MODAL';
 
 /**
  * Reducer
@@ -157,16 +156,10 @@ const reducer = (state = initialState, action = {}) => {
         navbarIsActive: !state.navbarIsActive,
       };
 
-    case OPEN_QUESTION_MODAL:
+    case TOGGLE_QUESTION_MODAL:
       return {
         ...state,
-        questionModalIsActive: true,
-      };
-
-    case CLOSE_QUESTION_MODAL:
-      return {
-        ...state,
-        questionModalIsActive: false,
+        questionModalIsActive: !state.questionModalIsActive,
       };
 
     case SEND_QUESTION:
@@ -249,12 +242,8 @@ export const toggleNavBar = () => ({
   type: TOGGLE_NAV_BAR,
 });
 
-export const openQuestionModal = () => ({
-  type: OPEN_QUESTION_MODAL,
-});
-
-export const closeQuestionModal = () => ({
-  type: CLOSE_QUESTION_MODAL,
+export const toggleQuestionModal = () => ({
+  type: TOGGLE_QUESTION_MODAL,
 });
 /**
  * Selectors

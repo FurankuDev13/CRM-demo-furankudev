@@ -14,7 +14,7 @@ import './QuestionForm.scss';
  * Code
  */
 
-const QuestionForm = ({ questionFields, closeQuestionModal }) => {
+const QuestionForm = ({ questionFields, toggleQuestionModal }) => {
   const { title, content } = questionFields;
   const tabl = [
     {
@@ -43,7 +43,7 @@ const QuestionForm = ({ questionFields, closeQuestionModal }) => {
           id="question-toggle"
           type="button"
           className="button is-danger modal-close"
-          onClick={closeQuestionModal}
+          onClick={toggleQuestionModal}
         />
       </Form>
     </div>
@@ -55,7 +55,7 @@ QuestionForm.propTypes = {
     title: PropTypes.string.isRequired,
     content: PropTypes.string.isRequired,
   }).isRequired,
-  closeQuestionModal: PropTypes.func.isRequired,
+  toggleQuestionModal: PropTypes.func.isRequired,
 };
 
 /**

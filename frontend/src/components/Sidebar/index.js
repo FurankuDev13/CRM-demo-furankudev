@@ -10,9 +10,9 @@ import PropTypes from 'prop-types';
  */
 import './sidebar.scss';
 
-const Sidebar = ({ openQuestionModal }) => (
+const Sidebar = ({ toggleQuestionModal }) => (
   <aside className="menu column">
-    <a className="control button is-light aside-button" onClick={openQuestionModal}>
+    <a className="control button is-light aside-button" onClick={toggleQuestionModal}>
       <span>Poser une question</span>
     </a>
     <a className="control button is-light">
@@ -25,7 +25,7 @@ const Sidebar = ({ openQuestionModal }) => (
 );
 
 Sidebar.propTypes = {
-  openQuestionModal: PropTypes.func.isRequired,
+  toggleQuestionModal: PropTypes.func.isRequired,
 };
 
 /**

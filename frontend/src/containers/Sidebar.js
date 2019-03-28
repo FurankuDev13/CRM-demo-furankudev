@@ -7,7 +7,7 @@ import { connect } from 'react-redux';
  * Local import
  */
 import Sidebar from 'src/components/Sidebar';
-import { openQuestionModal } from 'src/store/reducer';
+import { toggleQuestionModal } from 'src/store/reducer';
 
 /**
  * Mapping
@@ -16,8 +16,8 @@ const mapStateToProps = () => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  openQuestionModal: () => {
-    dispatch(openQuestionModal());
+  toggleQuestionModal: () => {
+    dispatch(toggleQuestionModal());
   },
 });
 

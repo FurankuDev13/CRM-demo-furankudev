@@ -7,7 +7,7 @@ import { connect } from 'react-redux';
  * Local import
  */
 import QuestionForm from 'src/components/QuestionForm';
-import { closeQuestionModal } from 'src/store/reducer';
+import { toggleQuestionModal } from 'src/store/reducer';
 
 /**
  * Mapping
@@ -17,8 +17,8 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  closeQuestionModal: () => {
-    dispatch(closeQuestionModal());
+  toggleQuestionModal: () => {
+    dispatch(toggleQuestionModal());
   },
 });
 

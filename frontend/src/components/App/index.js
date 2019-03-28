@@ -22,7 +22,7 @@ import Profilepage from 'src/containers/Profilepage';
 /**
  * Code
  */
-const App = ({ isLogged, closeQuestionModal, questionModalIsActive }) => (
+const App = ({ isLogged, toggleQuestionModal, questionModalIsActive }) => (
   <div>
     <Nav />
     <Switch>
@@ -106,7 +106,7 @@ const App = ({ isLogged, closeQuestionModal, questionModalIsActive }) => (
       { 'is-active': questionModalIsActive },
     )}
     >
-      <div className="modal-background" onClick={closeQuestionModal} />
+      <div className="modal-background" onClick={toggleQuestionModal} />
       {isLogged && <QuestionForm /> }
     </div>
   </div>
@@ -115,7 +115,7 @@ const App = ({ isLogged, closeQuestionModal, questionModalIsActive }) => (
 App.propTypes = {
   isLogged: PropTypes.bool.isRequired,
   questionModalIsActive: PropTypes.bool.isRequired,
-  closeQuestionModal: PropTypes.func.isRequired,
+  toggleQuestionModal: PropTypes.func.isRequired,
 };
 
 /**
