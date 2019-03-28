@@ -121,7 +121,10 @@ class DoctrineEvent implements EventSubscriber
         $entityManager = $args->getObjectManager();
 
         if ($entity instanceof Company) {
-            $entity->setIsCustomer(false);
+            if (!$entity->getIsCustomer()) {
+                $entity->setIsCustomer(false);
+            }
+            
         } 
     }
 
@@ -131,7 +134,9 @@ class DoctrineEvent implements EventSubscriber
         $entityManager = $args->getObjectManager();
 
         if ($entity instanceof Product) {
-            $entity->setIsAvailable(false);
+            if (!$entity->getIsAvailable()) {
+                $entity->setIsAvailable(false);
+            }
         } 
     }
 }
