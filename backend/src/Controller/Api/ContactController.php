@@ -74,6 +74,33 @@ class ContactController extends AbstractController
     }
 
     /**
+     * @Route("/contact/{id}", name="show", methods={"GET"})
+     */
+    public function show(Contact $contact = null, ContactRepository $contactRepo, SerializerInterface $serializer)
+    {
+        if (!is_null($contact) && $contact->getPerson()->getIsActive()) {
+            $responseCode = 200 ;
+            $jsonObject = $serializer->serialize($contact, 'json', ['groups' => 'contact_group']);
+        } else {
+            $responseCode = 400 ;
+            $jsonObject = $serializer->serialize(
+                [
+                "error" => "no_user_found",
+                "error_description"  => "Les données transmises ne correspondent à aucun utilisateur, la demande ne peut être traitée"
+                ], 
+                'json'
+            );
+        }
+
+        $response = new Response($jsonObject, $responseCode);
+        
+        $response->headers->set('Content-Type', 'application/json');
+        $response->headers->set('Access-Control-Allow-Origin', '*');
+
+        return $response;
+    }
+
+    /**
      * @Route("/contact", name="new", methods={"POST"})
      */
     public function new(Request $request, SerializerInterface $serializer, EntityManagerInterface $entityManager, UserPasswordEncoderInterface $passwordEncoder, CompanyAddressTypeRepository $companyAddressTypeRepo, ContactTypeRepository $contactTypeRepo, RequestTypeRepository $requestTypeRepo, HandlingStatusRepository $handlingStatusRepo, CompanyRepository $companyRepo, ContactRepository $contactRepo, \Swift_Mailer $mailer)
@@ -206,78 +233,135 @@ class ContactController extends AbstractController
     /**
      * @Route("/contact/{id}", name="edit", methods={"PATCH"})
      */
-    public function edit(Contact $contact, Request $request, SerializerInterface $serializer, EntityManagerInterface $entityManager, UserPasswordEncoderInterface $passwordEncoder, ContactRepository $contactRepo)
+    public function edit(Contact $contact = null, Request $request, SerializerInterface $serializer, EntityManagerInterface $entityManager, UserPasswordEncoderInterface $passwordEncoder, ContactRepository $contactRepo)
     {
-        if (!$contact) {
-            throw $this->createNotFoundException("Le contact indiqué n'existe pas"); 
-        }
-        $data = $serializer->deserialize($request->getContent(), Contact::class, 'json');
-        
-        if ($data) {
-            /* if (!$data->getEmail()) {
-                $savedContact = $contactRepo->findOneByEmail($data->getEmail());
-            } */
-            /* $entityManager->flush(); */
-            $jsonObject = $serializer->serialize($contact, 'json',['groups' => 'user_group']);
-        }
-        return new Response($jsonObject, 200, ['Content-Type' => 'application/json']);
-    }
-    /**
-     * @Route("/contact/{id}/products", name="productIndex", methods={"GET"})
-     */
-    public function productIndex(Contact $contact, ProductRepository $productRepo, SerializerInterface $serializer)
-    {
-        $products = $productRepo->findByIsActiveAndIsAvailable(true, true);
-        if ($contact->getCompany()->getDiscount() == null) {
-            $discountGranted = 0;
+        if (!is_null($contact)) {
+            $savedPassword = $contact->getPassword();
+
+            $data = $serializer->deserialize($request->getContent(), Contact::class, 'json', ['object_to_populate' => $contact]);
+            
+            if ($data->getPassword()) {
+                $encodedPassword = $passwordEncoder->encodePassword($data, $data->getPassword());
+                $data->setPassword($encodedPassword);
+            } else {
+                $data->setPassword($savedPassword);
+            }
+
+            $entityManager->flush();
+
+            $responseCode = 200 ;
+            $jsonObject = $serializer->serialize($data, 'json', ['groups' => 'contact_group']);
+
         } else {
-            $discountGranted = $contact->getCompany()->getDiscount()->getRate();
+            $responseCode = 400 ;
+            $errorCode = 'no_user_found';
+            $errorDescription = "Les données transmises ne correspondent à aucun utilisateur, la demande ne peut être traitée";
+    
         }
-        foreach ($products as $product) {
-            $maxDiscount = $product->getMaxDiscountRate();
-            $discount = min($discountGranted, $maxDiscount);
-            $listPrice = $product->getListPrice();
-            $sellingPrice = round($listPrice * (100-$discount)/100, 0);
-            $product->setListPrice($sellingPrice);
+
+        if ($responseCode == 400) {
+            $jsonObject = $serializer->serialize(
+                [
+                "error" => $errorCode,
+                "error_description"  => $errorDescription
+                ], 
+                'json'
+            );
         }
-        
-        //dd($products);
-        
-        $jsonObject = $serializer->serialize($products, 'json', ['groups' => 'product_group']);
-        $response = new Response($jsonObject, 200);
+        $response = new Response($jsonObject, $responseCode);
         
         $response->headers->set('Content-Type', 'application/json');
         $response->headers->set('Access-Control-Allow-Origin', '*');
+
         return $response;
     }
     /**
-     * @Route("/contact/{id}/request", name="requestCreate", methods={"POST"})
+     * @Route("/contact/{id}/product", name="product_index", methods={"GET"})
      */
-    public function requestCreate(Contact $contact, Request $request, EntityManagerInterface $entityManager, HandlingStatusRepository $handlingStatusRepo, RequestTypeRepository $requestTypeRepo, SerializerInterface $serializer, \Swift_Mailer $mailer)
+    public function productIndex(Contact $contact, ProductRepository $productRepo, SerializerInterface $serializer)
     {
-        if (!$contact) {
-            throw $this->createNotFoundException("Le contact indiqué n'existe pas"); 
+        $isActive = true;
+        $isAvailable = true;
+
+        $products = $productRepo->findByIsActiveAndIsAvailable($isActive, $isAvailable);
+
+        if ($products) {
+            if ($contact->getCompany()->getDiscount() == null) {
+                $discountGranted = 0;
+            } else {
+                $discountGranted = $contact->getCompany()->getDiscount()->getRate();
+            }
+            foreach ($products as $product) {
+                $maxDiscount = $product->getMaxDiscountRate();
+                $discount = min($discountGranted, $maxDiscount);
+                $listPrice = $product->getListPrice();
+                $sellingPrice = round($listPrice * (100-$discount)/100, 0);
+                $product->setListPrice($sellingPrice);
+            }
+
+            $responseCode = 200 ;
+            $jsonObject = $serializer->serialize($products, 'json', ['groups' => 'product_group']);
+
+        } else {
+            $responseCode = 400 ;
+            $jsonObject = $serializer->serialize(
+                [
+                "error" => "no_product_found",
+                "error_description"  => "Aucun produit n'a pu être trouvé"
+                ], 
+                'json'
+            );
         }
+
+        $response = new Response($jsonObject, $responseCode);
+        
+        $response->headers->set('Content-Type', 'application/json');
+        $response->headers->set('Access-Control-Allow-Origin', '*');
+
+        return $response;
+    }
+    
+    /**
+     * @Route("/contact/{id}/request", name="request_new", methods={"POST"})
+     */
+    public function requestNew(Contact $contact, Request $request, EntityManagerInterface $entityManager, HandlingStatusRepository $handlingStatusRepo, RequestTypeRepository $requestTypeRepo, SerializerInterface $serializer, \Swift_Mailer $mailer)
+    {
+        $responseCode = 400 ;
+        $errorCode = 'no_data_sent';
+        $errorDescription = "Aucune des données requises n'a été transmise, la demande ne peut être traitée";
+
         $jsonObject = null;
         $data = json_decode($request->getContent(), true);
-        $handlingStatus = $handlingStatusRepo->findOneByTitle("Initiée");
-        $carryOn = false;
-        if ($requestTypeRepo->findOneByTitle($data["request_type"])) {
-            $carryOn = true;
-        }
-        if ($carryOn) {
-            
-            $contactRequest = new ContactRequest();
-            $contactRequest->setTitle($data["request_title"]);
-            $contactRequest->setBody($data["request_body"]);
-            $contactRequest->setHandlingStatus($handlingStatus);
-            $requestType = $requestTypeRepo->findOneByTitle($data["request_type"]);
-            $contactRequest->setRequestType($requestType);
-            $contactRequest->setContact($contact);
-            $entityManager->persist($contactRequest);
-            $entityManager->flush();
 
-            $message = (new \Swift_Message("Votre demande a été prise en compte"))
+        $requestTypeTitle = array_key_exists('request_type', $data) ? $data['request_type'] : null;
+        $requestTitle = array_key_exists('request_title', $data) ? $data['request_title'] : null;
+        $requestBody = array_key_exists('request_body', $data) ? $data['request_body'] : null;
+
+        if ($requestTypeTitle && $requestTitle && $requestBody) {
+            $errorCode = 'notenough_data_sent';
+            $errorDescription = "Les données transmises sont insuffisantes, la demande ne peut être traitée";
+
+            $requestType = $requestTypeRepo->findOneByTitle($requestTypeTitle);
+
+            if ($requestType) {
+                $handlingStatus = $handlingStatusRepo->findOneByTitle("Initiée");
+
+                $contactRequest = new ContactRequest();
+                $contactRequest->setTitle($requestTitle);
+                $contactRequest->setBody($requestBody);
+                $contactRequest->setHandlingStatus($handlingStatus);
+                $contactRequest->setRequestType($requestType);
+                $contactRequest->setContact($contact);
+                $entityManager->persist($contactRequest);
+
+                $responseCode = 201;
+            }
+            
+            if ($responseCode == 201) {
+                $entityManager->flush();
+                $jsonObject = $serializer->serialize('Success', 'json');
+
+                $message = (new \Swift_Message("Votre demande a été prise en compte"))
                 ->setFrom('sith13160@gmail.com')
                 ->setTo('sith13160@gmail.com', $contact->getEmail())
                 ->setBody(
@@ -287,15 +371,25 @@ class ContactController extends AbstractController
                     ),
                     'text/html'
                 );
-
-            $mailer->send($message);
-            
-            $jsonObject = $serializer->serialize($contactRequest, 'json', ['groups' => 'contact_group']);
+                $mailer->send($message);
+            }
         }
-        $response = new Response($jsonObject, 200);
+
+        if ($responseCode == 400) {
+            $jsonObject = $serializer->serialize(
+                [
+                "error" => $errorCode,
+                "error_description"  => $errorDescription
+                ], 
+                'json'
+            );
+        }
+
+        $response = new Response($jsonObject, $responseCode);
         
         $response->headers->set('Content-Type', 'application/json');
         $response->headers->set('Access-Control-Allow-Origin', '*');
+
         return $response;
     }
 }

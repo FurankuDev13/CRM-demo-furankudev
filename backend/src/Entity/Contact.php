@@ -28,7 +28,7 @@ class Contact implements UserInterface
     private $lastConnection;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Person", inversedBy="contacts")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Person", inversedBy="contacts", cascade={"persist"})
      * @ORM\JoinColumn(nullable=false)
      * @Groups({"contact_group"})
      */
