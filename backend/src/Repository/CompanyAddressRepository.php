@@ -35,6 +35,20 @@ class CompanyAddressRepository extends ServiceEntityRepository
         ;
     }
 
+        //collection des adresses d'une société
+        public function findAllByOneCompany(Company $company)
+        {
+            return $this->createQueryBuilder('a')
+                ->join('a.company', 'c')
+                ->addSelect('c')
+                ->where('c = :company')
+                ->setParameter('company', $company)
+                ->getQuery()
+                ->getResult()
+            ;
+        }
+    
+
     // /**
     //  * @return CompanyAddress[] Returns an array of CompanyAddress objects
     //  */

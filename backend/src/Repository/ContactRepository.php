@@ -87,6 +87,22 @@ class ContactRepository extends ServiceEntityRepository
         ;
     }
 
+    //collection des contacts d'une société
+    public function findAllByOneCompany(Company $company)
+    {
+        return $this->createQueryBuilder('co')
+            ->join('co.company', 'c')
+            ->addSelect('c')
+            ->join('co.person', 'p')
+            ->addSelect('p')
+            ->where('c = :company')
+            ->setParameter('company', $company)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
+
     // /**
     //  * @return Contact[] Returns an array of Contact objects
     //  */
