@@ -16,27 +16,33 @@ class Category
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer", length=128, unique=true)
+     * @Groups({"product_group"})
+     * @Groups({"category_group"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=128)
      * @Groups({"product_group"})
+     * @Groups({"category_group"})
      */
     private $name;
 
     /**
      * @ORM\Column(type="text", nullable=true)
+     * @Groups({"category_group"})
      */
     private $description;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups({"category_group"})
      */
     private $picture;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
+     * @Groups({"category_group"})
      */
     private $rank;
 

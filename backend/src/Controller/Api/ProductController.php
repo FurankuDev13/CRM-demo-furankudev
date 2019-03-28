@@ -17,7 +17,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class ProductController extends AbstractController
 {
     /**
-     * @Route("/products", name="index", methods={"GET"})
+     * @Route("/product", name="index", methods={"GET"})
      */
     public function index(Request $request, ProductRepository $productRepo, SerializerInterface $serializer)
     {

@@ -35,6 +35,7 @@ class DoctrineEvent implements EventSubscriber
         $this->setCreatedAt($args);
         $this->setCompanyDefaultIsCustomer($args);
         $this->setProductDefaultIsAvailable($args);
+        $this->setProductDefaultIsOnHomePage($args);
     }
     
     public function preUpdate(LifecycleEventArgs $args) 
@@ -124,7 +125,6 @@ class DoctrineEvent implements EventSubscriber
             if (!$entity->getIsCustomer()) {
                 $entity->setIsCustomer(false);
             }
-            
         } 
     }
 
@@ -136,6 +136,18 @@ class DoctrineEvent implements EventSubscriber
         if ($entity instanceof Product) {
             if (!$entity->getIsAvailable()) {
                 $entity->setIsAvailable(false);
+            }
+        } 
+    }
+
+    private function setProductDefaultIsOnHomePage(LifecycleEventArgs $args)
+    {
+        $entity = $args->getObject();
+        $entityManager = $args->getObjectManager();
+
+        if ($entity instanceof Product) {
+            if (!$entity->getIsOnHomePage()) {
+                $entity->setIsOnHomePage(false);
             }
         } 
     }
