@@ -8,6 +8,7 @@ import { getSlug } from 'src/utils/url';
  */
 const initialState = {
   view: 'login',
+  profile: [],
   logId: '',
   isLogged: false,
   navbarIsActive: false,

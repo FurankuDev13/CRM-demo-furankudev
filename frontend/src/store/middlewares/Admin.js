@@ -31,6 +31,7 @@ const ajaxAdmin = store => next => (action) => {
       axiosUp.post('/api/login', stringifiedLoginDatas)
         .then((response) => {
           const { data } = response;
+          console.log(data);
           const { email, id } = data;
           localStorage.setItem('email', email);
           localStorage.setItem('id', id);
