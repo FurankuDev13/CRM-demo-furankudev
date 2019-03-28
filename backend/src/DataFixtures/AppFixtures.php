@@ -59,7 +59,7 @@ class AppFixtures extends Fixture
 
         //dd($response->body[0]->name);
         $dateToSet = new \DateTime();
-        for ($i=0; $i < min(100, count($response->body)); $i++) { 
+        for ($i=0; $i < min(200, count($response->body)); $i++) { 
             $product = new Product();
             $category = new Category();
             $category->setName($response->body[$i]->category);
@@ -72,6 +72,7 @@ class AppFixtures extends Fixture
             $product->setPicture($response->body[$i]->image_url);
             $product->setListPrice($response->body[$i]->price);
             $product->setMaxDiscountRate(15);
+            $product->setIsAvailable(true);
             $product->setIsOnHomePage(false);
             $product->setRank(10);
             
@@ -232,7 +233,7 @@ class AppFixtures extends Fixture
         ));
 
         //Additional Person puis Users -> Commercial
-        $populator->addEntity(Person::class,20, array(
+        $populator->addEntity(Person::class,40, array(
             'firstName' => function() use ($generator) { return $generator->firstName(); },
             'lastName' => function() use ($generator) { return $generator->unique()->lastName(); },
             'businessPhone' => function() use ($generator) { return $generator->unique()->phoneNumber(); },
@@ -279,7 +280,7 @@ class AppFixtures extends Fixture
         ));
 
         //Contact
-        $populator->addEntity(Contact::class,10, array(
+        $populator->addEntity(Contact::class,30, array(
             'email' => function() use ($generator) { return $generator->unique()->email(); },
         ), array(
             function($contact) { 
