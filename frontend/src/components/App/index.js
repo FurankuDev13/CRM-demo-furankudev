@@ -3,6 +3,7 @@
  */
 import React from 'react';
 import PropTypes from 'prop-types';
+import classNames from 'classnames';
 
 /**
  * Local import
@@ -16,8 +17,7 @@ import Signuppage from 'src/containers/Signuppage';
 import Footer from 'src/components/Footer';
 import NotFound from 'src/components/NotFound';
 import QuestionForm from 'src/containers/QuestionForm';
-import classNames from 'classnames';
-
+import Profilepage from 'src/components/Profilepage';
 
 /**
  * Code
@@ -42,6 +42,16 @@ const App = ({ isLogged, closeQuestionModal, questionModalIsActive }) => (
         render={() => (
           isLogged ? (
             <Customerpage />
+          ) : (
+            <Redirect to="/login" />
+          )
+        )}
+      />
+      <Route
+        path="/profile"
+        render={() => (
+          isLogged ? (
+            <Profilepage />
           ) : (
             <Redirect to="/login" />
           )

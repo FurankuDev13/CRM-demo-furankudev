@@ -13,6 +13,7 @@ import { FETCH_CATALOG, FETCH_CATEGORIES, fetchSuccess } from 'src/store/reducer
 const axiosUp = axios.create({
   baseURL: 'http://localhost/Apotheose/crm/backend/public',
 });
+//http://cerberus-crm.space/backend/public
 
 // Middleware : ajax : gestion des lettres
 const ajaxCatalog = store => next => (action) => {
