@@ -17,7 +17,7 @@ import Signuppage from 'src/containers/Signuppage';
 import Footer from 'src/components/Footer';
 import NotFound from 'src/components/NotFound';
 import QuestionForm from 'src/containers/QuestionForm';
-import Profilepage from 'src/components/Profilepage';
+import Profilepage from 'src/containers/Profilepage';
 
 /**
  * Code
@@ -107,7 +107,7 @@ const App = ({ isLogged, closeQuestionModal, questionModalIsActive }) => (
     )}
     >
       <div className="modal-background" onClick={closeQuestionModal} />
-      <QuestionForm />
+      {isLogged && <QuestionForm /> }
     </div>
   </div>
 );

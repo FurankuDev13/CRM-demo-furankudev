@@ -9,6 +9,7 @@ import { getSlug } from 'src/utils/url';
 const initialState = {
   view: 'login',
   profile: {
+    contactId: '',
     company: {
       name: '',
       description: '',
@@ -52,6 +53,14 @@ const initialState = {
     question: {
       title: '',
       content: '',
+    },
+    profile: {
+      firstname: '',
+      lastname: '',
+      businessPhone: '',
+      cellPhone: '',
+      password: '',
+      email: '',
     },
   },
 };
@@ -114,6 +123,7 @@ const reducer = (state = initialState, action = {}) => {
       return {
         ...state,
         profile: {
+          id: data.id,
           email: data.email,
           company: {
             name: data.company.name,

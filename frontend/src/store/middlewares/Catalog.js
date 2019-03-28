@@ -24,7 +24,7 @@ const axiosUp = axios.create({
 const ajaxCatalog = store => next => (action) => {
   switch (action.type) {
     case FETCH_CATALOG: {
-      const { id } = store.getState().profile.person;
+      const { id } = store.getState().profile;
       axiosUp.get(`/api/contact/${id}/products`)
         .then((response) => {
           const { data } = response;
