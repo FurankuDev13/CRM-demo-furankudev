@@ -11,7 +11,7 @@ const initialState = {
   logId: '',
   isLogged: false,
   navbarIsActive: false,
-  askQuestionElementIsActive: false,
+  questionModalIsActive: false,
   categoryList: [],
   catalogList: [],
   fields: {
@@ -53,7 +53,8 @@ const FETCH_SUCCESS = 'FETCH_SUCCESS';
 const INPUT_CHANGE = 'INPUT_CHANGE';
 const LOGOUT = 'LOGOUT';
 const TOGGLE_NAV_BAR = 'TOGGLE_NAV_BAR';
-const TOGGLE_QUESTION_FORM = 'TOGGLE_QUESTION_FORM';
+const OPEN_QUESTION_MODAL = 'OPEN_QUESTION_MODAL';
+const CLOSE_QUESTION_MODAL = 'CLOSE_QUESTION_MODAL';
 
 /**
  * Reducer
@@ -112,16 +113,22 @@ const reducer = (state = initialState, action = {}) => {
         navbarIsActive: !state.navbarIsActive,
       };
 
-    case TOGGLE_QUESTION_FORM:
+    case OPEN_QUESTION_MODAL:
       return {
         ...state,
-        askQuestionElementIsActive: !state.askQuestionElementIsActive,
+        questionModalIsActive: true,
+      };
+
+    case CLOSE_QUESTION_MODAL:
+      return {
+        ...state,
+        questionModalIsActive: false,
       };
 
     case SEND_QUESTION:
       return {
         ...state,
-        askQuestionElementIsActive: false,
+        questionModalIsActive: false,
         fields: {
           ...state.fields,
           question: {
@@ -194,8 +201,12 @@ export const toggleNavBar = () => ({
   type: TOGGLE_NAV_BAR,
 });
 
-export const toggleQuestionForm = () => ({
-  type: TOGGLE_QUESTION_FORM,
+export const openQuestionModal = () => ({
+  type: OPEN_QUESTION_MODAL,
+});
+
+export const closeQuestionModal = () => ({
+  type: CLOSE_QUESTION_MODAL,
 });
 /**
  * Selectors

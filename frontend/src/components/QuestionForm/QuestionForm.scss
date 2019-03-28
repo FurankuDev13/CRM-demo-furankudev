@@ -1,28 +1,23 @@
-#question {
+ #question {
   border: 2px solid #aaa;
   background-color: white;
-  padding:1rem;
-  height: 70vh;
-  width:80vw;
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-}
+  padding:1.3rem;
+} 
 
 #question-toggle {
-  height: 1.5em;
-  width: 1.3em;
+  height: 1rem;
+  width:1rem;
   position: absolute;
   top: 5px;
   right: 5px;
   font-weight: 700;
   cursor: pointer;
 
-  & > p {
-    position: relative;
-    bottom:6px;
-    transform: rotate(45deg);
+  &::before {
+    width: 11px;
   }
 
+  &::after {
+    height:11px;
+  }
 }

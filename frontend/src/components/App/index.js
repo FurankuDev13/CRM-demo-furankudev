@@ -16,12 +16,13 @@ import Signuppage from 'src/containers/Signuppage';
 import Footer from 'src/components/Footer';
 import NotFound from 'src/components/NotFound';
 import QuestionForm from 'src/containers/QuestionForm';
+import classNames from 'classnames';
 
 
 /**
  * Code
  */
-const App = ({ isLogged, askQuestionElementIsActive }) => (
+const App = ({ isLogged, closeQuestionModal, questionModalIsActive }) => (
   <div>
     <Nav />
     <Switch>
@@ -90,15 +91,21 @@ const App = ({ isLogged, askQuestionElementIsActive }) => (
       <Route component={NotFound} />
     </Switch>
     <Footer />
-    {askQuestionElementIsActive && (
-      <QuestionForm />
+    <div className={classNames(
+      'modal',
+      { 'is-active': questionModalIsActive },
     )}
+    >
+      <div className="modal-background" onClick={closeQuestionModal} />
+      <QuestionForm />
+    </div>
   </div>
 );
 
 App.propTypes = {
   isLogged: PropTypes.bool.isRequired,
-  askQuestionElementIsActive: PropTypes.bool.isRequired,
+  questionModalIsActive: PropTypes.bool.isRequired,
+  closeQuestionModal: PropTypes.func.isRequired,
 };
 
 /**
