@@ -59,29 +59,36 @@ class AppFixtures extends Fixture
 
         //dd($response->body[0]->name);
         $dateToSet = new \DateTime();
-        for ($i=0; $i < min(200, count($response->body)); $i++) { 
-            $product = new Product();
-            $category = new Category();
-            $category->setName($response->body[$i]->category);
-            $category->setCreatedAt($dateToSet);
-            $category->setUpdatedAt($dateToSet);
-
-            $product->setReference($response->body[$i]->product_id);
-            $product->setName($response->body[$i]->name);
-            $product->setDescription($response->body[$i]->size . " - " . $response->body[$i]->country . " - " . $response->body[$i]->type . " - by " . $response->body[$i]->brewer);
-            $product->setPicture($response->body[$i]->image_url);
-            $product->setListPrice($response->body[$i]->price);
-            $product->setMaxDiscountRate(15);
-            $product->setIsAvailable(true);
-            $product->setIsOnHomePage(false);
-            $product->setRank(10);
-            
-            //dd($this->completeCategory($category));
-            $product->addCategory($this->completeCategory($category));
-
-            $url = $product->getPicture();
+        for ($i=0; $i < min(200, count($response->body)); $i++) {
+            $url = $response->body[$i]->image_url;
             $file_headers = @get_headers($url);
+
             if($file_headers[0] != 'HTTP/1.1 404 Not Found') {
+                $product = new Product();
+                $category = new Category();
+                $category->setName($response->body[$i]->category);
+                $category->setCreatedAt($dateToSet);
+                $category->setUpdatedAt($dateToSet);
+
+                $category2 = new Category();
+                $category2->setName($response->body[$i]->type);
+                $category2->setCreatedAt($dateToSet);
+                $category2->setUpdatedAt($dateToSet);
+
+                $product->setReference($response->body[$i]->product_id);
+                $product->setName($response->body[$i]->name);
+                $product->setDescription($response->body[$i]->size . " - " . $response->body[$i]->country . " - " . $response->body[$i]->type . " - by " . $response->body[$i]->brewer);
+                $product->setPicture($response->body[$i]->image_url);
+                $product->setListPrice($response->body[$i]->price);
+                $product->setMaxDiscountRate(15);
+                $product->setIsAvailable(true);
+                $product->setIsOnHomePage(false);
+                $product->setRank(10);
+                
+                //dd($this->completeCategory($category));
+                $product->addCategory($this->completeCategory($category));
+                $product->addCategory($this->completeCategory($category2));
+                
                 $this->manager->persist($product);
             }
         }
@@ -149,6 +156,11 @@ class AppFixtures extends Fixture
         $adminRole->setCode('ROLE_ADMIN');
         $this->manager->persist($adminRole);
 
+        $apiRole = new UserRole();
+        $apiRole->setTitle('Frontoffice');
+        $apiRole->setCode('ROLE_APIUSER');
+        $this->manager->persist($apiRole);
+
         //Person
         $person1 = new Person();
         $person1->setFirstname('Franck');
@@ -166,10 +178,18 @@ class AppFixtures extends Fixture
 
         $person3 = new Person();
         $person3->setFirstname('PF');
-        $person3->setLastname('ECCHI');
+        $person3->setLastname('PICOLO');
         $person3->setBusinessPhone('0102030405');
         $person3->setCellPhone('0102030405');
         $this->manager->persist($person3);
+
+        $person4 = new Person();
+        $person4->setFirstname('API');
+        $person4->setLastname('JWT');
+        $person4->setBusinessPhone('0102030405');
+        $person4->setCellPhone('0102040405');
+        $person4->setIsActive(false);
+        $this->manager->persist($person4);
 
         //User
         $user1 = new User();
@@ -187,7 +207,15 @@ class AppFixtures extends Fixture
         $user2->setEmail('phil_p@oclock.io');
         $encodedPassword = $this->passwordEncoder->encodePassword($user2, 'phil');
         $user2->setPassword($encodedPassword);
-        $this->manager->persist($user2);
+        $this->manager->persist($user2);;
+
+        $user3 = new User();
+        $user3->setPerson($person4);
+        $user3->addUserRole($apiRole);
+        $user3->setEmail('cerberus.crm.mailer@gmail.com');
+        $encodedPassword = $this->passwordEncoder->encodePassword($user3, 'alabiere13');
+        $user3->setPassword($encodedPassword);
+        $this->manager->persist($user3);
 
         //Contact
         $contact1 = new Contact();
