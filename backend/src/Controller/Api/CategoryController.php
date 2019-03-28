@@ -20,12 +20,22 @@ class CategoryController extends AbstractController
     {
         $categories = $categoryRepo->findByIsActive(true);
 
-        $jsonObject = $serializer->serialize($categories, 'json', [
-            'circular_reference_handler' => function ($object) {
-                return $object->getId();
-            }
-        ]);
-
-        return new Response($jsonObject, 200, ['Content-Type' => 'application/json']);
+        if ($categories) {
+            $responseCode = 200 ;
+            $jsonObject = $serializer->serialize($categories, 'json', [
+                'circular_reference_handler' => function ($object) {
+                    return $object->getId();
+                }
+            ]);
+        } else {
+            $jsonObject = $serializer->serialize(
+                [
+                "error" => "no_category_found",
+                "error_description"  => "Aucune catégorie n'a pu être trouvée"
+                ], 
+                'json'
+            );
+        }
+        return new Response($jsonObject, $responseCode, ['Content-Type' => 'application/json']);
     }
 }
