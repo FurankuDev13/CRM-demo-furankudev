@@ -1,0 +1,8 @@
+<form class="level-item" action='{{ path('company_isCustomer_toggle', {'id': company.id}) }}' method="POST">
+    <input class="" type="hidden" name="_method" value="PATCH">
+    {% if company.isCustomer %}
+        <button type="submit" class="button is-success"><i class="fas fa-file-invoice-dollar"></i></i></button>
+    {% else %}
+        <button type="submit" class="button is-outlined"><i class="fas fa-file-invoice-dollar"></i></i></button>
+    {% endif %}
+</form>

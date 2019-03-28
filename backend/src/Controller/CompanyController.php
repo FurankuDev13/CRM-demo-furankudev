@@ -140,13 +140,20 @@ class CompanyController extends AbstractController
     }
 
     /**
-     * @Route("/{id}/toggleIsCustomer", name="toggleIsCustomer", methods={"PATCH"}, requirements={"id"="\d+"})
+     * @Route("/{id}/toggleIsCustomer", name="isCustomer_toggle", methods={"PATCH"}, requirements={"id"="\d+"})
      */
     public function toggleIsCustomer(Company $company, Request $request, EntityManagerInterface $entityManager)
     {
         if (!$company) {
             throw $this->createNotFoundException("La société indiquée n'existe pas"); 
         }
+
+        $company->setIsCustomer(!$company->getIsCustomer());
+        $this->addFlash(
+            'success',
+            'Le statut de la Société ' . $company->getName() . ' a été mis à jour !'
+        );
+        $entityManager->flush();
 
         $referer = $request->headers->get('referer');
 
