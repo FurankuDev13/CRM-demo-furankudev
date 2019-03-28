@@ -101,14 +101,16 @@ const App = ({ isLogged, toggleQuestionModal, questionModalIsActive }) => (
       <Route component={NotFound} />
     </Switch>
     <Footer />
-    <div className={classNames(
-      'modal',
-      { 'is-active': questionModalIsActive },
+    {isLogged && (
+      <div className={classNames(
+        'modal',
+        { 'is-active': questionModalIsActive },
+      )}
+      >
+        <div className="modal-background" onClick={toggleQuestionModal} />
+        <QuestionForm />
+      </div>
     )}
-    >
-      <div className="modal-background" onClick={toggleQuestionModal} />
-      {isLogged && <QuestionForm /> }
-    </div>
   </div>
 );
 

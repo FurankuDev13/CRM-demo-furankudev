@@ -13,7 +13,7 @@ import { toggleProfileModal } from 'src/store/reducer';
  * Mapping
  */
 const mapStateToProps = state => ({
-  profileFields: state.fields.question,
+  profileFields: state.fields.profile,
 });
 
 const mapDispatchToProps = dispatch => ({

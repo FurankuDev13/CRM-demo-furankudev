@@ -94,14 +94,14 @@ const Signup = ({ signupFields }) => {
       placeholder: 'Saisissez votre mot de passe',
     },
     {
-      name: 'contactPassword',
+      name: 'mot de passe',
       label: 'password',
       type: 'password',
       value: contactPassword,
       placeholder: 'Saisissez votre mot de passe',
     },
     {
-      name: 'contactPasswordRepeat',
+      name: 'confirmation mot de passe',
       label: 'passwordRepeat',
       type: 'password',
       value: contactPasswordRepeat,

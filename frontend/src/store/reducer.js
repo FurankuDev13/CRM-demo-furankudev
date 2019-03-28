@@ -10,6 +10,7 @@ const initialState = {
   view: 'login',
   profile: {
     contactId: '',
+    email: '',
     company: {
       name: '',
       description: '',
@@ -17,7 +18,6 @@ const initialState = {
       sirenNumber: '',
     },
     person: {
-      email: '',
       firstname: '',
       lastname: '',
       id: '',
@@ -28,6 +28,7 @@ const initialState = {
   isLogged: false,
   navbarIsActive: false,
   questionModalIsActive: false,
+  profileModalIsActive: false,
   categoryList: [],
   catalogList: [],
   articlesOnHomePage: [],
@@ -60,6 +61,7 @@ const initialState = {
       businessPhone: '',
       cellPhone: '',
       password: '',
+      passwordRepeat: '',
       email: '',
     },
   },
@@ -80,6 +82,7 @@ const INPUT_CHANGE = 'INPUT_CHANGE';
 const LOGOUT = 'LOGOUT';
 const TOGGLE_NAV_BAR = 'TOGGLE_NAV_BAR';
 const TOGGLE_QUESTION_MODAL = 'TOGGLE_QUESTION_MODAL';
+const TOGGLE_PROFILE_MODAL = 'TOGGLE_PROFILE_MODAL';
 
 /**
  * Reducer
@@ -160,6 +163,24 @@ const reducer = (state = initialState, action = {}) => {
       return {
         ...state,
         questionModalIsActive: !state.questionModalIsActive,
+      };
+
+    case TOGGLE_PROFILE_MODAL:
+      return {
+        ...state,
+        profileModalIsActive: !state.profileModalIsActive,
+        fields: {
+          ...state.fields,
+          profile: {
+            firstname: state.profile.person.firstname,
+            lastname: state.profile.person.lastname,
+            businessPhone: state.profile.person.businessPhone,
+            cellPhone: (state.profile.person.cellPhone ? state.profile.person.cellPhone : ''),
+            password: '',
+            passwordRepeat: '',
+            email: state.profile.email,
+          },
+        },
       };
 
     case SEND_QUESTION:
@@ -244,6 +265,10 @@ export const toggleNavBar = () => ({
 
 export const toggleQuestionModal = () => ({
   type: TOGGLE_QUESTION_MODAL,
+});
+
+export const toggleProfileModal = () => ({
+  type: TOGGLE_PROFILE_MODAL,
 });
 /**
  * Selectors
