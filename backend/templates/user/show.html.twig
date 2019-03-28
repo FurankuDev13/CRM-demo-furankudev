@@ -4,15 +4,24 @@
 
 {% block main %}
     <div class="container">
-        <div class="section level-left">
-            <div class="level-item">
-                <h2 class="level-item subtitle has-text-info is-3">{{ user.person.firstname }} {{ user.person.lastname }}</h2>
+        <div class="level">
+            <div class="section level-left">
+                <div class="level-item">
+                    <h2 class="level-item subtitle has-text-info is-3">{{ user.person.firstname }} {{ user.person.lastname }}</h2>
+                </div>
+                <button class="level-item button is-info is-small is-size-4">
+                    {% for role in user.userRoles %}
+                        {{ role.title }} {% if not loop.last %}, {% endif %}
+                    {% endfor %}
+                </button>
             </div>
-            <button class="level-item button is-info is-small is-size-4">
-                {% for role in user.userRoles %}
-                    {{ role.title }} {% if not loop.last %}, {% endif %}
-                {% endfor %}
-            </button>
+            {% if is_granted('ROLE_MANAGER') %}
+                <div class="level-right">
+                    <a class="level-item" href="{{ path('user_edit', {'id' : user.id })}}">
+                        <button type="submit" class="button is-info is-large"><i class="fas fa-edit"></i></button>
+                    </a>
+                </div>
+            {% endif %}
         </div>
         <div class="tile is-ancestor">
             {# Début des Tiles #}
