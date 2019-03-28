@@ -15,6 +15,7 @@ import PropTypes from 'prop-types';
 const Display = ({ classes, name, picture }) => (
   <article className={classes}>
     <p className="title">{name}</p>
+    <p className="subtitle">Sélection</p>
     <figure className="image is-4by3">
       <img src={picture} alt={name} />
     </figure>

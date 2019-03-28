@@ -19,7 +19,7 @@ import {
 const axiosUp = axios.create({
   baseURL: 'http://localhost/Apotheose/crm/backend/public',
 });
-//http://cerberus-crm.space/backend/public
+// http://cerberus-crm.space/backend/public
 
 // Middleware : ajax : gestion des lettres
 const ajaxAdmin = store => next => (action) => {
@@ -32,10 +32,7 @@ const ajaxAdmin = store => next => (action) => {
         .then((response) => {
           const { data } = response;
           console.log(data);
-          const { email, id } = data;
-          localStorage.setItem('email', email);
-          localStorage.setItem('id', id);
-          dispatch(setProfile(id));
+          dispatch(setProfile(data));
         })
         .catch((error) => {
           console.log(error);
@@ -93,8 +90,8 @@ const ajaxAdmin = store => next => (action) => {
         content,
       } = store.getState().fields.question;
       const {
-        logId,
-      } = store.getState();
+        id,
+      } = store.getState().profile;
 
       const questionDatas = {
         request_title: title,
@@ -102,7 +99,7 @@ const ajaxAdmin = store => next => (action) => {
         request_type: 'Devis simple',
       };
       const stringifiedLoginDatas = JSON.stringify(questionDatas);
-      axiosUp.post(`/api/contact/${logId}/request`, stringifiedLoginDatas)
+      axiosUp.post(`/api/contact/${id}/request`, stringifiedLoginDatas)
         .then((response) => {
           console.log(response);
         })

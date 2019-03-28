@@ -8,8 +8,23 @@ import { getSlug } from 'src/utils/url';
  */
 const initialState = {
   view: 'login',
-  profile: [],
   logId: '',
+  profile: {
+    company: {
+      name: '',
+      description: '',
+      picture: 'https://picsum.photos/200',
+      sirenNumber: '',
+    },
+    person: {
+      email: '',
+      firstname: '',
+      lastname: '',
+      id: '',
+      businessPhone: '',
+      cellPhone: '',
+    },
+  },
   isLogged: false,
   navbarIsActive: false,
   questionModalIsActive: false,
@@ -95,17 +110,31 @@ const reducer = (state = initialState, action = {}) => {
         },
       };
 
-    case SET_PROFILE:
-      if ((localStorage.getItem('id') !== null)) {
-        return {
-          ...state,
-          logId: localStorage.getItem('id'),
-          isLogged: true,
-        };
-      }
+    case SET_PROFILE: {
+      const { data } = action;
       return {
         ...state,
+        logId: data.id,
+        profile: {
+          id: data.id,
+          email: data.email,
+          company: {
+            name: data.company.name,
+            description: data.company.description,
+            picture: data.company.picture,
+            sirenNumber: data.company.sirenNumber,
+          },
+          person: {
+            email: data.email,
+            firstname: data.person.firstname,
+            lastname: data.person.lastname,
+            businessPhone: data.person.businessPhone,
+            cellPhone: data.person.cellPhone,
+          },
+        },
+        isLogged: true,
       };
+    }
 
     case LOGOUT:
       return {
@@ -200,9 +229,9 @@ export const sendQuestion = () => ({
   type: SEND_QUESTION,
 });
 
-export const setProfile = profileData => ({
+export const setProfile = data => ({
   type: SET_PROFILE,
-  profileData,
+  data,
 });
 
 export const logOut = () => ({

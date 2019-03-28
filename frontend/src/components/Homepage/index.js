@@ -35,9 +35,11 @@ class Homepage extends React.Component {
                   Lorem, ipsum dolor sit amet consectetur adipisicing elit. Consectetur quod esse perferendis animi soluta, quia ea deserunt vero minus magnam fugit autem porro inventore ipsam exercitationem corrupti et cumque dolorum.
                 </p>
                 <div className="level">
-                  <button className="level-item has-text-centered button is-primary is-outlined is-medium" type="button">
-                    <Link to="/signup" className="link is-info">Créer un compte</Link>
-                  </button>
+                  <Link to="/signup" className="link is-info">
+                    <button className="level-item has-text-centered button is-primary is-outlined is-medium" type="button">
+                      Créer un compte
+                    </button>
+                  </Link>
                   <p className="level-item has-text-centered is-medium">
                     <span className="is-size-5">Déjà client ? &nbsp;</span><Link to="/login" className="link is-info is-size-5">Se connecter</Link>
                   </p>

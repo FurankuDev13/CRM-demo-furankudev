@@ -18,14 +18,14 @@ import {
 const axiosUp = axios.create({
   baseURL: 'http://localhost/Apotheose/crm/backend/public',
 });
-//http://cerberus-crm.space/backend/public
+// http://cerberus-crm.space/backend/public
 
 // Middleware : ajax : gestion des lettres
 const ajaxCatalog = store => next => (action) => {
   switch (action.type) {
     case FETCH_CATALOG: {
-      const { logId } = store.getState();
-      axiosUp.get(`/api/contact/${logId}/products`)
+      const { id } = store.getState().profile;
+      axiosUp.get(`/api/contact/${id}/products`)
         .then((response) => {
           const { data } = response;
           store.dispatch(fetchSuccess(data, 'catalogList'));
