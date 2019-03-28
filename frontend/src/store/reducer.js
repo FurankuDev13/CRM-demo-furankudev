@@ -8,7 +8,6 @@ import { getSlug } from 'src/utils/url';
  */
 const initialState = {
   view: 'login',
-  logId: '',
   profile: {
     company: {
       name: '',
@@ -114,9 +113,7 @@ const reducer = (state = initialState, action = {}) => {
       const { data } = action;
       return {
         ...state,
-        logId: data.id,
         profile: {
-          id: data.id,
           email: data.email,
           company: {
             name: data.company.name,
@@ -125,7 +122,7 @@ const reducer = (state = initialState, action = {}) => {
             sirenNumber: data.company.sirenNumber,
           },
           person: {
-            email: data.email,
+            id: data.person.id,
             firstname: data.person.firstname,
             lastname: data.person.lastname,
             businessPhone: data.person.businessPhone,
