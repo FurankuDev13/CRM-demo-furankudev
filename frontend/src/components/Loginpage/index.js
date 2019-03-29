@@ -8,6 +8,7 @@ import React from 'react';
  */
 import Form from 'src/containers/Form';
 import PropTypes from 'prop-types';
+import { deleteNotification } from 'src/store/reducer';
 
 /**
  * Code
@@ -33,6 +34,14 @@ const Login = ({ loginFields }) => {
   ];
   return (
     <div>
+      <div id="notification" className="notification is-danger is-hidden">
+        <button
+          type="button"
+          className="delete"
+          onClick={deleteNotification}
+        />
+        Vous n'êtes pas enregistré ou vous avez mal saisi votre mot de passe
+      </div>
       <Form
         tabl={tabl}
         formOrigin="login"

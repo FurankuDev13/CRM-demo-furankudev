@@ -3,25 +3,26 @@
  */
 import React from 'react';
 import PropTypes from 'prop-types';
+import classNames from 'classnames';
 
 /**
  * Local import
  */
 import { Route, Redirect, Switch } from 'react-router-dom';
 import Nav from 'src/containers/Nav';
-import Homepage from 'src/components/Homepage';
+import Homepage from 'src/containers/Homepage';
 import Customerpage from 'src/containers/Customerpage';
 import Loginpage from 'src/containers/Loginpage';
 import Signuppage from 'src/containers/Signuppage';
 import Footer from 'src/components/Footer';
 import NotFound from 'src/components/NotFound';
 import QuestionForm from 'src/containers/QuestionForm';
-
+import Profilepage from 'src/containers/Profilepage';
 
 /**
  * Code
  */
-const App = ({ isLogged, askQuestionElementIsActive }) => (
+const App = ({ isLogged, toggleQuestionModal, questionModalIsActive }) => (
   <div>
     <Nav />
     <Switch>
@@ -41,6 +42,16 @@ const App = ({ isLogged, askQuestionElementIsActive }) => (
         render={() => (
           isLogged ? (
             <Customerpage />
+          ) : (
+            <Redirect to="/login" />
+          )
+        )}
+      />
+      <Route
+        path="/profile"
+        render={() => (
+          isLogged ? (
+            <Profilepage />
           ) : (
             <Redirect to="/login" />
           )
@@ -90,15 +101,23 @@ const App = ({ isLogged, askQuestionElementIsActive }) => (
       <Route component={NotFound} />
     </Switch>
     <Footer />
-    {askQuestionElementIsActive && (
-      <QuestionForm />
+    {isLogged && (
+      <div className={classNames(
+        'modal',
+        { 'is-active': questionModalIsActive },
+      )}
+      >
+        <div className="modal-background" onClick={toggleQuestionModal} />
+        <QuestionForm />
+      </div>
     )}
   </div>
 );
 
 App.propTypes = {
   isLogged: PropTypes.bool.isRequired,
-  askQuestionElementIsActive: PropTypes.bool.isRequired,
+  questionModalIsActive: PropTypes.bool.isRequired,
+  toggleQuestionModal: PropTypes.func.isRequired,
 };
 
 /**

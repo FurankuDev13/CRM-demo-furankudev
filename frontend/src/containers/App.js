@@ -7,6 +7,7 @@ import { connect } from 'react-redux';
  * Local import
  */
 import App from 'src/components/App';
+import { toggleQuestionModal } from 'src/store/reducer';
 
 /**
  * Mapping
@@ -16,17 +17,21 @@ const mapStateToProps = (state) => {
     view,
     logEmail,
     isLogged,
-    askQuestionElementIsActive,
+    questionModalIsActive,
   } = state;
   return ({
     isLogged,
     logEmail,
     view,
-    askQuestionElementIsActive,
+    questionModalIsActive,
   });
 };
 
-const mapDispatchToProps = () => ({});
+const mapDispatchToProps = dispatch => ({
+  toggleQuestionModal: () => {
+    dispatch(toggleQuestionModal());
+  },
+});
 
 
 const AppContainer = connect(

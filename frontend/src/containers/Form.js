@@ -9,7 +9,12 @@ import { connect } from 'react-redux';
 import Form from 'src/components/Form';
 
 // Action Creators
-import { sendLoginRequest, sendRegisterRequest, sendQuestion } from 'src/store/reducer';
+import {
+  sendLoginRequest,
+  sendRegisterRequest,
+  sendQuestion,
+  sendProfileChange,
+} from 'src/store/reducer';
 
 /**
  * Mapping
@@ -30,12 +35,20 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
         dispatch(sendLoginRequest(loginDatas));
       }
         break;
-      case 'signup':
+      case 'signup': {
+        /* const companySiren = ownProps.tabl[0].value;
+        console.log(companySiren);
+        console.log('okay !'); */
         dispatch(sendRegisterRequest());
         break;
+      }
 
       case 'question':
         dispatch(sendQuestion());
+        break;
+
+      case 'profile':
+        dispatch(sendProfileChange());
         break;
 
       default:
