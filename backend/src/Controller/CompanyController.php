@@ -99,12 +99,18 @@ class CompanyController extends AbstractController
     public function new(Request $request, EntityManagerInterface $entityManager)
     {
         $company = new Company();
+        $companyAddress = new CompanyAddress();
+        $company->addCompanyAddress($companyAddress);
 
         $form = $this->createForm(CompanyFormType::class, $company);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->persist($company);
+            foreach($form->getData()->getCompanyAddresses() as $companyAddress) {
+                $companyAddress->setCompany($company);
+                $entityManager->persist($companyAddress);
+            }
             $entityManager->flush();
 
             $this->addFlash(
@@ -133,6 +139,10 @@ class CompanyController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            foreach($form->getData()->getCompanyAddresses() as $companyAddress) {
+                $companyAddress->setCompany($company);
+                $entityManager->persist($companyAddress);
+            }
             $entityManager->flush();
 
             $this->addFlash(
