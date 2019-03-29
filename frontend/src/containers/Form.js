@@ -35,9 +35,13 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
         dispatch(sendLoginRequest(loginDatas));
       }
         break;
-      case 'signup':
+      case 'signup': {
+        /* const companySiren = ownProps.tabl[0].value;
+        console.log(companySiren);
+        console.log('okay !'); */
         dispatch(sendRegisterRequest());
         break;
+      }
 
       case 'question':
         dispatch(sendQuestion());

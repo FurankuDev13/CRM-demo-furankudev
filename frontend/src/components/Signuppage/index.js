@@ -8,6 +8,7 @@ import PropTypes from 'prop-types';
  * local import
  */
 import Form from 'src/containers/Form';
+import { deleteNotification } from 'src/store/reducer';
 
 /**
  * Code
@@ -30,19 +31,19 @@ const Signup = ({ signupFields }) => {
 
   const tabl = [
     {
+      name: 'companySiren',
+      label: 'Siren de la companie',
+      type: 'number',
+      value: companySiren,
+      placeholder: 'Saisissez le SIREN de votre entreprise',
+    },
+    {
 
       name: 'companyName',
       label: 'Nom de l\'entreprise',
       type: 'text',
       value: companyName,
       placeholder: 'Saisissez le nom de votre entreprise',
-    },
-    {
-      name: 'companySiren',
-      label: 'Siren de la companie',
-      type: 'text',
-      value: companySiren,
-      placeholder: 'Saisissez le SIREN de votre entreprise',
     },
     {
       name: 'companyAddressField',
@@ -110,6 +111,14 @@ const Signup = ({ signupFields }) => {
   ];
   return (
     <div>
+      {/* <div id="notification" className="notification is-danger">
+        <button
+          type="button"
+          className="delete"
+          onClick={deleteNotification}
+        />
+        Les erreurs suivantes ont été relevées
+      </div> */}
       <Form
         tabl={tabl}
         formOrigin="signup"

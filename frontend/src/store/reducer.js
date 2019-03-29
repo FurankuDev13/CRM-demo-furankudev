@@ -304,6 +304,14 @@ export const updateProfile = data => ({
   type: UPDATE_PROFILE,
   data,
 });
+
+export const errorNotification = () => {
+  document.getElementById('notification').className = 'notification is-danger';
+};
+
+export const deleteNotification = () => {
+  document.getElementById('notification').className += ' is-hidden';
+};
 /**
  * Selectors
  */
