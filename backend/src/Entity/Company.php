@@ -70,7 +70,7 @@ class Company
     private $discount;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\CompanyAddress", mappedBy="company")
+     * @ORM\OneToMany(targetEntity="App\Entity\CompanyAddress", mappedBy="company", cascade={"persist"})
      */
     private $companyAddresses;
 

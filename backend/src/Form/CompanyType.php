@@ -2,21 +2,23 @@
 
 namespace App\Form;
 
-use App\Entity\Company;
 use App\Entity\User;
-use App\Repository\UserRepository;
+use App\Entity\Company;
 use App\Entity\Discount;
+use App\Form\CompanyAddressFormType;
+use App\Repository\UserRepository;
 use App\Repository\DiscountRepository;
-use Symfony\Component\Validator\Constraints\Length;
-use Symfony\Component\Validator\Constraints\NotBlank;
-use Symfony\Component\Form\Extension\Core\Type\UrlType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
-use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
-use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Symfony\Component\Validator\Constraints\Length;
+use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\UrlType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 
 class CompanyType extends AbstractType
 {
@@ -104,6 +106,12 @@ class CompanyType extends AbstractType
                     ->orderBy('p.lastname', 'ASC');
                 }
             ])
+            ->add('companyAddresses', CollectionType::class, [
+                'entry_type' => CompanyAddressFormType::class,
+                'entry_options' => ['label' => false],
+                'label'    => "Le(s) adresse(s): ",
+                'allow_add' => true,
+            ]);
         ;
     }
 
