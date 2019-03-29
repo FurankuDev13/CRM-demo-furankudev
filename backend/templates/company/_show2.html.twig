@@ -1,0 +1,46 @@
+<div class="level">
+    <div class="level-left">
+        <h2 class=" level-item title is-3">Commentaires</h2>
+    </div> 
+    <div class="level-right">
+        <a class="level-item" href="{{ path('company_comment_new', {'id' : company.id}) }}">
+            <button type="submit" class="level-item button is-success s-small is-size-4"><i class="fas fa-plus-circle"></i></button>
+        </a>
+    </div>
+</div>
+
+<table class="table is-fullwidth is-hoverable is-striped">
+    <thead>
+        <tr>
+            <th>De</th>
+            <th>Date</th>
+            <th>Commentaire</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for comment in comments %}
+            <tr>
+                <td>{{ app.user.person.firstname }} {{ app.user.person.lastname }}</td>
+                <td>{{comment.updatedAt|date('d-m-Y H:i')}}</td>
+                <td>
+                    <span class="has-text-weight-bold">{{comment.title}}</span> <br/>
+                    {{comment.body}}
+                </td>
+                <td>
+                    <div class="level-left">
+                        <a class="level-item" href="{{ path('company_comment_edit', {'id': company.id, 'comment_id': comment.id}) }}">
+                            <button type="submit" class="button is-info"><i class="fas fa-edit"></i></button>
+                        </a>
+                        <form class="level-item" action='{{ path('company_comment_archive', {'id': comment.id}) }}' method="POST">
+                            <input class="" type="hidden" name="_method" value="PATCH">
+                            {% include 'partial/_confirm_cancel_modal.html.twig' with {'message': 'Confirmation d\'Archivage'} %}
+                            <button class="button showModalConfirm is-warning"><i class="fas fa-archive"></i></button>
+                        </form>
+                    </div>
+                </td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
