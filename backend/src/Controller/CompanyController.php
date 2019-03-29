@@ -2,11 +2,14 @@
 
 namespace App\Controller;
 
+use App\Entity\Comment;
 use App\Entity\Company;
+use App\Form\CommentType;
 use App\Entity\CompanyAddress;
 use App\Repository\UserRepository;
 use App\Form\CompanyAddressFormType;
 use App\Repository\PersonRepository;
+use App\Repository\CommentRepository;
 use App\Repository\CompanyRepository;
 use App\Repository\ContactRepository;
 use App\Repository\RequestRepository;
@@ -71,18 +74,22 @@ class CompanyController extends AbstractController
     /**
      * @Route("/{id}/show", name="show", methods={"GET"}, requirements={"id"="\d+"})
      */
-    public function show(Company $company, CompanyRepository $companyRepo, CompanyAddressRepository $companyAddressRepo)
+    public function show(Company $company, Request $request, CompanyRepository $companyRepo, CompanyAddressRepository $companyAddressRepo, CommentRepository $commentRepo)
     {
         if (!$company) {
             throw $this->createNotFoundException("La société indiquée n'existe pas"); 
         }
+        $index = $request->query->get('index', 1);
 
         $companyAddresses = $companyAddressRepo->findAddressIsActiveByCompany($company);
+        $comments = $commentRepo->findCommentIsActiveByCompany($company);
 
         return $this->render('company/show.html.twig', [
             'page_title' => 'Société: ' . $company->getName(),
             'company' => $company,
             'companyAddresses' => $companyAddresses,
+            'comments' => $comments,
+            'index' => $index,
         ]);
     }
 
@@ -92,12 +99,18 @@ class CompanyController extends AbstractController
     public function new(Request $request, EntityManagerInterface $entityManager)
     {
         $company = new Company();
+        $companyAddress = new CompanyAddress();
+        $company->addCompanyAddress($companyAddress);
 
         $form = $this->createForm(CompanyFormType::class, $company);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->persist($company);
+            foreach($form->getData()->getCompanyAddresses() as $companyAddress) {
+                $companyAddress->setCompany($company);
+                $entityManager->persist($companyAddress);
+            }
             $entityManager->flush();
 
             $this->addFlash(
@@ -126,6 +139,10 @@ class CompanyController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            foreach($form->getData()->getCompanyAddresses() as $companyAddress) {
+                $companyAddress->setCompany($company);
+                $entityManager->persist($companyAddress);
+            }
             $entityManager->flush();
 
             $this->addFlash(
@@ -329,4 +346,91 @@ class CompanyController extends AbstractController
 
         return $this->redirect($referer);;
     }
+
+    /**
+     * @Route("/{id}/comment/new", name="comment_new", methods={"GET", "POST"})
+     */
+    public function newComment(Request $request, EntityManagerInterface $entityManager, Company $company)
+    {
+        $comment = new Comment();
+        $commentForm = $this->createForm(CommentType::class, $comment);
+        $commentForm->handleRequest($request);
+        $user = $this->getUser();
+
+        if ($commentForm->isSubmitted() && $commentForm->isValid()) {
+            $comment->setCompany($company);
+            $comment->setUser($user);
+            $entityManager->persist($comment);
+            $entityManager->flush();
+
+            $this->addFlash(
+                'success',
+                "Le nouveau commentaire a bien été ajoutée et associée à " . $company->getName()
+            );
+            return $this->redirectToRoute('company_show', ['id' => $company->getId(), 'index' => 2]);
+        }
+
+        return $this->render('company/new_comment.html.twig', [
+            'page_title' => 'Ajouter un nouveau commentaire',
+            'form' => $commentForm->createView(),
+            'company' => $company,
+        ]);
+    }
+
+    /**
+     * @Route("/{id}/comment/{comment_id}/edit", name="comment_edit", methods={"GET", "POST"}, requirements={"id"="\d+", "id"="\d+"})
+     * @ParamConverter("comment", options={"id" = "comment_id"})
+     */
+    public function editComment(Request $request, EntityManagerInterface $entityManager, Company $company, Comment $comment)
+    {
+        if (!$company) {
+            throw $this->createNotFoundException("La société indiquée n'existe pas"); 
+        }
+
+        $commentForm = $this->createForm(CommentType::class, $comment);
+        $commentForm->handleRequest($request);
+        $user = $this->getUser();
+
+        if ($commentForm->isSubmitted() && $commentForm->isValid()) {
+            $comment->setCompany($company);
+            $comment->setUser($user);
+            $entityManager->flush();
+
+            $this->addFlash(
+                'success',
+                "Le commentaire a bien été mise à jour pour la société " . $company->getName()
+            );
+            return $this->redirectToRoute('company_show', ['id' => $company->getId(), 'index' => 2]);
+        }
+
+        return $this->render('company/edit_address.html.twig', [
+            'page_title' => "Mettre à jour le commentaire",
+            'form' => $commentForm->createView(),
+            'company' => $company
+        ]);
+    }
+
+    /**
+     * @Route("/comment/{id}/archive", name="comment_archive", methods={"PATCH"}, requirements={"id"="\d+", "id"="\d+"})
+     */
+    public function archiveComment(Request $request, EntityManagerInterface $entityManager, Comment $comment)
+    {
+        if (!$comment) {
+            throw $this->createNotFoundException("Le commentaire indiqué n'existe pas"); 
+        }
+
+        $comment->setIsActive(!$comment->getIsActive());
+        $this->addFlash(
+            'success',
+            'Le commentaire ' . $comment->getTitle() . ' a été archivé !'
+        );
+        $entityManager->flush();
+
+        $referer = $request->headers->get('referer');
+
+        return $this->redirect($referer);;
+    }
+
+
+
 }

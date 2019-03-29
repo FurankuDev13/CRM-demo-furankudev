@@ -12,7 +12,13 @@
         </div>
         {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
         {{ form_widget(form) }}
+        <ul class="companyAddresses" data-prototype="{{ form_widget(form.companyAddresses.vars.prototype)|e('html_attr') }}">
+
+        </ul>
+            <br>
             <button type="submit" class="button is-info">Mettre à jour</button>
         {{ form_end(form) }}
     </div>
 {% endblock %}
+
+{% block javascripts %}<script src="{{ asset('js/app_form.js') }}"></script>{% endblock %}

@@ -4,6 +4,7 @@ namespace App\EventListener;
 
 use DateTime;
 use App\Entity\Person;
+use App\Entity\Comment;
 use App\Entity\Company;
 use App\Entity\Product;
 use App\Entity\Request;
@@ -61,10 +62,12 @@ class DoctrineEvent implements EventSubscriber
             || $entity instanceof Request
             || $entity instanceof RequestType
             || $entity instanceof UserRole
+            || $entity instanceof Comment
             ) {
 
             if (!$entity->getCreatedAt()) {
                 $entity->setCreatedAt(new DateTime);
+                $entity->setUpdatedAt(new DateTime);
             }
         } 
     }
@@ -87,6 +90,7 @@ class DoctrineEvent implements EventSubscriber
             || $entity instanceof Request
             || $entity instanceof RequestType
             || $entity instanceof UserRole
+            || $entity instanceof Comment
             ) {
 
             $entity->setIsActive(true);
@@ -111,6 +115,7 @@ class DoctrineEvent implements EventSubscriber
             || $entity instanceof Request
             || $entity instanceof RequestType
             || $entity instanceof UserRole
+            || $entity instanceof Comment
             ) {
             $entity->setUpdatedAt(new DateTime);
         } 
