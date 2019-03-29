@@ -32,6 +32,7 @@ const initialState = {
   categoryList: [],
   catalogList: [],
   articlesOnHomePage: [],
+  formErrors: [],
   fields: {
     login: {
       email: '',
@@ -85,6 +86,8 @@ const TOGGLE_NAV_BAR = 'TOGGLE_NAV_BAR';
 const TOGGLE_QUESTION_MODAL = 'TOGGLE_QUESTION_MODAL';
 const TOGGLE_PROFILE_MODAL = 'TOGGLE_PROFILE_MODAL';
 const UPDATE_PROFILE = 'UPDATE_PROFILE';
+const DISPLAY_ERRORS = 'DISPLAY_ERRORS';
+const DELETE_ERRORS = 'DELETE_ERRORS';
 
 /**
  * Reducer
@@ -222,6 +225,20 @@ const reducer = (state = initialState, action = {}) => {
         },
       };
 
+    case DISPLAY_ERRORS:
+      return {
+        ...state,
+        formErrors: [
+          ...action.errorArray,
+        ],
+      };
+
+    case DELETE_ERRORS:
+      return {
+        ...state,
+        formErrors: [],
+      };
+
     default:
       return state;
   }
@@ -305,6 +322,11 @@ export const updateProfile = data => ({
   data,
 });
 
+export const displayErrors = errorArray => ({
+  type: DISPLAY_ERRORS,
+  errorArray,
+});
+
 export const errorNotification = () => {
   document.getElementById('notification').className = 'notification is-danger';
 };
@@ -312,6 +334,10 @@ export const errorNotification = () => {
 export const deleteNotification = () => {
   document.getElementById('notification').className += ' is-hidden';
 };
+
+export const deleteErrors = () => ({
+  type: DELETE_ERRORS,
+});
 /**
  * Selectors
  */
