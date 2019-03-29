@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Entity\Company;
 use App\Entity\Request;
 use App\Entity\RequestType;
 use App\Entity\HandlingStatus;
@@ -71,6 +72,23 @@ class RequestRepository extends ServiceEntityRepository
             ->andWhere('r.isActive = :isActive')
             ->setParameter('isActive', true)
             ->orderBy($table . '.' . $field, $order)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
+    //collection des demandes des contacts d'une société
+    public function findAllByOneCompany(Company $company)
+    {
+        return $this->createQueryBuilder('r')
+            ->join('r.contact', 'co')
+            ->addSelect('co')
+            ->join('co.company', 'c')
+            ->addSelect('c')
+            ->join('r.handlingStatus', 's')
+            ->addSelect('s')
+            ->where('c = :company')
+            ->setParameter('company', $company)
             ->getQuery()
             ->getResult()
         ;

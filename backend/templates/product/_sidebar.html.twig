@@ -20,7 +20,9 @@
                     </a>
                 </td>
                 <td>
-                    <button class="has-text-left button is-primary is-small is-outlined is-size-6">{{ category.products|length }}</button>
+                    <a href="{{ path('product_index', {'category': category.name}) }}">
+                        <button class="has-text-left button is-primary is-small is-outlined is-size-6">{{ category.products|length }}</button>
+                    </a>
                 </td>
             </tr>
         {% endfor %}

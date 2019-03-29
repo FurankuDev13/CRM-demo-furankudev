@@ -23,7 +23,9 @@
                                 </a>
                             </td>
                             <td>
-                                <button class="has-text-left button is-primary is-small is-outlined is-size-6">{{ requestType.requests|length }}</button>
+                                <a href="{{ path('request_index', {'filter': 'requestType', 'filterId': requestType.title }) }}">
+                                    <button class="has-text-left button is-primary is-small is-outlined is-size-6">{{ requestType.requests|length }}</button>
+                                </a>
                             </td>
                         </tr>
                     {% endfor %}
@@ -57,7 +59,9 @@
                                 </a>
                             </td>
                             <td>
-                                <button class="has-text-left button is-primary is-small is-outlined is-size-6">{{ handlingStatus.requests|length }}</button>
+                                <a href="{{ path('request_index', {'filter': 'handlingStatus', 'filterId': handlingStatus.title}) }}">
+                                    <button class="has-text-left button is-primary is-small is-outlined is-size-6">{{ handlingStatus.requests|length }}</button>
+                                </a>
                             </td>
                         </tr>
                     {% endfor %}
