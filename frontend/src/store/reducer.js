@@ -9,7 +9,7 @@ import { getSlug } from 'src/utils/url';
 const initialState = {
   view: 'login',
   profile: {
-    contactId: '',
+    id: '',
     email: '',
     company: {
       name: '',
@@ -76,6 +76,7 @@ export const FETCH_HOME_PAGE = 'FETCH_HOME_PAGE';
 export const SEND_LOGIN_REQUEST = 'SEND_LOGIN_REQUEST';
 export const SEND_REGISTER_REQUEST = 'SEND_REGISTER_REQUEST';
 export const SEND_QUESTION = 'SEND_QUESTION';
+export const SEND_PROFILE_CHANGE = 'SEND_PROFILE_CHANGE';
 export const SET_PROFILE = 'SET_PROFILE';
 const FETCH_SUCCESS = 'FETCH_SUCCESS';
 const INPUT_CHANGE = 'INPUT_CHANGE';
@@ -248,6 +249,10 @@ export const sendRegisterRequest = () => ({
 
 export const sendQuestion = () => ({
   type: SEND_QUESTION,
+});
+
+export const sendProfileChange = () => ({
+  type: SEND_PROFILE_CHANGE,
 });
 
 export const setProfile = data => ({
