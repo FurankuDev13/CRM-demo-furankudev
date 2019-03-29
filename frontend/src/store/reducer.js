@@ -84,6 +84,7 @@ const LOGOUT = 'LOGOUT';
 const TOGGLE_NAV_BAR = 'TOGGLE_NAV_BAR';
 const TOGGLE_QUESTION_MODAL = 'TOGGLE_QUESTION_MODAL';
 const TOGGLE_PROFILE_MODAL = 'TOGGLE_PROFILE_MODAL';
+const UPDATE_PROFILE = 'UPDATE_PROFILE';
 
 /**
  * Reducer
@@ -146,11 +147,35 @@ const reducer = (state = initialState, action = {}) => {
       };
     }
 
+    case UPDATE_PROFILE: {
+      const { data } = action;
+      const {
+        firstname,
+        lastname,
+        cellPhone,
+        businessPhone,
+      } = data.person;
+      return {
+        ...state,
+        profileModalIsActive: false,
+        profile: {
+          ...state.profile,
+          email: data.email,
+          person: {
+            ...state.profile.person,
+            firstname,
+            lastname,
+            businessPhone,
+            cellPhone,
+          },
+        },
+      };
+    }
+
     case LOGOUT:
       return {
         ...state,
         logEmail: '',
-        askQuestionElementIsActive: false,
         isLogged: false,
       };
 
@@ -274,6 +299,10 @@ export const toggleQuestionModal = () => ({
 
 export const toggleProfileModal = () => ({
   type: TOGGLE_PROFILE_MODAL,
+});
+export const updateProfile = data => ({
+  type: UPDATE_PROFILE,
+  data,
 });
 /**
  * Selectors

@@ -11,6 +11,7 @@ import {
   SEND_REGISTER_REQUEST,
   SEND_QUESTION,
   SEND_PROFILE_CHANGE,
+  updateProfile,
   sendLoginRequest,
   setProfile,
 } from 'src/store/reducer';
@@ -142,7 +143,8 @@ const ajaxAdmin = store => next => (action) => {
       const stringifiedProfileDatas = JSON.stringify(profileDatas);
       axiosUp.patch(`api/contact/${id}`, stringifiedProfileDatas)
         .then((response) => {
-          console.log(response);
+          const { data } = response;
+          dispatch(updateProfile(data));
         })
         .catch((error) => {
           console.log(error);
