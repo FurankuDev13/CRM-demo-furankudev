@@ -52,17 +52,18 @@ class Product
 
     /**
      * @ORM\Column(type="integer", nullable=true)
+     * @Groups({"product_group"})
      */
     private $maxDiscountRate;
 
     /**
      * @ORM\Column(type="boolean")
-     * @Groups({"product_group"})
      */
     private $isOnHomePage;
 
     /**
      * @ORM\Column(type="integer")
+     * @Groups({"product_group"})
      */
     private $rank;
 

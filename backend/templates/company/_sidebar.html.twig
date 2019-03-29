@@ -22,7 +22,9 @@
                                 </a>
                             </td>
                             <td>
-                                <button class="has-text-left button is-primary is-small is-outlined is-size-6">{{ prospects|length }}</button>
+                                <a href="{{ path('company_index', {'filter': 'Prospects'}) }}">
+                                    <button class="has-text-left button is-primary is-small is-outlined is-size-6">{{ prospects|length }}</button>
+                                </a>
                             </td>
                         </tr>
                         <tr>
@@ -32,7 +34,9 @@
                                 </a>
                             </td>
                             <td>
-                                <button class="has-text-left button is-primary is-small is-outlined is-size-6">{{ customers|length }}</button>
+                                <a href="{{ path('company_index', {'filter': 'Clients'}) }}">
+                                    <button class="has-text-left button is-primary is-small is-outlined is-size-6">{{ customers|length }}</button>
+                                </a>
                             </td>
                         </tr>
                 </tbody>
@@ -65,7 +69,9 @@
                                 </a>
                             </td>
                             <td>
-                                <button class="has-text-left button is-primary is-small is-outlined is-size-6">{{ salesUser.companies|length }}</button>
+                                <a href="{{ path('company_index', {'filter': 'Commercial', 'salesUser': salesUser.id}) }}">
+                                    <button class="has-text-left button is-primary is-small is-outlined is-size-6">{{ salesUser.companies|length }}</button>
+                                </a>
                             </td>
                         </tr>
                     {% endfor %}

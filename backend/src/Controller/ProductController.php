@@ -146,7 +146,14 @@ class ProductController extends AbstractController
             throw $this->createNotFoundException("Le produit indiqué n'existe pas"); 
         }
 
-        $product->setIsOnHomePage(!$product->getIsOnHomePage());
+        //si le produit n'est pas dispo à la vente, on ne l'affiche pas en home page front
+        if (!$product->getIsOnHomePage()) {
+            if($product->getIsAvailable()) {
+                $product->setIsOnHomePage(true);
+            }
+        } else {
+            $product->setIsOnHomePage(!$product->getIsOnHomePage());
+        }
 
         $entityManager->flush();
 
