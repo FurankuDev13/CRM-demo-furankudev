@@ -27,7 +27,7 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 class ContactController extends AbstractController
 {
     /**
-     * @Route("/login", name="login", methods={"POST", "OPTIONS"})
+     * @Route("/contact/login", name="login", methods={"POST", "OPTIONS"})
      */
     public function login(Request $request, ContactRepository $contactRepo, SerializerInterface $serializer, UserPasswordEncoderInterface $passwordEncoder)
     {

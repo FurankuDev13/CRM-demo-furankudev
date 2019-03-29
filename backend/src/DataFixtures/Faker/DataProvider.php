@@ -3,6 +3,13 @@ namespace App\DataFixtures\Faker;
 
 class DataProvider extends \Faker\Provider\Base
 {
+    protected static $categories = [
+        'Domestic Specialty' => [
+            'description' => '',
+            'picture' => ''
+        ]
+    ];
+
     protected static $addressTypeList = [
         'Siège',
         'Contact',
