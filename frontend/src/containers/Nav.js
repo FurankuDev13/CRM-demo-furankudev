@@ -31,7 +31,7 @@ const mapDispatchToProps = dispatch => ({
   },
 });
 
-const CatalogContainer = connect(
+const NavContainer = connect(
   mapStateToProps,
   mapDispatchToProps,
 )(Nav);
@@ -39,4 +39,4 @@ const CatalogContainer = connect(
 /**
  * Export
  */
-export default CatalogContainer;
+export default NavContainer;

@@ -4,7 +4,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { Route } from 'react-router-dom';
+import { Route, Switch } from 'react-router-dom';
 
 /**
  * Local import
@@ -24,18 +24,20 @@ class CustomerPage extends React.Component {
     return (
       <main className="columns is-gapless is-spaced">
         <Sidebar />
-        <Route
-          path="/catalog"
-          component={Catalog}
-        />
-        <Route
-          path="/category/:slug"
-          component={Catalog}
-        />
-        <Route
-          path="/categories"
-          component={Categories}
-        />
+        <Switch>
+          <Route
+            path="/catalog"
+            component={Catalog}
+          />
+          <Route
+            path="/category/:slug"
+            component={Catalog}
+          />
+          <Route
+            path="/categories"
+            component={Categories}
+          />
+        </Switch>
       </main>
     );
   }

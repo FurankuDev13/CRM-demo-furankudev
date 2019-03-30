@@ -8,12 +8,30 @@ import { getSlug } from 'src/utils/url';
  */
 const initialState = {
   view: 'login',
-  logId: '',
+  profile: {
+    id: '',
+    email: '',
+    company: {
+      name: '',
+      description: '',
+      picture: 'https://picsum.photos/200',
+      sirenNumber: '',
+    },
+    person: {
+      firstname: '',
+      lastname: '',
+      id: '',
+      businessPhone: '',
+      cellPhone: '',
+    },
+  },
   isLogged: false,
   navbarIsActive: false,
-  askQuestionElementIsActive: false,
+  questionModalIsActive: false,
+  profileModalIsActive: false,
   categoryList: [],
   catalogList: [],
+  articlesOnHomePage: [],
   fields: {
     login: {
       email: '',
@@ -37,6 +55,15 @@ const initialState = {
       title: '',
       content: '',
     },
+    profile: {
+      firstname: '',
+      lastname: '',
+      businessPhone: '',
+      cellPhone: '',
+      password: '',
+      passwordRepeat: '',
+      email: '',
+    },
   },
 };
 
@@ -45,15 +72,19 @@ const initialState = {
  */
 export const FETCH_CATALOG = 'FETCH_CATALOG';
 export const FETCH_CATEGORIES = 'FETCH_CATEGORIES';
+export const FETCH_HOME_PAGE = 'FETCH_HOME_PAGE';
 export const SEND_LOGIN_REQUEST = 'SEND_LOGIN_REQUEST';
 export const SEND_REGISTER_REQUEST = 'SEND_REGISTER_REQUEST';
 export const SEND_QUESTION = 'SEND_QUESTION';
+export const SEND_PROFILE_CHANGE = 'SEND_PROFILE_CHANGE';
 export const SET_PROFILE = 'SET_PROFILE';
 const FETCH_SUCCESS = 'FETCH_SUCCESS';
 const INPUT_CHANGE = 'INPUT_CHANGE';
 const LOGOUT = 'LOGOUT';
 const TOGGLE_NAV_BAR = 'TOGGLE_NAV_BAR';
-const TOGGLE_QUESTION_FORM = 'TOGGLE_QUESTION_FORM';
+const TOGGLE_QUESTION_MODAL = 'TOGGLE_QUESTION_MODAL';
+const TOGGLE_PROFILE_MODAL = 'TOGGLE_PROFILE_MODAL';
+const UPDATE_PROFILE = 'UPDATE_PROFILE';
 
 /**
  * Reducer
@@ -72,6 +103,11 @@ const reducer = (state = initialState, action = {}) => {
             ...state,
             categoryList: [...action.data],
           };
+        case 'articlesOnHomePage':
+          return {
+            ...state,
+            articlesOnHomePage: [...action.data],
+          };
         default: return state;
       }
     case INPUT_CHANGE:
@@ -86,23 +122,60 @@ const reducer = (state = initialState, action = {}) => {
         },
       };
 
-    case SET_PROFILE:
-      if ((localStorage.getItem('id') !== null)) {
-        return {
-          ...state,
-          logId: localStorage.getItem('id'),
-          isLogged: true,
-        };
-      }
+    case SET_PROFILE: {
+      const { data } = action;
       return {
         ...state,
+        profile: {
+          id: data.id,
+          email: data.email,
+          company: {
+            name: data.company.name,
+            description: data.company.description,
+            picture: data.company.picture,
+            sirenNumber: data.company.sirenNumber,
+          },
+          person: {
+            id: data.person.id,
+            firstname: data.person.firstname,
+            lastname: data.person.lastname,
+            businessPhone: data.person.businessPhone,
+            cellPhone: data.person.cellPhone,
+          },
+        },
+        isLogged: true,
       };
+    }
+
+    case UPDATE_PROFILE: {
+      const { data } = action;
+      const {
+        firstname,
+        lastname,
+        cellPhone,
+        businessPhone,
+      } = data.person;
+      return {
+        ...state,
+        profileModalIsActive: false,
+        profile: {
+          ...state.profile,
+          email: data.email,
+          person: {
+            ...state.profile.person,
+            firstname,
+            lastname,
+            businessPhone,
+            cellPhone,
+          },
+        },
+      };
+    }
 
     case LOGOUT:
       return {
         ...state,
         logEmail: '',
-        askQuestionElementIsActive: false,
         isLogged: false,
       };
 
@@ -112,16 +185,34 @@ const reducer = (state = initialState, action = {}) => {
         navbarIsActive: !state.navbarIsActive,
       };
 
-    case TOGGLE_QUESTION_FORM:
+    case TOGGLE_QUESTION_MODAL:
       return {
         ...state,
-        askQuestionElementIsActive: !state.askQuestionElementIsActive,
+        questionModalIsActive: !state.questionModalIsActive,
+      };
+
+    case TOGGLE_PROFILE_MODAL:
+      return {
+        ...state,
+        profileModalIsActive: !state.profileModalIsActive,
+        fields: {
+          ...state.fields,
+          profile: {
+            firstname: state.profile.person.firstname,
+            lastname: state.profile.person.lastname,
+            businessPhone: state.profile.person.businessPhone,
+            cellPhone: (state.profile.person.cellPhone ? state.profile.person.cellPhone : ''),
+            password: '',
+            passwordRepeat: '',
+            email: state.profile.email,
+          },
+        },
       };
 
     case SEND_QUESTION:
       return {
         ...state,
-        askQuestionElementIsActive: false,
+        questionModalIsActive: false,
         fields: {
           ...state.fields,
           question: {
@@ -139,6 +230,10 @@ const reducer = (state = initialState, action = {}) => {
 /**
  * Action Creators
  */
+export const fetchHomePageArticles = () => ({
+  type: FETCH_HOME_PAGE,
+});
+
 export const fetchCatalog = () => ({
   type: FETCH_CATALOG,
 });
@@ -181,9 +276,13 @@ export const sendQuestion = () => ({
   type: SEND_QUESTION,
 });
 
-export const setProfile = profileData => ({
+export const sendProfileChange = () => ({
+  type: SEND_PROFILE_CHANGE,
+});
+
+export const setProfile = data => ({
   type: SET_PROFILE,
-  profileData,
+  data,
 });
 
 export const logOut = () => ({
@@ -194,9 +293,25 @@ export const toggleNavBar = () => ({
   type: TOGGLE_NAV_BAR,
 });
 
-export const toggleQuestionForm = () => ({
-  type: TOGGLE_QUESTION_FORM,
+export const toggleQuestionModal = () => ({
+  type: TOGGLE_QUESTION_MODAL,
 });
+
+export const toggleProfileModal = () => ({
+  type: TOGGLE_PROFILE_MODAL,
+});
+export const updateProfile = data => ({
+  type: UPDATE_PROFILE,
+  data,
+});
+
+export const errorNotification = () => {
+  document.getElementById('notification').className = 'notification is-danger';
+};
+
+export const deleteNotification = () => {
+  document.getElementById('notification').className += ' is-hidden';
+};
 /**
  * Selectors
  */

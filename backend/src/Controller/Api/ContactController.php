@@ -231,7 +231,7 @@ class ContactController extends AbstractController
     }
 
     /**
-     * @Route("/contact/{id}", name="edit", methods={"PATCH"})
+     * @Route("/contact/{id}", name="edit", methods={"PATCH", "OPTIONS"})
      */
     public function edit(Contact $contact = null, Request $request, SerializerInterface $serializer, EntityManagerInterface $entityManager, UserPasswordEncoderInterface $passwordEncoder, ContactRepository $contactRepo)
     {

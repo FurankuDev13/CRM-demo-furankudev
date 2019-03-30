@@ -18,6 +18,7 @@ use App\Entity\CompanyAddress;
 use App\Entity\HandlingStatus;
 use Faker\ORM\Doctrine\Populator;
 use App\Entity\CompanyAddressType;
+use App\DataFixtures\Faker\CategoryData;
 use App\DataFixtures\Faker\DataProvider;
 use App\Entity\Request as ClientRequest;
 use Doctrine\Bundle\FixturesBundle\Fixture;
@@ -28,6 +29,8 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 class AppFixtures extends Fixture
 {
+    use CategoryData;
+
     private $passwordEncoder;
     private $manager;
     private $categories;
@@ -94,8 +97,10 @@ class AppFixtures extends Fixture
         }
 
         foreach ($this->categories as $category) {
-            $category->setDescription('Lorem ipsum dolor sit amet consectetur adipisicing elit.'); 
-            $category->setPicture('https://picsum.photos/200/300/?random');
+            $data = $this->categoryList[$category->getName()];
+            $category->setName($data['name']);
+            $category->setDescription($data['description']); 
+            $category->setPicture($data['picture']);
             $this->manager->persist($category);
         }
         $this->manager->flush();
@@ -120,6 +125,7 @@ class AppFixtures extends Fixture
         $company->setName('Tartenpion SAS');
         $company->setDescription('La force est en toi');
         $company->setPicture('https://static.thespicehouse.com/images/file/1454/large_square_Hungarian_Half-Sharp_Paprika__close.jpg');
+        $company->setSirenNumber('527726046');
         $this->manager->persist($company);
 
         $contactType = new ContactType();
