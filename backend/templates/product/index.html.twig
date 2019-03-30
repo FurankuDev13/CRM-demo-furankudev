@@ -24,6 +24,7 @@
                 </div>  
             </div> 
             <div class="level-right">
+                <input class="button level-item is-medium" type="text" id="productSearch" onkeyup="app.search('productSearch','productTable', 1)" placeholder= "&#128270; produit ..." title="">
                 <a class="level-item" href="{{ path('product_index')}}">
                     <button class="level-item button is-primary s-small is-size-3"><i class="fas fa-sort-alpha-down"></i></button>
                 </a>
@@ -34,7 +35,7 @@
                 {% endif %}
             </div>
         </div>
-        <table class="table is-fullwidth is-hoverable is-striped">
+        <table class="table is-fullwidth is-hoverable is-striped" id="productTable">
             <thead>
                 <tr>
                     <th>Référence&nbsp;
@@ -86,4 +87,5 @@
                 {% endfor %}
             </tbody>
         </table>
+
 {% endblock %}
