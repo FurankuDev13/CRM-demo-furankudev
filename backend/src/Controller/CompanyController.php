@@ -17,6 +17,7 @@ use App\Entity\Request as DemandRequest;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Form\CompanyType as CompanyFormType;
 use App\Repository\CompanyAddressRepository;
+use App\Repository\HandlingStatusRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -74,7 +75,7 @@ class CompanyController extends AbstractController
     /**
      * @Route("/{id}/show", name="show", methods={"GET"}, requirements={"id"="\d+"})
      */
-    public function show(Company $company, Request $request, CompanyRepository $companyRepo, CompanyAddressRepository $companyAddressRepo, CommentRepository $commentRepo)
+    public function show(Company $company, Request $request, CompanyRepository $companyRepo, CompanyAddressRepository $companyAddressRepo, CommentRepository $commentRepo, RequestRepository $requestRepo, HandlingStatusRepository $handlingStatusRepo)
     {
         if (!$company) {
             throw $this->createNotFoundException("La société indiquée n'existe pas"); 
@@ -83,12 +84,16 @@ class CompanyController extends AbstractController
 
         $companyAddresses = $companyAddressRepo->findAddressIsActiveByCompany($company);
         $comments = $commentRepo->findCommentIsActiveByCompany($company);
+        $demands = $requestRepo->findIsActiveByCompany($company);
+        $handlingStatuses = $handlingStatusRepo->findByIsActive(true);
 
         return $this->render('company/show.html.twig', [
             'page_title' => 'Société: ' . $company->getName(),
             'company' => $company,
             'companyAddresses' => $companyAddresses,
             'comments' => $comments,
+            'demands' => $demands,
+            'handlingStatuses' => $handlingStatuses,
             'index' => $index,
         ]);
     }
