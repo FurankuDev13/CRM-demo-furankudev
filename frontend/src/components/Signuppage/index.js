@@ -14,7 +14,7 @@ import { deleteNotification } from 'src/store/reducer';
  * Code
  */
 
-const Signup = ({ signupFields }) => {
+const Signup = ({ signupFields, formErrors }) => {
   const {
     companyName,
     companySiren,
@@ -95,15 +95,15 @@ const Signup = ({ signupFields }) => {
       placeholder: 'Saisissez votre mot de passe',
     },
     {
-      name: 'mot de passe',
-      label: 'password',
+      name: 'contactPassword',
+      label: 'mot de passe',
       type: 'password',
       value: contactPassword,
       placeholder: 'Saisissez votre mot de passe',
     },
     {
-      name: 'confirmation mot de passe',
-      label: 'passwordRepeat',
+      name: 'contactPasswordRepeat',
+      label: 'confirmation mot de passe',
       type: 'password',
       value: contactPasswordRepeat,
       placeholder: 'Confirmez votre mot de passe',
@@ -111,14 +111,23 @@ const Signup = ({ signupFields }) => {
   ];
   return (
     <div>
-      {/* <div id="notification" className="notification is-danger">
+      <div id="notification" className="notification is-danger is-hidden">
         <button
           type="button"
           className="delete"
           onClick={deleteNotification}
         />
-        Les erreurs suivantes ont été relevées
-      </div> */}
+        Les erreurs suivantes ont été relevées :
+        <ul>
+          {formErrors.map(error => (
+            <li>
+              <p>
+                {error}
+              </p>
+            </li>
+          ))}
+        </ul>
+      </div>
       <Form
         tabl={tabl}
         formOrigin="signup"
@@ -142,6 +151,9 @@ Signup.propTypes = {
     contactPasswordRepeat: PropTypes.string.isRequired,
     contactRequest: PropTypes.string.isRequired,
   }).isRequired,
+  formErrors: PropTypes.arrayOf(
+    PropTypes.string.isRequired,
+  ).isRequired,
 };
 
 

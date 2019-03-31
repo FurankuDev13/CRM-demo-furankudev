@@ -13,6 +13,7 @@ import Signuppage from 'src/components/Signuppage';
  */
 const mapStateToProps = state => ({
   signupFields: state.fields.signup,
+  formErrors: state.formErrors,
 });
 
 const mapDispatchToProps = () => ({});
