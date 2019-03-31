@@ -70,9 +70,15 @@ class Request
      */
     private $comments;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\RequestDetail", mappedBy="request")
+     */
+    private $requestDetails;
+
     public function __construct()
     {
         $this->comments = new ArrayCollection();
+        $this->requestDetails = new ArrayCollection();
     }
 
     public function __toString()
@@ -206,6 +212,37 @@ class Request
             // set the owning side to null (unless already changed)
             if ($comment->getRequest() === $this) {
                 $comment->setRequest(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|RequestDetail[]
+     */
+    public function getRequestDetails(): Collection
+    {
+        return $this->requestDetails;
+    }
+
+    public function addRequestDetail(RequestDetail $requestDetail): self
+    {
+        if (!$this->requestDetails->contains($requestDetail)) {
+            $this->requestDetails[] = $requestDetail;
+            $requestDetail->setRequest($this);
+        }
+
+        return $this;
+    }
+
+    public function removeRequestDetail(RequestDetail $requestDetail): self
+    {
+        if ($this->requestDetails->contains($requestDetail)) {
+            $this->requestDetails->removeElement($requestDetail);
+            // set the owning side to null (unless already changed)
+            if ($requestDetail->getRequest() === $this) {
+                $requestDetail->setRequest(null);
             }
         }
 
