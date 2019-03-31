@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -57,9 +59,15 @@ class Comment
     private $request;
 
     /**
-     * @ORM\OneToOne(targetEntity="App\Entity\Attachment", cascade={"persist", "remove"})
+     * @ORM\OneToMany(targetEntity="App\Entity\Attachment", mappedBy="comment")
      */
-    private $attachment;
+    private $attachments;
+
+    public function __construct()
+    {
+        $this->attachments = new ArrayCollection();
+    }
+
 
     public function getId(): ?int
     {
@@ -162,14 +170,33 @@ class Comment
         return $this;
     }
 
-    public function getAttachment(): ?Attachment
+    /**
+     * @return Collection|Attachment[]
+     */
+    public function getAttachments(): Collection
     {
-        return $this->attachment;
+        return $this->attachments;
     }
 
-    public function setAttachment(?Attachment $attachment): self
+    public function addAttachment(Attachment $attachment): self
     {
-        $this->attachment = $attachment;
+        if (!$this->attachments->contains($attachment)) {
+            $this->attachments[] = $attachment;
+            $attachment->setComment($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAttachment(Attachment $attachment): self
+    {
+        if ($this->attachments->contains($attachment)) {
+            $this->attachments->removeElement($attachment);
+            // set the owning side to null (unless already changed)
+            if ($attachment->getComment() === $this) {
+                $attachment->setComment(null);
+            }
+        }
 
         return $this;
     }

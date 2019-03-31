@@ -5,6 +5,9 @@ namespace App\Controller;
 use App\Entity\Comment;
 use App\Entity\Company;
 use App\Form\CommentType;
+use App\Entity\Attachment;
+use App\Form\AttachmentType;
+use App\Service\FileUploader;
 use App\Entity\CompanyAddress;
 use App\Repository\UserRepository;
 use App\Form\CompanyAddressFormType;
@@ -22,6 +25,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
 
 /** 
  *  @Route("/company", name="company_") 
@@ -355,14 +359,25 @@ class CompanyController extends AbstractController
     /**
      * @Route("/{id}/comment/new", name="comment_new", methods={"GET", "POST"})
      */
-    public function newComment(Request $request, EntityManagerInterface $entityManager, Company $company)
+    public function newComment(Request $request, EntityManagerInterface $entityManager, Company $company, FileUploader $fileUploader)
     {
         $comment = new Comment();
+     
         $commentForm = $this->createForm(CommentType::class, $comment);
         $commentForm->handleRequest($request);
         $user = $this->getUser();
 
         if ($commentForm->isSubmitted() && $commentForm->isValid()) {
+            /* $attachments = $comment->getAttachments();
+            foreach($attachments as $attachment) {
+                $file = $attachment->getPath();
+
+                if(!is_null($file)){
+                    $fileName = $fileUploader->upload($file);
+                    $comment->addAttachment($fileName);
+                }
+            } */
+
             $comment->setCompany($company);
             $comment->setUser($user);
             $entityManager->persist($comment);
@@ -377,7 +392,7 @@ class CompanyController extends AbstractController
 
         return $this->render('company/new_comment.html.twig', [
             'page_title' => 'Ajouter un nouveau commentaire',
-            'form' => $commentForm->createView(),
+            'commentForm' => $commentForm->createView(),
             'company' => $company,
         ]);
     }
@@ -386,7 +401,7 @@ class CompanyController extends AbstractController
      * @Route("/{id}/comment/{comment_id}/edit", name="comment_edit", methods={"GET", "POST"}, requirements={"id"="\d+", "id"="\d+"})
      * @ParamConverter("comment", options={"id" = "comment_id"})
      */
-    public function editComment(Request $request, EntityManagerInterface $entityManager, Company $company, Comment $comment)
+    public function editComment(Request $request, EntityManagerInterface $entityManager, Company $company, Comment $comment, FileUploader $fileUploader)
     {
         if (!$company) {
             throw $this->createNotFoundException("La société indiquée n'existe pas"); 
@@ -408,9 +423,9 @@ class CompanyController extends AbstractController
             return $this->redirectToRoute('company_show', ['id' => $company->getId(), 'index' => 2]);
         }
 
-        return $this->render('company/edit_address.html.twig', [
+        return $this->render('company/edit_comment.html.twig', [
             'page_title' => "Mettre à jour le commentaire",
-            'form' => $commentForm->createView(),
+            'commentForm' => $commentForm->createView(),
             'company' => $company
         ]);
     }

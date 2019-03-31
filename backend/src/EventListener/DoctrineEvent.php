@@ -63,6 +63,7 @@ class DoctrineEvent implements EventSubscriber
             || $entity instanceof RequestType
             || $entity instanceof UserRole
             || $entity instanceof Comment
+            || $entity instanceof Attachment
             ) {
 
             if (!$entity->getCreatedAt()) {
@@ -91,6 +92,7 @@ class DoctrineEvent implements EventSubscriber
             || $entity instanceof RequestType
             || $entity instanceof UserRole
             || $entity instanceof Comment
+            || $entity instanceof Attachment
             ) {
 
             $entity->setIsActive(true);
@@ -116,6 +118,7 @@ class DoctrineEvent implements EventSubscriber
             || $entity instanceof RequestType
             || $entity instanceof UserRole
             || $entity instanceof Comment
+            || $entity instanceof Attachment
             ) {
             $entity->setUpdatedAt(new DateTime);
         } 

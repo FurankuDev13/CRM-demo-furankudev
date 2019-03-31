@@ -2,6 +2,9 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
+use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -23,6 +26,12 @@ class Attachment
 
     /**
      * @ORM\Column(type="string", length=255)
+     * 
+     * @Assert\File(
+     * maxSize = "4096k", 
+     * mimeTypes = {"application/pdf", "application/x-pdf"},
+     * mimeTypesMessage = "Veuillez indiquer un PDF valide"
+     * )
      */
     private $path;
 
@@ -40,6 +49,16 @@ class Attachment
      * @ORM\Column(type="datetime", nullable=true)
      */
     private $updatedAt;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Comment", inversedBy="attachments")
+     */
+    private $comment;
+
+    public function __construct()
+    {
+        
+    }
 
     public function getId(): ?int
     {
@@ -102,6 +121,18 @@ class Attachment
     public function setUpdatedAt(?\DateTimeInterface $updatedAt): self
     {
         $this->updatedAt = $updatedAt;
+
+        return $this;
+    }
+
+    public function getComment(): ?Comment
+    {
+        return $this->comment;
+    }
+
+    public function setComment(?Comment $comment): self
+    {
+        $this->comment = $comment;
 
         return $this;
     }
