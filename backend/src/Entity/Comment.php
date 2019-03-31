@@ -51,6 +51,16 @@ class Comment
      */
     private $user;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Request", inversedBy="comments")
+     */
+    private $request;
+
+    /**
+     * @ORM\OneToOne(targetEntity="App\Entity\Attachment", cascade={"persist", "remove"})
+     */
+    private $attachment;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -136,6 +146,30 @@ class Comment
     public function setUser(?User $user): self
     {
         $this->user = $user;
+
+        return $this;
+    }
+
+    public function getRequest(): ?Request
+    {
+        return $this->request;
+    }
+
+    public function setRequest(?Request $request): self
+    {
+        $this->request = $request;
+
+        return $this;
+    }
+
+    public function getAttachment(): ?Attachment
+    {
+        return $this->attachment;
+    }
+
+    public function setAttachment(?Attachment $attachment): self
+    {
+        $this->attachment = $attachment;
 
         return $this;
     }
