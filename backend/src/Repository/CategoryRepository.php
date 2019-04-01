@@ -19,11 +19,11 @@ class CategoryRepository extends ServiceEntityRepository
         parent::__construct($registry, Category::class);
     }
 
-    public function findIsACtiveOrderedByField($field = 'name', $order = 'ASC')
+    public function findIsACtiveOrderedByField($field = 'name', $order = 'ASC', $isActive = true)
     {
         return $this->createQueryBuilder('c')
         ->andWhere('c.isActive = :val')
-        ->setParameter('val', true)
+        ->setParameter('val', $isActive)
         ->orderBy('c.' . $field, $order)
         ->getQuery()
         ->getResult()

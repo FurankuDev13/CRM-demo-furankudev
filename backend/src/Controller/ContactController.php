@@ -54,6 +54,21 @@ class ContactController extends AbstractController
     }
 
     /**
+     * @Route("/index/admin", name="index_admin", methods={"GET"})
+     * Index des Contacs en mode Gestion/ADMIN : seulement ceux qui sont archivés
+     */
+    public function indexAdmin(Request $request, ContactRepository $contactRepo, ContactTypeRepository $contactTypeRepo, CompanyRepository $companyRepo)
+    {
+        //$table = 'p', $field = 'lastname', $order = 'ASC', $isActive = true
+        $contacts = $contactRepo->findIsActiveOrderedByField('p', 'lastname', 'ASC', false);
+
+        return $this->render('contact/indexAdmin.html.twig', [
+            'page_title' => 'Contacts',
+            'contacts' => $contacts,
+        ]);
+    }
+
+    /**
      * @Route("/{id}/show", name="show", methods={"GET"}, requirements={"id"="\d+"})
      */
     public function show(Contact $contact)
@@ -78,9 +93,10 @@ class ContactController extends AbstractController
         }
 
         $contact->getPerson()->setIsActive(!$contact->getPerson()->getIsActive());
+        $notification = ($contact->getPerson()->getIsActive() ? ' a été désarchivé' : ' a été archivé !');
         $this->addFlash(
             'success',
-            'Le Contact ' . $contact->getPerson()->getFirstname() . " " . $contact->getPerson()->getLastname() . ' a été archivé !'
+            'Le Contact ' . $contact->getPerson()->getFirstname() . " " . $contact->getPerson()->getLastname() . $notification
         );
         $entityManager->flush();
 

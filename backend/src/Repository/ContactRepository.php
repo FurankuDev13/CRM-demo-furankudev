@@ -32,7 +32,7 @@ class ContactRepository extends ServiceEntityRepository
         ;
     }
 
-    public function findisActiveOrderedByField($table = 'p', $field = 'lastname', $order = 'ASC')
+    public function findisActiveOrderedByField($table = 'p', $field = 'lastname', $order = 'ASC', $isActive = true)
     {
         return $this->createQueryBuilder('co')
             ->join('co.company', 'c')
@@ -42,7 +42,7 @@ class ContactRepository extends ServiceEntityRepository
             ->join('co.person', 'p')
             ->addSelect('p')
             ->andWhere('p.isActive = :isActive')
-            ->setParameter('isActive', true)
+            ->setParameter('isActive', $isActive)
             ->orderBy($table . '.' . $field, $order)
             ->getQuery()
             ->getResult()

@@ -46,11 +46,11 @@ class CompanyRepository extends ServiceEntityRepository
         ;
     }
 
-    public function findIsActiveOrderedByField($field = 'name', $order = 'ASC')
+    public function findIsActiveOrderedByField($field = 'name', $order = 'ASC', $isActive = true)
     {
         return $this->createQueryBuilder('c')
         ->andWhere('c.isActive = :val')
-        ->setParameter('val', true)
+        ->setParameter('val', $isActive)
         ->orderBy('c.' . $field, $order)
         ->getQuery()
         ->getResult()

@@ -53,6 +53,20 @@ class RequestController extends AbstractController
     }
 
     /**
+     * @Route("/index/admin", name="index_admin", methods={"GET"})
+     * Index des Demandes en mode Gestion/ADMIN : seulement celles qui sont archivées
+     */
+    public function indexAdmin(Request $request, RequestRepository $requestRepo, CompanyRepository $companyRepo, HandlingStatusRepository $handlingStatusRepo, RequestTypeRepository $requestTypeRepo)
+    {
+        $demandRequests = $requestRepo->findIsActiveOrderedByField('r', 'createdAt', 'DESC',false);
+
+        return $this->render('request/indexAdmin.html.twig', [
+            'page_title' => 'Demandes',
+            'requests' => $demandRequests,
+        ]);
+    }
+
+    /**
      * @Route("/{id}/show", name="show", methods={"GET"}, requirements={"id"="\d+"})
      */
     public function show(DemandRequest $demandRequest)
@@ -101,9 +115,10 @@ class RequestController extends AbstractController
         }
 
         $demandRequest->setIsActive(!$demandRequest->getIsActive());
+        $notification = ($demandRequest->getIsActive() ? ' a été désarchivée' : ' a été archivée !');
         $this->addFlash(
             'success',
-            'La Demande ' . $demandRequest->getTitle() . ' a été archivée !'
+            'La Demande ' . $demandRequest->getTitle() . $notification
         );
         $entityManager->flush();
 

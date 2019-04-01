@@ -1,0 +1,49 @@
+<table class="table is-fullwidth is-hoverable is-striped">
+    <thead>
+        <tr>
+            <th>Date&nbsp;
+                {% include 'board/_order_buttons.html.twig' with {'index': '4', 'table': 'r', 'field' : 'createdAt'} %}
+            </th>
+            <th>Titre&nbsp;
+                {% include 'board/_order_buttons.html.twig' with {'index': '4', 'table': 'r', 'field' : 'requestType'} %}
+            </th>
+            <th>Description&nbsp;
+                {% include 'board/_order_buttons.html.twig' with {'index': '4', 'table': 'r', 'field' : 'title'} %}
+            </th>
+            <th>Société&nbsp;
+                {% include 'board/_order_buttons.html.twig' with {'index': '4', 'table': 'r', 'field' : 'body'} %}
+            </th>
+            <th>Auteur&nbsp;
+                {% include 'board/_order_buttons.html.twig' with {'index': '4', 'table': 'p', 'field' : 'lastname'} %}
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        {# {% for request in unhandledRequests %}
+            <tr>
+                <td>{{ request.createdAt|date("d/m/Y") }}</td>
+                <td>{{ request.requestType.title }}</td>
+                <td>   
+                    <a class="has-text-weight-bold" href="{{ path('request_show', {'id': request.id}) }}">{{ request.title }}</a>
+                </td>
+                <td>{{ request.body|truncate(30) }}</td>
+                
+                <td>
+                    <a class="" href="{{ path('contact_show', {'id': request.contact.id}) }}">
+                        {{ request.contact.person.firstname ~ ' ' ~ request.contact.person.lastname }}
+                    </a>
+                </td>
+                <td>
+                    <a class="" href="{{ path('company_show', {'id': request.contact.company.id}) }}">
+                        {{ request.contact.company.name }}
+                    </a>
+                </td>
+                <td>
+                    {% if request.contact.company.user %}
+                        <a class="" href="{{ path('user_show', {'id': request.contact.company.user.id}) }}">{{ request.contact.company.user.person.firstname ~ ' ' ~ request.contact.company.user.person.lastname }}</a>
+                    {% endif %}
+                </td>
+            </tr>
+        {% endfor %} #}
+    </tbody>
+</table>

@@ -34,7 +34,7 @@
                         </a>
                         <form class="level-item" action='{{ path('company_comment_archive', {'id': comment.id}) }}' method="POST">
                             <input class="" type="hidden" name="_method" value="PATCH">
-                            {% include 'partial/_confirm_cancel_modal.html.twig' with {'message': 'Confirmation d\'Archivage'} %}
+                            {% include 'partial/_confirm_cancel_modal.html.twig'  with {'notArchived': false} %}
                             <button class="button showModalConfirm is-warning"><i class="fas fa-archive"></i></button>
                         </form>
                     </div>

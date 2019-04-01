@@ -7,7 +7,7 @@
         <div class="section level">
             <div class="level-left ">
                 <div class="level-item">
-                    <h2 class=" level-item subtitle has-text-info is-3">Les catégories du catalogue</h2>
+                    <h2 class=" level-item subtitle has-text-info is-3">Les catégories archivées du catalogue</h2>
                     <button class=" level-item button is-info is-small is-size-4">{{ categories|length }}</button>
                 </div>  
             </div> 
@@ -67,16 +67,16 @@
                                  </div>
                             </div>
                         </td>
-                        {% if is_granted('ROLE_SUPPORT') %}
                             <td class="level">
                                 <div class="level-left">
                                     <a class="level-item" href="{{ path('category_edit', {'id' : category.id })}}">
                                         <button type="submit" class="button is-info"><i class="fas fa-edit"></i></button>
                                     </a>
-                                    {% include 'category/_archive_form.html.twig' with {'notArchived': true} %}
+                                    {% if is_granted('ROLE_ADMIN') %}
+                                        {% include 'category/_archive_form.html.twig' with {'notArchived': false} %}
+                                    {% endif %}
                                 </div>
                             </td>
-                        {% endif %}
                     </tr>
                 {% endfor %}
             </tbody>
