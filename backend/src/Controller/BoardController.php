@@ -4,6 +4,7 @@ namespace App\Controller;
 
 
 use App\Repository\UserRepository;
+use App\Repository\CommentRepository;
 use App\Repository\CompanyRepository;
 use App\Repository\RequestRepository;
 use App\Repository\HandlingStatusRepository;
@@ -16,7 +17,7 @@ class BoardController extends AbstractController
     /**
      * @Route("/", name="board_index", methods={"GET"})
      */
-    public function index(Request $request, CompanyRepository $companyRepo, RequestRepository $requestRepo, UserRepository $userRepo, HandlingStatusRepository $handlingStatusRepo)
+    public function index(Request $request, CompanyRepository $companyRepo, RequestRepository $requestRepo, UserRepository $userRepo, HandlingStatusRepository $handlingStatusRepo, CommentRepository $commentRepo)
     {
         $index = $request->query->get('index', 1);
         $table = $request->query->get('table');
@@ -41,13 +42,14 @@ class BoardController extends AbstractController
             $unhandledRequests = $requestRepo->findisActiveByHandlingStatus($unhandledStatus, $table?:'r', $field?:'createdAt', $order?:'DESC'); 
         } else {
             $unhandledRequests = $requestRepo->findisActiveByHandlingStatus($unhandledStatus); 
-        }
+        } 
 
-        if ($index != 1 && $index != 2 && $index != 3) {
+        if ($index != 1 && $index != 2 && $index != 3 && $index != 4) {
             throw $this->createNotFoundException("L'index indiqué n'existe pas");
         }
                
         $salesUsers = $userRepo->findSalesRoles();
+        $comments = $commentRepo->findCommentIsActiveByUpdatedAt();
 
         return $this->render('board/index.html.twig', [
             'page_title' => 'Tableau de bord',
@@ -56,6 +58,7 @@ class BoardController extends AbstractController
             'companiesWithUnhandledRequests' => $companiesWithUnhandledRequests,
             'unhandledRequests' => $unhandledRequests,
             'salesUsers' => $salesUsers,
+            'comments' => $comments,
         ]);
     }
 }

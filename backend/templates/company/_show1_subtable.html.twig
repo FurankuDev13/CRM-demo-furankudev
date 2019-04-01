@@ -47,7 +47,7 @@
                             <a class="level-item" href="{{ path('company_address_edit', {'id': company.id, 'address_id': address.id}) }}">
                                 <button type="submit" class="button is-info"><i class="fas fa-edit"></i></button>
                             </a>
-                            {% include 'contact/_archive_form.html.twig' with {'notArchived': true} %}
+                            {% include 'company/_archive_form.html.twig' with {'notArchived': true} %}
                         </div>
                     </td>
                     {% endif %}
