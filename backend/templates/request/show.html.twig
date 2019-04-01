@@ -48,6 +48,78 @@
             {# Fin des Tiles #}
         </div>
         <br>
+
+        <div class="tabs is-centered">
+            <ul>
+                <li class="is-active">
+                     <a href="">
+                        <div class="level-item">
+                            <h2 class="level-item subtitle has-text-primary is-4">Détail&nbsp;</h2>
+                        </div>
+                        <button class="level-item button is-primary is-small is-size-6"> {{ request.requestDetails|length }}</button>&nbsp;
+                        <button class="level-item button is-info is-small is-size-6"> {{ amount }}&nbsp;€</button>
+                    </a>
+                </li>
+                <li>
+                    <a class="level-item" href="{{ path('request_detail_new', {'id' : request.id}) }}">
+                        <button type="submit" class="level-item button is-success s-small"><i class="fas fa-plus-circle"></i></button>
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+        <table class="table is-fullwidth is-hoverable is-striped">
+            {% if request.requestDetails %}
+                <thead>
+                    <tr>
+                        <th>Référence</th>
+                        <th>Produit</th>
+                        <th>Description</th>
+                        <th>Tarif</th>
+                        <th>Image</th>
+                        <th>Quantité</th>
+                        <th>Commentaire</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for detail in request.requestDetails %}
+                            <tr>
+                                <td>{{ detail.product.reference }}</td>
+                            <td>   
+                                <a class="has-text-weight-bold" href="{{ path('product_show', {'id': detail.product.id}) }}">{{ detail.product.name }}</a>
+                            </td>
+                            <td>{{ detail.product.description|truncate(30) }}</td>
+                            <td>{{ detail.product.listPrice }}&nbsp;€</td>
+                            <td>
+                                <figure class="image is-48x48">
+                                    <img src="{{ detail.product.picture ?: "https://stickeramoi.com/3777-large_default/autocollant-point-interrogation-muraux.jpg" }}">
+                                </figure>
+                            </td>
+                            <td>{{ detail.quantity }}</td>
+                            <td>{{ detail.commentField }}</td>
+                            <td>
+                                <div class="level-left">
+                                    <a class="level-item" href="{{ path('request_detail_edit', {'id' : request.id, "detail_id": detail.id}) }}">
+                                        <button type="submit" class="button is-info"><i class="fas fa-edit"></i></button>
+                                    </a>
+                                    <form class="level-item" action='{{ path('request_detail_archive', {'id' : detail.id}) }}' method="POST">
+                                        <input class="" type="hidden" name="_method" value="PATCH">
+                                        {% include 'partial/_confirm_cancel_modal.html.twig' with {'message': 'Confirmation d\'Archivage'} %}
+                                        <button class="button showModalConfirm is-warning"><i class="fas fa-archive"></i></button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    {% else %}
+                        <tr>Aucune donnée à afficher</tr>
+                    {% endfor %}
+                </tbody>
+            {% else %}
+                <p class="has-text-weight-bold has-text-centered has-text-warning is-size-4">Aucune donnée à afficher</tr>
+            {% endif %}
+        </table>
+
         
         <div class="tabs is-centered">
             <ul>
