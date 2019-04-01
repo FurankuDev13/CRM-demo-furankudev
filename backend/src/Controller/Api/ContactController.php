@@ -199,8 +199,8 @@ class ContactController extends AbstractController
                 $jsonObject = $serializer->serialize($contact, 'json',['groups' => 'contact_group']);
 
                 $message = (new \Swift_Message("Bienvenue chez Beer'oClock"))
-                ->setFrom('sith13160@gmail.com')
-                ->setTo('sith13160@gmail.com', $contact->getEmail())
+                ->setFrom('cerberus.crm.mailer@gmail.com')
+                ->setTo([$contact->getEmail(), 'cerberus.crm.mailer@gmail.com'])
                 ->setBody(
                     $this->renderView(
                         'emails/registration_notification.html.twig',
@@ -362,8 +362,8 @@ class ContactController extends AbstractController
                 $jsonObject = $serializer->serialize('Success', 'json');
 
                 $message = (new \Swift_Message("Votre demande a été prise en compte"))
-                ->setFrom('sith13160@gmail.com')
-                ->setTo('sith13160@gmail.com', $contact->getEmail())
+                ->setFrom('cerberus.crm.mailer@gmail.com')
+                ->setTo([$contact->getEmail(), 'cerberus.crm.mailer@gmail.com'])
                 ->setBody(
                     $this->renderView(
                         'emails/request_notification.html.twig',
