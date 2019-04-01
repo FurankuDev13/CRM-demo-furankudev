@@ -22,7 +22,6 @@ const mapDispatchToProps = (dispatch, ownProps) => {
   const { formOrigin, name } = ownProps;
   return ({
     inputChange: (fieldInfos) => {
-      console.log(fieldInfos, formOrigin, name);
       dispatch(inputChange(fieldInfos, formOrigin, name));
     },
   });
