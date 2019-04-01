@@ -55,6 +55,7 @@ const initialState = {
     question: {
       title: '',
       content: '',
+      questionSelect: 'Demande d\'information',
     },
     profile: {
       firstname: '',
