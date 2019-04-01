@@ -31,10 +31,10 @@ class Select extends React.Component {
             <div
               id="select"
               className="select"
-              onChange={this.handleChange}
             >
               <select
                 value={value}
+                onChange={this.handleChange}
               >
                 <option>Demande d'information</option>
                 <option>Demande de devis</option>

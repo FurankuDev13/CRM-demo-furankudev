@@ -265,6 +265,10 @@ export const ProductIsInCategory = (product, slug) => (
   product.categories.find(category => getSlug(category.name) === slug) !== undefined
 );
 
+export const getCategoryFromSlug = (list, slug) => (
+  list.find(category => getSlug(category.name) === slug).name
+);
+
 export const getCurrentCategory = (list, slug) => (
   list.filter(product => ProductIsInCategory(product, slug))
 );

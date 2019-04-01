@@ -7,13 +7,15 @@ import { connect } from 'react-redux';
  * Local import
  */
 import Catalog from 'src/components/Customerpage/Catalog';
-import { getCurrentCategory } from 'src/store/reducer';
+import { getCurrentCategory, getCategoryFromSlug } from 'src/store/reducer';
 
 /**
  * Mapping
  */
 const mapStateToProps = (state, ownProps) => {
   let currentList;
+  let category;
+  const { categoryList } = state;
   switch (ownProps.location.pathname) {
     case '/catalog': {
       currentList = state.catalogList;
@@ -21,11 +23,13 @@ const mapStateToProps = (state, ownProps) => {
     }
     default: {
       const { params } = ownProps.match;
+      category = getCategoryFromSlug(categoryList, params.slug);
       currentList = getCurrentCategory(state.catalogList, params.slug);
       break;
     }
   }
   return {
+    category,
     currentList,
   };
 };
