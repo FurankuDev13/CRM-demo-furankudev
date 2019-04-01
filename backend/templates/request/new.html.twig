@@ -1,0 +1,23 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ parent() }} - {{ page_title }}{% endblock %}
+
+{% block main %}
+    <div class="container">
+        <div class="section level-left">
+            <div class="level-item">
+                <h2 class="level-item subtitle has-text-info is-3">Ajouter une nouvelle demande</h2>
+            </div>
+            <button class="level-item button is-info is-small is-size-4">NEW</button>
+        </div>
+        {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+        {{ form_widget(form) }}
+        <ul class="requestDetails" data-prototype="{{ form_widget(form.requestDetails.vars.prototype)|e('html_attr') }}">
+        </ul>
+            <br>
+            <button type="submit" class="button is-info">Ajouter</button>
+        {{ form_end(form) }}
+    </div>
+{% endblock %}
+
+{% block javascripts %}<script src="{{ asset('js/app_form.js') }}"></script>{% endblock %}

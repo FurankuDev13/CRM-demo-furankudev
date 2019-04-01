@@ -27,10 +27,10 @@
                             <div class="dropdown-menu">
                                 <div class="dropdown-content">
                                     <div class="level">
-                                        <a class="level-item" href="{{ path('company_comment_attachment_edit', {'id': company.id, 'comment_id': comment.id}) }}">
+                                        <a class="level-item" href="{{ path('request_comment_attachment_edit', {'id': request.id, 'comment_id': comment.id}) }}">
                                             <button type="submit" class="button is-info"><i class="fas fa-file-signature"></i></button>
                                         </a>
-                                        <form class="level-item" action='{{ path('company_comment_attachment_archive', {'id': company.id, 'comment_id': comment.id}) }}' method="POST">
+                                        <form class="level-item" action='{{ path('request_comment_attachment_archive', {'id': request.id, 'comment_id': comment.id}) }}' method="POST">
                                             <input class="" type="hidden" name="_method" value="PATCH">
                                             {% include 'partial/_confirm_cancel_modal.html.twig' with {'message': 'Confirmation d\'Archivage'} %}
                                             <button class="button showModalConfirm is-warning"><i class="far fa-file-excel"></i></button>
@@ -40,27 +40,28 @@
                             </div>
                         </div>
                         {% else %}
-                            <a href="{{ path('company_comment_attachment_new', {'id': company.id, 'comment_id': comment.id}) }}">
+                            <a href="{{ path('request_comment_attachment_new', {'id': request.id, 'comment_id': comment.id}) }}">
                                 <button type="submit" class="level-item button is-success is-small"><i class="fas fa-file-upload"></i></button>
                             </a>       
                         {% endif %}
                     </td>
                     <td>
                         <div class="level-left">
-                            <a class="level-item" href="{{ path('company_comment_edit', {'id': company.id, 'comment_id': comment.id}) }}">
+                            <a class="level-item" href="{{ path('request_comment_edit', {'id': request.id, 'comment_id': comment.id}) }}">
                                 <button type="submit" class="button is-info"><i class="fas fa-edit"></i></button>
                             </a>
                             {% include 'request/_isonboard_form.html.twig' %}
-                            {% include 'company/_archive_form.html.twig' with {'notArchived': true} %}
+                            <form class="level-item" action='{{ path('request_comment_archive', {'id': comment.id}) }}' method="POST">
+                                <input class="" type="hidden" name="_method" value="PATCH">
+                                {% include 'partial/_confirm_cancel_modal.html.twig' with {'message': 'Confirmation d\'Archivage'} %}
+                                <button class="button showModalConfirm is-warning"><i class="fas fa-archive"></i></button>
+                            </form>
                         </div>
                     </td>
                 </tr>
-            {% else %}
-                <tr>Aucune donnée à afficher</tr>
             {% endfor %}
         </tbody>
     {% else %}
         <p class="has-text-weight-bold has-text-centered has-text-warning is-size-4">Aucune donnée à afficher</tr>
     {% endif %}
 </table>
-

@@ -15,6 +15,7 @@ use Doctrine\ORM\Events;
 use App\Entity\Attachment;
 use App\Entity\ContactType;
 use App\Entity\RequestType;
+use App\Entity\RequestDetail;
 use App\Entity\CompanyAddress;
 use App\Entity\HandlingStatus;
 use App\Entity\CompanyAddressType;
@@ -66,13 +67,17 @@ class DoctrineEvent implements EventSubscriber
             || $entity instanceof UserRole
             || $entity instanceof Comment
             || $entity instanceof Attachment
+            || $entity instanceof RequestDetail
             ) {
 
             if (!$entity->getCreatedAt()) {
                 $entity->setCreatedAt(new DateTime);
-                $entity->setUpdatedAt(new DateTime);
             }
         } 
+
+        if ($entity instanceof Comment) {
+            $entity->setUpdatedAt(new DateTime);
+        }
     }
 
     private function setIsActive(LifecycleEventArgs $args)
@@ -95,6 +100,7 @@ class DoctrineEvent implements EventSubscriber
             || $entity instanceof UserRole
             || $entity instanceof Comment
             || $entity instanceof Attachment
+            || $entity instanceof RequestDetail
             ) {
 
             $entity->setIsActive(true);
@@ -121,6 +127,7 @@ class DoctrineEvent implements EventSubscriber
             || $entity instanceof UserRole
             || $entity instanceof Comment
             || $entity instanceof Attachment
+            || $entity instanceof RequestDetail
             ) {
             $entity->setUpdatedAt(new DateTime);
         } 

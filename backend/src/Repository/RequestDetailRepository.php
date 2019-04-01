@@ -19,6 +19,21 @@ class RequestDetailRepository extends ServiceEntityRepository
         parent::__construct($registry, RequestDetail::class);
     }
 
+    public function findisActiveOrderedByField($table = 'd', $field = 'createdAt', $order = 'DESC', $isActive = true)
+    {
+        return $this->createQueryBuilder('d')
+            ->join('d.request', 'r')
+            ->addSelect('r')
+            ->join('d.product', 'p')
+            ->addSelect('p')
+            ->andWhere('d.isActive = :isActive')
+            ->setParameter('isActive', $isActive)
+            ->orderBy($table . '.' . $field, $order)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
     // /**
     //  * @return RequestDetail[] Returns an array of RequestDetail objects
     //  */

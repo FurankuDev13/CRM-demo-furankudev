@@ -6,19 +6,25 @@ use App\Entity\Comment;
 use App\Form\CommentType;
 use App\Entity\Attachment;
 use App\Form\AttachmentType;
+use App\Entity\RequestDetail;
+use App\Form\RequestFormType;
 use App\Service\FileUploader;
+use App\Form\RequestDetailType;
 use App\Repository\CommentRepository;
 use App\Repository\CompanyRepository;
+use App\Repository\ContactRepository;
 use App\Repository\RequestRepository;
 use App\Entity\Request as DemandRequest;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\RequestTypeRepository;
+use App\Repository\RequestDetailRepository;
 use App\Repository\HandlingStatusRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+use Knp\Bundle\SnappyBundle\Snappy\Response\PdfResponse;
 
 /** 
  *  @Route("/request", name="request_") 
@@ -77,21 +83,142 @@ class RequestController extends AbstractController
     /**
      * @Route("/{id}/show", name="show", methods={"GET"}, requirements={"id"="\d+"})
      */
-    public function show(DemandRequest $demandRequest, CommentRepository $commentRepo)
+    public function show(DemandRequest $demandRequest, Request $request, CommentRepository $commentRepo, RequestDetailRepository $requestDetailRepo)
+    {
+        if (!$demandRequest) {
+            throw $this->createNotFoundException("La demande indiquée n'existe pas"); 
+        }
+
+        $index = $request->query->get('index', 1);
+
+        $comments = $commentRepo->findCommentIsActiveByRequest($demandRequest);
+        $details = $requestDetailRepo->findisActiveOrderedByField();
+
+        $amount = 0;
+
+        foreach($details as $detail) {
+            $amount += ($detail->getQuantity() * $detail->getProduct()->getListPrice());
+        }
+
+        return $this->render('request/show.html.twig', [
+            'page_title' => 'Demande: ' . $demandRequest->getTitle(),
+            'request' => $demandRequest,
+            'comments' => $comments,
+            'details' => $details,
+            'amount' => $amount,
+            'index' => $index
+
+        ]);
+    }
+
+    /**
+     * @Route("/{id}/pdf", name="pdf", methods={"GET"}, requirements={"id"="\d+"})
+     */
+/*     public function pdf(DemandRequest $demandRequest, Request $request, CommentRepository $commentRepo, RequestDetailRepository $requestDetailRepo, \Knp\Snappy\Pdf $knpSnappy)
     {
         if (!$demandRequest) {
             throw $this->createNotFoundException("La demande indiquée n'existe pas"); 
         }
 
         $comments = $commentRepo->findCommentIsActiveByRequest($demandRequest);
+        $details = $requestDetailRepo->findisActiveOrderedByField();
 
-        return $this->render('request/show.html.twig', [
+        $amount = 0;
+
+        foreach($details as $detail) {
+            $amount += ($detail->getQuantity() * $detail->getProduct()->getListPrice());
+        }
+
+        $html = $this->renderView('request/PDF/_export_details.html.twig', array(
             'page_title' => 'Demande: ' . $demandRequest->getTitle(),
             'request' => $demandRequest,
-            'comments' => $comments
+            'comments' => $comments,
+            'details' => $details,
+            'amount' => $amount,
+            'index' => $index
+        ));
 
+        return new PdfResponse(
+            $knpSnappy->getOutputFromHtml($html),
+            'file.pdf'
+        );
+    } */
+
+    /**
+     * @Route("/new", name="new", methods={"GET", "POST"})
+     */
+    public function new(Request $request, EntityManagerInterface $entityManager, ContactRepository $contactRepo)
+    {
+        $demandRequest = new DemandRequest();
+        $requestDetail = new RequestDetail();
+        $demandRequest->addRequestDetail($requestDetail);
+
+        $contactId = $request->query->get('contact_id');
+        if ($contactId) {
+            $contact = $contactRepo->find($contactId);
+            $demandRequest->setContact($contact);
+        }
+
+        $form = $this->createForm(RequestFormType::class, $demandRequest);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager->persist($demandRequest);
+
+            foreach($form->getData()->getRequestDetails() as $requestDetail) {
+                $requestDetail->setRequest($demandRequest);
+                $entityManager->persist($requestDetail);
+            }
+
+            $entityManager->flush();
+
+            $this->addFlash(
+                'success',
+                'La demande ' . $demandRequest->getTitle() . ' a bien été ajoutée !'
+            );
+            return $this->redirectToRoute('request_show', ['id' => $demandRequest->getId()]);
+        }
+
+        return $this->render('request/new.html.twig', [
+            'page_title' => 'Ajouter une nouvelle demande',
+            'form' => $form->createView()
         ]);
     }
+
+    /**
+     * @Route("/{id}/edit", name="edit", methods={"GET", "POST"}, requirements={"id"="\d+"})
+     */
+    public function edit(DemandRequest $demandRequest, Request $request, EntityManagerInterface $entityManager)
+    {
+        if (!$demandRequest) {
+            throw $this->createNotFoundException("La société indiquée n'existe pas"); 
+        }
+
+        $form = $this->createForm(RequestFormType::class, $demandRequest);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            foreach($form->getData()->getRequestDetails() as $requestDetail) {
+                $requestDetail->setRequest($demandRequest);
+                $entityManager->persist($requestDetail);
+            }
+
+            $entityManager->flush();
+
+            $this->addFlash(
+                'success',
+                'La demande ' . $demandRequest->getTitle() . ' a bien été mise à jour !'
+            );
+            return $this->redirectToRoute('request_show', ['id' => $demandRequest->getId()]);
+        }
+
+        return $this->render('request/edit.html.twig', [
+            'page_title' => 'Mettre à jour la demande: ' . $demandRequest->getTitle(),
+            'request' => $demandRequest,
+            'form' => $form->createView()
+        ]);
+    }
+
 
     /**
      * @Route("/{id}/edit-handling-status", name="editHandlingStatus", methods={"PATCH"}, requirements={"id"="\d+"})
@@ -139,7 +266,7 @@ class RequestController extends AbstractController
         return $this->redirect($referer);;
     }
 
-        /**
+    /**
      * @Route("/{id}/comment/new", name="comment_new", methods={"GET", "POST"})
      */
     public function newComment(DemandRequest $demandRequest, Request $request, EntityManagerInterface $entityManager)
@@ -160,7 +287,7 @@ class RequestController extends AbstractController
                 'success',
                 "Le nouveau commentaire a bien été ajoutée et associée à " . $demandRequest->getTitle()
             );
-            return $this->redirectToRoute('request_show', ['id' => $demandRequest->getId()]);
+            return $this->redirectToRoute('request_show', ['id' => $demandRequest->getId(), 'index' => 2]);
         }
 
         return $this->render('request/new_comment.html.twig', [
@@ -193,7 +320,7 @@ class RequestController extends AbstractController
                 'success',
                 "Le commentaire a bien été mise à jour pour la demande " . $demandRequest->getTitle()
             );
-            return $this->redirectToRoute('request_show', ['id' => $demandRequest->getId()]);
+            return $this->redirectToRoute('request_show', ['id' => $demandRequest->getId(), 'index' => 2]);
         }
 
         return $this->render('request/edit_comment.html.twig', [
@@ -201,6 +328,36 @@ class RequestController extends AbstractController
             'commentForm' => $commentForm->createView(),
             'request' => $demandRequest
         ]);
+    }
+
+    /**
+     * @Route("/comment/{id}", name="comment_toggleIsOnBoard", methods={"PATCH"}, requirements={"id"="\d+"})
+     */
+    public function toggleIsOnBoardComment(Comment $comment, Request $request, EntityManagerInterface $entityManager)
+    {
+        if (!$comment) {
+            throw $this->createNotFoundException("La demande indiquée n'existe pas"); 
+        }
+
+        if ($comment->getIsOnBoard()) {
+            $comment->setIsOnBoard(false);
+            $this->addFlash(
+                'success',
+                'Le commentaire ' . $comment->getTitle() . ' a été ajouté au tableau de bord !'
+            );
+
+        } else {
+            $comment->setIsOnBoard(true);
+            $this->addFlash(
+                'warning',
+                'Le commentaire ' . $comment->getTitle() . ' a été retiré du tableau de bord !'
+            );
+        }
+
+        $entityManager->flush();
+
+        $referer = $request->headers->get('referer');
+        return $this->redirect($referer);
     }
 
     /**
@@ -266,7 +423,7 @@ class RequestController extends AbstractController
                 'success',
                 "La pièce jointe a bien été associée au commentaire !"
             );
-            return $this->redirectToRoute('request_show', ['id' => $demandRequest->getId()]);
+            return $this->redirectToRoute('request_show', ['id' => $demandRequest->getId(), 'index' => 2]);
         }
 
         return $this->render('request/new_attachment.html.twig', [
@@ -321,7 +478,7 @@ class RequestController extends AbstractController
                 'success',
                 "La pièce jointe a bien été associée au commentaire !"
             );
-            return $this->redirectToRoute('request_show', ['id' => $demandRequest->getId()]);
+            return $this->redirectToRoute('request_show', ['id' => $demandRequest->getId(), 'index' => 2]);
         }
 
         return $this->render('request/edit_attachment.html.twig', [
@@ -358,4 +515,88 @@ class RequestController extends AbstractController
 
         return $this->redirect($referer);
     }
+
+    /**
+     * @Route("/{id}/detail/new", name="detail_new", methods={"GET", "POST"})
+     */
+    public function newDetail(DemandRequest $demandRequest, Request $request, EntityManagerInterface $entityManager)
+    {
+        $requestDetail = new RequestDetail();
+     
+        $form = $this->createForm(RequestDetailType::class, $requestDetail);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $requestDetail->setRequest($demandRequest);
+            $entityManager->persist($requestDetail);
+            $entityManager->flush();
+
+            $this->addFlash(
+                'success',
+                "Le nouvel élément a bien été ajoutée et associée à " . $demandRequest->getTitle()
+            );
+            return $this->redirectToRoute('request_show', ['id' => $demandRequest->getId()]);
+        }
+
+        return $this->render('request/new_detail.html.twig', [
+            'page_title' => 'Ajouter un nouvel élément à la demande',
+            'form' => $form->createView(),
+            'request' => $demandRequest
+        ]);
+    }
+
+    /**
+     * @Route("{id}/detail/{detail_id}/edit", name="detail_edit", methods={"GET", "POST"}, requirements={"id"="\d+", "id"="\d+"})
+     * @ParamConverter("requestDetail", options={"id" = "detail_id"})
+     */
+    public function editDetail(DemandRequest $demandRequest, Request $request, EntityManagerInterface $entityManager, RequestDetail $requestDetail)
+    {
+        if (!$requestDetail) {
+            throw $this->createNotFoundException("L'élément de la demande indiqué n'existe pas"); 
+        }
+
+        $form = $this->createForm(RequestDetailType::class, $requestDetail);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $requestDetail->setRequest($demandRequest);
+            $entityManager->flush();
+
+            $this->addFlash(
+                'success',
+                "L'élément a bien été mise à jour pour la demande " . $demandRequest->getTitle()
+            );
+            return $this->redirectToRoute('request_show', ['id' => $demandRequest->getId()]);
+        }
+
+        return $this->render('request/edit_detail.html.twig', [
+            'page_title' => "Mettre à jour l'élément",
+            'form' => $form->createView(),
+            'request' => $demandRequest
+        ]);
+    }
+
+    /**
+     * @Route("/detail/{id}/archive", name="detail_archive", methods={"PATCH"}, requirements={"id"="\d+", "id"="\d+"})
+     */
+    public function archiveDetail(Request $request, EntityManagerInterface $entityManager, RequestDetail $requestDetail)
+    {
+        if (!$requestDetail) {
+            throw $this->createNotFoundException("L'élément indiqué n'existe pas"); 
+        }
+
+        $requestDetail->setIsActive(!$requestDetail->getIsActive());
+        $this->addFlash(
+            'success',
+            "L'élément concernant le produit "  . $requestDetail->getProduct()->getName() . ' a été archivé !'
+        );
+
+        $entityManager->flush();
+
+        $referer = $request->headers->get('referer');
+
+        return $this->redirect($referer);
+    }
+
+    
 }

@@ -1,0 +1,8 @@
+<form class="level-item" action='{{ path('company_comment_toggleIsOnBoard', {'id': comment.id}) }}' method="POST">
+    <input class="" type="hidden" name="_method" value="PATCH">
+    {% if comment.isOnBoard %}
+        <button type="submit" class="button is-success"><i class="far fa-bell-slash"></i></button>
+    {% else %}
+        <button type="submit" class="button is-outlined"><i class="fas fa-bell"></i></button>
+    {% endif %}
+</form>

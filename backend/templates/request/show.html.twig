@@ -4,55 +4,43 @@
 
 {% block main %}
     <div class="container">
-        <div class="section level-left">
-            <div class="level-item">
-                <h2 class="level-item subtitle has-text-info is-3">{{ request.title }}</h2>
-            </div>
-            <button class="level-item button is-info is-small is-size-4">{{ request.requestType.title }}</button>
-            <button class="level-item button is-info is-small is-size-4">{{ request.handlingStatus.title }}</button>
-        </div>
-        <div class="tile is-ancestor">
-            {# Début des Tiles #}
-            <div class="tile is-parent is-3 is-vertical">
-                <article class="tile is-child">
-                    <figure class="image is-4by3">
-                        <img src="{{ request.contact.company.picture }}">
-                    </figure>
-                </article>
-            </div>
-            <div class="tile is-parent is-vertical">
-                <article class="tile is-child notification is-primary">
-                    <p class="title">Description</p>
-                    <p class="subtitle">{{ request.body }}</p>
-                </article>
-                <div class="tile">
-                    <article class="tile is-child is-8">
-                        <p class="title">Contact</p>
-                            <p class="content">
-                                <a href="{{ path('contact_show', {'id' : request.contact.id}) }}">
-                                    <span class="subtitle">{{ request.contact.person.firstname }} {{ request.contact.person.lastname }}</span>
-                                </a> &nbsp;-&nbsp;
-                                <span class="has-text-weight-bold">{{ request.contact.contactType.title }}</span></br>
-                                <i class="fas fa-mobile-alt"></i> {{ request.contact.person.cellPhone }} &nbsp;&nbsp;&nbsp;
-                                <i class="fas fa-phone"></i> {{ request.contact.person.businessPhone }}
-                            </p>
-                        
-                    </article>
-                    <article class="tile is-child">
-                        <p class="title">Informations</p>
-                        <p>Enregistrement: &nbsp; <span class="has-text-weight-bold">{{ request.createdAt|date('d-m-Y') }}</span></p>
-                        <p>Mise à jour: &nbsp; <span class="has-text-weight-bold">{{ request.updatedAt|date('d-m-Y') }}</span></p>
-                    </article>
+        <div class="section level">
+            <div class="level-left">
+                <div class="level-item">
+                    <h2 class="level-item subtitle has-text-info is-3">{{ request.title }}</h2>
                 </div>
+                <button class="level-item button is-info is-small is-size-4">{{ request.requestType.title }}</button>
+                <button class="level-item button is-info is-small is-size-4">{{ request.handlingStatus.title }}</button>
+                <button class="level-item button is-primary is-small is-size-4"> Total: {{ amount }}&nbsp;€</button>
             </div>
-            {# Fin des Tiles #}
+            {% if is_granted('ROLE_SALES') %}
+                <div class="level-right">
+                    <a class="level-item" href="{{ path('request_edit', {'id' : request.id })}}">
+                        <button type="submit" class="button is-info is-large"><i class="fas fa-edit"></i></button>
+                    </a>
+                </div>
+            {% endif %}
         </div>
+        {% include 'request/_show_information.html.twig' %}
         <br>
-        
+
         <div class="tabs is-centered">
             <ul>
-                <li class="is-active">
-                     <a href="">
+                <li class="{% if index == 1 %}is-active{% endif %}">
+                     <a href="{{ path('request_show', {'id': request.id, 'index' : 1}) }}">
+                        <div class="level-item">
+                            <h2 class="level-item subtitle has-text-primary is-4">Détail&nbsp;</h2>
+                        </div>
+                        <button class="level-item button is-primary is-small is-size-6"> {{ details|length }}</button>&nbsp;
+                    </a>
+                </li>
+                <li>
+                    <a class="level-item" href="{{ path('request_detail_new', {'id' : request.id}) }}">
+                        <button type="submit" class="level-item button is-success s-small"><i class="fas fa-plus-circle"></i></button>
+                    </a>
+                </li>
+                <li class="{% if index == 2 %}is-active{% endif %}">
+                     <a href="{{ path('request_show', {'id': request.id, 'index' : 2}) }}">
                         <div class="level-item">
                             <h2 class="level-item subtitle has-text-primary is-4">Commentaires&nbsp;</h2>
                         </div>
@@ -67,75 +55,8 @@
             </ul>
         </div>
 
-        <table class="table is-fullwidth is-hoverable is-striped">
-            {% if comments %}
-                <thead>
-                    <tr>
-                        <th>De</th>
-                        <th>Date</th>
-                        <th>Commentaire</th>
-                        <th>Pièce jointe</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for comment in comments %}
-                        <tr>
-                            <td>{{ app.user.person.firstname }} {{ app.user.person.lastname }}</td>
-                            <td>{{comment.updatedAt|date('d-m-Y H:i')}}</td>
-                            <td>
-                                <span class="has-text-weight-bold">{{comment.title}}</span> <br/>
-                                {{comment.body}}
-                            </td>
-                            <td>
-                                {% if comment.attachment and comment.attachment.isActive %}
-                                <div class="dropdown is-hoverable">
-                                    <a class="dropdown-trigger" href="{{ asset('uploads/attachments/' ~ comment.attachment.path) }}">
-                                        <button type="submit" class="button is-primary is-small is-size-6"><i class="fas fa-file-download"></i>&nbsp;{{ comment.attachment.title }}</button>
-                                    </a>
-                                    <div class="dropdown-menu">
-                                        <div class="dropdown-content">
-                                            <div class="level">
-                                                <a class="level-item" href="{{ path('request_comment_attachment_edit', {'id': request.id, 'comment_id': comment.id}) }}">
-                                                    <button type="submit" class="button is-info"><i class="fas fa-file-signature"></i></button>
-                                                </a>
-                                                <form class="level-item" action='{{ path('request_comment_attachment_archive', {'id': request.id, 'comment_id': comment.id}) }}' method="POST">
-                                                    <input class="" type="hidden" name="_method" value="PATCH">
-                                                    {% include 'partial/_confirm_cancel_modal.html.twig' with {'message': 'Confirmation d\'Archivage'} %}
-                                                    <button class="button showModalConfirm is-warning"><i class="far fa-file-excel"></i></button>
-                                                </form>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                {% else %}
-                                    <a href="{{ path('request_comment_attachment_new', {'id': request.id, 'comment_id': comment.id}) }}">
-                                        <button type="submit" class="level-item button is-success is-small"><i class="fas fa-file-upload"></i></button>
-                                    </a>       
-                                {% endif %}
-                            </td>
-                            <td>
-                                <div class="level-left">
-                                    <a class="level-item" href="{{ path('request_comment_edit', {'id': request.id, 'comment_id': comment.id}) }}">
-                                        <button type="submit" class="button is-info"><i class="fas fa-edit"></i></button>
-                                    </a>
-                                    <form class="level-item" action='{{ path('request_comment_archive', {'id': comment.id}) }}' method="POST">
-                                        <input class="" type="hidden" name="_method" value="PATCH">
-                                        {% include 'partial/_confirm_cancel_modal.html.twig' with {'message': 'Confirmation d\'Archivage'} %}
-                                        <button class="button showModalConfirm is-warning"><i class="fas fa-archive"></i></button>
-                                    </form>
-                                </div>
-                            </td>
-                        </tr>
-                    {% else %}
-                        <tr>Aucune donnée à afficher</tr>
-                    {% endfor %}
-                </tbody>
-            {% else %}
-                <p class="has-text-weight-bold has-text-centered has-text-warning is-size-4">Aucune donnée à afficher</tr>
-            {% endif %}
-        </table>
-
+        {% include 'request/_show' ~ index ~ '_subtable.html.twig' %}   
         <br>
+
     </div>
 {% endblock %}

@@ -83,6 +83,7 @@ class CompanyType extends AbstractType
             ->add('discount', EntityType::class, [
                 'class' => Discount::class,
                 'label'    => "Remise accordée à la société: ",
+                'placeholder' => 'Choisir une remise',
                 'multiple'=>false,
                 'expanded' => false,
                 'query_builder' => function (DiscountRepository $discountRepo) {
@@ -93,6 +94,7 @@ class CompanyType extends AbstractType
             ->add('user', EntityType::class, [
                 'class' => User::class,
                 'label'    => "Le commercial chargé du suivi de la société: ",
+                'placeholder' => 'Choisir un commercial',
                 'multiple'=>false,
                 'expanded' => false,
                 'query_builder' => function (UserRepository $userRepo) {
