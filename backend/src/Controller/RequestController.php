@@ -12,10 +12,12 @@ use App\Service\FileUploader;
 use App\Form\RequestDetailType;
 use App\Repository\CommentRepository;
 use App\Repository\CompanyRepository;
+use App\Repository\ContactRepository;
 use App\Repository\RequestRepository;
 use App\Entity\Request as DemandRequest;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\RequestTypeRepository;
+use App\Repository\RequestDetailRepository;
 use App\Repository\HandlingStatusRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\File\File;
@@ -80,17 +82,20 @@ class RequestController extends AbstractController
     /**
      * @Route("/{id}/show", name="show", methods={"GET"}, requirements={"id"="\d+"})
      */
-    public function show(DemandRequest $demandRequest, CommentRepository $commentRepo)
+    public function show(DemandRequest $demandRequest, Request $request, CommentRepository $commentRepo, RequestDetailRepository $requestDetailRepo)
     {
         if (!$demandRequest) {
             throw $this->createNotFoundException("La demande indiquée n'existe pas"); 
         }
 
+        $index = $request->query->get('index', 1);
+
         $comments = $commentRepo->findCommentIsActiveByRequest($demandRequest);
+        $details = $requestDetailRepo->findisActiveOrderedByField();
 
         $amount = 0;
 
-        foreach($demandRequest->getRequestDetails() as $detail) {
+        foreach($details as $detail) {
             $amount += ($detail->getQuantity() * $detail->getProduct()->getListPrice());
         }
 
@@ -98,7 +103,9 @@ class RequestController extends AbstractController
             'page_title' => 'Demande: ' . $demandRequest->getTitle(),
             'request' => $demandRequest,
             'comments' => $comments,
-            'amount' => $amount
+            'details' => $details,
+            'amount' => $amount,
+            'index' => $index
 
         ]);
     }
@@ -106,11 +113,17 @@ class RequestController extends AbstractController
     /**
      * @Route("/new", name="new", methods={"GET", "POST"})
      */
-    public function new(Request $request, EntityManagerInterface $entityManager)
+    public function new(Request $request, EntityManagerInterface $entityManager, ContactRepository $contactRepo)
     {
         $demandRequest = new DemandRequest();
         $requestDetail = new RequestDetail();
         $demandRequest->addRequestDetail($requestDetail);
+
+        $contactId = $request->query->get('contact_id');
+        if ($contactId) {
+            $contact = $contactRepo->find($contactId);
+            $demandRequest->setContact($contact);
+        }
 
         $form = $this->createForm(RequestFormType::class, $demandRequest);
         $form->handleRequest($request);
@@ -143,30 +156,31 @@ class RequestController extends AbstractController
      */
     public function edit(DemandRequest $demandRequest, Request $request, EntityManagerInterface $entityManager)
     {
-        if (!$company) {
+        if (!$demandRequest) {
             throw $this->createNotFoundException("La société indiquée n'existe pas"); 
         }
 
-        $form = $this->createForm(CompanyFormType::class, $company);
+        $form = $this->createForm(RequestFormType::class, $demandRequest);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            foreach($form->getData()->getCompanyAddresses() as $companyAddress) {
-                $companyAddress->setCompany($company);
-                $entityManager->persist($companyAddress);
+            foreach($form->getData()->getRequestDetails() as $requestDetail) {
+                $requestDetail->setRequest($demandRequest);
+                $entityManager->persist($requestDetail);
             }
+
             $entityManager->flush();
 
             $this->addFlash(
                 'success',
-                'La société ' . $company->getName() . ' a bien été mise à jour !'
+                'La demande ' . $demandRequest->getTitle() . ' a bien été mise à jour !'
             );
-            return $this->redirectToRoute('company_show', ['id' => $company->getId()]);
+            return $this->redirectToRoute('request_show', ['id' => $demandRequest->getId()]);
         }
 
-        return $this->render('company/edit.html.twig', [
-            'page_title' => 'Mettre à jour la société: ' . $company->getName(),
-            'company' => $company,
+        return $this->render('request/edit.html.twig', [
+            'page_title' => 'Mettre à jour la demande: ' . $demandRequest->getTitle(),
+            'request' => $demandRequest,
             'form' => $form->createView()
         ]);
     }
@@ -239,7 +253,7 @@ class RequestController extends AbstractController
                 'success',
                 "Le nouveau commentaire a bien été ajoutée et associée à " . $demandRequest->getTitle()
             );
-            return $this->redirectToRoute('request_show', ['id' => $demandRequest->getId()]);
+            return $this->redirectToRoute('request_show', ['id' => $demandRequest->getId(), 'index' => 2]);
         }
 
         return $this->render('request/new_comment.html.twig', [
@@ -272,7 +286,7 @@ class RequestController extends AbstractController
                 'success',
                 "Le commentaire a bien été mise à jour pour la demande " . $demandRequest->getTitle()
             );
-            return $this->redirectToRoute('request_show', ['id' => $demandRequest->getId()]);
+            return $this->redirectToRoute('request_show', ['id' => $demandRequest->getId(), 'index' => 2]);
         }
 
         return $this->render('request/edit_comment.html.twig', [
@@ -345,7 +359,7 @@ class RequestController extends AbstractController
                 'success',
                 "La pièce jointe a bien été associée au commentaire !"
             );
-            return $this->redirectToRoute('request_show', ['id' => $demandRequest->getId()]);
+            return $this->redirectToRoute('request_show', ['id' => $demandRequest->getId(), 'index' => 2]);
         }
 
         return $this->render('request/new_attachment.html.twig', [
@@ -400,7 +414,7 @@ class RequestController extends AbstractController
                 'success',
                 "La pièce jointe a bien été associée au commentaire !"
             );
-            return $this->redirectToRoute('request_show', ['id' => $demandRequest->getId()]);
+            return $this->redirectToRoute('request_show', ['id' => $demandRequest->getId(), 'index' => 2]);
         }
 
         return $this->render('request/edit_attachment.html.twig', [
@@ -468,8 +482,8 @@ class RequestController extends AbstractController
     }
 
     /**
-     * @Route("/detail/{detail_id}/edit", name="detail_edit", methods={"GET", "POST"}, requirements={"id"="\d+", "id"="\d+"})
-     * @ParamConverter("detail", options={"id" = "detail_id"})
+     * @Route("{id}/detail/{detail_id}/edit", name="detail_edit", methods={"GET", "POST"}, requirements={"id"="\d+", "id"="\d+"})
+     * @ParamConverter("requestDetail", options={"id" = "detail_id"})
      */
     public function editDetail(DemandRequest $demandRequest, Request $request, EntityManagerInterface $entityManager, RequestDetail $requestDetail)
     {
@@ -510,7 +524,7 @@ class RequestController extends AbstractController
         $requestDetail->setIsActive(!$requestDetail->getIsActive());
         $this->addFlash(
             'success',
-            "L'élément"  . $RequestDetail->getTitle() . ' a été archivé !'
+            "L'élément concernant le produit "  . $requestDetail->getProduct()->getName() . ' a été archivé !'
         );
 
         $entityManager->flush();
