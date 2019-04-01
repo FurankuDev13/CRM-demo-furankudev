@@ -222,6 +222,7 @@ const reducer = (state = initialState, action = {}) => {
           question: {
             title: '',
             content: '',
+            questionSelect: 'Demande d\'information',
           },
         },
       };

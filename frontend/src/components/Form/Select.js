@@ -20,6 +20,7 @@ class Select extends React.Component {
   }
 
   render() {
+    const { value } = this.props;
     return (
       <div className="field">
         <label
@@ -32,7 +33,9 @@ class Select extends React.Component {
               className="select"
               onChange={this.handleChange}
             >
-              <select>
+              <select
+                value={value}
+              >
                 <option>Demande d'information</option>
                 <option>Demande de devis</option>
               </select>
@@ -45,6 +48,7 @@ class Select extends React.Component {
 }
 
 Select.propTypes = {
+  value: PropTypes.string.isRequired,
   inputChange: PropTypes.func.isRequired,
 };
 
