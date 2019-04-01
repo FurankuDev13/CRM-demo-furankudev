@@ -1,0 +1,18 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ parent() }} - {{ page_title }}{% endblock %}
+
+{% block main %}
+    <div class="container">
+        <div class="section level-left">
+            <div class="level-item">
+                <h2 class="level-item subtitle has-text-info is-3">Pièce jointe pour la demande {{request.title}}</h2>
+            </div>
+            <button class="level-item button is-info is-small is-size-4">Création</button>
+        </div>
+        {{ form_start(attachmentForm, {'attr': {'novalidate': 'novalidate'}}) }}
+        {{ form_widget(attachmentForm) }}
+            <button type="submit" class="button is-info">Ajouter</button>
+        {{ form_end(attachmentForm) }}
+    </div>
+{% endblock %}

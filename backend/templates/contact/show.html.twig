@@ -49,15 +49,20 @@
 
         <br>
 
-        <div class="tabs is-boxed is-centered">
+        <div class="tabs is-centered">
             <ul>
                 <li class="is-active">
                      <a href="">
                         <div class="level-item">
                             <h2 class="level-item subtitle has-text-primary is-4">Demandes&nbsp;</h2>
                         </div>
-                        <button class="level-item button is-primary is-small is-size-6">{{ demands|length }}</button>
+                        <button class="level-item button is-primary is-small is-size-6"> {{ demands|length }}</button>
                     </a>
+                </li>
+                <li>
+                    {# <a class="level-item" href="{{ path('request_comment_new', {'id' : request.id}) }}">
+                        <button type="submit" class="level-item button is-success s-small"><i class="fas fa-plus-circle"></i></button>
+                    </a> #}
                 </li>
             </ul>
         </div>

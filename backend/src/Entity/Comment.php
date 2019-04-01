@@ -59,15 +59,14 @@ class Comment
     private $request;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Attachment", mappedBy="comment")
+     * @ORM\OneToOne(targetEntity="App\Entity\Attachment", cascade={"persist", "remove"})
      */
-    private $attachments;
+    private $attachment;
 
-    public function __construct()
-    {
-        $this->attachments = new ArrayCollection();
-    }
-
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $isOnBoard;
 
     public function getId(): ?int
     {
@@ -170,33 +169,26 @@ class Comment
         return $this;
     }
 
-    /**
-     * @return Collection|Attachment[]
-     */
-    public function getAttachments(): Collection
+    public function getAttachment(): ?Attachment
     {
-        return $this->attachments;
+        return $this->attachment;
     }
 
-    public function addAttachment(Attachment $attachment): self
+    public function setAttachment(?Attachment $attachment): self
     {
-        if (!$this->attachments->contains($attachment)) {
-            $this->attachments[] = $attachment;
-            $attachment->setComment($this);
-        }
+        $this->attachment = $attachment;
 
         return $this;
     }
 
-    public function removeAttachment(Attachment $attachment): self
+    public function getIsOnBoard(): ?bool
     {
-        if ($this->attachments->contains($attachment)) {
-            $this->attachments->removeElement($attachment);
-            // set the owning side to null (unless already changed)
-            if ($attachment->getComment() === $this) {
-                $attachment->setComment(null);
-            }
-        }
+        return $this->isOnBoard;
+    }
+
+    public function setIsOnBoard(bool $isOnBoard): self
+    {
+        $this->isOnBoard = $isOnBoard;
 
         return $this;
     }

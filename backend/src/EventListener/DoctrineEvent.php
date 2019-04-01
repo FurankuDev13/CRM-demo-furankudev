@@ -12,6 +12,7 @@ use App\Entity\Category;
 use App\Entity\Discount;
 use App\Entity\UserRole;
 use Doctrine\ORM\Events;
+use App\Entity\Attachment;
 use App\Entity\ContactType;
 use App\Entity\RequestType;
 use App\Entity\CompanyAddress;
@@ -37,6 +38,7 @@ class DoctrineEvent implements EventSubscriber
         $this->setCompanyDefaultIsCustomer($args);
         $this->setProductDefaultIsAvailable($args);
         $this->setProductDefaultIsOnHomePage($args);
+        $this->setCommentDefaultIsOnBoard($args);
     }
     
     public function preUpdate(LifecycleEventArgs $args) 
@@ -156,6 +158,18 @@ class DoctrineEvent implements EventSubscriber
         if ($entity instanceof Product) {
             if (!$entity->getIsOnHomePage()) {
                 $entity->setIsOnHomePage(false);
+            }
+        } 
+    }
+
+    private function setCommentDefaultIsOnBoard(LifecycleEventArgs $args)
+    {
+        $entity = $args->getObject();
+        $entityManager = $args->getObjectManager();
+
+        if ($entity instanceof Comment) {
+            if (!$entity->getIsOnBoard()) {
+                $entity->setIsOnBoard(false);
             }
         } 
     }

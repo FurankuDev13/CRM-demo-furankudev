@@ -32,11 +32,6 @@ class CommentType extends AbstractType
                     new NotBlank(),
                 ]
             ])
-            ->add('attachments', CollectionType::class, [
-                'entry_type' => AttachmentType::class,
-                'entry_options' => ['label' => false],
-                'label'    => "Pièce jointe: ",
-            ])
         ;
     }
 
