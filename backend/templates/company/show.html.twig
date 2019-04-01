@@ -4,8 +4,8 @@
 
 {% block main %}
     <div class="container">
-        <div class="level">
-            <div class="section level-left">
+        <div class="section level">
+            <div class="level-left">
                 <div class="level-item">
                     <h2 class="level-item subtitle has-text-info is-3">{{ company.name }}</h2>
                 </div>
@@ -20,28 +20,38 @@
             {% endif %}
         </div>
 
-        <div class="section tabs is-boxed is-centered">
+        {% include 'company/_show_information.html.twig' %}
+
+        <div class="tabs is-boxed is-centered">
             <ul>
                 <li {% if index == 1 %}class="is-active"{% endif %}>
                     <a href="{{ path('company_show', {'id': company.id, 'index' : 1}) }}">
                         <div class="level-item">
-                            <h2 class="level-item subtitle has-text-info is-4">Généralités&nbsp;</h2>
+                            <h2 class="level-item subtitle has-text-primary is-4">Adresses&nbsp;</h2>
+                            <button class="level-item button is-primary is-small is-size-6">{{ companyAddresses|length }}</button>
                         </div>
                     </a>
                 </li>
                 <li {% if index == 2 %}class="is-active"{% endif %}>
                      <a href="{{ path('company_show', {'id': company.id, 'index' : 2}) }}">
                         <div class="level-item">
-                            <h2 class="level-item subtitle has-text-info is-4">Commentaires&nbsp;</h2>
+                            <h2 class="level-item subtitle has-text-primary is-4">Commentaires&nbsp;</h2>
                         </div>
-                        <button class="level-item button is-info is-small is-size-6">{{ comments|length }}</button>
+                        <button class="level-item button is-primary is-small is-size-6">{{ comments|length }}</button>
+                    </a>
+                </li>
+                <li {% if index == 3 %}class="is-active"{% endif %}>
+                     <a href="{{ path('company_show', {'id': company.id, 'index' : 3}) }}">
+                        <div class="level-item">
+                            <h2 class="level-item subtitle has-text-primary is-4">Demandes&nbsp;</h2>
+                        </div>
+                        <button class="level-item button is-primary is-small is-size-6">{{ demands|length }}</button>
                     </a>
                 </li>
             </ul>
         </div>
 
-
-        {% include 'company/_show' ~ index ~ '.html.twig' %}
-
+        {% include 'company/_show' ~ index ~ '_subtable.html.twig' %}
+        <br>
     </div>
 {% endblock %}

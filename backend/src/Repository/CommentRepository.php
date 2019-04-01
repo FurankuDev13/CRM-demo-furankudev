@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\Comment;
 use App\Entity\Company;
+use App\Entity\Request;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 
@@ -27,6 +28,21 @@ class CommentRepository extends ServiceEntityRepository
             ->addSelect('c')
             ->where('c = :company')
             ->setParameter('company', $company)
+            ->andWhere('com.isActive IN (:isActive)')
+            ->setParameter('isActive', true)
+            ->orderBy('com.updatedAt', 'DESC')
+            ->getQuery()
+            ->getResult();
+        ;
+    }
+
+    public function findCommentIsActiveByRequest(Request $request)
+    {
+        return $this->createQueryBuilder('com')
+            ->join('com.request', 'r')
+            ->addSelect('r')
+            ->where('r = :request')
+            ->setParameter('request', $request)
             ->andWhere('com.isActive IN (:isActive)')
             ->setParameter('isActive', true)
             ->orderBy('com.updatedAt', 'DESC')

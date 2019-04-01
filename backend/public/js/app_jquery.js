@@ -9,6 +9,15 @@ var callAjax = {
       $(this).parents(".modal").removeClass("is-active");
     });
 
+    $(".showModalAttachment").click(function(event) {
+      event.preventDefault();
+      $(this).siblings(".modalAttachment").addClass("is-active");  
+    });
+    
+    $(".modal-close").click(function(event) {
+      $(this).parents(".modal").removeClass("is-active");
+    });
+
     // pour les Modals de Confirmation / Annulation
     $(".showModalConfirm").click(function(event) {
         event.preventDefault();

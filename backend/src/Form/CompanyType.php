@@ -111,7 +111,7 @@ class CompanyType extends AbstractType
                 'entry_options' => ['label' => false],
                 'label'    => "Le(s) adresse(s): ",
                 'allow_add' => true,
-            ]);
+            ])
         ;
     }
 

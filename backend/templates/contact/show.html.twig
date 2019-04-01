@@ -47,5 +47,82 @@
             {# Fin des Tiles #}
         </div>
 
+        <br>
+
+        <div class="tabs is-centered">
+            <ul>
+                <li class="is-active">
+                     <a href="">
+                        <div class="level-item">
+                            <h2 class="level-item subtitle has-text-primary is-4">Demandes&nbsp;</h2>
+                        </div>
+                        <button class="level-item button is-primary is-small is-size-6"> {{ demands|length }}</button>
+                    </a>
+                </li>
+                <li>
+                    {# <a class="level-item" href="{{ path('request_comment_new', {'id' : request.id}) }}">
+                        <button type="submit" class="level-item button is-success s-small"><i class="fas fa-plus-circle"></i></button>
+                    </a> #}
+                </li>
+            </ul>
+        </div>
+
+        <table class="table is-fullwidth is-hoverable is-striped">
+            {% if demands %}
+                <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Type</th>
+                    <th>Titre</th>
+                    <th>Description</th>
+                    <th>Société</th>
+                    <th>Statut</th>
+                    <th>Commercial</th>
+                    {% if is_granted('ROLE_SALES') %}
+                        <th>Actions</th>
+                    {% endif %} 
+                </tr>
+            </thead>
+            <tbody>
+                {% for request in demands %}
+                    <tr>
+                        <td>{{ request.createdAt|date("d/m/Y") }}</td>
+                        <td>{{ request.requestType.title }}</td>
+                        <td>   
+                            <a class="has-text-weight-bold" href="{{ path('request_show', {'id': request.id}) }}">{{ request.title }}</a>
+                        </td>
+                        <td>{{ request.body|truncate(30) }}</td>
+                        
+                        <td>
+                            <a class="" href="{{ path('company_show', {'id': contact.company.id}) }}">
+                                {{ contact.company.name }}
+                            </a>
+                        </td>
+                        <td>{{ request.handlingStatus.title }}</td>
+                        <td>
+                            {% if request.contact.company.user %}
+                                <a class="" href="{{ path('user_show', {'id': request.contact.company.user.id}) }}">{{ request.contact.company.user.person.firstname ~ ' ' ~ request.contact.company.user.person.lastname }}</a>
+                            {% endif %}
+                        </td>
+                        {% if is_granted('ROLE_SALES') %}
+                            <td class="level">
+                                <div class="level-left">
+                                    {% include 'request/_handle_status_modal.html.twig' %}
+                                    <form class="level-item" action='{{ path('request_archive', {'id': request.id}) }}' method="POST">
+                                        <input class="" type="hidden" name="_method" value="PATCH">
+                                        {% include 'partial/_confirm_cancel_modal.html.twig' with {'message': 'Confirmation d\'Archivage'} %}
+                                        <button class="button showModalConfirm is-warning level-item"><i class="fas fa-archive"></i></button>
+                                    </form>
+                                </div>
+                            </td>
+                        {% endif %}
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            {% else %}
+                <p class="has-text-weight-bold has-text-centered has-text-warning is-size-4">Aucune donnée à afficher</tr>
+            {% endif %}
+        </table>
+        <br>
     </div>
 {% endblock %}

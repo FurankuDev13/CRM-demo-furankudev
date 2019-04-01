@@ -3,11 +3,15 @@
 namespace App\Form;
 
 use App\Entity\Comment;
+use App\Form\AttachmentType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 
 class CommentType extends AbstractType
 {
@@ -21,7 +25,7 @@ class CommentType extends AbstractType
                     new NotBlank(),
                 ]
             ])
-            ->add('body', TextType::class, [
+            ->add('body', TextareaType::class, [
                 'label' => 'Commentaire' ,
                 'attr' => ['placeholder' => 'votre commentaire'],
                 'constraints' => [
