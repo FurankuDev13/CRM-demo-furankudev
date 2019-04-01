@@ -5,6 +5,9 @@ namespace App\Controller;
 use App\Entity\Comment;
 use App\Entity\Company;
 use App\Form\CommentType;
+use App\Entity\Attachment;
+use App\Form\AttachmentType;
+use App\Service\FileUploader;
 use App\Entity\CompanyAddress;
 use App\Repository\UserRepository;
 use App\Form\CompanyAddressFormType;
@@ -17,10 +20,13 @@ use App\Entity\Request as DemandRequest;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Form\CompanyType as CompanyFormType;
 use App\Repository\CompanyAddressRepository;
+use App\Repository\HandlingStatusRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
+use Symfony\Component\HttpFoundation\File\File;
 
 /** 
  *  @Route("/company", name="company_") 
@@ -88,7 +94,7 @@ class CompanyController extends AbstractController
     /**
      * @Route("/{id}/show", name="show", methods={"GET"}, requirements={"id"="\d+"})
      */
-    public function show(Company $company, Request $request, CompanyRepository $companyRepo, CompanyAddressRepository $companyAddressRepo, CommentRepository $commentRepo)
+    public function show(Company $company, Request $request, CompanyRepository $companyRepo, CompanyAddressRepository $companyAddressRepo, CommentRepository $commentRepo, RequestRepository $requestRepo, HandlingStatusRepository $handlingStatusRepo)
     {
         if (!$company) {
             throw $this->createNotFoundException("La société indiquée n'existe pas"); 
@@ -97,12 +103,16 @@ class CompanyController extends AbstractController
 
         $companyAddresses = $companyAddressRepo->findAddressIsActiveByCompany($company);
         $comments = $commentRepo->findCommentIsActiveByCompany($company);
+        $demands = $requestRepo->findIsActiveByCompany($company);
+        $handlingStatuses = $handlingStatusRepo->findByIsActive(true);
 
         return $this->render('company/show.html.twig', [
             'page_title' => 'Société: ' . $company->getName(),
             'company' => $company,
             'companyAddresses' => $companyAddresses,
             'comments' => $comments,
+            'demands' => $demands,
+            'handlingStatuses' => $handlingStatuses,
             'index' => $index,
         ]);
     }
@@ -376,6 +386,7 @@ class CompanyController extends AbstractController
     public function newComment(Request $request, EntityManagerInterface $entityManager, Company $company)
     {
         $comment = new Comment();
+     
         $commentForm = $this->createForm(CommentType::class, $comment);
         $commentForm->handleRequest($request);
         $user = $this->getUser();
@@ -395,7 +406,7 @@ class CompanyController extends AbstractController
 
         return $this->render('company/new_comment.html.twig', [
             'page_title' => 'Ajouter un nouveau commentaire',
-            'form' => $commentForm->createView(),
+            'commentForm' => $commentForm->createView(),
             'company' => $company,
         ]);
     }
@@ -426,9 +437,9 @@ class CompanyController extends AbstractController
             return $this->redirectToRoute('company_show', ['id' => $company->getId(), 'index' => 2]);
         }
 
-        return $this->render('company/edit_address.html.twig', [
+        return $this->render('company/edit_comment.html.twig', [
             'page_title' => "Mettre à jour le commentaire",
-            'form' => $commentForm->createView(),
+            'commentForm' => $commentForm->createView(),
             'company' => $company
         ]);
     }
@@ -447,13 +458,146 @@ class CompanyController extends AbstractController
             'success',
             'Le commentaire ' . $comment->getTitle() . ' a été archivé !'
         );
+
+        $attachment = $comment->getAttachment();
+
+        if ($attachment) {
+            $attachment->setIsActive(!$attachment->getIsActive());
+
+            $entityManager->flush();
+        }
+
         $entityManager->flush();
 
         $referer = $request->headers->get('referer');
 
-        return $this->redirect($referer);;
+        return $this->redirect($referer);
+    }
+
+    /**
+     * @Route("/{id}/comment/{comment_id}/new-attachment", name="comment_attachment_new", methods={"GET", "POST"}, requirements={"id"="\d+", "id"="\d+"})
+     * @ParamConverter("comment", options={"id" = "comment_id"})
+     */
+    public function newAttachment(Request $request, EntityManagerInterface $entityManager, Company $company, Comment $comment, FileUploader $fileUploader)
+    {
+        if (!$comment) {
+            throw $this->createNotFoundException("Le commentaire indiqué n'existe pas"); 
+        }
+        
+        $attachment = new Attachment();
+
+        $attachmentForm = $this->createForm(AttachmentType::class, $attachment);
+        $attachmentForm->handleRequest($request);
+
+        if ($attachmentForm->isSubmitted() && $attachmentForm->isValid()) {
+            $file = $attachment->getPath();
+
+            if(!is_null($file)){
+                $fileName = $fileUploader->upload($file);
+                $attachment->setPath($fileName);
+            }
+
+            $entityManager->persist($attachment);
+
+            $comment->setAttachment($attachment);
+
+            $entityManager->flush();
+
+            $this->addFlash(
+                'success',
+                "La pièce jointe a bien été associée au commentaire !"
+            );
+            return $this->redirectToRoute('company_show', ['id' => $company->getId(), 'index' => 2]);
+        }
+
+        return $this->render('company/new_attachment.html.twig', [
+            'page_title' => 'Ajouter une pièce jointe',
+            'attachmentForm' => $attachmentForm->createView(),
+            'company' => $company,
+        ]);
+    }
+
+     /**
+     * @Route("/{id}/comment/{comment_id}/edit-attachment", name="comment_attachment_edit", methods={"GET", "POST"}, requirements={"id"="\d+", "id"="\d+"})
+     * @ParamConverter("comment", options={"id" = "comment_id"})
+     */
+    public function editAttachment(Request $request, EntityManagerInterface $entityManager, Company $company, Comment $comment, FileUploader $fileUploader)
+    {
+        if (!$comment) {
+            throw $this->createNotFoundException("Le commentaire indiqué n'existe pas"); 
+        }
+
+        $attachment = $comment->getAttachment();
+        $savedPath = $attachment->getPath();
+
+        if (!empty($savedPath)) {
+            $attachment->setPath(
+                new File($this->getParameter('attachments_directory').'/'. $savedPath)
+            );
+        }
+        
+
+        $attachmentForm = $this->createForm(AttachmentType::class, $attachment);
+        $attachmentForm->handleRequest($request);
+
+        if ($attachmentForm->isSubmitted() && $attachmentForm->isValid()) {
+            $file = $attachment->getPath();
+
+            if(!is_null($file)){
+                $fileName = $fileUploader->upload($file);
+                $attachment->setPath($fileName);
+
+                if(!empty($savedPath)) {
+                    unlink(
+                        $this->getParameter('attachments_directory').'/'. $savedPath
+                    );
+                }
+
+            } else {
+                $attachment->setPath($savedPath);
+            }
+
+            $entityManager->flush();
+
+            $this->addFlash(
+                'success',
+                "La pièce jointe a bien été associée au commentaire !"
+            );
+            return $this->redirectToRoute('company_show', ['id' => $company->getId(), 'index' => 2]);
+        }
+
+        return $this->render('company/edit_attachment.html.twig', [
+            'page_title' => 'Ajouter une pièce jointe',
+            'attachmentForm' => $attachmentForm->createView(),
+            'company' => $company,
+        ]);
     }
 
 
+    /**
+     * @Route("/{id}/comment/{comment_id}/archive-attachment", name="comment_attachment_archive", methods={"PATCH"}, requirements={"id"="\d+", "id"="\d+"})
+     * @ParamConverter("comment", options={"id" = "comment_id"})
+     */
+    public function archiveAttachment(Request $request, EntityManagerInterface $entityManager, Company $company, Comment $comment)
+    {
+        if (!$comment) {
+            throw $this->createNotFoundException("Le commentaire indiqué n'existe pas"); 
+        }
 
+        $attachment = $comment->getAttachment();
+
+        if ($attachment) {
+            $attachment->setIsActive(!$attachment->getIsActive());
+            $this->addFlash(
+                'success',
+                'La pièce jointe ' . $attachment->getTitle() . ' a été archivée !'
+            );
+
+            $entityManager->flush();
+        }
+        
+        $referer = $request->headers->get('referer');
+
+        return $this->redirect($referer);
+    }
 }

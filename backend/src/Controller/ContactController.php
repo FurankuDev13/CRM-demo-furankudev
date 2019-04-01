@@ -5,8 +5,10 @@ namespace App\Controller;
 use App\Entity\Contact;
 use App\Repository\CompanyRepository;
 use App\Repository\ContactRepository;
+use App\Repository\RequestRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\ContactTypeRepository;
+use App\Repository\HandlingStatusRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -71,15 +73,20 @@ class ContactController extends AbstractController
     /**
      * @Route("/{id}/show", name="show", methods={"GET"}, requirements={"id"="\d+"})
      */
-    public function show(Contact $contact)
+    public function show(Contact $contact, RequestRepository $requestRepo, HandlingStatusRepository $handlingStatusRepo)
     {
         if (!$contact) {
             throw $this->createNotFoundException("Le contact indiqué n'existe pas"); 
         }
 
+        $demands = $requestRepo->findIsActiveByContact($contact);
+        $handlingStatuses = $handlingStatusRepo->findByIsActive(true);
+
         return $this->render('contact/show.html.twig', [
             'page_title' => 'Contact: ' . $contact->getPerson()->getFirstname() . ' ' . $contact->getPerson()->getLastname(),
             'contact' => $contact,
+            'demands' => $demands,
+            'handlingStatuses' => $handlingStatuses,
         ]);
     }
 

@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -50,6 +52,21 @@ class Comment
      * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="comments")
      */
     private $user;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Request", inversedBy="comments")
+     */
+    private $request;
+
+    /**
+     * @ORM\OneToOne(targetEntity="App\Entity\Attachment", cascade={"persist", "remove"})
+     */
+    private $attachment;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $isOnBoard;
 
     public function getId(): ?int
     {
@@ -136,6 +153,42 @@ class Comment
     public function setUser(?User $user): self
     {
         $this->user = $user;
+
+        return $this;
+    }
+
+    public function getRequest(): ?Request
+    {
+        return $this->request;
+    }
+
+    public function setRequest(?Request $request): self
+    {
+        $this->request = $request;
+
+        return $this;
+    }
+
+    public function getAttachment(): ?Attachment
+    {
+        return $this->attachment;
+    }
+
+    public function setAttachment(?Attachment $attachment): self
+    {
+        $this->attachment = $attachment;
+
+        return $this;
+    }
+
+    public function getIsOnBoard(): ?bool
+    {
+        return $this->isOnBoard;
+    }
+
+    public function setIsOnBoard(bool $isOnBoard): self
+    {
+        $this->isOnBoard = $isOnBoard;
 
         return $this;
     }

@@ -94,9 +94,15 @@ class Product
      */
     private $isAvailable;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\RequestDetail", mappedBy="product")
+     */
+    private $requestDetails;
+
     public function __construct()
     {
         $this->categories = new ArrayCollection();
+        $this->requestDetails = new ArrayCollection();
     }
 
     public function __toString()
@@ -275,6 +281,37 @@ class Product
     public function setIsAvailable(bool $isAvailable): self
     {
         $this->isAvailable = $isAvailable;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|RequestDetail[]
+     */
+    public function getRequestDetails(): Collection
+    {
+        return $this->requestDetails;
+    }
+
+    public function addRequestDetail(RequestDetail $requestDetail): self
+    {
+        if (!$this->requestDetails->contains($requestDetail)) {
+            $this->requestDetails[] = $requestDetail;
+            $requestDetail->setProduct($this);
+        }
+
+        return $this;
+    }
+
+    public function removeRequestDetail(RequestDetail $requestDetail): self
+    {
+        if ($this->requestDetails->contains($requestDetail)) {
+            $this->requestDetails->removeElement($requestDetail);
+            // set the owning side to null (unless already changed)
+            if ($requestDetail->getProduct() === $this) {
+                $requestDetail->setProduct(null);
+            }
+        }
 
         return $this;
     }

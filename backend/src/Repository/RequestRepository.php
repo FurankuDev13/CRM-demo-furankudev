@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Company;
+use App\Entity\Contact;
 use App\Entity\Request;
 use App\Entity\RequestType;
 use App\Entity\HandlingStatus;
@@ -89,6 +90,40 @@ class RequestRepository extends ServiceEntityRepository
             ->addSelect('s')
             ->where('c = :company')
             ->setParameter('company', $company)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
+    public function findIsActiveByCompany(Company $company)
+    {
+        return $this->createQueryBuilder('r')
+            ->join('r.contact', 'co')
+            ->addSelect('co')
+            ->join('co.company', 'c')
+            ->addSelect('c')
+            ->join('r.handlingStatus', 's')
+            ->addSelect('s')
+            ->andWhere('c = :company')
+            ->setParameter('company', $company)
+            ->andWhere('r.isActive = :isActive')
+            ->setParameter('isActive', true)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
+    public function findIsActiveByContact(Contact $contact)
+    {
+        return $this->createQueryBuilder('r')
+            ->join('r.contact', 'co')
+            ->addSelect('co')
+            ->join('r.handlingStatus', 's')
+            ->addSelect('s')
+            ->andWhere('co = :contact')
+            ->setParameter('contact', $contact)
+            ->andWhere('r.isActive = :isActive')
+            ->setParameter('isActive', true)
             ->getQuery()
             ->getResult()
         ;
