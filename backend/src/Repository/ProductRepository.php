@@ -49,18 +49,18 @@ class ProductRepository extends ServiceEntityRepository
         ;
     }
 
-    public function findIsACtiveOrderedByField($field = 'name', $order = 'ASC')
+    public function findIsACtiveOrderedByField($field = 'name', $order = 'ASC', $isActive = true)
     {
         return $this->createQueryBuilder('p')
         ->andWhere('p.isActive = :val')
-        ->setParameter('val', true)
+        ->setParameter('val', $isActive)
         ->orderBy('p.' . $field, $order)
         ->getQuery()
         ->getResult()
     ;
     }
 
-    public function findIsACtiveByCategoryNameOrderedByField($categoryName, $field = 'name', $order = 'ASC')
+    public function findIsACtiveByCategoryNameOrderedByField($categoryName, $field = 'name', $order = 'ASC', $isActive = true)
     {
         return $this->createQueryBuilder('p')
         ->join('p.categories', 'c')
@@ -68,7 +68,7 @@ class ProductRepository extends ServiceEntityRepository
         ->where('c.name = :categoryName')
         ->setParameter('categoryName', $categoryName)
         ->andWhere('p.isActive = :val')
-        ->setParameter('val', true)
+        ->setParameter('val', $isActive)
         ->orderBy('p.' . $field, $order)
         ->getQuery()
         ->getResult()

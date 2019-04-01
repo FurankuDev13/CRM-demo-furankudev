@@ -1,0 +1,81 @@
+{% extends 'base_without_sidebar.html.twig' %}
+
+{% block title %}{{ parent() }} - {{ page_title }}{% endblock %}
+
+{% block sidebar %}
+{% endblock %}
+
+{% block content %}
+    {% set orderButtonsIncludePath = 'contact/_order_buttons.html.twig' %}
+    <div class="level">
+        <div class="level-left ">
+            <div class="level-item">
+                <h2 class=" level-item subtitle has-text-info is-3">Les contacts (professionnels)</h2>
+                <button class=" level-item button is-info is-small is-size-4">{{ contacts|length }}</button>
+            </div>  
+        </div> 
+        <div class="level-right">
+            <input class="button level-item is-medium" type="text" id="contactSearch" onkeyup="app.search('contactSearch','contactTable', 1)" placeholder= "&#128270; nom de contact..." title="">
+            <a class="level-item" href="{{ path('contact_index')}}">
+                <button class="level-item button is-primary s-small is-size-3"><i class="fas fa-sort-alpha-down"></i></button>
+            </a>
+            {# <a class="level-item" href="{{ path('contact_new')}}">
+                <button type="submit" class="level-item button is-success s-small is-size-3"><i class="fas fa-plus-circle"></i></button>
+            </a> #}
+        </div>
+    </div>
+
+    <table class="table is-fullwidth is-hoverable is-striped" id="contactTable">
+        <thead>
+            <tr>
+                <th>Ajout 
+                    {% include orderButtonsIncludePath with {'table': 'p', 'field' : 'createdAt'} %}
+                </th>
+                <th>Nom 
+                    {% include orderButtonsIncludePath with {'table': 'p', 'field' : 'lastname'} %}
+                </th>
+                <th>Prénom 
+                    {% include orderButtonsIncludePath with {'table': 'p', 'field' : 'firstname'} %}
+                </th>
+                <th>Email 
+                    {% include orderButtonsIncludePath with {'table': 'co', 'field' : 'email'} %}
+                </th>
+                <th>Téléphone 
+                    {% include orderButtonsIncludePath with {'table': 'p', 'field' : 'businessPhone'} %}
+                </th>
+                <th>Société 
+                    {% include orderButtonsIncludePath with {'table': 'c', 'field' : 'name'} %}
+                </th>
+                <th>Titre 
+                    {% include orderButtonsIncludePath with {'table': 'ct', 'field' : 'title'} %}
+                </th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for contact in contacts %}
+                <tr>
+                    <td>{{ contact.person.createdAt|date("d/m/Y") }}</td>
+                    <td>   
+                        <a class="has-text-weight-bold" href="{{ path('contact_show', {'id': contact.id}) }}">{{ contact.person.lastname }}</a>
+                    </td>
+                    <td>{{ contact.person.firstname }}</td>
+                    <td>{{ contact.email }}</td>
+                    <td>{{ contact.person.businessPhone }}</td>
+                    <td>   
+                        <a class="has-text-weight-bold" href="{{ path('company_show', {'id': contact.company.id}) }}">{{ contact.company.name }}</a>
+                    </td>
+                    <td>{{ contact.contactType.title }}</td>
+                    <td class="level">
+                    {% if is_granted('ROLE_ADMIN') %}
+                        <div class="level-left">
+                            {% include 'contact/_archive_form.html.twig' with {'notArchived': false} %}
+                        </div>
+                    {% endif %}
+                    </td>
+
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

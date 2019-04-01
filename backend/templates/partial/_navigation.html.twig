@@ -47,6 +47,30 @@
                                     Utilisateurs
                                 </a>
                             {% endif %}
+                            {% if is_granted('ROLE_ADMIN') %}
+                                <div class="navbar-item has-dropdown is-hoverable">
+                                    <a class="navbar-link has-background-danger" href="{{ path('product_index_admin')}}">
+                                    Gestion
+                                    </a>
+                                    <div class="navbar-dropdown">
+                                        <a class="navbar-item {{ (app.request.attributes.get('_route') == 'product_index_admin') ? 'is-active' }} " href="{{ path('product_index_admin')}}">
+                                            Produits
+                                        </a>
+                                        <a class="navbar-item {{ (app.request.attributes.get('_route') == 'category_index_admin') ? 'is-active' }} " href="{{ path('category_index_admin')}}">
+                                            Catégories
+                                        </a>
+                                        <a class="navbar-item {{ (app.request.attributes.get('_route') == 'company_index_admin') ? 'is-active' }} " href="{{ path('company_index_admin')}}">
+                                            Sociétés
+                                        </a>
+                                        <a class="navbar-item {{ (app.request.attributes.get('_route') == 'request_index_admin') ? 'is-active' }} " href="{{ path('request_index_admin')}}">
+                                            Demandes
+                                        </a>
+                                        <a class="navbar-item {{ (app.request.attributes.get('_route') == 'contact_index_admin') ? 'is-active' }} " href="{{ path('contact_index_admin')}}">
+                                            Contacts
+                                        </a>
+                                    </div>
+                                </div>
+                            {% endif %}
                             <div class="navbar-item">
                                 <div class="buttons">
                                 {% if is_granted('IS_AUTHENTICATED_FULLY') %}
