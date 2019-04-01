@@ -445,6 +445,36 @@ class CompanyController extends AbstractController
     }
 
     /**
+     * @Route("/comment/{id}", name="comment_toggleIsOnBoard", methods={"PATCH"}, requirements={"id"="\d+"})
+     */
+    public function toggleIsOnBoardComment(Comment $comment, Request $request, EntityManagerInterface $entityManager)
+    {
+        if (!$comment) {
+            throw $this->createNotFoundException("La demande indiquée n'existe pas"); 
+        }
+
+        if ($comment->getIsOnBoard()) {
+            $comment->setIsOnBoard(false);
+            $this->addFlash(
+                'success',
+                'Le commentaire ' . $comment->getTitle() . ' a été ajouté au tableau de bord !'
+            );
+
+        } else {
+            $comment->setIsOnBoard(true);
+            $this->addFlash(
+                'warning',
+                'Le commentaire ' . $comment->getTitle() . ' a été retiré du tableau de bord !'
+            );
+        }
+
+        $entityManager->flush();
+
+        $referer = $request->headers->get('referer');
+        return $this->redirect($referer);;
+    }
+
+    /**
      * @Route("/comment/{id}/archive", name="comment_archive", methods={"PATCH"}, requirements={"id"="\d+", "id"="\d+"})
      */
     public function archiveComment(Request $request, EntityManagerInterface $entityManager, Comment $comment)

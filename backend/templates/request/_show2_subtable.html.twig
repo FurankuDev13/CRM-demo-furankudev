@@ -50,6 +50,7 @@
                             <a class="level-item" href="{{ path('request_comment_edit', {'id': request.id, 'comment_id': comment.id}) }}">
                                 <button type="submit" class="button is-info"><i class="fas fa-edit"></i></button>
                             </a>
+                            {% include 'request/_isonboard_form.html.twig' %}
                             <form class="level-item" action='{{ path('request_comment_archive', {'id': comment.id}) }}' method="POST">
                                 <input class="" type="hidden" name="_method" value="PATCH">
                                 {% include 'partial/_confirm_cancel_modal.html.twig' with {'message': 'Confirmation d\'Archivage'} %}

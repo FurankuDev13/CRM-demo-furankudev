@@ -50,6 +50,7 @@
                             <a class="level-item" href="{{ path('company_comment_edit', {'id': company.id, 'comment_id': comment.id}) }}">
                                 <button type="submit" class="button is-info"><i class="fas fa-edit"></i></button>
                             </a>
+                            {% include 'request/_isonboard_form.html.twig' %}
                             {% include 'company/_archive_form.html.twig' with {'notArchived': true} %}
                         </div>
                     </td>
