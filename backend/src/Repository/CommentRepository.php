@@ -51,6 +51,21 @@ class CommentRepository extends ServiceEntityRepository
         ;
     }
 
+    public function findCommentIsActiveByUpdatedAt()
+    {
+        return $this->createQueryBuilder('com')
+            // ->join('com.company', 'c')
+            // ->addSelect('c')
+            // ->join('com.request', 'r')
+            // ->addSelect('r')
+            ->where('com.isActive IN (:isActive)')
+            ->setParameter('isActive', true)
+            ->orderBy('com.updatedAt', 'DESC')
+            ->getQuery()
+            ->getResult();
+        ;
+    }
+
     // /**
     //  * @return Comment[] Returns an array of Comment objects
     //  */

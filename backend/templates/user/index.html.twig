@@ -104,7 +104,7 @@
                             <a class="level-item" href="{{ path('user_edit', {'id' : user.id })}}">
                                 <button type="submit" class="button is-info"><i class="fas fa-edit"></i></button>
                             </a>
-                            {% include 'product/_archive_form.html.twig' with {'notArchived': true} %}
+                            {% include 'user/_archive_form.html.twig' with {'notArchived': true} %}
                         </div>
                     </td>
                     {% endif %}
