@@ -81,6 +81,7 @@ class Company
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="companies")
+     * @Groups({"contact_group"})
      */
     private $user;
 

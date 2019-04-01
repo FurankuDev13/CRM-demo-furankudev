@@ -24,6 +24,7 @@ use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+use Knp\Bundle\SnappyBundle\Snappy\Response\PdfResponse;
 
 /** 
  *  @Route("/request", name="request_") 
@@ -109,6 +110,39 @@ class RequestController extends AbstractController
 
         ]);
     }
+
+    /**
+     * @Route("/{id}/pdf", name="pdf", methods={"GET"}, requirements={"id"="\d+"})
+     */
+/*     public function pdf(DemandRequest $demandRequest, Request $request, CommentRepository $commentRepo, RequestDetailRepository $requestDetailRepo, \Knp\Snappy\Pdf $knpSnappy)
+    {
+        if (!$demandRequest) {
+            throw $this->createNotFoundException("La demande indiquée n'existe pas"); 
+        }
+
+        $comments = $commentRepo->findCommentIsActiveByRequest($demandRequest);
+        $details = $requestDetailRepo->findisActiveOrderedByField();
+
+        $amount = 0;
+
+        foreach($details as $detail) {
+            $amount += ($detail->getQuantity() * $detail->getProduct()->getListPrice());
+        }
+
+        $html = $this->renderView('request/PDF/_export_details.html.twig', array(
+            'page_title' => 'Demande: ' . $demandRequest->getTitle(),
+            'request' => $demandRequest,
+            'comments' => $comments,
+            'details' => $details,
+            'amount' => $amount,
+            'index' => $index
+        ));
+
+        return new PdfResponse(
+            $knpSnappy->getOutputFromHtml($html),
+            'file.pdf'
+        );
+    } */
 
     /**
      * @Route("/new", name="new", methods={"GET", "POST"})
@@ -323,7 +357,7 @@ class RequestController extends AbstractController
         $entityManager->flush();
 
         $referer = $request->headers->get('referer');
-        return $this->redirect($referer);;
+        return $this->redirect($referer);
     }
 
     /**
