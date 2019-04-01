@@ -42,14 +42,14 @@
                         {% include orderButtonsIncludePath with {'entity' : 'product', 'field' : 'reference'} %}
                     </th>
                     <th>Produit&nbsp;
-                            {% include orderButtonsIncludePath with {'entity' : 'product', 'field' : 'name'} %}
-                        </th>
+                        {% include orderButtonsIncludePath with {'entity' : 'product', 'field' : 'name'} %}
+                    </th>
                     <th>Description&nbsp;
-                            {% include orderButtonsIncludePath with {'entity' : 'product', 'field' : 'description'} %}
-                        </th>
+                        {% include orderButtonsIncludePath with {'entity' : 'product', 'field' : 'description'} %}
+                    </th>
                     <th>Prix liste&nbsp;
-                            {% include orderButtonsIncludePath with {'entity' : 'product', 'field' : 'listPrice'} %}
-                        </th>
+                        {% include orderButtonsIncludePath with {'entity' : 'product', 'field' : 'listPrice'} %}
+                    </th>
                     <th>Image</th>
                     {% if is_granted('ROLE_SUPPORT') %}
                         <th>Actions</th>
@@ -79,7 +79,7 @@
                                 </a>
                                 {% include 'product/_available_form.html.twig' %}
                                 {% include 'product/_onhomepage_form.html.twig' %}
-                                {% include 'product/_archive_form.html.twig' %}
+                                {% include 'product/_archive_form.html.twig' with {'notArchived': true} %}
                             </div>
                         </td>
                         {% endif %}

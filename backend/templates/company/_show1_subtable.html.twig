@@ -47,11 +47,7 @@
                             <a class="level-item" href="{{ path('company_address_edit', {'id': company.id, 'address_id': address.id}) }}">
                                 <button type="submit" class="button is-info"><i class="fas fa-edit"></i></button>
                             </a>
-                            <form class="level-item" action='{{ path('company_address_archive', {'id': address.id}) }}' method="POST">
-                                <input class="" type="hidden" name="_method" value="PATCH">
-                                {% include 'partial/_confirm_cancel_modal.html.twig' with {'message': 'Confirmation d\'Archivage'} %}
-                                <button class="button showModalConfirm is-warning"><i class="fas fa-archive"></i></button>
-                            </form>
+                            {% include 'contact/_archive_form.html.twig' with {'notArchived': true} %}
                         </div>
                     </td>
                     {% endif %}

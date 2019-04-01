@@ -23,7 +23,7 @@ class RequestRepository extends ServiceEntityRepository
         parent::__construct($registry, Request::class);
     }
 
-    public function findisActiveOrderedByField($table = 'r', $field = 'createdAt', $order = 'DESC')
+    public function findisActiveOrderedByField($table = 'r', $field = 'createdAt', $order = 'DESC', $isActive = true)
     {
         return $this->createQueryBuilder('r')
             ->join('r.contact', 'co')
@@ -33,7 +33,7 @@ class RequestRepository extends ServiceEntityRepository
             ->join('co.company', 'c')
             ->addSelect('c')
             ->andWhere('r.isActive = :isActive')
-            ->setParameter('isActive', true)
+            ->setParameter('isActive', $isActive)
             ->orderBy($table . '.' . $field, $order)
             ->getQuery()
             ->getResult()

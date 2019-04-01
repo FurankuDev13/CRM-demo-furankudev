@@ -44,6 +44,22 @@ class ProductController extends AbstractController
     }
 
     /**
+     * @Route("/index/admin", name="index_admin", methods={"GET"})
+     * Index des produits en mode Gestion/ADMIN : seulement ceux qui sont archivés
+     */
+    public function indexAdmin(Request $request, ProductRepository $productRepo, CategoryRepository $categoryRepo)
+    {
+        $field = $request->query->get('field', 'name');
+        $order = $request->query->get('order', 'ASC');
+        $products = $productRepo->findIsACtiveOrderedByField($field , $order, false);
+
+        return $this->render('product/indexAdmin.html.twig', [
+            'page_title' => 'Catalogue Produits Archivés',
+            'products' => $products,
+        ]);
+    }
+
+    /**
      * @Route("/{id}/show", name="show", methods={"GET"}, requirements={"id"="\d+"})
      */
     public function show(Product $product)
@@ -171,9 +187,10 @@ class ProductController extends AbstractController
         }
 
         $product->setIsActive(!$product->getIsActive());
+        $notification = ($product->getIsActive() ? ' a été désarchivé' : ' a été archivé !');
         $this->addFlash(
             'success',
-            'Le Produit ' . $product->getName() . ' a été archivé !'
+            'Le Produit ' . $product->getName() . $notification
         );
         $entityManager->flush();
 

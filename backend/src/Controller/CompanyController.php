@@ -78,6 +78,20 @@ class CompanyController extends AbstractController
     }
 
     /**
+     * @Route("/index/admin", name="index_admin", methods={"GET"})
+     * Index des Sociétés en mode Gestion/ADMIN : seulement celles qui sont archivées
+     */
+    public function indexAdmin(Request $request, CompanyRepository $companyRepo, UserRepository $userRepo, PersonRepository $personRepo)
+    {
+        $companies = $companyRepo->findIsACtiveOrderedByField('name', 'ASC', false);
+
+        return $this->render('company/indexAdmin.html.twig', [
+            'page_title' => 'Sociétés',
+            'companies' => $companies,
+        ]);
+    }
+
+    /**
      * @Route("/{id}/show", name="show", methods={"GET"}, requirements={"id"="\d+"})
      */
     public function show(Company $company, Request $request, CompanyRepository $companyRepo, CompanyAddressRepository $companyAddressRepo, CommentRepository $commentRepo, RequestRepository $requestRepo, HandlingStatusRepository $handlingStatusRepo)
@@ -240,35 +254,44 @@ class CompanyController extends AbstractController
             return $this->redirect($referer);;
         }
         
-        // archiver la société
+        // archiver/désarchiver la société
         $company->setIsActive(!$company->getIsActive());
-        
-        // archiver également les adresses de la société
-        $companyAddresses = $companyAddressRepo->findAllByOneCompany($company);
-        foreach ($companyAddresses as $companyAddress) {
-            $companyAddress->setIsActive(false);
-        }
 
-        // archiver également les personnes en contact de la société
-        $contacts = $contactRepo->findAllByOneCompany($company);
-        foreach ($contacts as $contact) {
-            $contact->getPerson()->setIsActive(false);
-        }
-        
-        // archiver également, pour toutes les personnes en contact de la société, les demandes de ces contacts
-        $demandRequests = $requestRepo->findAllByOneCompany($company);
-        foreach ($demandRequests as $demandRequest) {
-            $demandRequest->setIsActive(false);
-        }
+        if (!$company->getIsActive()) {
+        //cas de l'archivage
+            // archiver également les adresses de la société
+            $companyAddresses = $companyAddressRepo->findAllByOneCompany($company);
+            foreach ($companyAddresses as $companyAddress) {
+                $companyAddress->setIsActive(false);
+            }
+    
+            // archiver également les personnes en contact de la société
+            $contacts = $contactRepo->findAllByOneCompany($company);
+            foreach ($contacts as $contact) {
+                $contact->getPerson()->setIsActive(false);
+            }
+            
+            // archiver également, pour toutes les personnes en contact de la société, les demandes de ces contacts
+            $demandRequests = $requestRepo->findAllByOneCompany($company);
+            foreach ($demandRequests as $demandRequest) {
+                $demandRequest->setIsActive(false);
+            }
+            // flash message global
+            $this->addFlash(
+                'success',
+                'La Société ' . $company->getName() . ' a été archivée, '.
+                'ainsi que ses ' . count($companyAddresses) . ' adresses,' . 
+                'ses ' . count($contacts) . ' personnes en contact,' . 
+                'ses ' . count($demandRequests) . ' demandes.'
+            );
+        } else {
+            // flash message global
+            $this->addFlash(
+                'success',
+                'La Société ' . $company->getName() . ' a été désarchivée, '
+            );
 
-        // flash message global
-        $this->addFlash(
-            'success',
-            'La Société ' . $company->getName() . ' a été archivée, '.
-            'ainsi que ses ' . count($companyAddresses) . ' adresses,' . 
-            'ses ' . count($contacts) . ' personnes en contact,' . 
-            'ses ' . count($demandRequests) . ' demandes.'
-        );
+        }
         
         $entityManager->flush();
 
