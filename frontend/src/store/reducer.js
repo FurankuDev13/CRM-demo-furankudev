@@ -7,7 +7,6 @@ import { getSlug } from 'src/utils/url';
  * Initial State
  */
 const initialState = {
-  view: 'login',
   profile: {
     id: '',
     email: '',
@@ -186,7 +185,24 @@ const reducer = (state = initialState, action = {}) => {
     case LOGOUT:
       return {
         ...state,
-        logEmail: '',
+        profile: {
+          id: '',
+          email: '',
+          company: {
+            name: '',
+            description: '',
+            picture: 'https://picsum.photos/200',
+            sirenNumber: '',
+            user: {},
+          },
+          person: {
+            firstname: '',
+            lastname: '',
+            id: '',
+            businessPhone: '',
+            cellPhone: '',
+          },
+        },
         isLogged: false,
       };
 
