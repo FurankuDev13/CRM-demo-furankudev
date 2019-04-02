@@ -44,11 +44,11 @@
                             </a>
                             {% if is_granted('ROLE_MANAGER') %}
                                 <div class="navbar-item has-dropdown is-hoverable">
-                                    <a class="navbar-link has-text-warning" href="{{ path('product_index_admin')}}">
+                                    <a class="navbar-link has-text-warning" href="{{ path('admin_user_index')}}">
                                     <i class="fas fa-cogs"></i>&nbsp;Admin
                                     </a>
                                     <div class="navbar-dropdown">
-                                        <a class="navbar-item {{ (app.request.attributes.get('_route') == 'user_index') ? 'is-active' }} " href="{{ path('user_index')}}">
+                                        <a class="navbar-item {{ (app.request.attributes.get('_route') == 'user_index') ? 'is-active' }} " href="{{ path('admin_user_index')}}">
                                             Utilisateurs
                                         </a>
                                         <a class="navbar-item {{ (app.request.attributes.get('_route') == 'admin_contactType_index') ? 'is-active' }} " href="{{ path('admin_contactType_index')}}">
