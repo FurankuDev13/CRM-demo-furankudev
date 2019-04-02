@@ -55,6 +55,7 @@ const initialState = {
     question: {
       title: '',
       content: '',
+      questionSelect: 'Demande d\'information',
     },
     profile: {
       firstname: '',
@@ -221,6 +222,7 @@ const reducer = (state = initialState, action = {}) => {
           question: {
             title: '',
             content: '',
+            questionSelect: 'Demande d\'information',
           },
         },
       };
@@ -261,6 +263,10 @@ export const fetchCategories = () => ({
 
 export const ProductIsInCategory = (product, slug) => (
   product.categories.find(category => getSlug(category.name) === slug) !== undefined
+);
+
+export const getCategoryFromSlug = (list, slug) => (
+  list.find(category => getSlug(category.name) === slug).name
 );
 
 export const getCurrentCategory = (list, slug) => (

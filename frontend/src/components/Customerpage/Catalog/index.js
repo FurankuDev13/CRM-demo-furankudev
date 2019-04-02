@@ -13,15 +13,21 @@ import Card from './Card';
 
 import './catalog.scss';
 
-const Catalog = ({ currentList }) => (
-  <div className="list">
-    {currentList.count !== 0 && currentList.map(item => (
-      <Card
-        key={item.id}
-        {...item}
-        source="catalog"
-      />
-    ))}
+const Catalog = ({ currentList, category }) => (
+  <div>
+    {(category !== undefined && (
+      <div id="category-title">Catégorie : {category}</div>
+    )) || <div id="category-title">Catalogue complet</div>
+    }
+    <div className="list">
+      {currentList.count !== 0 && currentList.map(item => (
+        <Card
+          key={item.id}
+          {...item}
+          source="catalog"
+        />
+      ))}
+    </div>
   </div>
 );
 
@@ -32,6 +38,7 @@ Catalog.propTypes = {
       id: PropTypes.number.isRequired,
     }).isRequired,
   ).isRequired,
+  category: PropTypes.string.isRequired,
 };
 
 const CatalogWithRouter = withRouter(Catalog);

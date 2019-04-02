@@ -93,15 +93,26 @@ const ajaxAdmin = store => next => (action) => {
       const {
         title,
         content,
+        questionSelect,
       } = store.getState().fields.question;
       const {
         id,
       } = store.getState().profile;
+      let type;
+      switch (questionSelect) {
+        case 'Demande de devis': {
+          type = 'Devis simple';
+          break;
+        }
+        default:
+          type = 'Informations';
+          break;
+      }
 
       const questionDatas = {
         request_title: title,
         request_body: content,
-        request_type: 'Devis simple',
+        request_type: type,
       };
       const stringifiedLoginDatas = JSON.stringify(questionDatas);
       axiosUp.post(`/api/contact/${id}/request`, stringifiedLoginDatas)

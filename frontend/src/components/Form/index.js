@@ -8,6 +8,7 @@ import PropTypes from 'prop-types';
  * local import
  */
 import Input from 'src/containers/Input';
+import Select from 'src/containers/Select';
 
 /**
  * Code
@@ -34,7 +35,12 @@ class Form extends React.Component {
             formOrigin={formOrigin}
           />
         ))}
-
+        {formOrigin === 'question' && (
+          <Select
+            formOrigin="question"
+            name="questionSelect"
+          />
+        )}
         <div className="field is-grouped">
           <div className="control">
             <button
