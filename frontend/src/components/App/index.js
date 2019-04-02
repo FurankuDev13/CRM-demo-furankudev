@@ -9,6 +9,7 @@ import classNames from 'classnames';
  * Local import
  */
 import { Route, Redirect, Switch } from 'react-router-dom';
+import './App.scss';
 import Nav from 'src/containers/Nav';
 import Homepage from 'src/containers/Homepage';
 import Customerpage from 'src/containers/Customerpage';

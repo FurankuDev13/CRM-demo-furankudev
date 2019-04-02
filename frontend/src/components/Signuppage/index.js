@@ -110,7 +110,7 @@ const Signup = ({ signupFields, formErrors }) => {
     },
   ];
   return (
-    <div>
+    <div id="form-container">
       <div id="notification" className="notification is-danger is-hidden">
         <button
           type="button"
