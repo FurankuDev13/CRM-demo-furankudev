@@ -2,36 +2,36 @@
 
 namespace App\Repository;
 
-use App\Entity\EmailTemplate;
+use App\Entity\EmailType;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
 /**
- * @method EmailTemplate|null find($id, $lockMode = null, $lockVersion = null)
- * @method EmailTemplate|null findOneBy(array $criteria, array $orderBy = null)
- * @method EmailTemplate[]    findAll()
- * @method EmailTemplate[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method EmailType|null find($id, $lockMode = null, $lockVersion = null)
+ * @method EmailType|null findOneBy(array $criteria, array $orderBy = null)
+ * @method EmailType[]    findAll()
+ * @method EmailType[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class EmailTemplateRepository extends ServiceEntityRepository
+class EmailTypeRepository extends ServiceEntityRepository
 {
     public function __construct(RegistryInterface $registry)
     {
-        parent::__construct($registry, EmailTemplate::class);
+        parent::__construct($registry, EmailType::class);
     }
 
     public function findByIsActiveOrderedByField($isActive = true, $field = 'title', $order = 'ASC')
     {
-        return $this->createQueryBuilder('et')
-            ->andWhere('et.isActive IN (:isActive)')
+        return $this->createQueryBuilder('e')
+            ->andWhere('e.isActive IN (:isActive)')
             ->setParameter('isActive', $isActive)
-            ->orderBy('et.' . $field, $order)
+            ->orderBy('e.' . $field, $order)
             ->getQuery()
             ->getResult()
         ;
     }
 
     // /**
-    //  * @return EmailTemplate[] Returns an array of EmailTemplate objects
+    //  * @return EmailType[] Returns an array of EmailType objects
     //  */
     /*
     public function findByExampleField($value)
@@ -48,7 +48,7 @@ class EmailTemplateRepository extends ServiceEntityRepository
     */
 
     /*
-    public function findOneBySomeField($value): ?EmailTemplate
+    public function findOneBySomeField($value): ?EmailType
     {
         return $this->createQueryBuilder('e')
             ->andWhere('e.exampleField = :val')

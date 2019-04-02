@@ -12,8 +12,10 @@ use App\Entity\Product;
 use App\Entity\Category;
 use App\Entity\Discount;
 use App\Entity\UserRole;
+use App\Entity\EmailType;
 use App\Entity\ContactType;
 use App\Entity\RequestType;
+use App\Entity\EmailTemplate;
 use App\Entity\CompanyAddress;
 use App\Entity\HandlingStatus;
 use Faker\ORM\Doctrine\Populator;
@@ -46,6 +48,8 @@ class AppFixtures extends Fixture
 
     public function load(ObjectManager $manager)
     {
+        $this->getEmailTypesAndTemplates();
+
         $this->getProductsAndCategories();
 
         $this->getMainContactAndUsers();
@@ -116,6 +120,22 @@ class AppFixtures extends Fixture
             }
         }
         return $category;
+    }
+
+    private function getEmailTypesAndTemplates() {
+        $emailTemplate = new EmailTemplate();
+        $emailTemplate->setTitle('Title');
+        $emailTemplate->setMessageTitle('MessageTitle');
+        $emailTemplate->setMessageBody('MessageBody');
+        $emailTemplate->setMessageSignature('MessageSignature');
+        $this->manager->persist($emailTemplate);
+
+        $emailType = new EmailType();
+        $emailType->setTitle('Title');
+        $emailType->setEmailTemplate($emailTemplate);
+        $this->manager->persist($emailType);
+
+        $this->manager->flush();
     }
 
     private function getMainContactAndUsers()

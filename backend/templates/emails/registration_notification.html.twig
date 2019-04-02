@@ -1,5 +1,11 @@
-<h2>Bonjour {{ contactFullName }}! Votre inscription a bien été enregistrée !</h2>
+<h2>Bonjour {{ contact.person.firstname }} {{ contact.person.lastname }}! Votre inscription a bien été enregistrée !</h2>
 
 <h3>Vous faîtes désormais partie de la communauté Beer o'Clock, nous vous en remercions</h3>
 
 <p>Vous pouvez désormais vous connecter et consulter notre catalogue. Nous allons rapidement vous recontacter pour vous apporter toutes les informations complémentaires dont vous auriez besoin.</p>
+<a href="http://www.cerberus-crm.space/login">vous connecter</a>
+<p>Votre identifiant est <span>{{ contact.email }}</span> et votre mot de passe est {{ password }}</p>
+<p>Bien bièrement,</p>
+<blockquote>
+    L'équipe de Beer o'Clock
+</blockquote>

@@ -12,9 +12,11 @@ use App\Entity\Category;
 use App\Entity\Discount;
 use App\Entity\UserRole;
 use Doctrine\ORM\Events;
+use App\Entity\EmailType;
 use App\Entity\Attachment;
 use App\Entity\ContactType;
 use App\Entity\RequestType;
+use App\Entity\EmailTemplate;
 use App\Entity\RequestDetail;
 use App\Entity\CompanyAddress;
 use App\Entity\HandlingStatus;
@@ -68,6 +70,8 @@ class DoctrineEvent implements EventSubscriber
             || $entity instanceof Comment
             || $entity instanceof Attachment
             || $entity instanceof RequestDetail
+            || $entity instanceof EmailTemplate
+            || $entity instanceof EmailType
             ) {
 
             if (!$entity->getCreatedAt()) {
@@ -101,6 +105,8 @@ class DoctrineEvent implements EventSubscriber
             || $entity instanceof Comment
             || $entity instanceof Attachment
             || $entity instanceof RequestDetail
+            || $entity instanceof EmailTemplate
+            || $entity instanceof EmailType
             ) {
 
             $entity->setIsActive(true);
@@ -128,6 +134,8 @@ class DoctrineEvent implements EventSubscriber
             || $entity instanceof Comment
             || $entity instanceof Attachment
             || $entity instanceof RequestDetail
+            || $entity instanceof EmailTemplate
+            || $entity instanceof EmailType
             ) {
             $entity->setUpdatedAt(new DateTime);
         } 
