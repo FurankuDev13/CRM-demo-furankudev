@@ -17,24 +17,24 @@
                 <tbody>
                     <tr>
                         <td>   
-                            <a href="{{ path('user_index', {'isActive': true}) }}">
+                            <a href="{{ path('admin_user_index', {'isActive': true}) }}">
                                 <h2 class="has-text-left subtitle has-text-primary is-6">Actifs</h2>
                             </a>
                         </td>
                         <td>
-                            <a href="{{ path('user_index', {'isActive': true}) }}">
+                            <a href="{{ path('admin_user_index', {'isActive': true}) }}">
                                 <button class="has-text-left button is-primary is-small is-outlined is-size-6">{{ activeUsers|length }}</button>
                             </a>
                         </td>
                     </tr>
                     <tr>
                         <td>   
-                            <a href="{{ path('user_index', {'isActive': false}) }}">
+                            <a href="{{ path('admin_user_index', {'isActive': false}) }}">
                                 <h2 class="has-text-left subtitle has-text-primary is-6">Archivés</h2>
                             </a>
                         </td>
                         <td>
-                            <a href="{{ path('user_index', {'isActive': false}) }}">
+                            <a href="{{ path('admin_user_index', {'isActive': false}) }}">
                                 <button class="has-text-left button is-primary is-small is-outlined is-size-6">{{ archivedUsers|length }}</button>
                             </a>
                         </td>
@@ -65,12 +65,12 @@
                     {% for userRole in userRoles %}
                         <tr>
                             <td>   
-                                <a href="{{ path('user_index', {'filter': 'userRole', 'filterName': userRole.title }) }}">
+                                <a href="{{ path('admin_user_index', {'filter': 'userRole', 'filterName': userRole.title }) }}">
                                     <h2 class="has-text-left subtitle has-text-primary is-6">{{ userRole.title }}</h2>
                                 </a>
                             </td>
                             <td>
-                                <a href="{{ path('user_index', {'filter': 'userRole', 'filterName': userRole.title }) }}">
+                                <a href="{{ path('admin_user_index', {'filter': 'userRole', 'filterName': userRole.title }) }}">
                                     <button class="has-text-left button is-primary is-small is-outlined is-size-6">{{ userRole.users|length }}</button>
                                 </a>
                             </td>
@@ -102,12 +102,12 @@
                         {% if company.user %}
                             <tr>
                                 <td>   
-                                    <a href="{{ path('user_index', {'filter': 'company', 'filterName': company.name }) }}">
+                                    <a href="{{ path('admin_user_index', {'filter': 'company', 'filterName': company.name }) }}">
                                         <h2 class="has-text-left subtitle has-text-primary is-6">{{ company.name }}</h2>
                                     </a>
                                 </td>
                                 <td>
-                                    <a href="{{ path('user_index', {'filter': 'company', 'filterName': company.name }) }}">
+                                    <a href="{{ path('admin_user_index', {'filter': 'company', 'filterName': company.name }) }}">
                                         <button class="has-text-left button is-primary is-small is-outlined is-size-6">1</button>
                                     </a>
                                 </td>

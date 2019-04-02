@@ -44,11 +44,12 @@
                             </a>
                             {% if is_granted('ROLE_MANAGER') %}
                                 <div class="navbar-item has-dropdown is-hoverable">
-                                    <a class="navbar-link has-text-warning" href="{{ path('admin_product_index')}}">
+
+                                    <a class="navbar-link has-text-warning" href="{{ path('admin_user_index')}}">
                                     <i class="fas fa-cogs"></i>&nbsp;Admin
                                     </a>
                                     <div class="navbar-dropdown">
-                                        <a class="navbar-item {{ (app.request.attributes.get('_route') == 'user_index') ? 'is-active' }} " href="{{ path('user_index')}}">
+                                        <a class="navbar-item {{ (app.request.attributes.get('_route') == 'user_index') ? 'is-active' }} " href="{{ path('admin_user_index')}}">
                                             Utilisateurs
                                         </a>
                                         <a class="navbar-item {{ (app.request.attributes.get('_route') == 'admin_contactType_index') ? 'is-active' }} " href="{{ path('admin_contactType_index')}}">
@@ -58,10 +59,16 @@
                                             Types d'adresses
                                         </a>
                                         <a class="navbar-item {{ (app.request.attributes.get('_route') == 'admin_requestType_index') ? 'is-active' }} " href="{{ path('admin_requestType_index')}}">
-                                            Type de demande
+                                            Types de demande
                                         </a>
                                         <a class="navbar-item {{ (app.request.attributes.get('_route') == 'admin_handlingStatus_index') ? 'is-active' }} " href="{{ path('admin_handlingStatus_index')}}">
-                                            Statut de traitement
+                                            Statuts de traitement
+                                        </a>
+                                        <a class="navbar-item {{ (app.request.attributes.get('_route') == 'admin_emailType_index') ? 'is-active' }} " href="{{ path('admin_emailType_index')}}">
+                                            Notifications
+                                        </a>
+                                        <a class="navbar-item {{ (app.request.attributes.get('_route') == 'admin_emailTemplate_index') ? 'is-active' }} " href="{{ path('admin_emailTemplate_index')}}">
+                                            Templates des notifications
                                         </a>
                                     </div>
                                 </div>

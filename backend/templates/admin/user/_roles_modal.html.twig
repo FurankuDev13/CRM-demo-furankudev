@@ -13,7 +13,7 @@
                         {% set roleMatch = true %}
                     {% endif %}
                 {% endfor %}
-                <form action='{{ path('user_userRole_toggle', {'id': user.id}) }}' method="POST">
+                <form action='{{ path('admin_user_userRole_toggle', {'id': user.id}) }}' method="POST">
                     <input type="hidden" name="_method" value="PATCH">
                     <input type="hidden" name="userRoleId" value="{{ userRole.id }}">
                     <input type="hidden" name="userRoleMatch" value="{{ roleMatch }}">
