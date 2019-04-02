@@ -60,7 +60,7 @@ class Request
     private $requestType;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Contact", inversedBy="requests")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Contact", inversedBy="requests", cascade={"remove"})
      * @ORM\JoinColumn(nullable=false)
      */
     private $contact;

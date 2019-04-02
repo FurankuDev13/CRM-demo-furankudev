@@ -6,7 +6,7 @@
 {% endblock %}
 
 {% block content %}
-    {% set orderButtonsIncludePath = 'contact/_order_buttons.html.twig' %}
+<div class="container">
     <div class="level">
         <div class="level-left ">
             <div class="level-item">
@@ -28,27 +28,13 @@
     <table class="table is-fullwidth is-hoverable is-striped" id="contactTable">
         <thead>
             <tr>
-                <th>Ajout 
-                    {% include orderButtonsIncludePath with {'table': 'p', 'field' : 'createdAt'} %}
-                </th>
-                <th>Nom 
-                    {% include orderButtonsIncludePath with {'table': 'p', 'field' : 'lastname'} %}
-                </th>
-                <th>Prénom 
-                    {% include orderButtonsIncludePath with {'table': 'p', 'field' : 'firstname'} %}
-                </th>
-                <th>Email 
-                    {% include orderButtonsIncludePath with {'table': 'co', 'field' : 'email'} %}
-                </th>
-                <th>Téléphone 
-                    {% include orderButtonsIncludePath with {'table': 'p', 'field' : 'businessPhone'} %}
-                </th>
-                <th>Société 
-                    {% include orderButtonsIncludePath with {'table': 'c', 'field' : 'name'} %}
-                </th>
-                <th>Titre 
-                    {% include orderButtonsIncludePath with {'table': 'ct', 'field' : 'title'} %}
-                </th>
+                <th>Ajout</th>
+                <th>Nom</th>
+                <th>Prénom</th>
+                <th>Email</th>
+                <th>Téléphone</th>
+                <th>Société</th>
+                <th>Titre</th>
                 <th>Actions</th>
             </tr>
         </thead>
@@ -70,6 +56,7 @@
                     {% if is_granted('ROLE_ADMIN') %}
                         <div class="level-left">
                             {% include 'contact/_archive_form.html.twig' with {'notArchived': false} %}
+                            {% include 'contact/_delete_form.html.twig' %}
                         </div>
                     {% endif %}
                     </td>
@@ -78,4 +65,6 @@
             {% endfor %}
         </tbody>
     </table>
+</div>
+
 {% endblock %}

@@ -50,7 +50,7 @@
                             {% if is_granted('ROLE_ADMIN') %}
                                 <div class="navbar-item has-dropdown is-hoverable">
                                     <a class="navbar-link has-background-danger" href="{{ path('product_index_admin')}}">
-                                    Gestion
+                                    Archives
                                     </a>
                                     <div class="navbar-dropdown">
                                         <a class="navbar-item {{ (app.request.attributes.get('_route') == 'product_index_admin') ? 'is-active' }} " href="{{ path('product_index_admin')}}">

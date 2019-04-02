@@ -136,5 +136,27 @@ class ContactController extends AbstractController
         return $this->redirect($referer);
     }
 
+    /**
+     * @Route("/{id}/delete", name="delete", methods={"DELETE"}, requirements={"id"="\d+"})
+     */
+    public function delete(Contact $contact, Request $request, EntityManagerInterface $entityManager)
+    {
+        if (!$contact) {
+            throw $this->createNotFoundException("Le contact indiqué n'existe pas"); 
+        }
+
+        $entityManager->remove($contact);
+        $entityManager->flush();
+        $notification = " a été supprimé !";
+        $this->addFlash(
+            'danger',
+            'La Catégorie ' . $contact->getPerson()->getFirstname() . ' ' . $contact->getPerson()->getLastname() . $notification
+        );
+
+        $referer = $request->headers->get('referer');
+        return $this->redirect($referer);;
+    }
+
+
 
 }
