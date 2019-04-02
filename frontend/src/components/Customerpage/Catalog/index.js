@@ -8,6 +8,7 @@ import { withRouter } from 'react-router';
 /**
  * Local import
  */
+import Select from 'src/containers/Select';
 import Card from './Card';
 
 
@@ -15,10 +16,20 @@ import './catalog.scss';
 
 const Catalog = ({ currentList, category }) => (
   <div>
-    {(category !== 'Catalogue complet' && (
-      <div id="category-title">Catégorie : {category}</div>
-    )) || <div id="category-title">{category}</div>
-    }
+    <div>
+      {(category !== 'Catalogue complet' && (
+        <div id="category-title">Catégorie : {category}</div>
+      )) || <div id="category-title">{category}</div>
+      }
+      <div>Tri des articles
+        <Select
+          formOrigin="articleOrder"
+          name="articleSelect"
+          id="article-select"
+          options={['Ordre alphabetique', 'Ordre alphabetique inverse', 'Par prix croissant', 'Par prix décroissant']}
+        />
+      </div>
+    </div>
     <div className="list">
       {currentList.count !== 0 && currentList.map(item => (
         <Card
@@ -30,7 +41,6 @@ const Catalog = ({ currentList, category }) => (
     </div>
   </div>
 );
-
 
 Catalog.propTypes = {
   currentList: PropTypes.arrayOf(

@@ -34,6 +34,9 @@ const initialState = {
   articlesOnHomePage: [],
   formErrors: [],
   fields: {
+    articleOrder: {
+      articleSelect: 'Ordre alphabetique',
+    },
     login: {
       email: '',
       password: '',

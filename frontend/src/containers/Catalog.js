@@ -28,9 +28,54 @@ const mapStateToProps = (state, ownProps) => {
       break;
     }
   }
+  const order = state.fields.articleOrder.articleSelect;
+  switch (order) {
+    case 'Par prix croissant': {
+      currentList.sort((a, b) => a.listPrice - b.listPrice);
+      break;
+    }
+    case 'Par prix décroissant': {
+      currentList.sort((a, b) => b.listPrice - a.listPrice);
+      break;
+    }
+    case 'Ordre alphabetique inverse': {
+      currentList.sort((a, b) => {
+        const nameA = a.name.toUpperCase();
+        const nameB = b.name.toUpperCase();
+        if (nameA > nameB) {
+          return -1;
+        }
+        if (nameA < nameB) {
+          return 1;
+        }
+        // names must be equal
+        return 0;
+      });
+
+      break;
+    }
+    default: {
+      currentList.sort((a, b) => {
+        const nameA = a.name.toUpperCase();
+        const nameB = b.name.toUpperCase();
+        if (nameA < nameB) {
+          return -1;
+        }
+        if (nameA > nameB) {
+          return 1;
+        }
+        // names must be equal
+        return 0;
+      });
+      break;
+    }
+  }
+
+  const { articleOrder } = state.fields;
   return {
     category,
     currentList,
+    articleOrder,
   };
 };
 
