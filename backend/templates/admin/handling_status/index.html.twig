@@ -3,5 +3,5 @@
 {% block title %}{{ parent() }} - {{ page_title }}{% endblock %}
 
 {% block main %}
-    {% include 'admin/partial/_index.html.twig' with {'entity': 'HandlingStatus', 'dataList': HandlingStatuses} %}
+    {% include 'admin/partial/_index.html.twig' with {'entity': 'handlingStatus', 'dataList': handlingStatuses} %}
 {% endblock %}

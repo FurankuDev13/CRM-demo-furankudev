@@ -28,7 +28,7 @@ class AddressTypeController extends AbstractController
 
         return $this->render('admin/address_type/index.html.twig', [
             'page_title' => "Liste des types d'adresse",
-            'companyAddressTypes' => $companyAddressTypes,
+            'addressTypes' => $companyAddressTypes,
         ]);
     }
 
@@ -50,7 +50,7 @@ class AddressTypeController extends AbstractController
                 'success',
                 'Le type ' . $companyAddressType->getTitle() . ' a bien été ajouté !'
             );
-            return $this->redirectToRoute('admin_companyAddressType_index');
+            return $this->redirectToRoute('admin_addressType_index');
         }
 
 
@@ -79,7 +79,7 @@ class AddressTypeController extends AbstractController
                 'warning',
                 'Le type ' . $companyAddressType->getTitle() . ' a bien été mis à jour !'
             );
-            return $this->redirectToRoute('admin_companyAddressType_index');
+            return $this->redirectToRoute('admin_addressType_index');
         }
 
         return $this->render('admin/address_type/edit.html.twig', [

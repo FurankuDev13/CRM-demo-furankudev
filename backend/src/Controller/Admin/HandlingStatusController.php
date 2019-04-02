@@ -3,6 +3,7 @@
 namespace App\Controller\Admin;
 
 use App\Entity\HandlingStatus;
+use App\Form\HandlingStatusFormType;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\HandlingStatusRepository;
 use Symfony\Component\HttpFoundation\Request;
@@ -23,11 +24,11 @@ class HandlingStatusController extends AbstractController
         $field = $request->query->get('field', 'title');
         $order = $request->query->get('order', 'ASC');
 
-        $handlingStatuss = $handlingStatusRepo->findByIsActiveOrderedByField($isActive, $field , $order);
+        $handlingStatuses = $handlingStatusRepo->findByIsActiveOrderedByField($isActive, $field , $order);
 
-        return $this->render('admin/contact_type/index.html.twig', [
-            'page_title' => 'Liste des types de contact',
-            'handlingStatuss' => $handlingStatuss,
+        return $this->render('admin/handling_status/index.html.twig', [
+            'page_title' => 'Liste des statuts des demandes',
+            'handlingStatuses' => $handlingStatuses,
         ]);
     }
 
@@ -36,9 +37,9 @@ class HandlingStatusController extends AbstractController
      */
     public function new(Request $request, EntityManagerInterface $entityManager)
     {
-        $handlingStatus = new handlingStatus();
+        $handlingStatus = new HandlingStatus();
 
-        $form = $this->createForm(handlingStatusFormType::class, $handlingStatus);
+        $form = $this->createForm(HandlingStatusFormType::class, $handlingStatus);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -47,14 +48,14 @@ class HandlingStatusController extends AbstractController
 
             $this->addFlash(
                 'success',
-                'Le type ' . $handlingStatus->getTitle() . ' a bien été ajouté !'
+                'Le statut ' . $handlingStatus->getTitle() . ' a bien été ajouté !'
             );
             return $this->redirectToRoute('admin_handlingStatus_index');
         }
 
 
-        return $this->render('admin/contact_type/new.html.twig', [
-            'page_title' => 'Ajouter un nouveau type de contact',
+        return $this->render('admin/handling_status/new.html.twig', [
+            'page_title' => 'Ajouter un nouveau statut de demande',
             'form' => $form->createView()
         ]);
     }
@@ -65,10 +66,10 @@ class HandlingStatusController extends AbstractController
     public function edit(HandlingStatus $handlingStatus, Request $request, EntityManagerInterface $entityManager)
     {
         if (!$handlingStatus) {
-            throw $this->createNotFoundException("Le type indiqué n'existe pas"); 
+            throw $this->createNotFoundException("Le statut indiqué n'existe pas"); 
         }
 
-        $form = $this->createForm(handlingStatusFormType::class, $handlingStatus);
+        $form = $this->createForm(HandlingStatusFormType::class, $handlingStatus);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -76,13 +77,13 @@ class HandlingStatusController extends AbstractController
 
             $this->addFlash(
                 'warning',
-                'Le type ' . $handlingStatus->getTitle() . ' a bien été mis à jour !'
+                'Le statut ' . $handlingStatus->getTitle() . ' a bien été mis à jour !'
             );
             return $this->redirectToRoute('admin_handlingStatus_index');
         }
 
-        return $this->render('admin/contact_type/edit.html.twig', [
-            'page_title' => 'Mettre à jour le type ' . $handlingStatus->getTitle(),
+        return $this->render('admin/handling_status/edit.html.twig', [
+            'page_title' => 'Mettre à jour le statut ' . $handlingStatus->getTitle(),
             'form' => $form->createView(),
             'handlingStatus' => $handlingStatus
         ]);
@@ -94,14 +95,14 @@ class HandlingStatusController extends AbstractController
     public function archive(HandlingStatus $handlingStatus, Request $request, EntityManagerInterface $entityManager)
     {
         if (!$handlingStatus) {
-            throw $this->createNotFoundException("Le type indiqué n'existe pas"); 
+            throw $this->createNotFoundException("Le statut indiqué n'existe pas"); 
         }
 
         $handlingStatus->setIsActive(!$handlingStatus->getIsActive());
         $notification = ($handlingStatus->getIsActive() ? ' a été désarchivé' : ' a été archivé !');
         $this->addFlash(
             'warning',
-            'Le type ' . $handlingStatus->getTitle() . $notification
+            'Le statut ' . $handlingStatus->getTitle() . $notification
         );
         $entityManager->flush();
 
@@ -116,13 +117,13 @@ class HandlingStatusController extends AbstractController
     public function delete(HandlingStatus $handlingStatus, Request $request, EntityManagerInterface $entityManager)
     {
         if (!$handlingStatus) {
-            throw $this->createNotFoundException("Le type indiqué n'existe pas"); 
+            throw $this->createNotFoundException("Le statut indiqué n'existe pas"); 
         }
 
         $entityManager->remove($handlingStatus);;
         $this->addFlash(
             'danger',
-            'Le type ' . $handlingStatus->getTitle() . ' a été supprimé ! '
+            'Le statut ' . $handlingStatus->getTitle() . ' a été supprimé ! '
         );
         $entityManager->flush();
 

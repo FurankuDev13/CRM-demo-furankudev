@@ -3,6 +3,7 @@
 namespace App\Controller\Admin;
 
 use App\Entity\RequestType;
+use App\Form\RequestTypeFormType;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\RequestTypeRepository;
 use Symfony\Component\HttpFoundation\Request;
@@ -25,7 +26,7 @@ class RequestTypeController extends AbstractController
 
         $requestTypes = $requestTypeRepo->findByIsActiveOrderedByField($isActive, $field , $order);
 
-        return $this->render('admin/contact_type/index.html.twig', [
+        return $this->render('admin/request_type/index.html.twig', [
             'page_title' => 'Liste des types de contact',
             'requestTypes' => $requestTypes,
         ]);
@@ -36,9 +37,9 @@ class RequestTypeController extends AbstractController
      */
     public function new(Request $request, EntityManagerInterface $entityManager)
     {
-        $requestType = new requestType();
+        $requestType = new RequestType();
 
-        $form = $this->createForm(requestTypeFormType::class, $requestType);
+        $form = $this->createForm(RequestTypeFormType::class, $requestType);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -53,7 +54,7 @@ class RequestTypeController extends AbstractController
         }
 
 
-        return $this->render('admin/contact_type/new.html.twig', [
+        return $this->render('admin/request_type/new.html.twig', [
             'page_title' => 'Ajouter un nouveau type de contact',
             'form' => $form->createView()
         ]);
@@ -68,7 +69,7 @@ class RequestTypeController extends AbstractController
             throw $this->createNotFoundException("Le type indiqué n'existe pas"); 
         }
 
-        $form = $this->createForm(requestTypeFormType::class, $requestType);
+        $form = $this->createForm(RequestTypeFormType::class, $requestType);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -81,7 +82,7 @@ class RequestTypeController extends AbstractController
             return $this->redirectToRoute('admin_requestType_index');
         }
 
-        return $this->render('admin/contact_type/edit.html.twig', [
+        return $this->render('admin/request_type/edit.html.twig', [
             'page_title' => 'Mettre à jour le type ' . $requestType->getTitle(),
             'form' => $form->createView(),
             'requestType' => $requestType
