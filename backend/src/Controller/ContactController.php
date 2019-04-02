@@ -121,21 +121,23 @@ class ContactController extends AbstractController
 
             $emailTemplate = $emailTemplateRepo->findOneByEmailTypeTitle('Inscription - Backoffice');
 
-            $message = (new \Swift_Message("Bienvenue chez Beer'oClock"))
-            ->setFrom('cerberus.crm.mailer@gmail.com')
-            ->setTo([$contact->getEmail(), 'cerberus.crm.mailer@gmail.com', 'sith13160@gmail.com'])
-            ->setBody(
-                $this->renderView(
-                    'emails/notification.html.twig',
-                    [
-                        'emailTemplate' => $emailTemplate,
-                        'contact' => $contact,
-                        'password' => $password,
-                    ]
-                ),
-                'text/html'
-            );
-            $mailer->send($message);
+            if ($emailTemplate) {
+                $message = (new \Swift_Message("Bienvenue chez Beer'oClock"))
+                ->setFrom('cerberus.crm.mailer@gmail.com')
+                ->setTo([$contact->getEmail(), 'cerberus.crm.mailer@gmail.com', 'sith13160@gmail.com'])
+                ->setBody(
+                    $this->renderView(
+                        'emails/notification.html.twig',
+                        [
+                            'emailTemplate' => $emailTemplate,
+                            'contact' => $contact,
+                            'password' => $password,
+                        ]
+                    ),
+                    'text/html'
+                );
+                $mailer->send($message);
+            }
 
             $this->addFlash(
                 'success',
