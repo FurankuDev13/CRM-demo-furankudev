@@ -15,9 +15,9 @@ import './catalog.scss';
 
 const Catalog = ({ currentList, category }) => (
   <div>
-    {(category !== undefined && (
+    {(category !== 'Catalogue complet' && (
       <div id="category-title">Catégorie : {category}</div>
-    )) || <div id="category-title">Catalogue complet</div>
+    )) || <div id="category-title">{category}</div>
     }
     <div className="list">
       {currentList.count !== 0 && currentList.map(item => (

@@ -2,7 +2,6 @@
  * NPM import
  */
 import React from 'react';
-import PropTypes from 'prop-types';
 
 /**
  * local import
@@ -12,7 +11,7 @@ import PropTypes from 'prop-types';
  * Code
  */
 
-const CompanyAddress = ({ classes, name, picture }) => (
+const CompanyAddress = () => (
   <section className="hero is-normal is-bold has-text-centered">
     <div className="hero-body">
       <div className="container">

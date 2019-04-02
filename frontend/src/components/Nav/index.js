@@ -57,9 +57,14 @@ const Nav = ({
           }
           {
           isLogged && (
-            <Link to="/profile" className="navbar-item is-size-4 is-active">
-              Mon Profil
-            </Link>
+            <>
+              <Link to="/profile" className="navbar-item is-size-4 is-active">
+                Mon Profil
+              </Link>
+              <Link to="/contact" className="navbar-item is-size-4 is-active">
+                Contacts
+              </Link>
+            </>
           )
           }
         </div>

@@ -14,7 +14,7 @@ import { getCurrentCategory, getCategoryFromSlug } from 'src/store/reducer';
  */
 const mapStateToProps = (state, ownProps) => {
   let currentList;
-  let category;
+  let category = 'Catalogue complet';
   const { categoryList } = state;
   switch (ownProps.location.pathname) {
     case '/catalog': {
