@@ -34,6 +34,17 @@ class ContactTypeRepository extends ServiceEntityRepository
         ;
     }
 
+    public function findByIsActiveOrderedByField($isActive = true, $field = 'title', $order = 'ASC')
+    {
+        return $this->createQueryBuilder('ct')
+            ->andWhere('ct.isActive IN (:isActive)')
+            ->setParameter('isActive', $isActive)
+            ->orderBy('ct.' . $field, $order)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
 
     // /**
     //  * @return ContactType[] Returns an array of ContactType objects
