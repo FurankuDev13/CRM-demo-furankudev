@@ -1,4 +1,4 @@
-<form class="level-item" action='{{ path('product_delete', {'id': product.id}) }}' method="POST">
+<form class="level-item" action='{{ path('admin_request_delete', {'id': request.id}) }}' method="POST">
     <input class="" type="hidden" name="_method" value="DELETE">
     
         {% include 'partial/_confirm_cancel_modal.html.twig' with {'message': 'Confirmation de Suppression'} %}
