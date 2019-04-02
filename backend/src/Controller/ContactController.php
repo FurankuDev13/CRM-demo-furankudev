@@ -2,7 +2,10 @@
 
 namespace App\Controller;
 
+use App\Entity\Person;
 use App\Entity\Contact;
+use App\Form\PersonType;
+use App\Form\ContactFormType;
 use App\Repository\CompanyRepository;
 use App\Repository\ContactRepository;
 use App\Repository\RequestRepository;
@@ -12,6 +15,7 @@ use App\Repository\HandlingStatusRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 /** 
  *  @Route("/contact", name="contact_") 
@@ -87,6 +91,78 @@ class ContactController extends AbstractController
             'contact' => $contact,
             'demands' => $demands,
             'handlingStatuses' => $handlingStatuses,
+        ]);
+    }
+
+    /**
+     * @Route("/new", name="new", methods={"GET", "POST"})
+     */
+    public function new(Request $request, EntityManagerInterface $entityManager, UserPasswordEncoderInterface $passwordEncoder)
+    {
+        $contact = new Contact();
+        $person = new Person();
+
+        $contactForm = $this->createForm(ContactFormType::class, $contact);
+        $personForm = $this->createForm(PersonType::class, $person);
+
+        $contactForm->handleRequest($request);
+        $personForm->handleRequest($request);
+
+        if ($contactForm->isSubmitted() && $contactForm->isValid()) {
+            $entityManager->persist($person);
+            $password = random_bytes(10);
+            $encodedPassword = $passwordEncoder->encodePassword($contact, $password);
+            $contact->setPassword($encodedPassword);
+            $contact->setPerson($person);
+            $entityManager->persist($contact);
+            $entityManager->flush();
+
+            $this->addFlash(
+                'success',
+                "Le contact " . $contact->getPerson()->getFirstname() . ' ' . $contact->getPerson()->getLastname() . ' a bien été ajouté !'
+            );
+            return $this->redirectToRoute('contact_show', ['id' => $contact->getId()]);
+        }
+
+        return $this->render('contact/new.html.twig', [
+            'page_title' => 'Ajouter un nouvel utilisateur',
+            'contactForm' => $contactForm->createView(),
+            'personForm' => $personForm->createView()
+        ]);
+    }
+
+    /**
+     * @Route("/{id}/edit", name="edit", methods={"GET", "POST"}, requirements={"id"="\d+"})
+     */
+    public function edit(Contact $contact, Request $request, EntityManagerInterface $entityManager, UserPasswordEncoderInterface $passwordEncoder)
+    {
+        if (!$contact) {
+            throw $this->createNotFoundException("Le contact indiqué n'existe pas"); 
+        }
+
+        $person = $contact->getPerson();
+
+        $contactForm = $this->createForm(ContactFormType::class, $contact);
+        $personForm = $this->createForm(PersonType::class, $person);
+
+        $contactForm->handleRequest($request);
+        $personForm->handleRequest($request);
+
+        if ($contactForm->isSubmitted() && $contactForm->isValid()) {
+            $entityManager->flush();
+
+            $this->addFlash(
+                'success',
+                "Le contact " . $contact->getPerson()->getFirstname() . ' ' . $contact->getPerson()->getLastname() . ' a bien été mis à jour !'
+            );
+            return $this->redirectToRoute('contact_show', ['id' => $contact->getId()]);
+        }
+
+        return $this->render('contact/edit.html.twig', [
+            'page_title' => "Mettre à jour le contact: " . $contact->getPerson()->getFirstname() . ' ' . $contact->getPerson()->getLastname(),
+            'contact' => $contact,
+            'contactForm' => $contactForm->createView(),
+            'personForm' => $personForm->createView()
         ]);
     }
 

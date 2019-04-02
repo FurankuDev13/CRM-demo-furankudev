@@ -27,9 +27,9 @@
                 <a class="level-item" href="{{ path('contact_index')}}">
                     <button class="level-item button is-primary s-small is-size-3"><i class="fas fa-sort-alpha-down"></i></button>
                 </a>
-                {# <a class="level-item" href="{{ path('contact_new')}}">
+                <a class="level-item" href="{{ path('contact_new')}}">
                     <button type="submit" class="level-item button is-success s-small is-size-3"><i class="fas fa-plus-circle"></i></button>
-                </a> #}
+                </a>
             </div>
         </div>
 
@@ -79,6 +79,9 @@
                         {% if is_granted('ROLE_SALES') %}
                         <td class="level">
                             <div class="level-left">
+                                <a class="level-item" href="{{ path('contact_edit', {'id' : contact.id })}}">
+                                    <button type="submit" class="button is-info"><i class="fas fa-edit"></i></button>
+                                </a>
                                 {% include 'contact/_handle_type_modal.html.twig' %}
                                 {% include 'contact/_archive_form.html.twig' with {'notArchived': true} %}
                             </div>
