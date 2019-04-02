@@ -598,5 +598,25 @@ class RequestController extends AbstractController
         return $this->redirect($referer);
     }
 
-    
+    /**
+     * @Route("/{id}/delete", name="delete", methods={"DELETE"}, requirements={"id"="\d+"})
+     */
+    public function delete(DemandRequest $demandRequest, Request $request, EntityManagerInterface $entityManager)
+    {
+        if (!$demandRequest) {
+            throw $this->createNotFoundException("La demande indiquée n'existe pas"); 
+        }
+
+        $entityManager->remove($demandRequest);
+        $entityManager->flush();
+        $notification = " a été supprimée !";
+        $this->addFlash(
+            'danger',
+            'La demande ' . $demandRequest->getName() . $notification
+        );
+
+        $referer = $request->headers->get('referer');
+        return $this->redirect($referer);;
+    }
+
 }

@@ -26,12 +26,8 @@
         <table class="table is-fullwidth is-hoverable is-striped" id="categoryTable">
             <thead>
                 <tr>
-                    <th>Nom&nbsp;
-                        {% include 'partial/_order_buttons.html.twig' with {'entity' : 'category', 'field' : 'name'} %}
-                    </th>
-                    <th>Description&nbsp;
-                        {% include 'partial/_order_buttons.html.twig' with {'entity' : 'category', 'field' : 'description'} %}
-                    </th>
+                    <th>Nom&nbsp;</th>
+                    <th>Description&nbsp;</th>
                     <th>Image</th>
                     <th>Produit(s)</th>
                     {% if is_granted('ROLE_SUPPORT') %}
@@ -74,6 +70,7 @@
                                     </a>
                                     {% if is_granted('ROLE_ADMIN') %}
                                         {% include 'category/_archive_form.html.twig' with {'notArchived': false} %}
+                                        {% include 'category/_delete_form.html.twig' %}
                                     {% endif %}
                                 </div>
                             </td>

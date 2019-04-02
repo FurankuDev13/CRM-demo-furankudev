@@ -49,7 +49,7 @@ class Contact implements UserInterface
     private $company;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Request", mappedBy="contact")
+     * @ORM\OneToMany(targetEntity="App\Entity\Request", mappedBy="contact", cascade={"remove"})
      * @Groups({"contact_group"})
      */
     private $requests;

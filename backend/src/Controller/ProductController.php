@@ -197,4 +197,25 @@ class ProductController extends AbstractController
         $referer = $request->headers->get('referer');
         return $this->redirect($referer);;
     }
+
+    /**
+     * @Route("/{id}/delete", name="delete", methods={"DELETE"}, requirements={"id"="\d+"})
+     */
+    public function delete(Product $product, Request $request, EntityManagerInterface $entityManager)
+    {
+        if (!$product) {
+            throw $this->createNotFoundException("Le produit indiqué n'existe pas"); 
+        }
+
+        $entityManager->remove($product);
+        $entityManager->flush();
+        $notification = " a été supprimé !";
+        $this->addFlash(
+            'danger',
+            'Le Produit ' . $product->getName() . $notification
+        );
+
+        $referer = $request->headers->get('referer');
+        return $this->redirect($referer);;
+    }
 }

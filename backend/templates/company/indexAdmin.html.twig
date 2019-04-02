@@ -6,9 +6,7 @@
 {% endblock %}
 
 {% block content %}
-
-    {% set orderButtonsIncludePath = 'partial/_order_buttons.html.twig' %}
-
+<div class="container">
     <div class="level">
         <div class="level-left ">
             <div class="level-item">
@@ -31,19 +29,11 @@
     <table class="table is-fullwidth is-hoverable is-striped" id="companyTable">
         <thead>
             <tr>
-                <th>Ajout&nbsp;
-                    {% include orderButtonsIncludePath with {'entity' : 'company', 'field' : 'createdAt'} %}
-                </th>
-                <th>Nom&nbsp;
-                    {% include orderButtonsIncludePath with {'entity' : 'company', 'field' : 'name'} %}
-                </th>
-                <th>Description&nbsp;
-                    {% include orderButtonsIncludePath with {'entity' : 'company', 'field' : 'description'} %}
-                </th>
+                <th>Ajout&nbsp;</th>
+                <th>Nom&nbsp;</th>
+                <th>Description&nbsp;</th>
                 <th>Image</th>
-                <th>Client/Prospect&nbsp;
-                    {% include orderButtonsIncludePath with {'entity' : 'company', 'field' : 'isCustomer'} %}
-                </th>
+                <th>Client/Prospect&nbsp;</th>
                 <th>Actions</th>
             </tr>
         </thead>
@@ -68,6 +58,7 @@
                                     <button type="submit" class="button is-info"><i class="fas fa-edit"></i></button>
                                 </a>
                                 {% include 'company/_archive_form.html.twig' with {'notArchived': false} %}
+                                {% include 'company/_delete_form.html.twig' %}
                             </div>
                         </td>
                     {% endif %}
@@ -75,4 +66,6 @@
             {% endfor %}
         </tbody>
     </table>
+</div>
+
 {% endblock %}

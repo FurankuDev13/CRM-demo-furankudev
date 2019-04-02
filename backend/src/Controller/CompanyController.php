@@ -630,4 +630,26 @@ class CompanyController extends AbstractController
 
         return $this->redirect($referer);
     }
+
+    /**
+     * @Route("/{id}/delete", name="delete", methods={"DELETE"}, requirements={"id"="\d+"})
+     */
+    public function delete(Company $company, Request $request, EntityManagerInterface $entityManager)
+    {
+        if (!$company) {
+            throw $this->createNotFoundException("La société indiquée n'existe pas"); 
+        }
+
+        $entityManager->remove($company);
+        $entityManager->flush();
+        $notification = " a été supprimée !";
+        $this->addFlash(
+            'danger',
+            'La Société ' . $company->getName() . $notification
+        );
+
+        $referer = $request->headers->get('referer');
+        return $this->redirect($referer);;
+    }
+
 }

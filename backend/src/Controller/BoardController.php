@@ -39,9 +39,15 @@ class BoardController extends AbstractController
         }
 
         if ($index == 3) {
-            $unhandledRequests = $requestRepo->findisActiveByHandlingStatus($unhandledStatus, $table?:'r', $field?:'createdAt', $order?:'DESC'); 
+            $unhandledRequests = $requestRepo->findIsActiveByHandlingStatus($unhandledStatus, $table?:'r', $field?:'createdAt', $order?:'DESC'); 
         } else {
-            $unhandledRequests = $requestRepo->findisActiveByHandlingStatus($unhandledStatus); 
+            $unhandledRequests = $requestRepo->findIsActiveByHandlingStatus($unhandledStatus); 
+        } 
+
+        if ($index == 4) {
+            $comments = $commentRepo->findCommentIsActiveByUpdatedAt($table?:'com', $field?:'updatedAt', $order?:'DESC');
+        } else {
+            $comments = $commentRepo->findCommentIsActiveByUpdatedAt(); 
         } 
 
         if ($index != 1 && $index != 2 && $index != 3 && $index != 4) {
@@ -49,7 +55,6 @@ class BoardController extends AbstractController
         }
                
         $salesUsers = $userRepo->findSalesRoles();
-        $comments = $commentRepo->findCommentIsActiveByUpdatedAt();
 
         return $this->render('board/index.html.twig', [
             'page_title' => 'Tableau de bord',

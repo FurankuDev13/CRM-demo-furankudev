@@ -6,8 +6,7 @@
 {% endblock %}
 
 {% block content %}
-    {% set orderButtonsIncludePath = 'request/_order_buttons.html.twig' %}
-
+<div class="container">
     <div class="level">
         <div class="level-left ">
             <div class="level-item">
@@ -29,21 +28,11 @@
     <table class="table is-fullwidth is-hoverable is-striped" id="requestTable">
         <thead>
             <tr>
-                <th>Date 
-                    {% include orderButtonsIncludePath with {'table': 'r', 'field' : 'createdAt'} %}
-                </th>
-                <th>Type 
-                    {% include orderButtonsIncludePath with {'table': 'r', 'field' : 'requestType'} %}
-                </th>
-                <th>Titre 
-                    {% include orderButtonsIncludePath with {'table': 'r', 'field' : 'title'} %}
-                </th>
-                <th>Description 
-                    {% include orderButtonsIncludePath with {'table': 'r', 'field' : 'body'} %}
-                </th>
-                <th>Société 
-                    {% include orderButtonsIncludePath with {'table': 'c', 'field' : 'name'} %}
-                </th>
+                <th>Date</th>
+                <th>Type</th>
+                <th>Titre</th>
+                <th>Description</th>
+                <th>Société</th>
                 <th>Actions</th>
 
             </tr>
@@ -71,4 +60,6 @@
             {% endfor %}
         </tbody>
     </table>
+</div>
+
 {% endblock %}
