@@ -36,6 +36,7 @@
                     <th>Statut&nbsp;
                         {% include 'admin/partial/_order_buttons.html.twig' with {'entity' : entity, 'field' : 'isActive'} %}
                     </th>
+                    <th>Template</th>
                     <th>Actions</th>
                 </tr>
             </thead>
@@ -54,9 +55,13 @@
                         <td>   
                             {{ data.isActive ? 'Actif' : 'Archivé' }}
                         </td>
+                        <td>   
+                            {{ data.emailTemplate.title }}
+                        </td>
                         <td class="level">
                             <div class="level-left">
-
+                                {% include 'admin/email_type/_handle_emailtemplate_modal.html.twig' %}
+                                {% include 'admin/partial/_archive_form.html.twig' with {'notArchived': data.isActive} %}
                             </div>
                         </td>
                     </tr>
