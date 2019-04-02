@@ -56,21 +56,6 @@ class ContactController extends AbstractController
     }
 
     /**
-     * @Route("/index/admin", name="index_admin", methods={"GET"})
-     * Index des Contacs en mode Gestion/ADMIN : seulement ceux qui sont archivés
-     */
-    public function indexAdmin(Request $request, ContactRepository $contactRepo, ContactTypeRepository $contactTypeRepo, CompanyRepository $companyRepo)
-    {
-        //$table = 'p', $field = 'lastname', $order = 'ASC', $isActive = true
-        $contacts = $contactRepo->findIsActiveOrderedByField('p', 'lastname', 'ASC', false);
-
-        return $this->render('contact/indexAdmin.html.twig', [
-            'page_title' => 'Contacts',
-            'contacts' => $contacts,
-        ]);
-    }
-
-    /**
      * @Route("/{id}/show", name="show", methods={"GET"}, requirements={"id"="\d+"})
      */
     public function show(Contact $contact, RequestRepository $requestRepo, HandlingStatusRepository $handlingStatusRepo)
@@ -88,28 +73,6 @@ class ContactController extends AbstractController
             'demands' => $demands,
             'handlingStatuses' => $handlingStatuses,
         ]);
-    }
-
-    /**
-     * @Route("/{id}/archive", name="archive", methods={"PATCH"}, requirements={"id"="\d+"})
-     */
-    public function archive(Contact $contact, Request $request, EntityManagerInterface $entityManager)
-    {
-        if (!$contact) {
-            throw $this->createNotFoundException("Le contact indiqué n'existe pas"); 
-        }
-
-        $contact->getPerson()->setIsActive(!$contact->getPerson()->getIsActive());
-        $notification = ($contact->getPerson()->getIsActive() ? ' a été désarchivé' : ' a été archivé !');
-        $this->addFlash(
-            'success',
-            'Le Contact ' . $contact->getPerson()->getFirstname() . " " . $contact->getPerson()->getLastname() . $notification
-        );
-        $entityManager->flush();
-
-        $referer = $request->headers->get('referer');
-
-        return $this->redirect($referer);;
     }
 
     /**
@@ -137,26 +100,25 @@ class ContactController extends AbstractController
     }
 
     /**
-     * @Route("/{id}/delete", name="delete", methods={"DELETE"}, requirements={"id"="\d+"})
+     * @Route("/{id}/archive", name="archive", methods={"PATCH"}, requirements={"id"="\d+"})
      */
-    public function delete(Contact $contact, Request $request, EntityManagerInterface $entityManager)
+    public function archive(Contact $contact, Request $request, EntityManagerInterface $entityManager)
     {
         if (!$contact) {
             throw $this->createNotFoundException("Le contact indiqué n'existe pas"); 
         }
 
-        $entityManager->remove($contact);
-        $entityManager->flush();
-        $notification = " a été supprimé !";
+        $contact->getPerson()->setIsActive(!$contact->getPerson()->getIsActive());
+        $notification = ($contact->getPerson()->getIsActive() ? ' a été désarchivé' : ' a été archivé !');
         $this->addFlash(
-            'danger',
-            'La Catégorie ' . $contact->getPerson()->getFirstname() . ' ' . $contact->getPerson()->getLastname() . $notification
+            'success',
+            'Le Contact ' . $contact->getPerson()->getFirstname() . " " . $contact->getPerson()->getLastname() . $notification
         );
+        $entityManager->flush();
 
         $referer = $request->headers->get('referer');
+
         return $this->redirect($referer);;
     }
-
-
 
 }

@@ -66,7 +66,7 @@ class Request
     private $contact;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Comment", mappedBy="request")
+     * @ORM\OneToMany(targetEntity="App\Entity\Comment", mappedBy="request", cascade={"remove"})
      */
     private $comments;
 

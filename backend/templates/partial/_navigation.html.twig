@@ -44,7 +44,7 @@
                             </a>
                             {% if is_granted('ROLE_MANAGER') %}
                                 <div class="navbar-item has-dropdown is-hoverable">
-                                    <a class="navbar-link has-text-warning" href="{{ path('product_index_admin')}}">
+                                    <a class="navbar-link has-text-warning" href="{{ path('admin_product_index')}}">
                                     <i class="fas fa-cogs"></i>&nbsp;Admin
                                     </a>
                                     <div class="navbar-dropdown">
@@ -68,23 +68,23 @@
                             {% endif %}
                             {% if is_granted('ROLE_ADMIN') %}
                                 <div class="navbar-item has-dropdown is-hoverable">
-                                    <a class="navbar-link has-background-danger" href="{{ path('product_index_admin')}}">
-                                    Archives
+                                    <a class="navbar-link has-text-warning" href="{{ path('admin_product_index')}}">
+                                    <i class="fas fa-archive"></i>&nbsp;Archives
                                     </a>
                                     <div class="navbar-dropdown">
-                                        <a class="navbar-item {{ (app.request.attributes.get('_route') == 'product_index_admin') ? 'is-active' }} " href="{{ path('product_index_admin')}}">
+                                        <a class="navbar-item {{ (app.request.attributes.get('_route') == 'admin_product_index') ? 'is-active' }} " href="{{ path('admin_product_index')}}">
                                             Produits
                                         </a>
-                                        <a class="navbar-item {{ (app.request.attributes.get('_route') == 'category_index_admin') ? 'is-active' }} " href="{{ path('category_index_admin')}}">
+                                        <a class="navbar-item {{ (app.request.attributes.get('_route') == 'admin_category_index') ? 'is-active' }} " href="{{ path('admin_category_index')}}">
                                             Catégories
                                         </a>
-                                        <a class="navbar-item {{ (app.request.attributes.get('_route') == 'company_index_admin') ? 'is-active' }} " href="{{ path('company_index_admin')}}">
+                                        <a class="navbar-item {{ (app.request.attributes.get('_route') == 'admin_company_index') ? 'is-active' }} " href="{{ path('admin_company_index')}}">
                                             Sociétés
                                         </a>
-                                        <a class="navbar-item {{ (app.request.attributes.get('_route') == 'request_index_admin') ? 'is-active' }} " href="{{ path('request_index_admin')}}">
+                                        <a class="navbar-item {{ (app.request.attributes.get('_route') == 'admin_request_index') ? 'is-active' }} " href="{{ path('admin_request_index')}}">
                                             Demandes
                                         </a>
-                                        <a class="navbar-item {{ (app.request.attributes.get('_route') == 'contact_index_admin') ? 'is-active' }} " href="{{ path('contact_index_admin')}}">
+                                        <a class="navbar-item {{ (app.request.attributes.get('_route') == 'admin_contact_index') ? 'is-active' }} " href="{{ path('admin_contact_index')}}">
                                             Contacts
                                         </a>
                                     </div>
