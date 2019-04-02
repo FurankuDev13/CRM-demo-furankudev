@@ -1,0 +1,68 @@
+<div class="container">
+    <div class="section level">
+        <div class="level-left ">
+            <div class="level-item">
+                <h2 class=" level-item subtitle has-text-info is-3">{{ page_title }}</h2>
+                <button class=" level-item button is-info is-small is-size-4">{{ dataList|length }}</button>
+            </div>  
+        </div> 
+        <div class="level-right">
+            <a class="level-item" href="{{ path('admin_' ~ entity ~ '_index')}}">
+                <button class="level-item button is-primary s-small is-size-3"><i class="fas fa-sort-alpha-down"></i></button>
+            </a>
+            <a class="level-item" href="{{ path('admin_' ~ entity ~ '_new')}}">
+                <button type="submit" class="level-item button is-success s-small is-size-3"><i class="fas fa-plus-circle"></i></button>
+            </a>
+        </div>
+    </div>
+    <table class="table is-fullwidth is-hoverable is-striped" id="dataTable">
+        <thead>
+        {% if dataList %}
+            <tr>
+                <th>Intitulé&nbsp;
+                    {% include 'admin/partial/_order_buttons.html.twig' with {'entity' : entity, 'field' : 'title'} %}
+                </th>
+                <th>Date de création&nbsp;
+                    {% include 'admin/partial/_order_buttons.html.twig' with {'entity' : entity, 'field' : 'createdAt'} %}
+                </th>
+                <th>Dernière mise à jour&nbsp;
+                    {% include 'admin/partial/_order_buttons.html.twig' with {'entity' : entity, 'field' : 'updatedAt'} %}
+                </th>
+                <th>Statut&nbsp;
+                    {% include 'admin/partial/_order_buttons.html.twig' with {'entity' : entity, 'field' : 'isActive'} %}
+                </th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for data in dataList %}
+                <tr {% if not data.isActive %}class="has-text-warning"{% endif %}>
+                    <td>   
+                        {{ data.title }}
+                    </td>
+                    <td>   
+                        {{ data.createdAt|date("d/m/Y") }}
+                    </td>
+                    <td>   
+                        {{ data.updatedAt|date("d/m/Y") }}
+                    </td>
+                    <td>   
+                        {{ data.isActive ? 'Actif' : 'Archivé' }}
+                    </td>
+                    <td class="level">
+                        <div class="level-left">
+                            <a class="level-item" href="{{ path('admin_' ~ entity ~ '_edit', {'id' : data.id })}}">
+                                <button type="submit" class="button is-info"><i class="fas fa-edit"></i></button>
+                            </a>
+                            {% include 'admin/partial/_archive_form.html.twig' with {'notArchived': data.isActive} %}
+                            {% include 'admin/partial/_delete_form.html.twig' %}
+                        </div>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+        {% else %}
+            <p class="has-text-weight-bold has-text-centered has-text-warning is-size-4">Aucune donnée à afficher</tr>
+        {% endif %}
+    </table>
+</div>

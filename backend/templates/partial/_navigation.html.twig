@@ -17,11 +17,11 @@
                 <div id="navbarMenuHero9" class="navbar-menu">
                         <div class="navbar-end">
                             <a class="navbar-item {{ (app.request.attributes.get('_route') == 'board_index') ? 'is-active' }}" href="{{ path('board_index')}}">
-                                Tableau de bord
+                                <i class="fas fa-chalkboard"></i>&nbsp;Tableau de bord
                             </a>
                             <div class="navbar-item has-dropdown is-hoverable">
                                 <a class="navbar-link {{ (app.request.attributes.get('_route') == 'product_index' or app.request.attributes.get('_route') == 'category_index') ? 'is-active' }} " href="{{ path('product_index')}}">
-                                Catalogue
+                                <i class="fas fa-store"></i>&nbsp;Catalogue
                                 </a>
 
                                 <div class="navbar-dropdown">
@@ -34,18 +34,37 @@
                                 </div>
                             </div>
                             <a class="navbar-item {{ (app.request.attributes.get('_route') == 'company_index') ? 'is-active' }} " href="{{ path('company_index')}}">
-                                Sociétés
+                                <i class="fas fa-building"></i>&nbsp;Sociétés
                             </a>
                             <a class="navbar-item {{ (app.request.attributes.get('_route') == 'request_index') ? 'is-active' }} " href="{{ path('request_index')}}">
-                                Demandes
+                                <i class="fas fa-tasks"></i>&nbsp;Demandes
                             </a>
                             <a class="navbar-item {{ (app.request.attributes.get('_route') == 'contact_index') ? 'is-active' }} " href="{{ path('contact_index')}}">
-                                Contacts
+                                <i class="fas fa-id-card-alt"></i>&nbsp;Contacts
                             </a>
                             {% if is_granted('ROLE_MANAGER') %}
-                                <a class="navbar-item {{ (app.request.attributes.get('_route') == 'user_index') ? 'is-active' }} " href="{{ path('user_index')}}">
-                                    Utilisateurs
-                                </a>
+                                <div class="navbar-item has-dropdown is-hoverable">
+                                    <a class="navbar-link has-text-warning" href="{{ path('product_index_admin')}}">
+                                    <i class="fas fa-cogs"></i>&nbsp;Admin
+                                    </a>
+                                    <div class="navbar-dropdown">
+                                        <a class="navbar-item {{ (app.request.attributes.get('_route') == 'user_index') ? 'is-active' }} " href="{{ path('user_index')}}">
+                                            Utilisateurs
+                                        </a>
+                                        <a class="navbar-item {{ (app.request.attributes.get('_route') == 'admin_contactType_index') ? 'is-active' }} " href="{{ path('admin_contactType_index')}}">
+                                            Types de contacts
+                                        </a>
+                                        <a class="navbar-item {{ (app.request.attributes.get('_route') == 'admin_addressType_index') ? 'is-active' }} " href="{{ path('admin_addressType_index')}}">
+                                            Types d'adresses
+                                        </a>
+                                        <a class="navbar-item {{ (app.request.attributes.get('_route') == 'admin_requestType_index') ? 'is-active' }} " href="{{ path('admin_requestType_index')}}">
+                                            Type de demande
+                                        </a>
+                                        <a class="navbar-item {{ (app.request.attributes.get('_route') == 'admin_handlingStatus_index') ? 'is-active' }} " href="{{ path('admin_handlingStatus_index')}}">
+                                            Statut de traitement
+                                        </a>
+                                    </div>
+                                </div>
                             {% endif %}
                             {% if is_granted('ROLE_ADMIN') %}
                                 <div class="navbar-item has-dropdown is-hoverable">
@@ -75,11 +94,11 @@
                                 <div class="buttons">
                                 {% if is_granted('IS_AUTHENTICATED_FULLY') %}
                                     <a class="button is-light" href="{{ path('app_logout') }}">
-                                        Déconnexion
+                                        <i class="fas fa-sign-out-alt"></i>&nbsp;Déconnexion
                                     </a>
                                 {% else %}
                                     <a class="button is-light" href="{{ path('app_login') }}">
-                                        Connexion
+                                        <i class="fas fa-sign-in-alt"></i>&nbsp;Connexion
                                     </a>
                                 {% endif %}
                                 </div>
@@ -94,6 +113,7 @@
         <div class="box has-background-info">
             <p class="title has-text-centered is-6"><span class="has-text-weight-bold">
                 {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+                    <i class="fas fa-user-tie"></i>&nbsp;
                     {{ app.user.person.firstname }} {{ app.user.person.lastname }}</span> - 
                         {% for role in app.user.userRoles %}
                             {{ role.title }} {% if not loop.last %}, {% endif %}

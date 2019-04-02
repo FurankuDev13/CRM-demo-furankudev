@@ -19,6 +19,17 @@ class RequestTypeRepository extends ServiceEntityRepository
         parent::__construct($registry, RequestType::class);
     }
 
+    public function findByIsActiveOrderedByField($isActive = true, $field = 'title', $order = 'ASC')
+    {
+        return $this->createQueryBuilder('rt')
+            ->andWhere('rt.isActive IN (:isActive)')
+            ->setParameter('isActive', $isActive)
+            ->orderBy('rt.' . $field, $order)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
     // /**
     //  * @return RequestType[] Returns an array of RequestType objects
     //  */

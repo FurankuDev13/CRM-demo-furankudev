@@ -48,6 +48,7 @@ class ContactRepository extends ServiceEntityRepository
             ->getResult()
         ;
     }
+    
 
     public function findIsActiveByContactType(ContactType $contactType, $table = 'p', $field = 'lastname', $order = 'ASC')
     {
