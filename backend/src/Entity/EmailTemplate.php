@@ -51,6 +51,11 @@ class EmailTemplate
      */
     private $updatedAt;
 
+    /**
+     * @ORM\OneToOne(targetEntity="App\Entity\EmailType", mappedBy="emailTemplate", cascade={"persist", "remove"})
+     */
+    private $emailType;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -136,6 +141,23 @@ class EmailTemplate
     public function setUpdatedAt(?\DateTimeInterface $updatedAt): self
     {
         $this->updatedAt = $updatedAt;
+
+        return $this;
+    }
+
+    public function getEmailType(): ?EmailType
+    {
+        return $this->emailType;
+    }
+
+    public function setEmailType(EmailType $emailType): self
+    {
+        $this->emailType = $emailType;
+
+        // set the owning side of the relation if necessary
+        if ($this !== $emailType->getEmailTemplate()) {
+            $emailType->setEmailTemplate($this);
+        }
 
         return $this;
     }

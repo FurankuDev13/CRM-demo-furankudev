@@ -24,6 +24,7 @@ use App\DataFixtures\Faker\CategoryData;
 use App\DataFixtures\Faker\DataProvider;
 use App\Entity\Request as ClientRequest;
 use Doctrine\Bundle\FixturesBundle\Fixture;
+use App\DataFixtures\Faker\EmailTemplateData;
 use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\Validator\Constraints\DateTime;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
@@ -32,6 +33,7 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 class AppFixtures extends Fixture
 {
     use CategoryData;
+    use EmailTemplateData;
 
     private $passwordEncoder;
     private $manager;
@@ -123,17 +125,20 @@ class AppFixtures extends Fixture
     }
 
     private function getEmailTypesAndTemplates() {
-        $emailTemplate = new EmailTemplate();
-        $emailTemplate->setTitle('Title');
-        $emailTemplate->setMessageTitle('MessageTitle');
-        $emailTemplate->setMessageBody('MessageBody');
-        $emailTemplate->setMessageSignature('MessageSignature');
-        $this->manager->persist($emailTemplate);
+        foreach($this->emailTemplatesList as $emailTypeTitle => $emailTemplateData) {
+            $emailTemplate = new EmailTemplate();
+            $emailTemplate->setTitle($emailTypeTitle . ' par défaut');
+            $emailTemplate->setMessageTitle($emailTemplateData['messageTitle']);
+            $emailTemplate->setMessageBody($emailTemplateData['messageBody']);
+            $emailTemplate->setMessageSignature($emailTemplateData['messageSignature']);
+            $this->manager->persist($emailTemplate);
 
-        $emailType = new EmailType();
-        $emailType->setTitle('Title');
-        $emailType->setEmailTemplate($emailTemplate);
-        $this->manager->persist($emailType);
+            $emailType = new EmailType();
+            $emailType->setTitle($emailTypeTitle);
+            $emailType->setEmailTemplate($emailTemplate);
+            $this->manager->persist($emailType);
+
+        }
 
         $this->manager->flush();
     }

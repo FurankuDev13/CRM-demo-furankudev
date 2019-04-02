@@ -9,8 +9,10 @@ use App\Form\ContactFormType;
 use App\Repository\CompanyRepository;
 use App\Repository\ContactRepository;
 use App\Repository\RequestRepository;
+use App\Repository\EmailTypeRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\ContactTypeRepository;
+use App\Repository\EmailTemplateRepository;
 use App\Repository\HandlingStatusRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -97,7 +99,7 @@ class ContactController extends AbstractController
     /**
      * @Route("/new", name="new", methods={"GET", "POST"})
      */
-    public function new(Request $request, EntityManagerInterface $entityManager, UserPasswordEncoderInterface $passwordEncoder)
+    public function new(Request $request, EntityManagerInterface $entityManager, UserPasswordEncoderInterface $passwordEncoder, EmailTemplateRepository $emailTemplateRepo, \Swift_Mailer $mailer)
     {
         $contact = new Contact();
         $person = new Person();
@@ -110,18 +112,36 @@ class ContactController extends AbstractController
 
         if ($contactForm->isSubmitted() && $contactForm->isValid()) {
             $entityManager->persist($person);
-            $password = random_bytes(10);
+            $password = substr(md5($person->getFirstname()), 1, 6);
             $encodedPassword = $passwordEncoder->encodePassword($contact, $password);
             $contact->setPassword($encodedPassword);
             $contact->setPerson($person);
             $entityManager->persist($contact);
             $entityManager->flush();
 
+            $emailTemplate = $emailTemplateRepo->findOneByEmailTypeTitle('Inscription - Backoffice');
+
+            $message = (new \Swift_Message("Bienvenue chez Beer'oClock"))
+            ->setFrom('cerberus.crm.mailer@gmail.com')
+            ->setTo([$contact->getEmail(), 'cerberus.crm.mailer@gmail.com', 'sith13160@gmail.com'])
+            ->setBody(
+                $this->renderView(
+                    'emails/notification.html.twig',
+                    [
+                        'emailTemplate' => $emailTemplate,
+                        'contact' => $contact,
+                        'password' => $password,
+                    ]
+                ),
+                'text/html'
+            );
+            $mailer->send($message);
+
             $this->addFlash(
                 'success',
                 "Le contact " . $contact->getPerson()->getFirstname() . ' ' . $contact->getPerson()->getLastname() . ' a bien été ajouté !'
             );
-            return $this->redirectToRoute('contact_show', ['id' => $contact->getId()]);
+            /* return $this->redirectToRoute('contact_show', ['id' => $contact->getId()]); */
         }
 
         return $this->render('contact/new.html.twig', [

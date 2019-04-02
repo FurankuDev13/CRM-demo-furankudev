@@ -21,12 +21,24 @@ class EmailTemplateRepository extends ServiceEntityRepository
 
     public function findByIsActiveOrderedByField($isActive = true, $field = 'title', $order = 'ASC')
     {
-        return $this->createQueryBuilder('et')
-            ->andWhere('et.isActive IN (:isActive)')
+        return $this->createQueryBuilder('e')
+            ->andWhere('e.isActive IN (:isActive)')
             ->setParameter('isActive', $isActive)
-            ->orderBy('et.' . $field, $order)
+            ->orderBy('e.' . $field, $order)
             ->getQuery()
             ->getResult()
+        ;
+    }
+
+    public function findOneByEmailTypeTitle($title)
+    {
+        return $this->createQueryBuilder('e')
+            ->join('e.emailType', 'et')
+            ->addSelect('et')
+            ->andWhere('et.title = :val')
+            ->setParameter('val', $title)
+            ->getQuery()
+            ->getOneOrNullResult()
         ;
     }
 

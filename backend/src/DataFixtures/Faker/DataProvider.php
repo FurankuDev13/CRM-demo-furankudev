@@ -10,13 +10,6 @@ class DataProvider extends \Faker\Provider\Base
         'Livraison'
     ];
 
-    protected static $emailTypeList = [
-        'Inscription - Internet',
-        'Inscription - Backoffice',
-        'Nouvelle demande - Internet',
-        'Attribution commercial - Backoffice'
-    ];
-
     protected static $contactTypeList = [
         'Directeur',
         'Gérant',
