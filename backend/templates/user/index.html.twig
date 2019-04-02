@@ -64,7 +64,8 @@
         </thead>
         <tbody>
             {% for user in users %}
-                <tr>
+                <tr {% if not user.person.isActive %}class="has-text-warning"{% endif %}
+                >
                     <td>{{ user.person.createdAt|date("d/m/Y") }}</td>
                     <td>   
                         <a class="has-text-weight-bold" href="{{ path('user_show', {'id': user.id}) }}">{{ user.person.lastname }}</a>
@@ -98,13 +99,14 @@
                     {% if is_granted('ROLE_MANAGER') %}
                     <td class="level">
                         <div class="level-left">
-                            {% if filterName == null %}
-                                {% include 'user/_roles_modal.html.twig' %}
-                            {% endif %}
                             <a class="level-item" href="{{ path('user_edit', {'id' : user.id })}}">
                                 <button type="submit" class="button is-info"><i class="fas fa-edit"></i></button>
                             </a>
-                            {% include 'user/_archive_form.html.twig' with {'notArchived': true} %}
+                            {% if filterName == null %}
+                                {% include 'user/_roles_modal.html.twig' %}
+                            {% endif %}
+                            
+                            {% include 'user/_archive_form.html.twig' with {'notArchived': user.person.isActive } %}
                         </div>
                     </td>
                     {% endif %}

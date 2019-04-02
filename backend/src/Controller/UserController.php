@@ -28,19 +28,24 @@ class UserController extends AbstractController
         $filter = $request->query->get('filter', null);
         $filterName = $request->query->get('filterName', null);
 
+        $isActive = $request->query->get('isActive', [true,false]);
         $table = $request->query->get('table', 'p');
         $field = $request->query->get('field', 'lastname');
         $order = $request->query->get('order', 'ASC');
 
-        $userRoles = $userRoleRepo->findWherePersonIsActive();
-        $companies = $companyRepo->findWherePersonIsActive();
+        
+
+        $userRoles = $userRoleRepo->findByPersonIsActive($isActive);
+        $companies = $companyRepo->findByPersonIsActive($isActive);
+        $activeUsers = $userRepo->findByIsActiveAndOrderedByField(true, $table, $field, $order);
+        $archivedUsers = $userRepo->findByIsActiveAndOrderedByField(false, $table, $field, $order);
 
         if ($filter == 'userRole') {
-            $users = $userRepo->findIsActiveByUserRole($filterName, $table, $field, $order);
+            $users = $userRepo->findByIsActiveAndByUserRole($isActive, $filterName, $table, $field, $order);
         } elseif ($filter == 'company') {
-            $users = $userRepo->findIsActiveByCompany($filterName, $table, $field, $order);
+            $users = $userRepo->findByIsActiveAndByCompany($isActive, $filterName, $table, $field, $order);
         } else {
-            $users = $userRepo->findIsActiveOrderedByField($table, $field, $order);
+            $users = $userRepo->findByIsActiveAndOrderedByField($isActive, $table, $field, $order);
         }
 
         return $this->render('user/index.html.twig', [
@@ -48,8 +53,11 @@ class UserController extends AbstractController
             'users' => $users,
             'userRoles' => $userRoles,
             'companies' => $companies,
+            'activeUsers' => $activeUsers,
+            'archivedUsers' => $archivedUsers,
             'filter' => $filter,
             'filterName' => $filterName,
+            'isActive' => $isActive,
         ]);
     }
 

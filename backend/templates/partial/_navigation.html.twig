@@ -43,14 +43,33 @@
                                 Contacts
                             </a>
                             {% if is_granted('ROLE_MANAGER') %}
-                                <a class="navbar-item {{ (app.request.attributes.get('_route') == 'user_index') ? 'is-active' }} " href="{{ path('user_index')}}">
-                                    Utilisateurs
-                                </a>
+                                <div class="navbar-item has-dropdown is-hoverable">
+                                    <a class="navbar-link has-background-warning" href="{{ path('product_index_admin')}}">
+                                    Administration
+                                    </a>
+                                    <div class="navbar-dropdown">
+                                        <a class="navbar-item {{ (app.request.attributes.get('_route') == 'user_index') ? 'is-active' }} " href="{{ path('user_index')}}">
+                                            Utilisateurs
+                                        </a>
+                                        <a class="navbar-item {{ (app.request.attributes.get('_route') == 'user_index') ? 'is-active' }} " href="{{ path('user_index')}}">
+                                            Types de contacts
+                                        </a>
+                                        <a class="navbar-item {{ (app.request.attributes.get('_route') == 'user_index') ? 'is-active' }} " href="{{ path('user_index')}}">
+                                            Types d'adresses
+                                        </a>
+                                        <a class="navbar-item {{ (app.request.attributes.get('_route') == 'user_index') ? 'is-active' }} " href="{{ path('user_index')}}">
+                                            Type de demande
+                                        </a>
+                                        <a class="navbar-item {{ (app.request.attributes.get('_route') == 'user_index') ? 'is-active' }} " href="{{ path('user_index')}}">
+                                            Statut de traitement
+                                        </a>
+                                    </div>
+                                </div>
                             {% endif %}
                             {% if is_granted('ROLE_ADMIN') %}
                                 <div class="navbar-item has-dropdown is-hoverable">
                                     <a class="navbar-link has-background-danger" href="{{ path('product_index_admin')}}">
-                                    Gestion
+                                    Archives
                                     </a>
                                     <div class="navbar-dropdown">
                                         <a class="navbar-item {{ (app.request.attributes.get('_route') == 'product_index_admin') ? 'is-active' }} " href="{{ path('product_index_admin')}}">
