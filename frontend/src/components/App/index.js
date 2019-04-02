@@ -13,7 +13,7 @@ import './App.scss';
 import Nav from 'src/containers/Nav';
 import Homepage from 'src/containers/Homepage';
 import Customerpage from 'src/containers/Customerpage';
-import Contactpage from 'src/components/Contactpage';
+import Contactpage from 'src/containers/Contactpage';
 import Loginpage from 'src/containers/Loginpage';
 import Signuppage from 'src/containers/Signuppage';
 import Footer from 'src/components/Footer';

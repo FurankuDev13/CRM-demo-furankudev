@@ -37,6 +37,7 @@ const ajaxAdmin = store => next => (action) => {
       axiosUp.post('/api/contact/login', stringifiedLoginDatas)
         .then((response) => {
           const { data } = response;
+          console.log(data);
           dispatch(setProfile(data));
         })
         .catch(() => {

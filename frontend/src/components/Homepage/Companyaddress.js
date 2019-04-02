@@ -19,7 +19,7 @@ const CompanyAddress = () => (
           Nous contacter
         </h2>
         <p className="title is-3 has-text-weight-bold">
-          o'Wine'rs
+          o'Beer
         </p>
         <p className="is-size-4">10 rue de Penthievre</p>
         <p className="is-size-4">75008 Paris</p>
