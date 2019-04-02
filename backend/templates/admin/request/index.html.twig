@@ -53,6 +53,7 @@
                         {% if is_granted('ROLE_ADMIN') %}
                             <div class="level-left">
                                 {% include 'request/_archive_form.html.twig' with {'notArchived': false} %}
+                                {% include 'admin/request/_delete_form.html.twig' %}
                             </div>
                         {% endif %}
                         </td>
