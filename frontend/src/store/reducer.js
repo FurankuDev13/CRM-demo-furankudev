@@ -7,7 +7,6 @@ import { getSlug } from 'src/utils/url';
  * Initial State
  */
 const initialState = {
-  view: 'login',
   profile: {
     id: '',
     email: '',
@@ -16,6 +15,7 @@ const initialState = {
       description: '',
       picture: 'https://picsum.photos/200',
       sirenNumber: '',
+      user: {},
     },
     person: {
       firstname: '',
@@ -25,8 +25,16 @@ const initialState = {
       cellPhone: '',
     },
   },
+  currentProduct: {
+    description: '',
+    listPrice: '',
+    name: '',
+    picture: '',
+    reference: '',
+  },
   isLogged: false,
   navbarIsActive: false,
+  productModalIsActive: false,
   questionModalIsActive: false,
   profileModalIsActive: false,
   categoryList: [],
@@ -34,6 +42,9 @@ const initialState = {
   articlesOnHomePage: [],
   formErrors: [],
   fields: {
+    articleOrder: {
+      articleSelect: 'Ordre alphabetique',
+    },
     login: {
       email: '',
       password: '',
@@ -86,9 +97,12 @@ const LOGOUT = 'LOGOUT';
 const TOGGLE_NAV_BAR = 'TOGGLE_NAV_BAR';
 const TOGGLE_QUESTION_MODAL = 'TOGGLE_QUESTION_MODAL';
 const TOGGLE_PROFILE_MODAL = 'TOGGLE_PROFILE_MODAL';
+const TOGGLE_PRODUCT_MODAL = 'TOGGLE_PRODUCT_MODAL';
 const UPDATE_PROFILE = 'UPDATE_PROFILE';
 const DISPLAY_ERRORS = 'DISPLAY_ERRORS';
 const DELETE_ERRORS = 'DELETE_ERRORS';
+const DISPLAY_ITEM = 'DISPLAY_ITEM';
+
 
 /**
  * Reducer
@@ -138,6 +152,12 @@ const reducer = (state = initialState, action = {}) => {
             description: data.company.description,
             picture: data.company.picture,
             sirenNumber: data.company.sirenNumber,
+            user: (data.company.user !== undefined ? {
+              firstname: data.company.user.person.firstname,
+              email: data.company.user.email,
+              lastname: data.company.user.person.lastname,
+              businessPhone: data.company.user.person.businessPhone,
+            } : {}),
           },
           person: {
             id: data.person.id,
@@ -179,7 +199,24 @@ const reducer = (state = initialState, action = {}) => {
     case LOGOUT:
       return {
         ...state,
-        logEmail: '',
+        profile: {
+          id: '',
+          email: '',
+          company: {
+            name: '',
+            description: '',
+            picture: 'https://picsum.photos/200',
+            sirenNumber: '',
+            user: {},
+          },
+          person: {
+            firstname: '',
+            lastname: '',
+            id: '',
+            businessPhone: '',
+            cellPhone: '',
+          },
+        },
         isLogged: false,
       };
 
@@ -193,6 +230,12 @@ const reducer = (state = initialState, action = {}) => {
       return {
         ...state,
         questionModalIsActive: !state.questionModalIsActive,
+      };
+
+    case TOGGLE_PRODUCT_MODAL:
+      return {
+        ...state,
+        productModalIsActive: !state.productModalIsActive,
       };
 
     case TOGGLE_PROFILE_MODAL:
@@ -240,6 +283,27 @@ const reducer = (state = initialState, action = {}) => {
         ...state,
         formErrors: [],
       };
+
+
+    case DISPLAY_ITEM: {
+      const {
+        description,
+        listPrice, name,
+        picture,
+        reference,
+      } = action.itemProps;
+      return {
+        ...state,
+        productModalIsActive: true,
+        currentProduct: {
+          description,
+          listPrice,
+          name,
+          picture,
+          reference,
+        },
+      };
+    }
 
     default:
       return state;
@@ -323,6 +387,11 @@ export const toggleQuestionModal = () => ({
 export const toggleProfileModal = () => ({
   type: TOGGLE_PROFILE_MODAL,
 });
+
+export const toggleProductModal = () => ({
+  type: TOGGLE_PRODUCT_MODAL,
+});
+
 export const updateProfile = data => ({
   type: UPDATE_PROFILE,
   data,
@@ -343,6 +412,11 @@ export const deleteNotification = () => {
 
 export const deleteErrors = () => ({
   type: DELETE_ERRORS,
+});
+
+export const displayItem = itemProps => ({
+  type: DISPLAY_ITEM,
+  itemProps,
 });
 /**
  * Selectors

@@ -14,9 +14,12 @@ import { inputChange } from 'src/store/reducer';
 /**
  * Mapping
  */
-const mapStateToProps = state => ({
-  value: state.fields.question.questionSelect,
-});
+const mapStateToProps = (state, ownProps) => {
+  const { formOrigin, name } = ownProps;
+  return ({
+    value: state.fields[formOrigin][name],
+  });
+};
 
 const mapDispatchToProps = (dispatch, ownProps) => {
   const { formOrigin, name } = ownProps;

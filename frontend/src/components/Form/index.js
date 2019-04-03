@@ -39,6 +39,9 @@ class Form extends React.Component {
           <Select
             formOrigin="question"
             name="questionSelect"
+            id="question-select"
+            label="Nature de votre question"
+            options={['Demande d\'information', 'Demande de devis']}
           />
         )}
         <div className="field is-grouped">
