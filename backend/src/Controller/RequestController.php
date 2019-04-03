@@ -149,8 +149,12 @@ class RequestController extends AbstractController
             $contact = $contactRepo->find($contactId);
             $demandRequest->setContact($contact);
         }
+        
+        $companyId = $request->query->get('company_id', '%');
 
-        $form = $this->createForm(RequestFormType::class, $demandRequest);
+        $form = $this->createForm(RequestFormType::class, $demandRequest, array(
+            'companyId' => $companyId
+        ));
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
