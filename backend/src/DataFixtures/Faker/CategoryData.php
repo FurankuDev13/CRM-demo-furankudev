@@ -28,7 +28,7 @@ trait CategoryData
         'Lager' => [
             'name' => 'Les Lagers',
             'description' => 'Ce sont certainement les bières les plus répandues sur l’ensemble des continents. Obtenues à partir de fermentation basse, ce sont des bières généralement blondes, pas trop alcoolisées.',
-            'picture' => ''
+            'picture' => 'https://i.pinimg.com/564x/29/5f/21/295f21c2441946394f8998e1d67e47ef.jpg'
         ],
         'Malt' => [
             'name' => 'La fermentation spontanée',

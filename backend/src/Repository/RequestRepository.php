@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use DateTime;
 use App\Entity\Company;
 use App\Entity\Contact;
 use App\Entity\Request;
@@ -124,6 +125,26 @@ class RequestRepository extends ServiceEntityRepository
             ->setParameter('contact', $contact)
             ->andWhere('r.isActive = :isActive')
             ->setParameter('isActive', true)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
+    public function findIsActiveAndIsFinishedByTypeFromDateToDate(RequestType $requestType, DateTime $minDate, DateTime $maxDate)
+    {
+        return $this->createQueryBuilder('r')
+            ->join('r.handlingStatus', 's')
+            ->addSelect('s')
+            ->join('r.requestType', 'rt')
+            ->addSelect('rt')
+            ->andWhere('rt = :requestType')
+            ->setParameter('requestType', $requestType)
+            ->andWhere('r.isActive = :isActive')
+            ->setParameter('isActive', true)
+            ->andWhere('r.createdAt > :last')
+            ->setParameter('last', $minDate)
+            ->andWhere('r.createdAt < :first')
+            ->setParameter('first', $maxDate)
             ->getQuery()
             ->getResult()
         ;

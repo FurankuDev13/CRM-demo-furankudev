@@ -19,8 +19,8 @@
                         <a href="{{ path('contact_show', {'id' : request.contact.id}) }}">
                             <span class="subtitle">{{ request.contact.person.firstname }} {{ request.contact.person.lastname }}</span>
                         </a> &nbsp;-&nbsp;
-                        <span class="has-text-weight-bold">{{ request.contact.contactType.title }} de 
-                            <a href="{{ path('contact_show', {'id' : request.contact.id}) }}">{{ request.contact.company.name }}</a>
+                        <span class="has-text-weight-bold">{{ request.contact.contactType.title }} de la société 
+                            <a class="subtitle" href="{{ path('company_show', {'id' : request.contact.company.id}) }}">{{ request.contact.company.name }}</a>
                         </span>
                         </br>
                         <i class="fas fa-mobile-alt"></i> {{ request.contact.person.cellPhone }} &nbsp;&nbsp;&nbsp;
