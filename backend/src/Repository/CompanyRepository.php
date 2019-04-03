@@ -90,8 +90,23 @@ class CompanyRepository extends ServiceEntityRepository
             ->addSelect('co')
             ->join('co.person', 'p')
             ->addSelect('p')
-            ->andWhere('p.isActive = :isActive')
+            ->andWhere('p.isActive IN (:isActive)')
             ->setParameter('isActive', true)
+            ->orderBy('c.name', 'ASC')
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
+    public function findByPersonIsActive($isActive = true)
+    {
+        return $this->createQueryBuilder('c')
+            ->join('c.contacts', 'co')
+            ->addSelect('co')
+            ->join('co.person', 'p')
+            ->addSelect('p')
+            ->andWhere('p.isActive IN (:isActive)')
+            ->setParameter('isActive', $isActive)
             ->orderBy('c.name', 'ASC')
             ->getQuery()
             ->getResult()

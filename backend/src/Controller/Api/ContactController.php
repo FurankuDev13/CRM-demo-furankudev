@@ -198,17 +198,25 @@ class ContactController extends AbstractController
                 $entityManager->flush();
                 $jsonObject = $serializer->serialize($contact, 'json',['groups' => 'contact_group']);
 
-                $message = (new \Swift_Message("Bienvenue chez Beer'oClock"))
-                ->setFrom('cerberus.crm.mailer@gmail.com')
-                ->setTo([$contact->getEmail(), 'cerberus.crm.mailer@gmail.com'])
-                ->setBody(
-                    $this->renderView(
-                        'emails/registration_notification.html.twig',
-                        ['contactFullName' => $contact->getPerson()->getFirstname() . $contact->getPerson()->getLastname()]
-                    ),
-                    'text/html'
-                );
-                $mailer->send($message);
+                $emailTemplate = $emailTemplateRepo->findOneByEmailTypeTitle('Inscription - Internet');
+
+                if ($emailTemplate) {
+                    $message = (new \Swift_Message("Bienvenue chez Beer'oClock"))
+                    ->setFrom('cerberus.crm.mailer@gmail.com')
+                    ->setTo([$contact->getEmail(), 'cerberus.crm.mailer@gmail.com', 'sith13160@gmail.com'])
+                    ->setBody(
+                        $this->renderView(
+                            'emails/notification.html.twig',
+                            [
+                                'emailTemplate' => $emailTemplate,
+                                'contact' => $contact,
+                                'password' => $password,
+                            ]
+                        ),
+                        'text/html'
+                    );
+                    $mailer->send($message);
+                }
             }
         }
 
@@ -361,17 +369,26 @@ class ContactController extends AbstractController
                 $entityManager->flush();
                 $jsonObject = $serializer->serialize('Success', 'json');
 
-                $message = (new \Swift_Message("Votre demande a été prise en compte"))
-                ->setFrom('cerberus.crm.mailer@gmail.com')
-                ->setTo([$contact->getEmail(), 'cerberus.crm.mailer@gmail.com'])
-                ->setBody(
-                    $this->renderView(
-                        'emails/request_notification.html.twig',
-                        ['contactFullName' => $contact->getPerson()->getFirstname() . $contact->getPerson()->getLastname()]
-                    ),
-                    'text/html'
-                );
-                $mailer->send($message);
+                $emailTemplate = $emailTemplateRepo->findOneByEmailTypeTitle('Nouvelle demande - Internet');
+
+                if ($emailTemplate) {
+                    $message = (new \Swift_Message("Votre demande a été prise en compte"))
+                    ->setFrom('cerberus.crm.mailer@gmail.com')
+                    ->setTo([$contact->getEmail(), 'cerberus.crm.mailer@gmail.com', 'sith13160@gmail.com'])
+                    ->setBody(
+                        $this->renderView(
+                            'emails/notification.html.twig',
+                            [
+                                'emailTemplate' => $emailTemplate,
+                                'contact' => $contact,
+                                'request' => $contactRequest,
+                            ]
+                        ),
+                        'text/html'
+                    );
+                    $mailer->send($message);
+                }
+                
             }
         }
 

@@ -32,23 +32,6 @@ class CategoryController extends AbstractController
     }
 
     /**
-     * @Route("/index/admin", name="index_admin", methods={"GET"})
-     * Index des catégories en mode Gestion/ADMIN : seulement ceux qui sont archivés
-     */
-    public function indexAdmin(Request $request, CategoryRepository $categoryRepo)
-    {
-        $field = $request->query->get('field', 'name');
-        $order = $request->query->get('order', 'ASC');
-
-        $categories = $categoryRepo->findIsACtiveOrderedByField($field , $order, false);
-
-        return $this->render('category/indexAdmin.html.twig', [
-            'page_title' => 'Catalogue Catégories',
-            'categories' => $categories,
-        ]);
-    }
-
-    /**
      * @Route("/{id}/show", name="show", methods={"GET"}, requirements={"id"="\d+"})
      */
     public function show(Category $category)
@@ -141,4 +124,7 @@ class CategoryController extends AbstractController
 
         return $this->redirect($referer);;
     }
+
+
+
 }

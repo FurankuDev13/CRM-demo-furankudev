@@ -1,0 +1,19 @@
+<div class="modal level-item">
+    <div class="modal-background"></div>
+    <div class="modal-card">
+        <header class="modal-card-head">
+            <p class="modal-card-title">Modifier le template de la notification</p>
+            <button class="modal-close is-large" aria-label="close"></button>
+        </header>
+            <section class="modal-card-body has-text-centered">
+            {% for emailTemplate in emailTemplates %}
+                <form action='{{ path('admin_emailType_editTemplate', {'id': data.id}) }}' method="POST">
+                    <input type="hidden" name="_method" value="PATCH">
+                    <input type="hidden" name="emailTemplateId" value="{{ emailTemplate.id }}">
+                    <button type="submit" class="button">{{ emailTemplate.title }}</button>
+                </form>
+            {% endfor %}
+        </section>
+    </div>
+</div>
+<button class="button showModal level-item"><i class="fas fa-exchange-alt"></i></button>

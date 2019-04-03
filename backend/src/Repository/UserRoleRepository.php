@@ -19,15 +19,15 @@ class UserRoleRepository extends ServiceEntityRepository
         parent::__construct($registry, UserRole::class);
     }
 
-    public function findWherePersonIsActive()
+    public function findByPersonIsActive($isActive = true)
     {
         return $this->createQueryBuilder('r')
             ->join('r.users', 'u')
             ->addSelect('u')
             ->join('u.person', 'p')
             ->addSelect('p')
-            ->andWhere('p.isActive = :isActive')
-            ->setParameter('isActive', true)
+            ->andWhere('p.isActive IN (:isActive)')
+            ->setParameter('isActive', $isActive)
             ->orderBy('r.title', 'ASC')
             ->getQuery()
             ->getResult()

@@ -1,0 +1,16 @@
+<form class="level-item" action='{{ path('admin_' ~ entity ~ '_delete', {'id': data.id}) }}' method="POST">
+    <input class="" type="hidden" name="_method" value="DELETE">
+    <button class="button showModalConfirm is-danger"><i class="fas fa-bomb"></i></button>
+    <div class="modal">
+        <div class="modal-background"></div>
+        <div class="modal-card">
+            <header class="modal-card-head">
+                <p class="modal-card-title">Supprimer définitivement ?</p>
+            </header>
+            <section class="modal-card-body has-text-centered">
+                <button type="submit" class="button is-large is-success">Confirmer</button>
+                <button class="button modal-closeConfirm is-large is-danger" aria-label="close">Annuler</button>
+            </section>
+        </div>
+    </div>
+</form>

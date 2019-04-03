@@ -19,6 +19,17 @@ class CompanyAddressTypeRepository extends ServiceEntityRepository
         parent::__construct($registry, CompanyAddressType::class);
     }
 
+    public function findByIsActiveOrderedByField($isActive = true, $field = 'title', $order = 'ASC')
+    {
+        return $this->createQueryBuilder('at')
+            ->andWhere('at.isActive IN (:isActive)')
+            ->setParameter('isActive', $isActive)
+            ->orderBy('at.' . $field, $order)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
     // /**
     //  * @return CompanyAddressType[] Returns an array of CompanyAddressType objects
     //  */

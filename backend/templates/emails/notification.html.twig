@@ -1,0 +1,22 @@
+<h2>Bonjour {{ contact.person.firstname }} {{ contact.person.lastname }}!</h2>
+<h2>{{ emailTemplate. messageTitle }}</h2>
+<br>
+<p>{{ emailTemplate. messageBody }}</p> 
+<br>
+{% if emailTemplate.emailType.title == 'Inscription - Internet' or 'Inscription - Backoffice' %}
+    <p>Votre identifiant est <span>{{ contact.email }}</span> et votre mot de passe est <span>{{ password }}</span></p>
+{% endif %}
+
+{% if emailTemplate.emailType.title == 'Nouvelle demande - Internet' %}
+    <p>{{ request.title }}:
+        <br>
+        <span>{{ request.body }}</span>
+    </p>
+{% endif %}
+
+<br>
+<p>Bien bièrement,</p>
+<br>
+<p>
+    {{ emailTemplate. messageSignature }}
+</p>

@@ -60,13 +60,13 @@ class Request
     private $requestType;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Contact", inversedBy="requests")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Contact", inversedBy="requests", cascade={"remove"})
      * @ORM\JoinColumn(nullable=false)
      */
     private $contact;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Comment", mappedBy="request")
+     * @ORM\OneToMany(targetEntity="App\Entity\Comment", mappedBy="request", cascade={"remove"})
      */
     private $comments;
 

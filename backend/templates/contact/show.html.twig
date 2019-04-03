@@ -4,12 +4,20 @@
 
 {% block main %}
     <div class="container">
-        <div class="section level-left">
-            <div class="level-item">
-                <h2 class="level-item subtitle has-text-info is-3">{{ contact.person.firstname }} {{ contact.person.lastname }}</h2>
+        <div class="section level">
+            <div class="level-left">
+                <div class="level-item">
+                    <h2 class="level-item subtitle has-text-info is-3">{{ contact.person.firstname }} {{ contact.person.lastname }}</h2>
+                </div>
+                <button class="level-item button is-info is-small is-size-4">{{ contact.contactType.title }}</button>
             </div>
-            <button class="level-item button is-info is-small is-size-4">{{ contact.contactType.title }}</button>
+            <div class="level-right">
+                <a class="level-item" href="{{ path('contact_edit', {'id' : contact.id })}}">
+                    <button type="submit" class="button is-info is-large"><i class="fas fa-edit"></i></button>
+                </a>
+            </div>
         </div>
+
         <div class="tile is-ancestor">
             {# Début des Tiles #}
             <div class="tile is-parent is-3 is-vertical">

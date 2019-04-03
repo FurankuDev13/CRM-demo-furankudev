@@ -1,0 +1,12 @@
+<div class="container">
+    <div class="section level-left">
+        <div class="level-item">
+            <h2 class="level-item subtitle has-text-info is-3">{{ page_title }}</h2>
+        </div>
+        <button class="level-item button is-info is-small is-size-4">{{ action }}</button>
+    </div>
+    {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+    {{ form_widget(form) }}
+        <button type="submit" class="button is-info">{{ action }}</button>
+    {{ form_end(form) }}
+</div>
