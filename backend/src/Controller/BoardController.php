@@ -90,8 +90,6 @@ class BoardController extends AbstractController
                 ];
             }
 
-            dump($amountPerMonth);
-
             $oldColumnChart = new ColumnChart();
             $oldColumnChart->getData()->setArrayToDataTable(
                 [
