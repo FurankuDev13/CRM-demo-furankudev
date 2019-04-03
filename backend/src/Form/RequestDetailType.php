@@ -5,6 +5,7 @@ namespace App\Form;
 use App\Entity\RequestDetail;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -16,12 +17,24 @@ class RequestDetailType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('product', null, [
+            ->add('product', EntityType::class, [
+                'class' => Product::class,
                 'label'    => "Produit",
                 'placeholder' => 'Choisir un produit',
                 'multiple'=>false,
                 'expanded' => false
             ])
+            /* ->add('discount', EntityType::class, [
+                'class' => Discount::class,
+                'label'    => "Remise accordée à la société: ",
+                'placeholder' => 'Choisir une remise',
+                'multiple'=>false,
+                'expanded' => false,
+                'query_builder' => function (DiscountRepository $discountRepo) {
+                    return $discountRepo->createQueryBuilder('d')
+                    ->orderBy('d.rate', 'ASC');
+                }
+            ]) */
             ->add('quantity', IntegerType::class, [
                 'label'    => "Quantité souhaitée",
                 'attr' => ['placeholder' => "chiffre"],
