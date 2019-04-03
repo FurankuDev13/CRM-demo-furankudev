@@ -46,6 +46,7 @@
                     </article>
                     <article class="tile is-child">
                         <p class="title">Informations</p>
+                        <p>Remise Maximale: <span class="has-text-weight-bold">{{ product.maxDiscountRate }}%</span></p>
                         <p>Disponible à la Vente: <span class="has-text-weight-bold">{{ product.isAvailable? 'Oui' : 'Non' }}</span></p>
                         <p>Affichage Vitrine: <span class="has-text-weight-bold">{{ product.isOnHomePage? 'Oui' : 'Non' }}</span></p>
                         <p>Enregistrement: <span class="has-text-weight-bold">{{ product.createdAt|date('d-m-Y') }}</span></p>

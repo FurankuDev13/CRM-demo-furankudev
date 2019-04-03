@@ -80,10 +80,15 @@ class RequestController extends AbstractController
         $comments = $commentRepo->findCommentIsActiveByRequest($demandRequest);
         $details = $requestDetailRepo->findisActiveOrderedByField();
 
+        $companyDiscount = $demandRequest->getContact()->getCompany()->getDiscount()->getRate();
         $amount = 0;
 
         foreach($details as $detail) {
-            $amount += ($detail->getQuantity() * $detail->getProduct()->getListPrice());
+            $productMaxDiscount = $detail->getProduct()->getMaxDiscountRate();
+            $productListPrice = $detail->getProduct()->getListPrice();
+            $productDiscount = min($companyDiscount, $productMaxDiscount);
+            $productSellingPrice = $productListPrice * (100 - $productDiscount)/100;
+            $amount += ($detail->getQuantity() * $productSellingPrice);
         }
 
         return $this->render('request/show.html.twig', [

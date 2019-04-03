@@ -34,7 +34,12 @@ class RequestFormType extends AbstractType
                 'label'    => "Contact émetteur de la demande",
                 'placeholder' => 'Choisir un contact',
                 'multiple'=>false,
-                'expanded' => false
+                'expanded' => false,
+                'constraints' => [
+                    new NotBlank([
+                        'message' => 'Le champ ne doit pas être vide'
+                    ])
+                ]
             ])
             ->add('title', TextType::class, [
                 'label'    => "Intitulé de la demande",
