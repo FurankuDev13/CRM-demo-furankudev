@@ -84,7 +84,7 @@ class ContactController extends AbstractController
     /**
      * @Route("/new", name="new", methods={"GET", "POST"})
      */
-    public function new(Request $request, EntityManagerInterface $entityManager, UserPasswordEncoderInterface $passwordEncoder, EmailTemplateRepository $emailTemplateRepo, \Swift_Mailer $mailer)
+    public function new(Request $request, EntityManagerInterface $entityManager, UserPasswordEncoderInterface $passwordEncoder, ContactRepository $contactRepo, EmailTemplateRepository $emailTemplateRepo, \Swift_Mailer $mailer)
     {
         $contact = new Contact();
         $person = new Person();
@@ -96,39 +96,48 @@ class ContactController extends AbstractController
         $personForm->handleRequest($request);
 
         if ($contactForm->isSubmitted() && $contactForm->isValid()) {
-            $entityManager->persist($person);
-            $password = substr(md5($person->getFirstname()), 1, 6);
-            $encodedPassword = $passwordEncoder->encodePassword($contact, $password);
-            $contact->setPassword($encodedPassword);
-            $contact->setPerson($person);
-            $entityManager->persist($contact);
-            $entityManager->flush();
-
-            $emailTemplate = $emailTemplateRepo->findOneByEmailTypeTitle('Inscription - Backoffice');
-
-            if ($emailTemplate) {
-                $message = (new \Swift_Message("Bienvenue chez Beer'oClock"))
-                ->setFrom('cerberus.crm.mailer@gmail.com')
-                ->setTo([$contact->getEmail(), 'cerberus.crm.mailer@gmail.com', 'sith13160@gmail.com'])
-                ->setBody(
-                    $this->renderView(
-                        'emails/notification.html.twig',
-                        [
-                            'emailTemplate' => $emailTemplate,
-                            'contact' => $contact,
-                            'password' => $password,
-                        ]
-                    ),
-                    'text/html'
+            if (!$contactRepo->findOneByEmail($contact->getEmail())) {
+                $entityManager->persist($person);
+                $password = substr(md5($person->getFirstname()), 1, 6);
+                $encodedPassword = $passwordEncoder->encodePassword($contact, $password);
+                $contact->setPassword($encodedPassword);
+                $contact->setPerson($person);
+                $entityManager->persist($contact);
+                $entityManager->flush();
+    
+                $emailTemplate = $emailTemplateRepo->findOneByEmailTypeTitle('Inscription - Backoffice');
+    
+                if ($emailTemplate) {
+                    $message = (new \Swift_Message("Bienvenue chez Beer'oClock"))
+                    ->setFrom('cerberus.crm.mailer@gmail.com')
+                    ->setTo([$contact->getEmail(), 'cerberus.crm.mailer@gmail.com', 'sith13160@gmail.com'])
+                    ->setBody(
+                        $this->renderView(
+                            'emails/notification.html.twig',
+                            [
+                                'emailTemplate' => $emailTemplate,
+                                'contact' => $contact,
+                                'password' => $password,
+                            ]
+                        ),
+                        'text/html'
+                    );
+                    $mailer->send($message);
+                }
+    
+                $this->addFlash(
+                    'success',
+                    "Le contact " . $contact->getPerson()->getFirstname() . ' ' . $contact->getPerson()->getLastname() . ' a bien été ajouté !'
                 );
-                $mailer->send($message);
-            }
 
-            $this->addFlash(
-                'success',
-                "Le contact " . $contact->getPerson()->getFirstname() . ' ' . $contact->getPerson()->getLastname() . ' a bien été ajouté !'
-            );
-            /* return $this->redirectToRoute('contact_show', ['id' => $contact->getId()]); */
+                return $this->redirectToRoute('contact_show', ['id' => $contact->getId()]);
+
+            } else {
+                $this->addFlash(
+                    'danger',
+                    "Un contact avec l'email " . $contact->getEmail() . ' existe déjà, cette information doit être unique !'
+                );
+            }
         }
 
         return $this->render('contact/new.html.twig', [
@@ -141,7 +150,7 @@ class ContactController extends AbstractController
     /**
      * @Route("/{id}/edit", name="edit", methods={"GET", "POST"}, requirements={"id"="\d+"})
      */
-    public function edit(Contact $contact, Request $request, EntityManagerInterface $entityManager, UserPasswordEncoderInterface $passwordEncoder)
+    public function edit(Contact $contact, Request $request, EntityManagerInterface $entityManager, UserPasswordEncoderInterface $passwordEncoder, ContactRepository $contactRepo)
     {
         if (!$contact) {
             throw $this->createNotFoundException("Le contact indiqué n'existe pas"); 
@@ -156,13 +165,21 @@ class ContactController extends AbstractController
         $personForm->handleRequest($request);
 
         if ($contactForm->isSubmitted() && $contactForm->isValid()) {
-            $entityManager->flush();
+            if (!$contactRepo->findOneByEmailAndNotById($contact->getEmail(), $contact->getId())) {
+                $entityManager->flush();
 
-            $this->addFlash(
-                'success',
-                "Le contact " . $contact->getPerson()->getFirstname() . ' ' . $contact->getPerson()->getLastname() . ' a bien été mis à jour !'
-            );
-            return $this->redirectToRoute('contact_show', ['id' => $contact->getId()]);
+                $this->addFlash(
+                    'success',
+                    "Le contact " . $contact->getPerson()->getFirstname() . ' ' . $contact->getPerson()->getLastname() . ' a bien été mis à jour !'
+                );
+                return $this->redirectToRoute('contact_show', ['id' => $contact->getId()]);
+
+            } else {
+                $this->addFlash(
+                    'danger',
+                    "Un contact avec l'email " . $contact->getEmail() . ' existe déjà, cette information doit être unique !'
+                );
+            }
         }
 
         return $this->render('contact/edit.html.twig', [

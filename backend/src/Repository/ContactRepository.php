@@ -103,6 +103,18 @@ class ContactRepository extends ServiceEntityRepository
         ;
     }
 
+    public function findOneByEmailAndNotById($email, $id): ?Contact
+    {
+        return $this->createQueryBuilder('c')
+            ->andWhere('c.email = :email')
+            ->setParameter('email', $email)
+            ->andWhere('c.id != :id')
+            ->setParameter('id', $id)
+            ->getQuery()
+            ->getOneOrNullResult()
+        ;
+    }
+
 
     // /**
     //  * @return Contact[] Returns an array of Contact objects

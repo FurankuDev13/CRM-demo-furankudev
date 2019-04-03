@@ -42,8 +42,8 @@ class RequestController extends AbstractController
         $field = $request->query->get('field', 'createdAt');
         $order = $request->query->get('order', 'DESC');
 
-        $handlingStatuses = $handlingStatusRepo->findByIsActive(true);
-        $requestTypes = $requestTypeRepo->findByIsActive(true);
+        $handlingStatuses = $handlingStatusRepo->findByIsActiveOrderedByField(true);
+        $requestTypes = $requestTypeRepo->findByIsActiveOrderedByField(true);
 
         if ($filter == 'handlingStatus') {
             $handlingStatus = $handlingStatusRepo->findOneByTitle($filterId);
@@ -72,13 +72,13 @@ class RequestController extends AbstractController
     public function show(DemandRequest $demandRequest, Request $request, CommentRepository $commentRepo, RequestDetailRepository $requestDetailRepo)
     {
         if (!$demandRequest) {
-            throw $this->createNotFoundException("La demande indiquée n'existe pas"); 
+            throw $this->createNotFoundException("La demande indiquée n'existe pas");
         }
 
         $index = $request->query->get('index', 1);
 
         $comments = $commentRepo->findCommentIsActiveByRequest($demandRequest);
-        $details = $requestDetailRepo->findisActiveOrderedByField();
+        $details = $requestDetailRepo->findIsActiveByRequestOrderedByField($demandRequest);
 
         $companyDiscount = $demandRequest->getContact()->getCompany()->getDiscount()->getRate();
         $amount = 0;

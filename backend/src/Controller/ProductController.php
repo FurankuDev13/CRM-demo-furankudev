@@ -7,6 +7,7 @@ use App\Form\ProductType;
 use App\Repository\ProductRepository;
 use App\Repository\CategoryRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use App\Repository\RequestDetailRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -46,15 +47,18 @@ class ProductController extends AbstractController
     /**
      * @Route("/{id}/show", name="show", methods={"GET"}, requirements={"id"="\d+"})
      */
-    public function show(Product $product)
+    public function show(Product $product, RequestDetailRepository $requestDetailRepo)
     {
         if (!$product) {
             throw $this->createNotFoundException("Le produit indiqué n'existe pas"); 
         }
 
+        $requestDetails = $requestDetailRepo->findIsActiveByProductOrderedByField($product);
+
         return $this->render('product/show.html.twig', [
             'page_title' => 'Produit: ' . $product->getName(),
             'product' => $product,
+            'details' => $requestDetails,
         ]);
     }
 
@@ -140,16 +144,33 @@ class ProductController extends AbstractController
     /**
      * @Route("/{id}/on_home_page", name="on_home_page", methods={"PATCH"}, requirements={"id"="\d+"})
      */
-    public function onHomePage(Product $product, Request $request, EntityManagerInterface $entityManager)
+    public function onHomePage(Product $product, Request $request, EntityManagerInterface $entityManager, ProductRepository $productRepo)
     {
         if (!$product) {
             throw $this->createNotFoundException("Le produit indiqué n'existe pas"); 
         }
 
+        $onHomepageProducts = $productRepo->findByIsActiveAndIsAvailableAndIsOnHomePage(true, true, true);
+
         //si le produit n'est pas dispo à la vente, on ne l'affiche pas en home page front
         if (!$product->getIsOnHomePage()) {
             if($product->getIsAvailable()) {
-                $product->setIsOnHomePage(true);
+                if (count($onHomepageProducts) <= 10 ){
+                    $product->setIsOnHomePage(true);
+
+                    $this->addFlash(
+                        'success',
+                        'Le Produit ' . $product->getName() . 'a été ajouté en vitrine !'
+                    );
+                    $entityManager->flush();
+
+                } else {
+                    $this->addFlash(
+                        'danger',
+                        'Un maximum de 10 produits peuvent être ajoutés en vitrine, un autre ajout est impossible !'
+                    );
+                    $entityManager->flush();
+                }
             }
         } else {
             $product->setIsOnHomePage(!$product->getIsOnHomePage());
