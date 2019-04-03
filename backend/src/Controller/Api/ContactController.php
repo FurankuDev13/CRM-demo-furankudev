@@ -242,23 +242,31 @@ class ContactController extends AbstractController
      * @Route("/contact/{id}", name="edit", methods={"PATCH", "OPTIONS"})
      */
     public function edit(Contact $contact = null, Request $request, SerializerInterface $serializer, EntityManagerInterface $entityManager, UserPasswordEncoderInterface $passwordEncoder, ContactRepository $contactRepo)
-    {
+    {   
         if (!is_null($contact)) {
+            
             $savedPassword = $contact->getPassword();
 
             $data = $serializer->deserialize($request->getContent(), Contact::class, 'json', ['object_to_populate' => $contact]);
-            
-            if ($data->getPassword()) {
-                $encodedPassword = $passwordEncoder->encodePassword($data, $data->getPassword());
-                $data->setPassword($encodedPassword);
+
+            if (!$contactRepo->findOneByEmailAndNotById($data->getEmail(), $contact->getId())) {
+                if ($data->getPassword()) {
+                    $encodedPassword = $passwordEncoder->encodePassword($data, $data->getPassword());
+                    $data->setPassword($encodedPassword);
+                } else {
+                    $data->setPassword($savedPassword);
+                }
+
+                $entityManager->flush();
+
+                $responseCode = 200 ;
+                $jsonObject = $serializer->serialize($data, 'json', ['groups' => 'contact_group']);
+
             } else {
-                $data->setPassword($savedPassword);
+                $responseCode = 400 ;
+                $errorCode = 'email_already_exists';
+                $errorDescription = "Un utilisateur avec cette adresse email existe déjà, cette donnée doit être unique, la demande ne peut être traitée";
             }
-
-            $entityManager->flush();
-
-            $responseCode = 200 ;
-            $jsonObject = $serializer->serialize($data, 'json', ['groups' => 'contact_group']);
 
         } else {
             $responseCode = 400 ;

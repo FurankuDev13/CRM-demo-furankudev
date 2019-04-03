@@ -150,7 +150,7 @@ class UserController extends AbstractController
         $personForm->handleRequest($request);
 
         if ($userForm->isSubmitted() && $userForm->isValid()) {
-            if (!$userRepo->findOneByEmail($user->getEmail())) {
+            if (!$userRepo->findOneByEmailAndNotById($user->getEmail(), $user->getId())) {
                 if($user->getPassword() == ''){
                     $encodedPassword = $savedPassword;
                 } else {

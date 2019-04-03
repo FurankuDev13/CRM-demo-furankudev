@@ -165,7 +165,7 @@ class ContactController extends AbstractController
         $personForm->handleRequest($request);
 
         if ($contactForm->isSubmitted() && $contactForm->isValid()) {
-            if (!$contactRepo->findOneByEmail($contact->getEmail())) {
+            if (!$contactRepo->findOneByEmailAndNotById($contact->getEmail(), $contact->getId())) {
                 $entityManager->flush();
 
                 $this->addFlash(
