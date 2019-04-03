@@ -75,12 +75,10 @@
                         <th>Date</th>
                         <th>Demande</th>
                         <th>Type</th>
-                        <th>Description</th>
                         <th>Prix vente</th>
                         <th>Quantité</th>
                         <th>CA</th>
                         <th>Commentaire</th>
-                        <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -88,10 +86,9 @@
                         <tr>
                             <td>{{ detail.request.createdAt|date('d-m-Y') }}</td>
                             <td>   
-                                <a class="has-text-weight-bold" href="{{ path('product_show', {'id': detail.product.id}) }}">{{ detail.request.title }}</a>
+                                <a class="has-text-weight-bold" href="{{ path('request_show', {'id': detail.request.id}) }}">{{ detail.request.title }}</a>
                             </td>
                             <td>{{ detail.request.requestType.title}}</td>
-                            <td>{{ detail.request.body|truncate(30) }}</td>
                             {% if detail.request.contact.company.discount.rate <= detail.product.maxDiscountRate %}
                                 {% set rate = detail.request.contact.company.discount.rate %}
                             {% else %}
@@ -101,18 +98,6 @@
                             <td>{{ detail.quantity }}</td>
                             <td>{{ detail.product.listPrice * (100 - rate) / 100 * detail.quantity }}&nbsp;€</td>
                             <td>{{ detail.commentField }}</td>
-                            <td>
-                                <div class="level-left">
-                                    <a class="level-item" href="{{ path('request_detail_edit', {'id' : detail.request.id, "detail_id": detail.id}) }}">
-                                        <button type="submit" class="button is-info"><i class="fas fa-edit"></i></button>
-                                    </a>
-                                    <form class="level-item" action='{{ path('request_detail_archive', {'id' : detail.id}) }}' method="POST">
-                                        <input class="" type="hidden" name="_method" value="PATCH">
-                                        {% include 'partial/_confirm_cancel_modal.html.twig' with {'message': 'Confirmation d\'Archivage'} %}
-                                        <button class="button showModalConfirm is-warning"><i class="fas fa-archive"></i></button>
-                                    </form>
-                                </div>
-                            </td>
                         </tr>
                     {% endfor %}
                 </tbody>
