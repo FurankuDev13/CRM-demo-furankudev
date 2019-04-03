@@ -16,14 +16,6 @@
         </div> 
         <div class="level-right">
             <input class="button level-item is-medium" type="text" id="companySearch" onkeyup="app.search('companySearch','companyTable', 1)" placeholder= "&#128270; nom de société ..." title="">
-            <a class="level-item" href="{{ path('company_index')}}">
-                <button class="level-item button is-primary s-small is-size-3"><i class="fas fa-sort-alpha-down"></i></button>
-            </a>
-            {% if is_granted('ROLE_ADMIN') %}
-                <a class="level-item" href="{{ path('company_new')}}">
-                    <button type="submit" class="level-item button is-success s-small is-size-3"><i class="fas fa-plus-circle"></i></button>
-                </a>
-            {% endif %} 
         </div>
     </div>
     <table class="table is-fullwidth is-hoverable is-striped" id="companyTable">
