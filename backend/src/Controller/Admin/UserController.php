@@ -89,7 +89,7 @@ class UserController extends AbstractController
     /**
      * @Route("/new", name="new", methods={"GET", "POST"})
      */
-    public function new(Request $request, EntityManagerInterface $entityManager, UserPasswordEncoderInterface $passwordEncoder)
+    public function new(Request $request, EntityManagerInterface $entityManager, UserPasswordEncoderInterface $passwordEncoder, UserRepository $userRepo)
     {
         $user = new User();
         $person = new Person();
@@ -101,18 +101,27 @@ class UserController extends AbstractController
         $personForm->handleRequest($request);
 
         if ($userForm->isSubmitted() && $userForm->isValid()) {
-            $entityManager->persist($person);
-            $encodedPassword = $passwordEncoder->encodePassword($user, $user->getPassword());
-            $user->setPassword($encodedPassword);
-            $user->setPerson($person);
-            $entityManager->persist($user);
-            $entityManager->flush();
+            if (!$userRepo->findOneByEmail($user->getEmail())) {
+                $entityManager->persist($person);
+                $encodedPassword = $passwordEncoder->encodePassword($user, $user->getPassword());
+                $user->setPassword($encodedPassword);
+                $user->setPerson($person);
+                $entityManager->persist($user);
+                $entityManager->flush();
 
-            $this->addFlash(
-                'success',
-                "L'utilisateur " . $user->getPerson()->getFirstname() . ' ' . $user->getPerson()->getLastname() . ' a bien été ajouté !'
-            );
-            return $this->redirectToRoute('admin_user_show', ['id' => $user->getId()]);
+                $this->addFlash(
+                    'success',
+                    "L'utilisateur " . $user->getPerson()->getFirstname() . ' ' . $user->getPerson()->getLastname() . ' a bien été ajouté !'
+                );
+
+                return $this->redirectToRoute('admin_user_show', ['id' => $user->getId()]);
+
+            } else {
+                $this->addFlash(
+                    'danger',
+                    "Un utilisateur avec l'email " . $user->getEmail() . ' existe déjà, cette information doit être unique !'
+                );
+            }
         }
 
         return $this->render('admin/user/new.html.twig', [
@@ -125,7 +134,7 @@ class UserController extends AbstractController
     /**
      * @Route("/{id}/edit", name="edit", methods={"GET", "POST"}, requirements={"id"="\d+"})
      */
-    public function edit(User $user, Request $request, EntityManagerInterface $entityManager, UserPasswordEncoderInterface $passwordEncoder)
+    public function edit(User $user, Request $request, EntityManagerInterface $entityManager, UserPasswordEncoderInterface $passwordEncoder, UserRepository $userRepo)
     {
         if (!$user) {
             throw $this->createNotFoundException("L'utilisateur indiqué n'existe pas"); 
@@ -141,20 +150,28 @@ class UserController extends AbstractController
         $personForm->handleRequest($request);
 
         if ($userForm->isSubmitted() && $userForm->isValid()) {
-            if($user->getPassword() == ''){
-                $encodedPassword = $savedPassword;
+            if (!$userRepo->findOneByEmail($user->getEmail())) {
+                if($user->getPassword() == ''){
+                    $encodedPassword = $savedPassword;
+                } else {
+                    $encodedPassword = $passwordEncoder->encodePassword($user, $user->getPassword());
+                }
+
+                $user->setPassword($encodedPassword);
+                $entityManager->flush();
+
+                $this->addFlash(
+                    'success',
+                    "L'utilisateur " . $user->getPerson()->getFirstname() . ' ' . $user->getPerson()->getLastname() . ' a bien été mis à jour !'
+                );
+                return $this->redirectToRoute('admin_user_show', ['id' => $user->getId()]);
+
             } else {
-                $encodedPassword = $passwordEncoder->encodePassword($user, $user->getPassword());
+                $this->addFlash(
+                    'danger',
+                    "Un utilisateur avec l'email " . $user->getEmail() . ' existe déjà, cette information doit être unique !'
+                );
             }
-
-            $user->setPassword($encodedPassword);
-            $entityManager->flush();
-
-            $this->addFlash(
-                'success',
-                "L'utilisateur " . $user->getPerson()->getFirstname() . ' ' . $user->getPerson()->getLastname() . ' a bien été mis à jour !'
-            );
-            return $this->redirectToRoute('admin_user_show', ['id' => $user->getId()]);
         }
 
         return $this->render('admin/user/edit.html.twig', [
