@@ -33,7 +33,7 @@ const Productdetails = ({
 
 Productdetails.propTypes = {
   description: PropTypes.string.isRequired,
-  listPrice: PropTypes.string.isRequired,
+  listPrice: PropTypes.number.isRequired,
   name: PropTypes.string.isRequired,
   picture: PropTypes.string.isRequired,
   reference: PropTypes.string.isRequired,

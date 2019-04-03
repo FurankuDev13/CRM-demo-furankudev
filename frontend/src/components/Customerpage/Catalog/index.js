@@ -28,11 +28,12 @@ const Catalog = ({
         <div id="category-title">Catégorie : {category}</div>
       )) || <div id="category-title">{category}</div>
       }
-      <div>Tri des articles
+      <div>
         <Select
           formOrigin="articleOrder"
           name="articleSelect"
           id="article-select"
+          label="Tri des articles"
           options={['Ordre alphabetique', 'Ordre alphabetique inverse', 'Par prix croissant', 'Par prix décroissant']}
         />
       </div>

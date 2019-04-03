@@ -14,6 +14,7 @@ import {
   updateProfile,
   sendLoginRequest,
   setProfile,
+  displayErrors,
   errorNotification,
 } from 'src/store/reducer';
 
@@ -37,11 +38,30 @@ const ajaxAdmin = store => next => (action) => {
       axiosUp.post('/api/contact/login', stringifiedLoginDatas)
         .then((response) => {
           const { data } = response;
-          console.log(data);
           dispatch(setProfile(data));
         })
         .catch((error) => {
-          console.log(error);
+          const errorType = JSON.parse(error.request.responseText).error;
+          const errors = [];
+          let errorMessage;
+          switch (errorType) {
+            case 'no_data_sent': {
+              errorMessage = 'Le champ email est vide.';
+              break;
+            }
+
+            case 'no_user_found': {
+              errorMessage = 'Vous n\'êtes pas enregistré ou vous avez mal saisi votre mot de passe';
+              break;
+            }
+
+            default: {
+              errorMessage = 'Une erreur de type inconnue est survenue. Veuillez reessayer plus tard';
+              break;
+            }
+          }
+          errors.push(errorMessage);
+          dispatch(displayErrors(errors));
           errorNotification();
         });
       break;
@@ -86,7 +106,23 @@ const ajaxAdmin = store => next => (action) => {
           dispatch(sendLoginRequest(loginDatas));
         })
         .catch((error) => {
-          console.log(error);
+          const errorType = JSON.parse(error.request.responseText).error;
+          const errors = [];
+          let errorMessage;
+          switch (errorType) {
+            case 'data_already_exists': {
+              errorMessage = JSON.parse(error.request.responseText).error_description;
+              break;
+            }
+
+            default: {
+              errorMessage = 'Une erreur de type inconnue est survenue. Veuillez reessayer plus tard';
+              break;
+            }
+          }
+          errors.push(errorMessage);
+          dispatch(displayErrors(errors));
+          errorNotification();
         });
       break;
     }
@@ -128,7 +164,6 @@ const ajaxAdmin = store => next => (action) => {
     }
 
     case SEND_PROFILE_CHANGE: {
-      console.log('youhou');
       const {
         firstname,
         lastname,

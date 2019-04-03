@@ -14,7 +14,7 @@ import { deleteNotification } from 'src/store/reducer';
  * Code
  */
 
-const Login = ({ loginFields }) => {
+const Login = ({ formErrors, loginFields }) => {
   const { email, password } = loginFields;
   const tabl = [
     {
@@ -40,7 +40,7 @@ const Login = ({ loginFields }) => {
           className="delete"
           onClick={deleteNotification}
         />
-        Vous n'êtes pas enregistré ou vous avez mal saisi votre mot de passe
+        {formErrors[0]}
       </div>
       <Form
         tabl={tabl}
@@ -51,6 +51,7 @@ const Login = ({ loginFields }) => {
 };
 
 Login.propTypes = {
+  formErrors: PropTypes.string.isRequired,
   loginFields: PropTypes.shape({
     email: PropTypes.string.isRequired,
     password: PropTypes.string.isRequired,
