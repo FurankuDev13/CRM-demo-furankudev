@@ -72,13 +72,13 @@ class RequestController extends AbstractController
     public function show(DemandRequest $demandRequest, Request $request, CommentRepository $commentRepo, RequestDetailRepository $requestDetailRepo)
     {
         if (!$demandRequest) {
-            throw $this->createNotFoundException("La demande indiquée n'existe pas"); 
+            throw $this->createNotFoundException("La demande indiquée n'existe pas");
         }
 
         $index = $request->query->get('index', 1);
 
         $comments = $commentRepo->findCommentIsActiveByRequest($demandRequest);
-        $details = $requestDetailRepo->findisActiveOrderedByField();
+        $details = $requestDetailRepo->findIsActiveByRequestOrderedByField($demandRequest);
 
         $companyDiscount = $demandRequest->getContact()->getCompany()->getDiscount()->getRate();
         $amount = 0;

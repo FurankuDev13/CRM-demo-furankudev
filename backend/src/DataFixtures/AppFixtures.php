@@ -420,7 +420,7 @@ class AppFixtures extends Fixture
     }
 
     private function getRequestDetails() {
-        for ($i = 0; $i < 50; $i ++) {
+        for ($i = 0; $i < 100; $i ++) {
             $requestDetail = new RequestDetail();
             $requestDetail->setQuantity(random_int(10, 30));
 

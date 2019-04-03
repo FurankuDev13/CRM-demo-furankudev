@@ -2,9 +2,10 @@
 
 namespace App\Repository;
 
+use App\Entity\Request;
 use App\Entity\RequestDetail;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 
 /**
  * @method RequestDetail|null find($id, $lockMode = null, $lockVersion = null)
@@ -28,6 +29,23 @@ class RequestDetailRepository extends ServiceEntityRepository
             ->addSelect('p')
             ->andWhere('d.isActive = :isActive')
             ->setParameter('isActive', $isActive)
+            ->orderBy($table . '.' . $field, $order)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
+    public function findIsActiveByRequestOrderedByField(Request $request, $table = 'd', $field = 'createdAt', $order = 'DESC', $isActive = true)
+    {
+        return $this->createQueryBuilder('d')
+            ->join('d.request', 'r')
+            ->addSelect('r')
+            ->join('d.product', 'p')
+            ->addSelect('p')
+            ->andWhere('d.isActive = :isActive')
+            ->setParameter('isActive', $isActive)
+            ->andWhere('r = :request')
+            ->setParameter('request', $request)
             ->orderBy($table . '.' . $field, $order)
             ->getQuery()
             ->getResult()
