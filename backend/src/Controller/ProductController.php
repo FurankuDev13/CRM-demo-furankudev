@@ -140,16 +140,33 @@ class ProductController extends AbstractController
     /**
      * @Route("/{id}/on_home_page", name="on_home_page", methods={"PATCH"}, requirements={"id"="\d+"})
      */
-    public function onHomePage(Product $product, Request $request, EntityManagerInterface $entityManager)
+    public function onHomePage(Product $product, Request $request, EntityManagerInterface $entityManager, ProductRepository $productRepo)
     {
         if (!$product) {
             throw $this->createNotFoundException("Le produit indiqué n'existe pas"); 
         }
 
+        $onHomepageProducts = $productRepo->findByIsActiveAndIsAvailableAndIsOnHomePage(true, true, true);
+
         //si le produit n'est pas dispo à la vente, on ne l'affiche pas en home page front
         if (!$product->getIsOnHomePage()) {
             if($product->getIsAvailable()) {
-                $product->setIsOnHomePage(true);
+                if (count($onHomepageProducts) <= 10 ){
+                    $product->setIsOnHomePage(true);
+
+                    $this->addFlash(
+                        'success',
+                        'Le Produit ' . $product->getName() . 'a été ajouté en vitrine !'
+                    );
+                    $entityManager->flush();
+
+                } else {
+                    $this->addFlash(
+                        'danger',
+                        'Un maximum de 10 produits peuvent être ajoutés en vitrine, un autre ajout est impossible !'
+                    );
+                    $entityManager->flush();
+                }
             }
         } else {
             $product->setIsOnHomePage(!$product->getIsOnHomePage());
