@@ -27,7 +27,7 @@ const initialState = {
   },
   currentProduct: {
     description: '',
-    listPrice: '',
+    listPrice: 0,
     name: '',
     picture: '',
     reference: '',

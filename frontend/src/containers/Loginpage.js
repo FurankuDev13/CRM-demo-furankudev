@@ -13,6 +13,7 @@ import Loginpage from 'src/components/Loginpage';
  */
 const mapStateToProps = state => ({
   loginFields: state.fields.login,
+  formErrors: state.formErrors,
 });
 
 const mapDispatchToProps = () => ({});
