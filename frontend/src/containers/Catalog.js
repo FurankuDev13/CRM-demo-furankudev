@@ -7,7 +7,7 @@ import { connect } from 'react-redux';
  * Local import
  */
 import Catalog from 'src/components/Customerpage/Catalog';
-import { getCurrentCategory, getCategoryFromSlug } from 'src/store/reducer';
+import { getCurrentCategory, getCategoryFromSlug, toggleProductModal } from 'src/store/reducer';
 
 /**
  * Mapping
@@ -15,7 +15,7 @@ import { getCurrentCategory, getCategoryFromSlug } from 'src/store/reducer';
 const mapStateToProps = (state, ownProps) => {
   let currentList;
   let category = 'Catalogue complet';
-  const { categoryList } = state;
+  const { categoryList, productModalIsActive } = state;
   switch (ownProps.location.pathname) {
     case '/catalog': {
       currentList = state.catalogList;
@@ -76,10 +76,15 @@ const mapStateToProps = (state, ownProps) => {
     category,
     currentList,
     articleOrder,
+    productModalIsActive,
   };
 };
 
-const mapDispatchToProps = () => ({});
+const mapDispatchToProps = dispatch => ({
+  toggleProductModal: () => {
+    dispatch(toggleProductModal());
+  },
+});
 
 const CatalogContainer = connect(
   mapStateToProps,

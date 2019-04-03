@@ -3,18 +3,25 @@
  */
 import React from 'react';
 import PropTypes from 'prop-types';
+import classNames from 'classnames';
 import { withRouter } from 'react-router';
 
 /**
  * Local import
  */
 import Select from 'src/containers/Select';
-import Card from './Card';
+import Productdetails from 'src/containers/Productdetails';
+import Card from 'src/containers/Card';
 
 
 import './catalog.scss';
 
-const Catalog = ({ currentList, category }) => (
+const Catalog = ({
+  currentList,
+  category,
+  productModalIsActive,
+  toggleProductModal,
+}) => (
   <div>
     <div>
       {(category !== 'Catalogue complet' && (
@@ -39,6 +46,14 @@ const Catalog = ({ currentList, category }) => (
         />
       ))}
     </div>
+    <div className={classNames(
+      'modal',
+      { 'is-active': productModalIsActive },
+    )}
+    >
+      <div className="modal-background" onClick={toggleProductModal} />
+      <Productdetails />
+    </div>
   </div>
 );
 
@@ -49,6 +64,8 @@ Catalog.propTypes = {
     }).isRequired,
   ).isRequired,
   category: PropTypes.string.isRequired,
+  productModalIsActive: PropTypes.bool.isRequired,
+  toggleProductModal: PropTypes.func.isRequired,
 };
 
 const CatalogWithRouter = withRouter(Catalog);

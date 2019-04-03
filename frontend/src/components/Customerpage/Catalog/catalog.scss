@@ -9,9 +9,19 @@
   padding : 2rem;
 }
 
-.card{
+.card,{
   min-width: 300px;
   margin: 0.8rem;
+}
+
+#product-modal {
+  min-width: 300px;
+  margin: 0.8rem;
+  background: #ccc;
+
+  & img {
+    min-width:300px;
+  }
 }
 
 
@@ -20,6 +30,10 @@
   .list {
     width: calc(100vw - 195px);
     grid-template-columns: auto;
+  }
+
+  #product-modal {
+    width: calc(100vw - 50px);
   }
 }
 

@@ -25,8 +25,16 @@ const initialState = {
       cellPhone: '',
     },
   },
+  currentProduct: {
+    description: '',
+    listPrice: '',
+    name: '',
+    picture: '',
+    reference: '',
+  },
   isLogged: false,
   navbarIsActive: false,
+  productModalIsActive: false,
   questionModalIsActive: false,
   profileModalIsActive: false,
   categoryList: [],
@@ -89,9 +97,12 @@ const LOGOUT = 'LOGOUT';
 const TOGGLE_NAV_BAR = 'TOGGLE_NAV_BAR';
 const TOGGLE_QUESTION_MODAL = 'TOGGLE_QUESTION_MODAL';
 const TOGGLE_PROFILE_MODAL = 'TOGGLE_PROFILE_MODAL';
+const TOGGLE_PRODUCT_MODAL = 'TOGGLE_PRODUCT_MODAL';
 const UPDATE_PROFILE = 'UPDATE_PROFILE';
 const DISPLAY_ERRORS = 'DISPLAY_ERRORS';
 const DELETE_ERRORS = 'DELETE_ERRORS';
+const DISPLAY_ITEM = 'DISPLAY_ITEM';
+
 
 /**
  * Reducer
@@ -221,6 +232,12 @@ const reducer = (state = initialState, action = {}) => {
         questionModalIsActive: !state.questionModalIsActive,
       };
 
+    case TOGGLE_PRODUCT_MODAL:
+      return {
+        ...state,
+        productModalIsActive: !state.productModalIsActive,
+      };
+
     case TOGGLE_PROFILE_MODAL:
       return {
         ...state,
@@ -266,6 +283,27 @@ const reducer = (state = initialState, action = {}) => {
         ...state,
         formErrors: [],
       };
+
+
+    case DISPLAY_ITEM: {
+      const {
+        description,
+        listPrice, name,
+        picture,
+        reference,
+      } = action.itemProps;
+      return {
+        ...state,
+        productModalIsActive: true,
+        currentProduct: {
+          description,
+          listPrice,
+          name,
+          picture,
+          reference,
+        },
+      };
+    }
 
     default:
       return state;
@@ -349,6 +387,11 @@ export const toggleQuestionModal = () => ({
 export const toggleProfileModal = () => ({
   type: TOGGLE_PROFILE_MODAL,
 });
+
+export const toggleProductModal = () => ({
+  type: TOGGLE_PRODUCT_MODAL,
+});
+
 export const updateProfile = data => ({
   type: UPDATE_PROFILE,
   data,
@@ -369,6 +412,11 @@ export const deleteNotification = () => {
 
 export const deleteErrors = () => ({
   type: DELETE_ERRORS,
+});
+
+export const displayItem = itemProps => ({
+  type: DISPLAY_ITEM,
+  itemProps,
 });
 /**
  * Selectors
