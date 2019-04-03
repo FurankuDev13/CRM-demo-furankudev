@@ -12,8 +12,10 @@ use App\Entity\Product;
 use App\Entity\Category;
 use App\Entity\Discount;
 use App\Entity\UserRole;
+use App\Entity\EmailType;
 use App\Entity\ContactType;
 use App\Entity\RequestType;
+use App\Entity\EmailTemplate;
 use App\Entity\CompanyAddress;
 use App\Entity\HandlingStatus;
 use Faker\ORM\Doctrine\Populator;
@@ -22,6 +24,7 @@ use App\DataFixtures\Faker\CategoryData;
 use App\DataFixtures\Faker\DataProvider;
 use App\Entity\Request as ClientRequest;
 use Doctrine\Bundle\FixturesBundle\Fixture;
+use App\DataFixtures\Faker\EmailTemplateData;
 use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\Validator\Constraints\DateTime;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
@@ -30,6 +33,7 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 class AppFixtures extends Fixture
 {
     use CategoryData;
+    use EmailTemplateData;
 
     private $passwordEncoder;
     private $manager;
@@ -46,6 +50,8 @@ class AppFixtures extends Fixture
 
     public function load(ObjectManager $manager)
     {
+        $this->getEmailTypesAndTemplates();
+
         $this->getProductsAndCategories();
 
         $this->getMainContactAndUsers();
@@ -116,6 +122,25 @@ class AppFixtures extends Fixture
             }
         }
         return $category;
+    }
+
+    private function getEmailTypesAndTemplates() {
+        foreach($this->emailTemplatesList as $emailTypeTitle => $emailTemplateData) {
+            $emailTemplate = new EmailTemplate();
+            $emailTemplate->setTitle($emailTypeTitle . ' par défaut');
+            $emailTemplate->setMessageTitle($emailTemplateData['messageTitle']);
+            $emailTemplate->setMessageBody($emailTemplateData['messageBody']);
+            $emailTemplate->setMessageSignature($emailTemplateData['messageSignature']);
+            $this->manager->persist($emailTemplate);
+
+            $emailType = new EmailType();
+            $emailType->setTitle($emailTypeTitle);
+            $emailType->setEmailTemplate($emailTemplate);
+            $this->manager->persist($emailType);
+
+        }
+
+        $this->manager->flush();
     }
 
     private function getMainContactAndUsers()

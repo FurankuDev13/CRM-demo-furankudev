@@ -3,14 +3,14 @@
 {% block title %}{{ parent() }} - {{ page_title }}{% endblock %}
 
 {% block sidebar %}
-    {% include 'user/_sidebar.html.twig' %}
+    {% include 'admin/user/_sidebar.html.twig' %}
 {% endblock %}
 
 {% block content %}
     {% if filterName %}
-        {% set orderButtonsIncludePath = 'user/_order_buttons_withfilter.twig' %}
+        {% set orderButtonsIncludePath = 'admin/user/_order_buttons_withfilter.twig' %}
     {% else %}
-        {% set orderButtonsIncludePath = 'user/_order_buttons.html.twig' %}
+        {% set orderButtonsIncludePath = 'admin/user/_order_buttons.html.twig' %}
     {% endif %}
     <div class="level">
         <div class="level-left">
@@ -24,11 +24,11 @@
         </div> 
             <div class="level-right">
                 <input class="button level-item is-medium" type="text" id="userSearch" onkeyup="app.search('userSearch','userTable', 1)" placeholder= "&#128270; nom d'utilisateur ..." title="">
-                <a class="level-item" href="{{ path('user_index')}}">
+                <a class="level-item" href="{{ path('admin_user_index')}}">
                     <button class="level-item button is-primary s-small is-size-3"><i class="fas fa-sort-alpha-down"></i></button>
                 </a>
                 {% if is_granted('ROLE_MANAGER') %}
-                    <a class="level-item" href="{{ path('user_new')}}">
+                    <a class="level-item" href="{{ path('admin_user_new')}}">
                         <button type="submit" class="level-item button is-success s-small is-size-3"><i class="fas fa-plus-circle"></i></button>
                     </a>
                 {% endif %}
@@ -68,7 +68,7 @@
                 >
                     <td>{{ user.person.createdAt|date("d/m/Y") }}</td>
                     <td>   
-                        <a class="has-text-weight-bold" href="{{ path('user_show', {'id': user.id}) }}">{{ user.person.lastname }}</a>
+                        <a class="has-text-weight-bold" href="{{ path('admin_user_show', {'id': user.id}) }}">{{ user.person.lastname }}</a>
                     </td>
                     <td>{{ user.person.firstname }}</td>
                     <td>{{ user.email }}</td>
@@ -99,14 +99,14 @@
                     {% if is_granted('ROLE_MANAGER') %}
                     <td class="level">
                         <div class="level-left">
-                            <a class="level-item" href="{{ path('user_edit', {'id' : user.id })}}">
+                            <a class="level-item" href="{{ path('admin_user_edit', {'id' : user.id })}}">
                                 <button type="submit" class="button is-info"><i class="fas fa-edit"></i></button>
                             </a>
                             {% if filterName == null %}
-                                {% include 'user/_roles_modal.html.twig' %}
+                                {% include 'admin/user/_roles_modal.html.twig' %}
                             {% endif %}
                             
-                            {% include 'user/_archive_form.html.twig' with {'notArchived': user.person.isActive } %}
+                            {% include 'admin/user/_archive_form.html.twig' with {'notArchived': user.person.isActive } %}
                         </div>
                     </td>
                     {% endif %}
