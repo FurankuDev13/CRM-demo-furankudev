@@ -120,7 +120,7 @@ const Signup = ({ signupFields, formErrors }) => {
         Les erreurs suivantes ont été relevées :
         <ul>
           {formErrors.map(error => (
-            <li>
+            <li key={error}>
               <p>
                 {error}
               </p>

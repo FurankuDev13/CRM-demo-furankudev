@@ -40,7 +40,6 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
         break;
       case 'signup': {
         const errors = [];
-        console.log(ownProps.tabl);
         const companySiren = ownProps.tabl[0].value;
         const companyName = ownProps.tabl[1].value;
         const companyAdress = ownProps.tabl[2].value;
@@ -52,10 +51,7 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
         const contactEmail = ownProps.tabl[8].value;
         const contactPassword = ownProps.tabl[9].value;
         const contactPasswordRepeat = ownProps.tabl[10].value;
-        if (companySiren.length === 9) {
-          console.log('okay !');
-        }
-        else {
+        if (companySiren.length !== 9) {
           errors.push('Un numéro de siren doit comporter 9 chiffres');
         }
 

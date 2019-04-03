@@ -42,7 +42,6 @@ const ajaxAdmin = store => next => (action) => {
         })
         .catch((error) => {
           const errorType = JSON.parse(error.request.responseText).error;
-          console.log(errorType);
           const errors = [];
           let errorMessage;
           switch (errorType) {
@@ -107,7 +106,23 @@ const ajaxAdmin = store => next => (action) => {
           dispatch(sendLoginRequest(loginDatas));
         })
         .catch((error) => {
-          console.log(error);
+          const errorType = JSON.parse(error.request.responseText).error;
+          const errors = [];
+          let errorMessage;
+          switch (errorType) {
+            case 'data_already_exists': {
+              errorMessage = JSON.parse(error.request.responseText).error_description;
+              break;
+            }
+
+            default: {
+              errorMessage = 'Une erreur de type inconnue est survenue. Veuillez reessayer plus tard';
+              break;
+            }
+          }
+          errors.push(errorMessage);
+          dispatch(displayErrors(errors));
+          errorNotification();
         });
       break;
     }
@@ -149,7 +164,6 @@ const ajaxAdmin = store => next => (action) => {
     }
 
     case SEND_PROFILE_CHANGE: {
-      console.log('youhou');
       const {
         firstname,
         lastname,
