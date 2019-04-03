@@ -2,6 +2,7 @@
 
 namespace App\Form;
 
+use App\Entity\Product;
 use App\Entity\RequestDetail;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -24,17 +25,6 @@ class RequestDetailType extends AbstractType
                 'multiple'=>false,
                 'expanded' => false
             ])
-            /* ->add('discount', EntityType::class, [
-                'class' => Discount::class,
-                'label'    => "Remise accordée à la société: ",
-                'placeholder' => 'Choisir une remise',
-                'multiple'=>false,
-                'expanded' => false,
-                'query_builder' => function (DiscountRepository $discountRepo) {
-                    return $discountRepo->createQueryBuilder('d')
-                    ->orderBy('d.rate', 'ASC');
-                }
-            ]) */
             ->add('quantity', IntegerType::class, [
                 'label'    => "Quantité souhaitée",
                 'attr' => ['placeholder' => "chiffre"],
