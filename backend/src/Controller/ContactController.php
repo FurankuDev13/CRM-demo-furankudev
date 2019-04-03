@@ -174,28 +174,6 @@ class ContactController extends AbstractController
     }
 
     /**
-     * @Route("/{id}/archive", name="archive", methods={"PATCH"}, requirements={"id"="\d+"})
-     */
-    public function archive(Contact $contact, Request $request, EntityManagerInterface $entityManager)
-    {
-        if (!$contact) {
-            throw $this->createNotFoundException("Le contact indiqué n'existe pas"); 
-        }
-
-        $contact->getPerson()->setIsActive(!$contact->getPerson()->getIsActive());
-        $notification = ($contact->getPerson()->getIsActive() ? ' a été désarchivé' : ' a été archivé !');
-        $this->addFlash(
-            'success',
-            'Le Contact ' . $contact->getPerson()->getFirstname() . " " . $contact->getPerson()->getLastname() . $notification
-        );
-        $entityManager->flush();
-
-        $referer = $request->headers->get('referer');
-
-        return $this->redirect($referer);;
-    }
-
-    /**
      * @Route("/{id}/edit-type", name="editType", methods={"PATCH"}, requirements={"id"="\d+"})
      */
     public function editType(Contact $contact, Request $request, EntityManagerInterface $entityManager, ContactTypeRepository $contactTypeRepo)
