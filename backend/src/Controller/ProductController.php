@@ -7,6 +7,7 @@ use App\Form\ProductType;
 use App\Repository\ProductRepository;
 use App\Repository\CategoryRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use App\Repository\RequestDetailRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -46,15 +47,18 @@ class ProductController extends AbstractController
     /**
      * @Route("/{id}/show", name="show", methods={"GET"}, requirements={"id"="\d+"})
      */
-    public function show(Product $product)
+    public function show(Product $product, RequestDetailRepository $requestDetailRepo)
     {
         if (!$product) {
             throw $this->createNotFoundException("Le produit indiqué n'existe pas"); 
         }
 
+        $requestDetails = $requestDetailRepo->findIsActiveByProductOrderedByField($product);
+
         return $this->render('product/show.html.twig', [
             'page_title' => 'Produit: ' . $product->getName(),
             'product' => $product,
+            'details' => $requestDetails,
         ]);
     }
 
