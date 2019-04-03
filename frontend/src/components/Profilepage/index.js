@@ -27,9 +27,9 @@ const Profilepage = ({
   profileModalIsActive,
   toggleProfileModal,
 }) => (
-  <div id="profilePage" className="columns is-gapless is-spaced">
+  <div id="profilePage" className="columns is-gapless is-spaced is-size-4">
     <div className="column is-half">
-      <h2>Mes informations</h2>
+      <h2 className="title">Mes informations</h2>
       <p><span>Prénom : </span>{firstname}</p>
       <p><span>Nom : </span>{lastname}</p>
       <p><span> Numéro de portable : </span>{cellPhone}</p>
@@ -39,7 +39,7 @@ const Profilepage = ({
       </button>
     </div>
     <div className="column is-half">
-      <h2>Infos sur ma société</h2>
+      <h2 className="title">Infos sur ma société</h2>
       <p><span>Nom : </span>{name}</p>
       <p><span>Notre devise : </span>{description}</p>
       <p><span>Numéro de Siren : </span>{sirenNumber}</p>
@@ -60,14 +60,20 @@ const Profilepage = ({
 Profilepage.propTypes = {
   firstname: PropTypes.string.isRequired,
   lastname: PropTypes.string.isRequired,
-  cellPhone: PropTypes.string.isRequired,
+  cellPhone: PropTypes.string,
   businessPhone: PropTypes.string.isRequired,
-  description: PropTypes.string.isRequired,
+  description: PropTypes.string,
   name: PropTypes.string.isRequired,
-  picture: PropTypes.string.isRequired,
+  picture: PropTypes.string,
   sirenNumber: PropTypes.string.isRequired,
   profileModalIsActive: PropTypes.bool.isRequired,
   toggleProfileModal: PropTypes.func.isRequired,
+};
+
+Profilepage.defaultProps = {
+  cellPhone: 'Non renseigné',
+  description: 'Non rensegné',
+  picture: 'https://cdn.dribbble.com/users/612987/screenshots/4309700/cerberus-logo.jpg',
 };
 
 /**

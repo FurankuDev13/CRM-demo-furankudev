@@ -20,24 +20,29 @@ class Select extends React.Component {
   }
 
   render() {
-    const { value } = this.props;
+    const {
+      value,
+      id,
+      label,
+      options,
+    } = this.props;
+
     return (
       <div className="field">
         <label
           className="label"
-          htmlFor="select"
-        >Nature de votre question
+          htmlFor={id}
+        >{label}
           <div className="control">
             <div
-              id="select"
+              id={id}
               className="select"
             >
               <select
                 value={value}
                 onChange={this.handleChange}
               >
-                <option>Demande d'information</option>
-                <option>Demande de devis</option>
+                {options.map(option => <option key={option}>{option}</option>)}
               </select>
             </div>
           </div>
@@ -49,7 +54,16 @@ class Select extends React.Component {
 
 Select.propTypes = {
   value: PropTypes.string.isRequired,
+  id: PropTypes.string.isRequired,
   inputChange: PropTypes.func.isRequired,
+  options: PropTypes.arrayOf(
+    PropTypes.string.isRequired,
+  ).isRequired,
+  label: PropTypes.string,
+};
+
+Select.defaultProps = {
+  label: '',
 };
 
 /**

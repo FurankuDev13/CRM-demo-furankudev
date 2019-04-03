@@ -19,7 +19,7 @@ const Nav = ({
     <nav className="navbar has-shadow is-primary is-fixed-top">
       <div className="navbar-brand">
         <Link to={(isLogged && '/catalog') || '/'} className="navbar-item">
-          <img src="src/cerberus_logo.png" alt="Logo o'Wine'rs" />
+          <img src="./cerberus_logo.png" alt="Logo o'Beer" />
           <h1 className="title is-3 has-text-white">o'beer</h1>
         </Link>
         <div
@@ -57,9 +57,14 @@ const Nav = ({
           }
           {
           isLogged && (
-            <Link to="/profile" className="navbar-item is-size-4 is-active">
-              Mon Profil
-            </Link>
+            <>
+              <Link to="/profile" className="navbar-item is-size-4 is-active">
+                Mon Profil
+              </Link>
+              <Link to="/contact" className="navbar-item is-size-4 is-active">
+                Contacts
+              </Link>
+            </>
           )
           }
         </div>

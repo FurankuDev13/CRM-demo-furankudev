@@ -14,6 +14,7 @@ const Card = ({
   picture,
   source,
   description,
+  displayItem,
 }) => (
   <div className="card">
     <div className="card-image">
@@ -30,12 +31,12 @@ const Card = ({
           )}
         </div>
         {source === 'catalog' && (
-        <div className="media-right button is-light">
-          <span>+</span>
-        </div>
+          <div className="media-right button is-light" onClick={displayItem}>
+            <span>+</span>
+          </div>
         )}
       </div>
-      {source === 'categories' && (
+      {source === 'category' && (
         <div className="content">
           {description}
         </div>
@@ -50,6 +51,7 @@ Card.propTypes = {
   listPrice: PropTypes.number,
   picture: PropTypes.string.isRequired,
   source: PropTypes.string.isRequired,
+  displayItem: PropTypes.func.isRequired,
 };
 
 Card.defaultProps = {

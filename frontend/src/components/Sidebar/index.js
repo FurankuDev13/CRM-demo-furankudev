@@ -15,9 +15,6 @@ const Sidebar = ({ toggleQuestionModal }) => (
     <a className="control button is-light aside-button" onClick={toggleQuestionModal}>
       <span>Poser une question</span>
     </a>
-    <a className="control button is-light">
-      <span>Faire une demande<br />de devis</span>
-    </a>
     <Link to="/categories" className="control button is-light">
       <span>Consulter nos<br />catégories</span>
     </Link>
