@@ -31,11 +31,11 @@
                 <td>
                     {% for contact in company.contacts %}
                         {% for request in contact.requests %}
-                            <a class="has-text-weight-bold" href="{{ path('request_show', {'id': request.id}) }}">{{ request.title }}</a>
-                            <span class="has-text-weight-bold">&nbsp; du {{ request.createdAt|date("d/m/Y") }}</span>
-                            <br>
-                            {{ request.body|truncate(100) }}
-                            {% if not loop.last %}<br>{% endif %}
+                            <p>
+                                <a class="has-text-weight-bold" href="{{ path('request_show', {'id': request.id}) }}">{{ request.title }}</a>
+                                <span class="has-text-weight-bold">&nbsp; du {{ request.createdAt|date("d/m/Y") }}</span>
+                                {{ request.body|truncate(100) }}
+                            </p>
                         {% endfor %}
                     {% endfor %}
                 </td>
