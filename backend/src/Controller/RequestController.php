@@ -42,8 +42,8 @@ class RequestController extends AbstractController
         $field = $request->query->get('field', 'createdAt');
         $order = $request->query->get('order', 'DESC');
 
-        $handlingStatuses = $handlingStatusRepo->findByIsActive(true);
-        $requestTypes = $requestTypeRepo->findByIsActive(true);
+        $handlingStatuses = $handlingStatusRepo->findByIsActiveOrderedByField(true);
+        $requestTypes = $requestTypeRepo->findByIsActiveOrderedByField(true);
 
         if ($filter == 'handlingStatus') {
             $handlingStatus = $handlingStatusRepo->findOneByTitle($filterId);
