@@ -1,0 +1,34 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ parent() }} - {{ page_title }}{% endblock %}
+
+{% block main %}
+    <div class="container">
+        <div class="section tabs is-boxed is-centered">
+            <ul>
+                <li class="is-active">
+                    <a href="">
+                        <div class="level-item">
+                            <h2 class="level-item subtitle has-text-info is-4">Statistiques&nbsp;</h2>
+                        </div>
+                    </a>
+                </li>
+            </ul>
+        </div>
+        <div id="div_chart"></div>
+            
+        <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+        <script type="text/javascript">
+            {{ gc_draw(piechart, 'div_chart') }}
+        </script>
+
+        <div id="oldColumnChart"></div>
+        <div id="newColumnChart"></div>
+        <div id="diffColumnChart"></div>
+        
+        <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+        <script type="text/javascript">
+            {{ gc_draw([oldColumnChart, newColumnChart, diffColumnChart], ['oldColumnChart', 'newColumnChart', 'diffColumnChart']) }}
+        </script>
+    </div>
+{% endblock %}
