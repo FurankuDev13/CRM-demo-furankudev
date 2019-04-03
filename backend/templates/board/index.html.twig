@@ -6,10 +6,17 @@
     <div class="container">
         <div class="section tabs is-boxed is-centered">
             <ul>
+                <li {% if not index %}class="is-active"{% endif %}>
+                    <a href="{{ path('board_index') }}">
+                        <div class="level-item">
+                            <h2 class="level-item subtitle has-text-info is-4"><i class="fas fa-chart-area"></i>&nbsp;Stats&nbsp;</h2>
+                        </div>
+                    </a>
+                </li>
                 <li {% if index == 1 %}class="is-active"{% endif %}>
                     <a href="{{ path('board_index', {'index' : 1}) }}">
                         <div class="level-item">
-                            <h2 class="level-item subtitle has-text-info is-4">Prospects en attente <br/> d'un commercial&nbsp;</h2>
+                            <h2 class="level-item subtitle has-text-info is-5"><i class="fas fa-user-clock"></i>&nbsp;Attributions&nbsp;</h2>
                         </div>
                         <button class="level-item button is-info is-small is-size-6">{{ orphanCompanies|length }}</button>
                     </a>
@@ -17,7 +24,7 @@
                 <li {% if index == 2 %}class="is-active"{% endif %}>
                      <a href="{{ path('board_index', {'index' : 2}) }}">
                         <div class="level-item">
-                            <h2 class="level-item subtitle has-text-info is-4">Sociétés en attente <br/> de réponse&nbsp;</h2>
+                            <h2 class="level-item subtitle has-text-info is-5"><i class="fas fa-building"></i>&nbsp;Sociétés en attente&nbsp;</h2>
                         </div>
                         <button class="level-item button is-info is-small is-size-6">{{ companiesWithUnhandledRequests|length }}</button>
                     </a>
@@ -25,7 +32,7 @@
                 <li {% if index == 3 %}class="is-active"{% endif %}>
                      <a href="{{ path('board_index', {'index' : 3}) }}">
                         <div class="level-item">
-                            <h2 class="level-item subtitle has-text-info is-4">Demandes en attente <br/> de réponse&nbsp;</h2>
+                            <h2 class="level-item subtitle has-text-info is-5"><i class="fas fa-tasks"></i>&nbsp;Demandes en attente&nbsp;</h2>
                         </div>
                         <button class="level-item button is-info is-small is-size-6">{{ unhandledRequests|length}}</button>
                     </a>
@@ -33,7 +40,7 @@
                 <li {% if index == 4 %}class="is-active"{% endif %}>
                      <a href="{{ path('board_index', {'index' : 4}) }}">
                         <div class="level-item">
-                            <h2 class="level-item subtitle has-text-info is-4">Commentaires <br/> et informations&nbsp;</h2>
+                            <h2 class="level-item subtitle has-text-info is-5"><i class="fas fa-exclamation-triangle"></i>&nbsp;Alertes&nbsp;</h2>
                         </div>
                         <button class="level-item button is-info is-small is-size-6">{{ comments|length}}</button>
                     </a>

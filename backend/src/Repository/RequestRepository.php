@@ -130,7 +130,7 @@ class RequestRepository extends ServiceEntityRepository
         ;
     }
 
-    public function findIsActiveAndIsFinishedByTypeFromDate(RequestType $requestType, DateTime $date)
+    public function findIsActiveAndIsFinishedByTypeFromDateToDate(RequestType $requestType, DateTime $minDate, DateTime $maxDate)
     {
         return $this->createQueryBuilder('r')
             ->join('r.handlingStatus', 's')
@@ -142,7 +142,9 @@ class RequestRepository extends ServiceEntityRepository
             ->andWhere('r.isActive = :isActive')
             ->setParameter('isActive', true)
             ->andWhere('r.createdAt > :last')
-            ->setParameter('last', $date)
+            ->setParameter('last', $minDate)
+            ->andWhere('r.createdAt < :first')
+            ->setParameter('first', $maxDate)
             ->getQuery()
             ->getResult()
         ;

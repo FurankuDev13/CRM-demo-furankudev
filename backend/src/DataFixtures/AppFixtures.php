@@ -375,7 +375,7 @@ class AppFixtures extends Fixture
         ));
 
         //Request
-        $populator->addEntity(ClientRequest::class, 30, array(
+        $populator->addEntity(ClientRequest::class, 60, array(
             'title' => function() use ($generator) { return $generator->realText(50); },
             'body' => function() use ($generator) { return $generator->realText(500); },
             'createdAt' => function() use ($generator) { return $generator->dateTimeBetween($startDate = '-1 years', $endDate = 'now', $timezone = null) ; },
@@ -398,29 +398,12 @@ class AppFixtures extends Fixture
                 $comment->setUpdatedAt($comment->getCreatedAt());
             },
         ));
-        //Request
-        /* $populator->addEntity(RequestDetail::class, 10, array(
-            'quantity' => function() use ($generator) { return $generator->numberBetween($min = 0, $max = 30) ; },
-            'createdAt' => function() use ($generator) { return $generator->dateTimeBetween($startDate = '-1 years', $endDate = 'now', $timezone = null) ; },
-            'updatedAt' => null,
-        ), array(
-            function($requestDetail) { 
-                
-                $products = $this->products;
-                shuffle($products);
-                $requestDetail->setProduct($products[0]);
-
-                $requests = $this->requests;
-                shuffle($requests);
-                $requestDetail->setRequest($requests[0]);
-            },
-        )); */
         
         return  $insertedEntities = $populator->execute();
     }
 
     private function getRequestDetails() {
-        for ($i = 0; $i < 100; $i ++) {
+        for ($i = 0; $i < 500; $i ++) {
             $requestDetail = new RequestDetail();
             $requestDetail->setQuantity(random_int(10, 30));
 
