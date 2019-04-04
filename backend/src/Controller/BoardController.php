@@ -28,7 +28,7 @@ class BoardController extends AbstractController
         $table = $request->query->get('table');
         $field = $request->query->get('field');
         $order = $request->query->get('order');
-
+        $yearRequests = 0;
        
         // Statistiques
         if (!$index) {
@@ -45,6 +45,7 @@ class BoardController extends AbstractController
             $quotations = $requestRepo->findIsActiveAndIsFinishedByTypeFromDateToDate($quotationType, $pastDate, $currentdDate);
             $detailedQuotations = $requestRepo->findIsActiveAndIsFinishedByTypeFromDateToDate($detailedQuotationType, $pastDate, $currentdDate);
             $orders = $requestRepo->findIsActiveAndIsFinishedByTypeFromDateToDate($orderType, $pastDate, $currentdDate);
+            $yearRequests = count($informations) + count($quotations) + count($detailedQuotations) + count($orders);
 
             $pieChart = new PieChart();
             $pieChart->getData()->setArrayToDataTable(
@@ -162,7 +163,8 @@ class BoardController extends AbstractController
             'salesUsers' => $salesUsers,
             'comments' => $comments,
             'piechart' => $pieChart,
-            'oldColumnChart' => $oldColumnChart
+            'oldColumnChart' => $oldColumnChart,
+            'yearRequests' => $yearRequests
         ]);
     }
 }
