@@ -80,7 +80,12 @@ class RequestController extends AbstractController
         $comments = $commentRepo->findCommentIsActiveByRequest($demandRequest);
         $details = $requestDetailRepo->findIsActiveByRequestOrderedByField($demandRequest);
 
-        $companyDiscount = $demandRequest->getContact()->getCompany()->getDiscount()->getRate();
+        if ($demandRequest->getContact()->getCompany()->getDiscount()) {
+            $companyDiscount = $demandRequest->getContact()->getCompany()->getDiscount()->getRate();
+        } else {
+            $companyDiscount = 0;
+        }
+        
         $amount = 0;
 
         foreach($details as $detail) {
