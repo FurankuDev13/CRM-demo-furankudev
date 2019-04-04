@@ -55,44 +55,54 @@ security:
     # Easy way to control access for large sections of your site
     # Note: Only the *first* access control that matches will be used
     access_control:
+        # Route API pour récupérer TOKEN
         - { path: ^/api/login_check, roles: IS_AUTHENTICATED_ANONYMOUSLY }
 
-        # - { path: '^\/api\/[a-z]+\/[0-9]+\/[a-z]+', roles: IS_AUTHENTICATED_ANONYMOUSLY, methods: [GET, POST, PATCH] } #
-        # - { path: '^\/api\/[a-z]+\/[0-9]+', roles: IS_AUTHENTICATED_ANONYMOUSLY, methods: [GET, POST, PATCH] } #
-        # - { path: '^\/api\/[a-z]+\/[a-z]+', roles: IS_AUTHENTICATED_ANONYMOUSLY, methods: [GET, POST, PATCH] } #
-        # - { path: '^\/api\/[a-z]+', roles: IS_AUTHENTICATED_ANONYMOUSLY, methods: [GET, POST, PATCH] } #
-
+        # Routes API sécurisées par le TOKEN
         - { path: '^\/api\/[a-z]+\/[0-9]+\/[a-z]+', roles: IS_AUTHENTICATED_FULLY, methods: [GET, POST, PATCH] } #
         - { path: '^\/api\/[a-z]+\/[0-9]+', roles: IS_AUTHENTICATED_FULLY, methods: [GET, POST, PATCH] } #
         - { path: '^\/api\/[a-z]+\/[a-z]+', roles: IS_AUTHENTICATED_FULLY, methods: [GET, POST, PATCH] } #
         - { path: '^\/api\/[a-z]+', roles: IS_AUTHENTICATED_FULLY, methods: [GET, POST, PATCH] } #
         
-        - { path: '^\/user\/[0-9]+\/[a-z]+', roles: ROLE_MANAGER, methods: [GET, POST, PATCH] } 
-        - { path: '^\/user\/index', roles: ROLE_MANAGER, methods: [GET] }
-        - { path: '^\/user\/new', roles: ROLE_MANAGER, methods: [GET, POST] }
+        # Routes Admin réservées au responsable et à l'administrateur
+        - { path: '^^\/admin\/[a-z]+\/[a-z]+\/[0-9]+\/[a-z]+', roles: ROLE_MANAGER, methods: [GET, POST, PATCH, DELETE] } #
+        - { path: '^\/admin\/[a-z]+\/[a-z]+\/[0-9]+', roles: ROLE_MANAGER, methods: [GET] } #
+        - { path: '^\/admin\/[a-z]+\/[a-z]+', roles: ROLE_MANAGER, methods: [GET, POST] } #
 
+        # Routes index et show hors Admin accessibles des commerciaux et supports
         - { path: '^\/[a-z]+\/[0-9]+\/show', roles: [ROLE_SALES, ROLE_SUPPORT], methods: [GET] }
         - { path: '^\/[a-z]+\/index', roles: [ROLE_SALES, ROLE_SUPPORT], methods: [GET] }
 
-        - { path: '^\/request\/[0-9]+\/[a-z]+', roles: [ROLE_SALES, ROLE_SUPPORT], methods: [GET, POST, PATCH] } 
-        - { path: '^\/request\/new', roles: [ROLE_SALES, ROLE_SUPPORT], methods: [GET, POST] }
-
+        # Routes Create et Update et Get Form réservées aux supports
         - { path: '^\/product\/[0-9]+\/[a-z]+', roles: ROLE_SUPPORT, methods: [GET, POST, PATCH] }
         - { path: '^\/product\/new', roles: ROLE_SUPPORT, methods: [GET, POST] }
 
+        # Routes Create et Update et Get Form réservées aux supports
         - { path: '^\/category\/[0-9]+\/[a-z]+', roles: ROLE_SUPPORT, methods: [GET, POST, PATCH] }
         - { path: '^\/category\/new', roles: ROLE_SUPPORT, methods: [GET, POST] }
 
-        - { path: '^\/company\/address\/[0-9]+\/[a-z]+', roles: ROLE_SALES, methods: [GET, POST, PATCH] }
-        - { path: '^\/company\/address\/new', roles: ROLE_SALES, methods: [GET, POST] }
+        # Routes Create et Update et Get Form réservées aux commerciaux
         - { path: '^\/company\/[0-9]+\/user\/set', roles: ROLE_SALESMGR, methods: [PATCH] }
+        - { path: '^\/company\/[0-9]+\/[a-z]+\/[0-9]+\/[a-z]+', roles: ROLE_SALES, methods: [GET, POST, PATCH] }
+        - { path: '^\/company\/[0-9]+\/[a-z]+\/[a-z]+', roles: ROLE_SALES, methods: [GET, POST, PATCH] }
         - { path: '^\/company\/[0-9]+\/[a-z]+', roles: ROLE_SALES, methods: [GET, POST, PATCH] }
+        - { path: '^\/company\/[a-z]+\/[0-9]+\/[a-z]+', roles: ROLE_SALES, methods: [GET, POST, PATCH] }
         - { path: '^\/company\/new', roles: ROLE_SALES, methods: [GET, POST] }
         
-
+        # Routes Create et Update et Get Form réservées aux commerciaux
         - { path: '^\/contact\/[0-9]+\/[a-z]+', roles: ROLE_SALES, methods: [GET, POST, PATCH] }
         - { path: '^\/contact\/new', roles: ROLE_SALES, methods: [GET, POST] }
 
+        # Routes pour les demandes qui sont accessibles aux supports et commerciaux
+        - { path: '^\/[a-z]+\/[0-9]+\/[a-z]+\/[0-9]+\/[a-z]+', roles: [ROLE_SALES, ROLE_SUPPORT], methods: [GET, POST, PATCH] } 
+        - { path: '^\/[a-z]+\/[0-9]+\/[a-z]+', roles: [ROLE_SALES, ROLE_SUPPORT], methods: [GET, POST, PATCH] } 
+        - { path: '^\/[a-z]+\/[a-z]+\/[a-z]+\/[0-9]+', roles: [ROLE_SALES, ROLE_SUPPORT], methods: [GET, POST, PATCH] } 
+        - { path: '^\/[a-z]+\/[a-z]+', roles: [ROLE_SALES, ROLE_SUPPORT], methods: [GET, POST] }
+
+        # Routes login et logout
         - { path: '^\/login', roles: IS_AUTHENTICATED_ANONYMOUSLY, methods: [GET, POST] } #
+        - { path: '^\/logout', roles: IS_AUTHENTICATED_FULLY, methods: [GET] } #
+
+        # Routes du tableau de bord accessible aux supports et commerciaux
         - { path: '^\/', roles: [ROLE_SALES, ROLE_SUPPORT], methods: [GET] } #
 
