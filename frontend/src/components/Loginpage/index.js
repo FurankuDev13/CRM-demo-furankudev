@@ -51,7 +51,9 @@ const Login = ({ formErrors, loginFields }) => {
 };
 
 Login.propTypes = {
-  formErrors: PropTypes.string.isRequired,
+  formErrors: PropTypes.arrayOf(
+    PropTypes.string.isRequired,
+  ).isRequired,
   loginFields: PropTypes.shape({
     email: PropTypes.string.isRequired,
     password: PropTypes.string.isRequired,

@@ -152,7 +152,7 @@ const reducer = (state = initialState, action = {}) => {
             description: data.company.description,
             picture: data.company.picture,
             sirenNumber: data.company.sirenNumber,
-            user: (data.company.user !== undefined ? {
+            user: (data.company.user !== null ? {
               firstname: data.company.user.person.firstname,
               email: data.company.user.email,
               lastname: data.company.user.person.lastname,
