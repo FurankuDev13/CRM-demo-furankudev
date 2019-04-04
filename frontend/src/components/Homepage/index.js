@@ -21,7 +21,7 @@ class Homepage extends React.Component {
   render() {
     const { articlesOnHomePage } = this.props;
     return (
-      <main>
+      <main className="container">
         <div className="columns is-gapless is-spaced">
           <div className="column is-half">
             <section className="hero is-bold is-medium">

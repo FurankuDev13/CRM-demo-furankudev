@@ -16,6 +16,7 @@ import {
   setProfile,
   displayErrors,
   errorNotification,
+  popMessage,
 } from 'src/store/reducer';
 
 /* TODO : redéfinir l'URL du backend en mode production juste avant la fin */
@@ -154,8 +155,8 @@ const ajaxAdmin = store => next => (action) => {
       };
       const stringifiedLoginDatas = JSON.stringify(questionDatas);
       axiosUp.post(`/api/contact/${id}/request`, stringifiedLoginDatas)
-        .then((response) => {
-          console.log(response);
+        .then(() => {
+          popMessage('Votre requête a abouti.', 'success');
         })
         .catch((error) => {
           console.log(error);
@@ -192,6 +193,7 @@ const ajaxAdmin = store => next => (action) => {
       axiosUp.patch(`api/contact/${id}`, stringifiedProfileDatas)
         .then((response) => {
           const { data } = response;
+          popMessage('Votre profil a été mis à jour', 'success');
           dispatch(updateProfile(data));
         })
         .catch((error) => {

@@ -27,6 +27,7 @@ import Profilepage from 'src/containers/Profilepage';
 const App = ({ isLogged, toggleQuestionModal, questionModalIsActive }) => (
   <div>
     <Nav />
+    <div id="popmessage" />
     <Switch>
       <Route
         exact

@@ -36,7 +36,7 @@ const Card = ({
           </div>
         )}
       </div>
-      {source === 'category' && (
+      {source === 'categories' && (
         <div className="content">
           {description}
         </div>
@@ -51,11 +51,12 @@ Card.propTypes = {
   listPrice: PropTypes.number,
   picture: PropTypes.string.isRequired,
   source: PropTypes.string.isRequired,
-  displayItem: PropTypes.func.isRequired,
+  displayItem: PropTypes.func,
 };
 
 Card.defaultProps = {
   listPrice: null,
+  displayItem: null,
 };
 /**
  * Export

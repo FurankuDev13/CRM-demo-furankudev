@@ -418,6 +418,17 @@ export const displayItem = itemProps => ({
   type: DISPLAY_ITEM,
   itemProps,
 });
+
+export const popMessage = (message, style) => {
+  const div = document.createElement('div');
+  div.className = `notification is-${style} is-centered`;
+  div.innerText = message;
+  const popmessage = document.getElementById('popmessage');
+  popmessage.appendChild(div);
+  setTimeout(() => {
+    popmessage.removeChild(div);
+  }, 3000);
+};
 /**
  * Selectors
  */
