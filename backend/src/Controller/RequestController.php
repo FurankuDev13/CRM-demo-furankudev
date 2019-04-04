@@ -188,13 +188,17 @@ class RequestController extends AbstractController
     /**
      * @Route("/{id}/edit", name="edit", methods={"GET", "POST"}, requirements={"id"="\d+"})
      */
-    public function edit(DemandRequest $demandRequest, Request $request, EntityManagerInterface $entityManager)
+    public function edit(DemandRequest $demandRequest, Request $request, EntityManagerInterface $entityManager, ContactRepository $contactRepo)
     {
         if (!$demandRequest) {
             throw $this->createNotFoundException("La société indiquée n'existe pas"); 
         }
 
-        $form = $this->createForm(RequestFormType::class, $demandRequest);
+        $companyId = $demandRequest->getContact()->getCompany();
+
+        $form = $this->createForm(RequestFormType::class, $demandRequest, array(
+            'companyId' => $companyId
+        ));
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {

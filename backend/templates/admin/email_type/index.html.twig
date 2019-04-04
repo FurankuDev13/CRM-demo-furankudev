@@ -61,7 +61,7 @@
                         <td class="level">
                             <div class="level-left">
                                 {% include 'admin/email_type/_handle_emailtemplate_modal.html.twig' %}
-                                {% include 'admin/partial/_archive_form.html.twig' with {'notArchived': data.isActive} %}
+                                {% include 'admin/partial/_emailValidation_form.html.twig' with {'notArchived': data.isActive} %}
                             </div>
                         </td>
                     </tr>
