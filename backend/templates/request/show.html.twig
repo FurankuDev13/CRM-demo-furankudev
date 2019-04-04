@@ -11,7 +11,7 @@
                 </div>
                 <button class="level-item button is-info is-small is-size-4">{{ request.requestType.title }}</button>
                 <button class="level-item button is-info is-small is-size-4">{{ request.handlingStatus.title }}</button>
-                <button class="level-item button is-primary is-small is-size-4"> PVT: {{ amount }}&nbsp;€</button>
+                <button class="level-item button is-primary is-small is-size-4"> <span class="is-size-5">Prix vente:&nbsp;</span> {{ amount|number_format(2, ',', ' ') }}&nbsp;€</button>
             </div>
             {% if is_granted('ROLE_SALES') %}
                 <div class="level-right">
