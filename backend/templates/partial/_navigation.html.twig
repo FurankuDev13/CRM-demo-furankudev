@@ -96,6 +96,11 @@
                                     </div>
                                 </div>
                             {% endif %}
+                            {% if is_granted('ROLE_ADMIN') %}
+                                <a class="navbar-item has-text-warning" href="{{ path('app.swagger_ui')}}" target="_blank">
+                                    <i class="fas fa-book"></i>&nbsp;Doc API
+                                </a>
+                            {% endif %}
                             <div class="navbar-item">
                                 <div class="buttons">
                                 {% if is_granted('IS_AUTHENTICATED_FULLY') %}
@@ -103,7 +108,7 @@
                                         <i class="fas fa-sign-out-alt"></i>&nbsp;Déconnexion
                                     </a>
                                 {% else %}
-                                    <a class="button is-light" href="{{ path('app_login') }}">
+                                    <a class="button is-light has-text-warning" href="{{ path('app_login') }}">
                                         <i class="fas fa-sign-in-alt"></i>&nbsp;Connexion
                                     </a>
                                 {% endif %}
