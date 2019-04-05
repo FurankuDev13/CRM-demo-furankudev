@@ -3,7 +3,9 @@ namespace App\Controller\Api;
 use App\Entity\Person;
 use App\Entity\Company;
 use App\Entity\Contact;
+use App\Entity\Product;
 use App\Entity\CompanyAddress;
+use Swagger\Annotations as SWG;
 use App\Repository\CompanyRepository;
 use App\Repository\ContactRepository;
 use App\Repository\ProductRepository;
@@ -11,7 +13,9 @@ use Doctrine\ORM\EntityManagerInterface;
 use App\Entity\Request as ContactRequest;
 use App\Repository\ContactTypeRepository;
 use App\Repository\RequestTypeRepository;
+use Nelmio\ApiDocBundle\Annotation\Model;
 use App\Repository\HandlingStatusRepository;
+use Nelmio\ApiDocBundle\Annotation\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -21,6 +25,7 @@ use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
+
 /** 
  *  @Route("/api", name="api_contact_") 
 */
@@ -28,6 +33,30 @@ class ContactController extends AbstractController
 {
     /**
      * @Route("/contact/login", name="login", methods={"POST", "OPTIONS"})
+     * 
+     * @SWG\Response(
+     *     response=200,
+     *     description="Checks the credentials of a contact user for his login, returns his information",
+     *     @SWG\Schema(
+     *         type="array",
+     *         @SWG\Items(ref=@Model(type=Contact::class, groups={"contact_group"}))
+     *     )
+     * )
+     *  @SWG\Parameter(
+     *     name="email",
+     *     in="formData",
+     *     type="string",
+     *     description="email address of the contact user"
+     * )
+     *  @SWG\Parameter(
+     *     name="password",
+     *     in="formData",
+     *     type="string",
+     *     description="password of the contact user"
+     * )
+     * @SWG\Tag(name="contacts")
+     * @Security(name="Bearer")
+     * 
      */
     public function login(Request $request, ContactRepository $contactRepo, SerializerInterface $serializer, UserPasswordEncoderInterface $passwordEncoder)
     {
@@ -75,6 +104,18 @@ class ContactController extends AbstractController
 
     /**
      * @Route("/contact/{id}", name="show", methods={"GET"})
+     * 
+     * @SWG\Response(
+     *     response=200,
+     *     description="Returns one contact user information by his id",
+     *     @SWG\Schema(
+     *         type="array",
+     *         @SWG\Items(ref=@Model(type=Contact::class, groups={"contact_group"}))
+     *     )
+     * )
+     * @SWG\Tag(name="contacts")
+     * @Security(name="Bearer")
+     * 
      */
     public function show(Contact $contact = null, ContactRepository $contactRepo, SerializerInterface $serializer)
     {
@@ -102,6 +143,90 @@ class ContactController extends AbstractController
 
     /**
      * @Route("/contact", name="new", methods={"POST"})
+     * 
+     * @SWG\Response(
+     *     response=200,
+     *     description="Creates a new contact user, returns the contact user information",
+     *     @SWG\Schema(
+     *         type="array",
+     *         @SWG\Items(ref=@Model(type=Contact::class, groups={"contact_group"}))
+     *     )
+     * )
+     *  @SWG\Parameter(
+     *     name="companyName",
+     *     in="formData",
+     *     type="string",
+     *     description="name of the contact user's company"
+     * )
+     *  @SWG\Parameter(
+     *     name="companySiren",
+     *     in="formData",
+     *     type="integer",
+     *     description="siren of the contact user's company"
+     * )
+     *  @SWG\Parameter(
+     *     name="companyAddressField",
+     *     in="formData",
+     *     type="string",
+     *     description="address of the contact user's company"
+     * )
+     *  @SWG\Parameter(
+     *     name="companyPostalCode",
+     *     in="formData",
+     *     type="string",
+     *     description="postal code of the contact user's company"
+     * )
+     *  @SWG\Parameter(
+     *     name="companyCity",
+     *     in="formData",
+     *     type="string",
+     *     description="city of the contact user's company"
+     * )
+     *  @SWG\Parameter(
+     *     name="contactLastname",
+     *     in="formData",
+     *     type="string",
+     *     description="lastname of the contact user"
+     * )
+     *  @SWG\Parameter(
+     *     name="contactFirstname",
+     *     in="formData",
+     *     type="string",
+     *     description="firstname of the contact user"
+     * )
+     *  @SWG\Parameter(
+     *     name="contactBusinessPhone",
+     *     in="formData",
+     *     type="string",
+     *     description="phonenumber of the contact user"
+     * )
+     *  @SWG\Parameter(
+     *     name="contactEmail",
+     *     in="formData",
+     *     type="string",
+     *     description="email address of the contact user"
+     * )
+     *  @SWG\Parameter(
+     *     name="contactPassword",
+     *     in="formData",
+     *     type="string",
+     *     description="password of the contact user"
+     * )
+     *  @SWG\Parameter(
+     *     name="contactPasswordRepeat",
+     *     in="formData",
+     *     type="string",
+     *     description="password repeat of the contact user"
+     * )
+     *  @SWG\Parameter(
+     *     name="contactRequest",
+     *     in="formData",
+     *     type="string",
+     *     description="information request of the contact user"
+     * )
+     * @SWG\Tag(name="contacts")
+     * @Security(name="Bearer")
+     * 
      */
     public function new(Request $request, SerializerInterface $serializer, EntityManagerInterface $entityManager, UserPasswordEncoderInterface $passwordEncoder, CompanyAddressTypeRepository $companyAddressTypeRepo, ContactTypeRepository $contactTypeRepo, RequestTypeRepository $requestTypeRepo, HandlingStatusRepository $handlingStatusRepo, CompanyRepository $companyRepo, ContactRepository $contactRepo, \Swift_Mailer $mailer)
     {
@@ -239,7 +364,27 @@ class ContactController extends AbstractController
     }
 
     /**
-     * @Route("/contact/{id}", name="edit", methods={"PATCH", "OPTIONS"})
+     * @Route("/contact/{id}", name="edit", methods={"PATCH"})
+     * 
+     * @SWG\Response(
+     *     response=200,
+     *     description="Updates one contact user information by his id, returns the contact user information",
+     *     @SWG\Schema(
+     *         type="array",
+     *         @SWG\Items(ref=@Model(type=Contact::class, groups={"contact_group"}))
+     *     )
+     * )
+     *  @SWG\Parameter(
+     *      name="body",
+     *      in="body",
+     *      @SWG\Schema(
+     *          type="array",
+     *          @Model(type=Contact::class, groups={"contact_group"})
+     *      )
+     *  )
+     * @SWG\Tag(name="contacts")
+     * @Security(name="Bearer")
+     * 
      */
     public function edit(Contact $contact = null, Request $request, SerializerInterface $serializer, EntityManagerInterface $entityManager, UserPasswordEncoderInterface $passwordEncoder, ContactRepository $contactRepo)
     {   
@@ -293,6 +438,18 @@ class ContactController extends AbstractController
     }
     /**
      * @Route("/contact/{id}/product", name="product_index", methods={"GET"})
+     * 
+     * @SWG\Response(
+     *     response=200,
+     *     description="Returns the list of the catalog products with contact user's company discounted prices",
+     *     @SWG\Schema(
+     *         type="array",
+     *         @SWG\Items(ref=@Model(type=Product::class, groups={"product_group"}))
+     *     )
+     * )
+     * @SWG\Tag(name="contacts")
+     * @Security(name="Bearer")
+     * 
      */
     public function productIndex(Contact $contact, ProductRepository $productRepo, SerializerInterface $serializer)
     {
@@ -339,6 +496,36 @@ class ContactController extends AbstractController
     
     /**
      * @Route("/contact/{id}/request", name="request_new", methods={"POST"})
+     * 
+     * @SWG\Response(
+     *     response=200,
+     *     description="Creates a new contact user's request, returns the contact user's request",
+     *     @SWG\Schema(
+     *         type="array",
+     *         @SWG\Items(ref=@Model(type=Product::class, groups={"product_group"}))
+     *     )
+     * )
+     *  @SWG\Parameter(
+     *     name="request_type",
+     *     in="formData",
+     *     type="string",
+     *     description="type of the request"
+     * )
+     *  @SWG\Parameter(
+     *     name="request_title",
+     *     in="formData",
+     *     type="string",
+     *     description="title of the request"
+     * )
+     *  @SWG\Parameter(
+     *     name="request_body",
+     *     in="formData",
+     *     type="string",
+     *     description="body of the request"
+     * )
+     * @SWG\Tag(name="contacts")
+     * @Security(name="Bearer")
+     * 
      */
     public function requestNew(Contact $contact, Request $request, EntityManagerInterface $entityManager, HandlingStatusRepository $handlingStatusRepo, RequestTypeRepository $requestTypeRepo, SerializerInterface $serializer, \Swift_Mailer $mailer)
     {
@@ -370,12 +557,12 @@ class ContactController extends AbstractController
                 $contactRequest->setContact($contact);
                 $entityManager->persist($contactRequest);
 
-                $responseCode = 201;
+                $responseCode = 200;
             }
             
-            if ($responseCode == 201) {
+            if ($responseCode == 200) {
                 $entityManager->flush();
-                $jsonObject = $serializer->serialize('Success', 'json');
+                $jsonObject = $serializer->serialize($contactRequest, 'json');
 
                 $emailTemplate = $emailTemplateRepo->findOneByEmailTypeTitle('Nouvelle demande - Internet');
 
