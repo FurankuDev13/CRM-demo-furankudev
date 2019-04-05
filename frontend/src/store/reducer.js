@@ -102,6 +102,7 @@ const UPDATE_PROFILE = 'UPDATE_PROFILE';
 const DISPLAY_ERRORS = 'DISPLAY_ERRORS';
 const DELETE_ERRORS = 'DELETE_ERRORS';
 const DISPLAY_ITEM = 'DISPLAY_ITEM';
+const CLEAR_FIELDS_DATAS = 'CLEAR_FIELDS_DATAS';
 
 
 /**
@@ -128,6 +129,45 @@ const reducer = (state = initialState, action = {}) => {
           };
         default: return state;
       }
+
+    case CLEAR_FIELDS_DATAS:
+      switch (action.data) {
+        case 'login':
+          return {
+            ...state,
+            fields: {
+              ...state.fields,
+              login: {
+                email: '',
+                password: '',
+              },
+            },
+          };
+        case 'register':
+          return {
+            ...state,
+            fields: {
+              ...state.fields,
+              signup: {
+                companyName: '',
+                companySiren: '',
+                companyAddressField: '',
+                companyPostalCode: '',
+                companyCity: '',
+                contactLastname: '',
+                contactFirstname: '',
+                contactBusinessPhone: '',
+                contactEmail: '',
+                contactPassword: '',
+                contactPasswordRepeat: '',
+                contactRequest: '',
+              },
+            },
+          };
+        default: return state;
+      }
+
+
     case INPUT_CHANGE:
       return {
         ...state,
@@ -315,6 +355,11 @@ const reducer = (state = initialState, action = {}) => {
  */
 export const fetchHomePageArticles = () => ({
   type: FETCH_HOME_PAGE,
+});
+
+export const clearFieldsDatas = data => ({
+  type: CLEAR_FIELDS_DATAS,
+  data,
 });
 
 export const fetchCatalog = () => ({

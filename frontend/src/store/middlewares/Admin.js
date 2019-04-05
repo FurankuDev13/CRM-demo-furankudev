@@ -17,6 +17,7 @@ import {
   displayErrors,
   errorNotification,
   popMessage,
+  clearFieldsDatas,
 } from 'src/store/reducer';
 
 /* TODO : redéfinir l'URL du backend en mode production juste avant la fin */
@@ -40,6 +41,7 @@ const ajaxAdmin = store => next => (action) => {
         .then((response) => {
           const { data } = response;
           dispatch(setProfile(data));
+          dispatch(clearFieldsDatas('login'));
         })
         .catch((error) => {
           const errorType = JSON.parse(error.request.responseText).error;
@@ -105,6 +107,7 @@ const ajaxAdmin = store => next => (action) => {
             password: contactPassword,
           };
           dispatch(sendLoginRequest(loginDatas));
+          dispatch(clearFieldsDatas('register'));
         })
         .catch((error) => {
           const errorType = JSON.parse(error.request.responseText).error;
