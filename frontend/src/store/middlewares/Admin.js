@@ -204,7 +204,6 @@ const ajaxAdmin = store => next => (action) => {
           const errors = [];
           let errorMessage;
           if (errorType === 'email_already_exists') {
-
             errorMessage = 'Un utilisateur avec cette adresse email existe déjà, cette donnée doit être unique, la demande ne peut être traitée';
           }
           else {
