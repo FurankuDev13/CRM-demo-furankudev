@@ -8,6 +8,9 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Nelmio\ApiDocBundle\Annotation\Model;
+use Nelmio\ApiDocBundle\Annotation\Security;
+use Swagger\Annotations as SWG;
 
 /** 
  *  @Route("/api", name="api_category_") 
@@ -16,6 +19,18 @@ class CategoryController extends AbstractController
 {
     /**
      * @Route("/category", name="index", methods={"GET"})
+     * 
+     * @SWG\Response(
+     *     response=200,
+     *     description="Returns the list of the catalog categories",
+     *     @SWG\Schema(
+     *         type="array",
+     *         @SWG\Items(ref=@Model(type=Category::class, groups={"category_group"}))
+     *     )
+     * )
+     * @SWG\Tag(name="categories")
+     * @Security(name="Bearer")
+     * 
      */
     public function index(CategoryRepository $categoryRepo, SerializerInterface $serializer)
     {
@@ -38,6 +53,18 @@ class CategoryController extends AbstractController
 
     /**
      * @Route("/category/{id}", name="show", methods={"GET"})
+     * 
+     * @SWG\Response(
+     *     response=200,
+     *     description="Returns one category by its id",
+     *     @SWG\Schema(
+     *         type="array",
+     *         @SWG\Items(ref=@Model(type=Category::class, groups={"category_group"}))
+     *     )
+     * )
+     * @SWG\Tag(name="categories")
+     * @Security(name="Bearer")
+     * 
      */
     public function show(Category $category = null, CategoryRepository $categoryRepo, SerializerInterface $serializer)
     {
