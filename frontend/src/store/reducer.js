@@ -102,6 +102,7 @@ const UPDATE_PROFILE = 'UPDATE_PROFILE';
 const DISPLAY_ERRORS = 'DISPLAY_ERRORS';
 const DELETE_ERRORS = 'DELETE_ERRORS';
 const DISPLAY_ITEM = 'DISPLAY_ITEM';
+const CLEAR_FIELDS_DATAS = 'CLEAR_FIELDS_DATAS';
 
 
 /**
@@ -128,6 +129,45 @@ const reducer = (state = initialState, action = {}) => {
           };
         default: return state;
       }
+
+    case CLEAR_FIELDS_DATAS:
+      switch (action.data) {
+        case 'login':
+          return {
+            ...state,
+            fields: {
+              ...state.fields,
+              login: {
+                email: '',
+                password: '',
+              },
+            },
+          };
+        case 'register':
+          return {
+            ...state,
+            fields: {
+              ...state.fields,
+              signup: {
+                companyName: '',
+                companySiren: '',
+                companyAddressField: '',
+                companyPostalCode: '',
+                companyCity: '',
+                contactLastname: '',
+                contactFirstname: '',
+                contactBusinessPhone: '',
+                contactEmail: '',
+                contactPassword: '',
+                contactPasswordRepeat: '',
+                contactRequest: '',
+              },
+            },
+          };
+        default: return state;
+      }
+
+
     case INPUT_CHANGE:
       return {
         ...state,
@@ -313,8 +353,22 @@ const reducer = (state = initialState, action = {}) => {
 /**
  * Action Creators
  */
+
+export const errorNotification = () => {
+  document.getElementById('notification').className = 'notification is-danger';
+};
+
+export const deleteNotification = () => {
+  document.getElementById('notification').className += ' is-hidden';
+};
+
 export const fetchHomePageArticles = () => ({
   type: FETCH_HOME_PAGE,
+});
+
+export const clearFieldsDatas = data => ({
+  type: CLEAR_FIELDS_DATAS,
+  data,
 });
 
 export const fetchCatalog = () => ({
@@ -380,17 +434,26 @@ export const toggleNavBar = () => ({
   type: TOGGLE_NAV_BAR,
 });
 
-export const toggleQuestionModal = () => ({
-  type: TOGGLE_QUESTION_MODAL,
-});
+export const toggleQuestionModal = () => {
+  deleteNotification();
+  return ({
+    type: TOGGLE_QUESTION_MODAL,
+  });
+};
 
-export const toggleProfileModal = () => ({
-  type: TOGGLE_PROFILE_MODAL,
-});
+export const toggleProfileModal = () => {
+  deleteNotification();
+  return ({
+    type: TOGGLE_PROFILE_MODAL,
+  });
+};
 
-export const toggleProductModal = () => ({
-  type: TOGGLE_PRODUCT_MODAL,
-});
+export const toggleProductModal = () => {
+  deleteNotification();
+  return ({
+    type: TOGGLE_PRODUCT_MODAL,
+  });
+};
 
 export const updateProfile = data => ({
   type: UPDATE_PROFILE,
@@ -402,14 +465,6 @@ export const displayErrors = errorArray => ({
   errorArray,
 });
 
-export const errorNotification = () => {
-  document.getElementById('notification').className = 'notification is-danger';
-};
-
-export const deleteNotification = () => {
-  document.getElementById('notification').className += ' is-hidden';
-};
-
 export const deleteErrors = () => ({
   type: DELETE_ERRORS,
 });
@@ -418,6 +473,17 @@ export const displayItem = itemProps => ({
   type: DISPLAY_ITEM,
   itemProps,
 });
+
+export const popMessage = (message, style) => {
+  const div = document.createElement('div');
+  div.className = `notification is-${style} is-centered`;
+  div.innerText = message;
+  const popmessage = document.getElementById('popmessage');
+  popmessage.appendChild(div);
+  setTimeout(() => {
+    popmessage.removeChild(div);
+  }, 3000);
+};
 /**
  * Selectors
  */
