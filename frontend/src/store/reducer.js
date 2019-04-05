@@ -353,6 +353,15 @@ const reducer = (state = initialState, action = {}) => {
 /**
  * Action Creators
  */
+
+export const errorNotification = () => {
+  document.getElementById('notification').className = 'notification is-danger';
+};
+
+export const deleteNotification = () => {
+  document.getElementById('notification').className += ' is-hidden';
+};
+
 export const fetchHomePageArticles = () => ({
   type: FETCH_HOME_PAGE,
 });
@@ -425,17 +434,26 @@ export const toggleNavBar = () => ({
   type: TOGGLE_NAV_BAR,
 });
 
-export const toggleQuestionModal = () => ({
-  type: TOGGLE_QUESTION_MODAL,
-});
+export const toggleQuestionModal = () => {
+  deleteNotification();
+  return ({
+    type: TOGGLE_QUESTION_MODAL,
+  });
+};
 
-export const toggleProfileModal = () => ({
-  type: TOGGLE_PROFILE_MODAL,
-});
+export const toggleProfileModal = () => {
+  deleteNotification();
+  return ({
+    type: TOGGLE_PROFILE_MODAL,
+  });
+};
 
-export const toggleProductModal = () => ({
-  type: TOGGLE_PRODUCT_MODAL,
-});
+export const toggleProductModal = () => {
+  deleteNotification();
+  return ({
+    type: TOGGLE_PRODUCT_MODAL,
+  });
+};
 
 export const updateProfile = data => ({
   type: UPDATE_PROFILE,
@@ -446,14 +464,6 @@ export const displayErrors = errorArray => ({
   type: DISPLAY_ERRORS,
   errorArray,
 });
-
-export const errorNotification = () => {
-  document.getElementById('notification').className = 'notification is-danger';
-};
-
-export const deleteNotification = () => {
-  document.getElementById('notification').className += ' is-hidden';
-};
 
 export const deleteErrors = () => ({
   type: DELETE_ERRORS,

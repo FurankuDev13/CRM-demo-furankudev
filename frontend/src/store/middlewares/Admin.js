@@ -199,8 +199,20 @@ const ajaxAdmin = store => next => (action) => {
           popMessage('Votre profil a été mis à jour', 'success');
           dispatch(updateProfile(data));
         })
-        .catch(() => {
-          popMessage('Suite à une erreur d\'origine inconnue, vos modifications n\'ont pas été prises en compte', 'warning');
+        .catch((error) => {
+          const errorType = JSON.parse(error.request.responseText).error;
+          const errors = [];
+          let errorMessage;
+          if (errorType === 'email_already_exists') {
+
+            errorMessage = 'Un utilisateur avec cette adresse email existe déjà, cette donnée doit être unique, la demande ne peut être traitée';
+          }
+          else {
+            errorMessage = 'Suite à une erreur d\'origine inconnue, vos modifications n\'ont pas été prises en compte';
+          }
+          errors.push(errorMessage);
+          dispatch(displayErrors(errors));
+          errorNotification();
         });
       break;
     }
