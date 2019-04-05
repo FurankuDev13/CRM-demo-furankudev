@@ -1,0 +1,18 @@
+nelmio_api_doc:
+    documentation:
+        schemes: [http, https]
+        info:
+            title: Cerberus CRM
+            description: By the Cerberus Team
+            version: 1.0.0
+        securityDefinitions:
+            Bearer:
+                type: apiKey
+                description: 'Value: Bearer {jwt}'
+                name: Authorization
+                in: header
+        security:
+            - Bearer: [eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJpYXQiOjE1NTQ0NTI0NzYsInJvbGVzIjpbIlJPTEVfQVBJVVNFUiJdLCJ1c2VybmFtZSI6ImNlcmJlcnVzLmNybS5tYWlsZXJAZ21haWwuY29tIn0.S_2WXs2HPszGjWBM0qvnSPcB2RjXcL1X4ouquMeQ6F0owcMkzbM1QIIX01-fXP-eFUqQ6dX1wNLji1rW68yV23CUuiXiwx0-uWFI39VUwfbkpc-AKeAChsePxgZ5LgfJIovMriiA2gO4Ufi7FNfHUBFshb2R5jM9iH9g4IvglYzB1vpNNJw7Bawyp-zNSMQtReqeDQ5GT9H9XcYxjfqhVBUUwOoHbzoIURQDh8Cz5IVh2dIq1w6B3zOLh3tErHBTNPvcDA6HI57jUiDmLxPHo4M5nF0LGUajJ9K5stTov27aZ8N6WAWg3M4_EV1kb9WhhyBsOreTUDO4o8nxzUnTCgTil5guhkCNBoFcmLJ_s16Q4mqvzI3oTi0W_uf-EfbRSiyzXBI797wYbhFb42GEeb-xdt4MUCLFpum9SbJ0DIV6cvLHFkwbyUdsIQgLbjZ8nwxWxC8C8lF3AnkkJmR4IW5h6GRI2gp2iKrOUYrVXeJbUgWCHCNX1AQPISbg_CfYYiKnMVBt0UyJShcFjYPHPVFXLKmZ12CxNYITXQSq01YurB6q_zitNmKB2F3G3SRHZem6uRYBKYKkWFfNfLP3XfrIFbrgTFXY-tgLRKOZnrYP5XV_QaRv2yZCapAEGAx3nBzDB4o8fnJu9MOtBo6yVX6tOHjIRbCcdOZrjL8pu9w]
+    areas: # to filter documented areas
+        path_patterns:
+            - ^/api(?!/doc$) # Accepts routes under /api except /api/doc

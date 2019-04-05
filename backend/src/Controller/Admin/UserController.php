@@ -40,7 +40,7 @@ class UserController extends AbstractController
         $activeUsers = $userRepo->findByIsActiveAndOrderedByField(true, $table, $field, $order);
         $archivedUsers = $userRepo->findByIsActiveAndOrderedByField(false, $table, $field, $order);
 
-        if ($isActive == true) {
+        if ($isActive == 1) {
             $filter = 'isActive';
             $filterName = 'Actifs';
         }
