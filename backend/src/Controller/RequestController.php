@@ -42,8 +42,8 @@ class RequestController extends AbstractController
         $field = $request->query->get('field', 'createdAt');
         $order = $request->query->get('order', 'DESC');
 
-        $handlingStatuses = $handlingStatusRepo->findByIsActive(true);
-        $requestTypes = $requestTypeRepo->findByIsActive(true);
+        $handlingStatuses = $handlingStatusRepo->findByIsActiveOrderedByField(true);
+        $requestTypes = $requestTypeRepo->findByIsActiveOrderedByField(true);
 
         if ($filter == 'handlingStatus') {
             $handlingStatus = $handlingStatusRepo->findOneByTitle($filterId);
@@ -72,18 +72,28 @@ class RequestController extends AbstractController
     public function show(DemandRequest $demandRequest, Request $request, CommentRepository $commentRepo, RequestDetailRepository $requestDetailRepo)
     {
         if (!$demandRequest) {
-            throw $this->createNotFoundException("La demande indiquée n'existe pas"); 
+            throw $this->createNotFoundException("La demande indiquée n'existe pas");
         }
 
         $index = $request->query->get('index', 1);
 
         $comments = $commentRepo->findCommentIsActiveByRequest($demandRequest);
-        $details = $requestDetailRepo->findisActiveOrderedByField();
+        $details = $requestDetailRepo->findIsActiveByRequestOrderedByField($demandRequest);
 
+        if ($demandRequest->getContact()->getCompany()->getDiscount()) {
+            $companyDiscount = $demandRequest->getContact()->getCompany()->getDiscount()->getRate();
+        } else {
+            $companyDiscount = 0;
+        }
+        
         $amount = 0;
 
         foreach($details as $detail) {
-            $amount += ($detail->getQuantity() * $detail->getProduct()->getListPrice());
+            $productMaxDiscount = $detail->getProduct()->getMaxDiscountRate();
+            $productListPrice = $detail->getProduct()->getListPrice();
+            $productDiscount = min($companyDiscount, $productMaxDiscount);
+            $productSellingPrice = $productListPrice * (100 - $productDiscount)/100;
+            $amount += ($detail->getQuantity() * $productSellingPrice);
         }
 
         return $this->render('request/show.html.twig', [
@@ -144,8 +154,12 @@ class RequestController extends AbstractController
             $contact = $contactRepo->find($contactId);
             $demandRequest->setContact($contact);
         }
+        
+        $companyId = $request->query->get('company_id', '%');
 
-        $form = $this->createForm(RequestFormType::class, $demandRequest);
+        $form = $this->createForm(RequestFormType::class, $demandRequest, array(
+            'companyId' => $companyId
+        ));
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -174,13 +188,17 @@ class RequestController extends AbstractController
     /**
      * @Route("/{id}/edit", name="edit", methods={"GET", "POST"}, requirements={"id"="\d+"})
      */
-    public function edit(DemandRequest $demandRequest, Request $request, EntityManagerInterface $entityManager)
+    public function edit(DemandRequest $demandRequest, Request $request, EntityManagerInterface $entityManager, ContactRepository $contactRepo)
     {
         if (!$demandRequest) {
             throw $this->createNotFoundException("La société indiquée n'existe pas"); 
         }
 
-        $form = $this->createForm(RequestFormType::class, $demandRequest);
+        $companyId = $demandRequest->getContact()->getCompany();
+
+        $form = $this->createForm(RequestFormType::class, $demandRequest, array(
+            'companyId' => $companyId
+        ));
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {

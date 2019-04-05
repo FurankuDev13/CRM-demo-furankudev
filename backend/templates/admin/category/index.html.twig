@@ -1,10 +1,10 @@
-{% extends 'base.html.twig' %}
+{% extends 'base_without_sidebar.html.twig' %}
 
 {% block title %}{{ parent() }} - {{ page_title }}{% endblock %}
 
-{% block main %}
+{% block content %}
     <div class="container">
-        <div class="section level">
+        <div class="level">
             <div class="level-left ">
                 <div class="level-item">
                     <h2 class=" level-item subtitle has-text-info is-3">Les catégories archivées du catalogue</h2>
@@ -13,14 +13,6 @@
             </div> 
             <div class="level-right">
                 <input class="button level-item is-medium" type="text" id="categorySearch" onkeyup="app.search('categorySearch','categoryTable', 0)" placeholder= "&#128270; nom de catégorie ..." title="">
-                <a class="level-item" href="{{ path('category_index')}}">
-                    <button class="level-item button is-primary s-small is-size-3"><i class="fas fa-sort-alpha-down"></i></button>
-                </a>
-                {% if is_granted('ROLE_SUPPORT') %} 
-                    <a class="level-item" href="{{ path('category_new')}}">
-                        <button type="submit" class="level-item button is-success s-small is-size-3"><i class="fas fa-plus-circle"></i></button>
-                    </a>
-                {% endif %}
             </div>
         </div>
         <table class="table is-fullwidth is-hoverable is-striped" id="categoryTable">

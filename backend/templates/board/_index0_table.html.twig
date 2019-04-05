@@ -1,0 +1,29 @@
+<div class="level">
+    <div class="level-item has-text-centered">
+        <p class="has-text-info is-size-4">Demandes sur la période <span class="button is-info is-outlined is-normal">{{yearRequests}}</span></p>
+    </div>
+</div>
+
+<div class="columns">
+    <div class="column is-6">
+        <div id="div_chart"></div>
+    </div>
+    <div class="column is-6">
+        <div id="oldColumnChart"></div>
+    </div>
+</div>
+
+{% block javascripts %}
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+        {{ gc_draw(piechart, 'div_chart') }}
+    </script>
+
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+        {{ gc_draw([oldColumnChart], ['oldColumnChart']) }}
+    </script>
+
+{% endblock %}
+
+

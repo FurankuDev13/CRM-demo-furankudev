@@ -98,6 +98,18 @@ class UserRepository extends ServiceEntityRepository
         ;
     }
 
+    public function findOneByEmailAndNotById($email, $id): ?User
+    {
+        return $this->createQueryBuilder('u')
+            ->andWhere('u.email = :email')
+            ->setParameter('email', $email)
+            ->andWhere('u.id != :id')
+            ->setParameter('id', $id)
+            ->getQuery()
+            ->getOneOrNullResult()
+        ;
+    }
+
     // /**
     //  * @return User[] Returns an array of User objects
     //  */

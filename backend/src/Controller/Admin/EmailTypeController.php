@@ -68,7 +68,7 @@ class EmailTypeController extends AbstractController
         }
 
         $emailType->setIsActive(!$emailType->getIsActive());
-        $notification = ($emailType->getIsActive() ? ' a été désarchivé' : ' a été archivé !');
+        $notification = ($emailType->getIsActive() ? ' a été activé' : ' a été désactivé !');
         $this->addFlash(
             'warning',
             'Le type ' . $emailType->getTitle() . $notification

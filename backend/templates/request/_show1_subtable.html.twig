@@ -5,7 +5,8 @@
                 <th>Référence</th>
                 <th>Produit</th>
                 <th>Description</th>
-                <th>Tarif</th>
+                <th>Prix liste</th>
+                <th>Prix vente</th>
                 <th>Image</th>
                 <th>Quantité</th>
                 <th>Commentaire</th>
@@ -21,6 +22,12 @@
                     </td>
                     <td>{{ detail.product.description|truncate(30) }}</td>
                     <td>{{ detail.product.listPrice }}&nbsp;€</td>
+                    {% if detail.request.contact.company.discount.rate <= detail.product.maxDiscountRate %}
+                        {% set rate = detail.request.contact.company.discount.rate %}
+                    {% else %}
+                        {% set rate = detail.product.maxDiscountRate %}
+                    {% endif %}
+                    <td>{{ detail.product.listPrice * (100 - rate) / 100 }}&nbsp;€</td>
                     <td>
                         <figure class="image is-24x24">
                             <img src="{{ detail.product.picture ?: "https://stickeramoi.com/3777-large_default/autocollant-point-interrogation-muraux.jpg" }}">

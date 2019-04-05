@@ -35,17 +35,16 @@
                     <p class="subtitle">{{ product.description }}</p>
                 </article>
                 <div class="tile">
-                    <article class="tile is-child">
+                    <article class="tile is-child is-8">
                         <p class="title">Catégories</p>
-                        <p class="subtitle">
                             {% for category in product.categories %}
-                                <a class="has-text-weight-bold" href="{{ path('category_show', {'id': category.id}) }}">{{ category.name }}</a>
-                                {% if not loop.last %}, {% endif %}
+                                <a class="subtitle has-text-weight-bold" href="{{ path('category_show', {'id': category.id}) }}">{{ category.name }} </a>
+                                <p class="is-italic">{{ category.description }}</p>
                             {% endfor %}
-                        </p>
                     </article>
-                    <article class="tile is-child">
+                    <article class="tile is-child box is-4">
                         <p class="title">Informations</p>
+                        <p>Remise Maximale: <span class="has-text-weight-bold">{{ product.maxDiscountRate }}%</span></p>
                         <p>Disponible à la Vente: <span class="has-text-weight-bold">{{ product.isAvailable? 'Oui' : 'Non' }}</span></p>
                         <p>Affichage Vitrine: <span class="has-text-weight-bold">{{ product.isOnHomePage? 'Oui' : 'Non' }}</span></p>
                         <p>Enregistrement: <span class="has-text-weight-bold">{{ product.createdAt|date('d-m-Y') }}</span></p>
@@ -55,5 +54,57 @@
             </div>
             {# Fin des Tiles #}
         </div>
+
+        <div class="tabs is-centered">
+            <ul>
+                <li class="is-active">
+                     <a href="">
+                        <div class="level-item">
+                            <h2 class="level-item subtitle has-text-primary is-4">Demandes pour ce produit&nbsp;</h2>
+                        </div>
+                        <button class="level-item button is-primary is-small is-size-6"> {{ details|length }}</button>&nbsp;
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+        <table class="table is-fullwidth is-hoverable is-striped">
+            {% if details %}
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Demande</th>
+                        <th>Type</th>
+                        <th>Prix vente</th>
+                        <th>Quantité</th>
+                        <th>CA</th>
+                        <th>Commentaire</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for detail in details %}
+                        <tr>
+                            <td>{{ detail.request.createdAt|date('d-m-Y') }}</td>
+                            <td>   
+                                <a class="has-text-weight-bold" href="{{ path('request_show', {'id': detail.request.id}) }}">{{ detail.request.title }}</a>
+                            </td>
+                            <td>{{ detail.request.requestType.title}}</td>
+                            {% if detail.request.contact.company.discount.rate <= detail.product.maxDiscountRate %}
+                                {% set rate = detail.request.contact.company.discount.rate %}
+                            {% else %}
+                                {% set rate = detail.product.maxDiscountRate %}
+                            {% endif %}
+                            <td>{{ detail.product.listPrice * (100 - rate) / 100 }}&nbsp;€</td>
+                            <td>{{ detail.quantity }}</td>
+                            <td>{{ detail.product.listPrice * (100 - rate) / 100 * detail.quantity }}&nbsp;€</td>
+                            <td>{{ detail.commentField }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            {% else %}
+                <p class="has-text-weight-bold has-text-centered has-text-warning is-size-4">Aucune donnée à afficher</tr>
+            {% endif %}
+        </table>
+        <br>
     </div>
 {% endblock %}

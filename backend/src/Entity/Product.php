@@ -107,7 +107,7 @@ class Product
 
     public function __toString()
     {
-        return $this->name;
+        return $this->name . ' - ' . substr($this->description, 0, 20);
     }
 
     public function getId(): ?int

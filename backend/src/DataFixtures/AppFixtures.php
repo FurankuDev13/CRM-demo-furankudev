@@ -6,6 +6,7 @@ use Faker\Factory;
 use App\Entity\User;
 use Unirest\Request;
 use App\Entity\Person;
+use App\Entity\Comment;
 use App\Entity\Company;
 use App\Entity\Contact;
 use App\Entity\Product;
@@ -16,6 +17,7 @@ use App\Entity\EmailType;
 use App\Entity\ContactType;
 use App\Entity\RequestType;
 use App\Entity\EmailTemplate;
+use App\Entity\RequestDetail;
 use App\Entity\CompanyAddress;
 use App\Entity\HandlingStatus;
 use Faker\ORM\Doctrine\Populator;
@@ -38,6 +40,8 @@ class AppFixtures extends Fixture
     private $passwordEncoder;
     private $manager;
     private $categories;
+    private $request  = [];
+    private $products  = [];
     private $userRoles = [];
 
     public function __construct(UserPasswordEncoderInterface $passwordEncoder, ObjectManager $manager)
@@ -56,7 +60,10 @@ class AppFixtures extends Fixture
 
         $this->getMainContactAndUsers();
 
-        $this->getPopulatedData();        
+        $data = $this->getPopulatedData();  
+        
+        $this->getRequestDetails(); 
+    
     }
 
     private function getProductsAndCategories()
@@ -86,19 +93,26 @@ class AppFixtures extends Fixture
 
                 $product->setReference($response->body[$i]->product_id);
                 $product->setName($response->body[$i]->name);
-                $product->setDescription($response->body[$i]->size . " - " . $response->body[$i]->country . " - " . $response->body[$i]->type . " - by " . $response->body[$i]->brewer);
+                
+                $categories = $this->categoryList;
+                shuffle($categories);
+
+                $product->setDescription($response->body[$i]->size . " - " . $response->body[$i]->country . " - " . $response->body[$i]->type . " - by " . $response->body[$i]->brewer . '. ' . $categories[0]['description']);
+
                 $product->setPicture($response->body[$i]->image_url);
                 $product->setListPrice($response->body[$i]->price);
                 $product->setMaxDiscountRate(15);
                 $product->setIsAvailable(true);
                 $product->setIsOnHomePage(false);
-                $product->setRank(10);
+                $product->setRank(random_int(1, 10));
                 
                 //dd($this->completeCategory($category));
                 $product->addCategory($this->completeCategory($category));
                 $product->addCategory($this->completeCategory($category2));
                 
                 $this->manager->persist($product);
+
+                $this->products[] = $product;
             }
         }
 
@@ -270,11 +284,15 @@ class AppFixtures extends Fixture
         //Contact Type
         $populator->addEntity(ContactType::class,5, array(
             'title' => function() use ($generator) { return $generator->unique()->SetContactType(); },
+            'createdAt' => function() use ($generator) { return $generator->dateTimeBetween($startDate = '-1 years', $endDate = 'now', $timezone = null) ; },
+            'updatedAt' => null,
         ));
 
         //Discounts
         $populator->addEntity(Discount::class,6, array(
             'rate' => function() use ($generator) { return $generator->unique()->SetDiscount(); },
+            'createdAt' => function() use ($generator) { return $generator->dateTimeBetween($startDate = '-1 years', $endDate = 'now', $timezone = null) ; },
+            'updatedAt' => null,
         ), array(
             function($discount) { 
                 $discount->setTitle($discount->getRate() . '%');
@@ -284,11 +302,15 @@ class AppFixtures extends Fixture
         //Handling Status des Demandes
         $populator->addEntity(HandlingStatus::class,4, array(
             'title' => function() use ($generator) { return $generator->unique()->SetHandlingStatus(); },
+            'createdAt' => function() use ($generator) { return $generator->dateTimeBetween($startDate = '-1 years', $endDate = 'now', $timezone = null) ; },
+            'updatedAt' => null,
         ));
 
         //Types des Demandes        
         $populator->addEntity(RequestType::class,4, array(
             'title' => function() use ($generator) { return $generator->unique()->SetRequestType(); },
+            'createdAt' => function() use ($generator) { return $generator->dateTimeBetween($startDate = '-1 years', $endDate = 'now', $timezone = null) ; },
+            'updatedAt' => null,
         ));
 
         //Additional Person puis Users -> Commercial
@@ -327,6 +349,8 @@ class AppFixtures extends Fixture
         //AddressType
         $populator->addEntity(CompanyAddressType::class,4, array(
             'title' => function() use ($generator) { return $generator->unique()->setAddressType(); },
+            'createdAt' => function() use ($generator) { return $generator->dateTimeBetween($startDate = '-1 years', $endDate = 'now', $timezone = null) ; },
+            'updatedAt' => null,
         ));
 
         //CompanyAddress
@@ -335,7 +359,9 @@ class AppFixtures extends Fixture
             'secondAddressField' => null,
             'postalCode' => function() use ($generator) { return $generator->postcode(); },
             'city' => function() use ($generator) { return $generator->city(); },
-            'country' => 'France',            
+            'country' => 'France', 
+            'createdAt' => function() use ($generator) { return $generator->dateTimeBetween($startDate = '-1 years', $endDate = 'now', $timezone = null) ; },
+            'updatedAt' => null,           
         ));
 
         //Contact
@@ -349,13 +375,49 @@ class AppFixtures extends Fixture
         ));
 
         //Request
-        $populator->addEntity(ClientRequest::class, 30, array(
+        $populator->addEntity(ClientRequest::class, 60, array(
             'title' => function() use ($generator) { return $generator->realText(50); },
             'body' => function() use ($generator) { return $generator->realText(500); },
             'createdAt' => function() use ($generator) { return $generator->dateTimeBetween($startDate = '-1 years', $endDate = 'now', $timezone = null) ; },
             'updatedAt' => null,
+        ), array(
+            function($request) { 
+                if($request->getRequestType()->getTitle() == 'Devis Détaillé' || $request->getRequestType()->getTitle() == 'Commande') {
+                    $this->requests[] = $request;
+                }
+            },
+        ));
+
+        //Comment
+        $populator->addEntity(Comment::class, 30, array(
+            'title' => function() use ($generator) { return $generator->realText(50); },
+            'body' => function() use ($generator) { return $generator->realText(200); },
+            'createdAt' => function() use ($generator) { return $generator->dateTimeBetween($startDate = '-1 years', $endDate = 'now', $timezone = null) ; },
+        ), array(
+            function($comment) { 
+                $comment->setUpdatedAt($comment->getCreatedAt());
+            },
         ));
         
         return  $insertedEntities = $populator->execute();
+    }
+
+    private function getRequestDetails() {
+        for ($i = 0; $i < 500; $i ++) {
+            $requestDetail = new RequestDetail();
+            $requestDetail->setQuantity(random_int(10, 30));
+
+            $products = $this->products;
+            shuffle($products);
+            $requestDetail->setProduct($products[0]);
+
+            $requests = $this->requests;
+            shuffle($requests);
+            $requestDetail->setRequest($requests[0]);
+
+            $this->manager->persist($requestDetail);
+        }
+
+        $this->manager->flush();
     }
 }

@@ -9,7 +9,7 @@ trait EmailTemplateData
             "Votre inscription a bien été enregistrée sur notre site internet.",
 
             'messageBody' => 
-            "Vous faîtes désormais partie de la communauté Beer o'Clock, nous vous en remercions.
+            "Vous faites désormais partie de la communauté Beer o'Clock, nous vous en remercions.
             Vous pouvez désormais vous connecter sur http://www.cerberus-crm.space/login et consulter notre catalogue. Nous allons rapidement vous recontacter pour vous apporter toutes les informations complémentaires dont vous auriez besoin.",
 
             'messageSignature' => 
@@ -20,7 +20,7 @@ trait EmailTemplateData
             "Votre inscription a bien été enregistrée à votre demande.",
 
             'messageBody' => 
-            "Vous faîtes désormais partie de la communauté Beer o'Clock, nous vous en remercions.
+            "Vous faites désormais partie de la communauté Beer o'Clock, nous vous en remercions.
             Vous pouvez désormais vous connecter sur http://www.cerberus-crm.space/login et consulter notre catalogue. Nous allons rapidement vous recontacter pour vous apporter toutes les informations complémentaires dont vous auriez besoin.",
 
             'messageSignature' => 

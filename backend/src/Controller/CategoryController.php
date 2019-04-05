@@ -6,6 +6,7 @@ use App\Entity\Category;
 use App\Form\CategoryType;
 use App\Repository\CategoryRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use App\Repository\RequestDetailRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -34,15 +35,18 @@ class CategoryController extends AbstractController
     /**
      * @Route("/{id}/show", name="show", methods={"GET"}, requirements={"id"="\d+"})
      */
-    public function show(Category $category)
+    public function show(Category $category, RequestDetailRepository $requestDetailRepo)
     {
         if (!$category) {
             throw $this->createNotFoundException("La catégorie indiquée n'existe pas"); 
         }
 
+        $requestDetails = $requestDetailRepo->findIsActiveByCategoryOrderedByField($category);
+
         return $this->render('category/show.html.twig', [
             'page_title' => 'Catégorie: ' . $category->getName(),
             'category' => $category,
+            'details' => $requestDetails,
         ]);
     }
 

@@ -4,6 +4,7 @@ namespace App\Form;
 
 use App\Entity\Request;
 use App\Form\RequestDetailType;
+use App\Repository\ContactRepository;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Validator\Constraints\Length;
@@ -17,6 +18,8 @@ class RequestFormType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        $companyId = $options['companyId'];
+
         $builder
             ->add('requestType', null, [
                 'label'    => "Type de demande",
@@ -34,7 +37,19 @@ class RequestFormType extends AbstractType
                 'label'    => "Contact émetteur de la demande",
                 'placeholder' => 'Choisir un contact',
                 'multiple'=>false,
-                'expanded' => false
+                'expanded' => false,
+                'query_builder' => function (ContactRepository $contactRepo) use ($companyId) {
+                    return $contactRepo->createQueryBuilder('co')
+                    ->join('co.company', 'c')
+                    ->addSelect('c')
+                    ->andWhere('c.id LIKE :companyId')
+                    ->setParameter('companyId', $companyId);
+                },
+                'constraints' => [
+                    new NotBlank([
+                        'message' => 'Le champ ne doit pas être vide'
+                    ])
+                ]
             ])
             ->add('title', TextType::class, [
                 'label'    => "Intitulé de la demande",
@@ -68,10 +83,12 @@ class RequestFormType extends AbstractType
         ;
     }
 
+
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
             'data_class' => Request::class,
+            'companyId' => null,
         ]);
     }
 }

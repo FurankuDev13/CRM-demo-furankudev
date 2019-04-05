@@ -28,7 +28,7 @@ class ProductRepository extends ServiceEntityRepository
             ->setParameter('isActive', $isActive)
             ->andWhere('p.isAvailable = :isAvailable')
             ->setParameter('isAvailable', $isAvailable)
-            ->orderBy('p.createdAt', 'DESC')
+            ->orderBy('p.rank', 'ASC')
             ->getQuery()
             ->getResult()
         ;
@@ -43,7 +43,7 @@ class ProductRepository extends ServiceEntityRepository
             ->setParameter('isAvailable', $isAvailable)
             ->andWhere('p.isOnHomePage = :isOnHomePage')
             ->setParameter('isOnHomePage', $isOnHomePage)
-            ->orderBy('p.createdAt', 'DESC')
+            ->orderBy('p.rank', 'ASC')
             ->getQuery()
             ->getResult()
         ;
