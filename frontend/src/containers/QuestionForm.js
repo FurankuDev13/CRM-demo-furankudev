@@ -14,6 +14,7 @@ import { toggleQuestionModal } from 'src/store/reducer';
  */
 const mapStateToProps = state => ({
   questionFields: state.fields.question,
+  formErrors: state.formErrors,
 });
 
 const mapDispatchToProps = dispatch => ({

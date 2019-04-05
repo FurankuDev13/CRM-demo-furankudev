@@ -97,7 +97,7 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
         }
         if (errors.length !== 0) {
           dispatch(displayErrors(errors));
-          dispatch(errorNotification());
+          errorNotification();
         }
         else {
           deleteErrors();
@@ -106,13 +106,69 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
         break;
       }
 
-      case 'question':
-        dispatch(sendQuestion());
-        break;
+      case 'question': {
+        const errors = [];
+        const title = ownProps.tabl[0].value;
+        const content = ownProps.tabl[1].value;
+        if (title.length === 0) {
+          errors.push('Veuillez donner un titre à votre demande');
+        }
 
-      case 'profile':
-        dispatch(sendProfileChange());
+        if (content.length === 0) {
+          errors.push('Votre demande est vide');
+        }
+
+        if (errors.length !== 0) {
+          dispatch(displayErrors(errors));
+          errorNotification();
+        }
+        else {
+          deleteErrors();
+          dispatch(sendQuestion());
+        }
         break;
+      }
+
+      case 'profile': {
+        const errors = [];
+        const contactFirstname = ownProps.tabl[0].value;
+        const contactLastname = ownProps.tabl[1].value;
+        const contactBusinessPhone = ownProps.tabl[2].value;
+        const contactEmail = ownProps.tabl[4].value;
+        const contactPassword = ownProps.tabl[5].value;
+        const contactPasswordRepeat = ownProps.tabl[6].value;
+
+        if (contactFirstname.length === 0) {
+          errors.push('Votre champ prénom a été vidé. Veuillez saisir quelque chose');
+        }
+
+        if (contactLastname.length === 0) {
+          errors.push('Votre champ nom a été vidé. Veuillez saisir quelque chose');
+        }
+
+        if (contactBusinessPhone.length === 0) {
+          errors.push('Nous souhaitons conserver au moins un numéro de téléphone.');
+        }
+        else if (contactBusinessPhone.length !== 10) {
+          errors.push('Numéro mal renseigné ou incomplet');
+        }
+
+        if (contactEmail.length === 0) {
+          errors.push('Ladresse mail est obligatoire');
+        }
+        if (contactPassword.length !== 0 && contactPassword !== contactPasswordRepeat) {
+          errors.push('Vos champs de mot de passe et confirmation sont différents. Soyez sûr(e) de votre saisie.');
+        }
+        if (errors.length !== 0) {
+          dispatch(displayErrors(errors));
+          errorNotification();
+        }
+        else {
+          deleteErrors();
+          dispatch(sendProfileChange());
+        }
+        break;
+      }
 
       default:
     }

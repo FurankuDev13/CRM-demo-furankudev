@@ -14,6 +14,7 @@ import { toggleProfileModal } from 'src/store/reducer';
  */
 const mapStateToProps = state => ({
   profileFields: state.fields.profile,
+  formErrors: state.formErrors,
 });
 
 const mapDispatchToProps = dispatch => ({

@@ -197,7 +197,7 @@ const ajaxAdmin = store => next => (action) => {
           dispatch(updateProfile(data));
         })
         .catch(() => {
-          popMessage('Suite à une erreur d\'origine inconnue, vos modifications n\'ont pas été prises en compte', 'success');
+          popMessage('Suite à une erreur d\'origine inconnue, vos modifications n\'ont pas été prises en compte', 'warning');
         });
       break;
     }

@@ -8,12 +8,13 @@ import PropTypes from 'prop-types';
  * local import
  */
 import Form from 'src/containers/Form';
+import { deleteNotification } from 'src/store/reducer';
 
 /**
  * Code
  */
 
-const ProfileForm = ({ profileFields, toggleProfileModal }) => {
+const ProfileForm = ({ profileFields, toggleProfileModal, formErrors }) => {
   const {
     firstname,
     lastname,
@@ -86,6 +87,22 @@ const ProfileForm = ({ profileFields, toggleProfileModal }) => {
           className="button is-danger modal-close"
           onClick={toggleProfileModal}
         />
+        <div id="notification" className="notification is-danger is-hidden">
+          <button
+            type="button"
+            className="delete"
+            onClick={deleteNotification}
+          />
+          <ul>
+            {formErrors.map(error => (
+              <li key={error}>
+                <p>
+                  {error}
+                </p>
+              </li>
+            ))}
+          </ul>
+        </div>
       </Form>
     </div>
   );
@@ -102,6 +119,9 @@ ProfileForm.propTypes = {
     passwordRepeat: PropTypes.string.isRequired,
   }).isRequired,
   toggleProfileModal: PropTypes.func.isRequired,
+  formErrors: PropTypes.arrayOf(
+    PropTypes.string.isRequired,
+  ).isRequired,
 };
 
 /**

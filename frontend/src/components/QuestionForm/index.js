@@ -8,13 +8,14 @@ import PropTypes from 'prop-types';
  * local import
  */
 import Form from 'src/containers/Form';
+import { deleteNotification } from 'src/store/reducer';
 import './QuestionForm.scss';
 
 /**
  * Code
  */
 
-const QuestionForm = ({ questionFields, toggleQuestionModal }) => {
+const QuestionForm = ({ questionFields, toggleQuestionModal, formErrors }) => {
   const { title, content } = questionFields;
   const tabl = [
     {
@@ -39,6 +40,22 @@ const QuestionForm = ({ questionFields, toggleQuestionModal }) => {
         tabl={tabl}
         formOrigin="question"
       >
+        <div id="notification" className="notification is-danger is-hidden">
+          <button
+            type="button"
+            className="delete"
+            onClick={deleteNotification}
+          />
+          <ul>
+            {formErrors.map(error => (
+              <li key={error}>
+                <p>
+                  {error}
+                </p>
+              </li>
+            ))}
+          </ul>
+        </div>
         <button
           id="question-toggle"
           type="button"
@@ -56,6 +73,9 @@ QuestionForm.propTypes = {
     content: PropTypes.string.isRequired,
   }).isRequired,
   toggleQuestionModal: PropTypes.func.isRequired,
+  formErrors: PropTypes.arrayOf(
+    PropTypes.string.isRequired,
+  ).isRequired,
 };
 
 /**
