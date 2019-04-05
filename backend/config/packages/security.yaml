@@ -58,6 +58,10 @@ security:
         # Route API pour récupérer TOKEN
         - { path: ^/api/login_check, roles: IS_AUTHENTICATED_ANONYMOUSLY }
 
+        # Routes API pour la documentation API
+        - { path: ^/doc/api, roles: ROLE_ADMIN }
+        - { path: ^/doc/api.json, roles: ROLE_ADMIN }
+
         # Routes API sécurisées par le TOKEN
         - { path: '^\/api\/[a-z]+\/[0-9]+\/[a-z]+', roles: IS_AUTHENTICATED_FULLY, methods: [GET, POST, PATCH] } #
         - { path: '^\/api\/[a-z]+\/[0-9]+', roles: IS_AUTHENTICATED_FULLY, methods: [GET, POST, PATCH] } #
