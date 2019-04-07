@@ -6,9 +6,9 @@
     <div class="container">
         <div class="section level-left">
             <div class="level-item">
-                <h2 class="level-item subtitle has-text-info is-3">{{ user.person.firstname }} {{ user.person.lastname }}</h2>
+                <h2 class="level-item subtitle has-text-info is-3">Utilisateur: {{ user.person.firstname }} {{ user.person.lastname }}</h2>
             </div>
-            <button class="level-item button is-info is-small is-size-4">MISE A JOUR</button>
+            <button class="level-item button is-info is-small is-size-4">Mise à jour</button>
         </div>
         {{ form_start(userForm, {'attr': {'novalidate': 'novalidate'}}) }}
         {{ form_widget(personForm) }}

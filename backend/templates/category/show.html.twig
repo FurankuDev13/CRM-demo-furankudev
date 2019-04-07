@@ -4,8 +4,8 @@
 
 {% block main %}
     <div class="container">
-        <div class="level">
-            <div class="section level-left">
+        <div class="section  level">
+            <div class="level-left">
                 <div class="level-item">
                     <h2 class="level-item subtitle has-text-info is-3">{{ category.name }}</h2>
                 </div>
@@ -88,9 +88,9 @@
                             {% else %}
                                 {% set rate = detail.product.maxDiscountRate %}
                             {% endif %}
-                            <td>{{ detail.product.listPrice * (100 - rate) / 100 }}&nbsp;€</td>
+                            <td>{{ (detail.product.listPrice * (100 - rate) / 100)|number_format(2, ',', ' ') }}&nbsp;€</td>
                             <td>{{ detail.quantity }}</td>
-                            <td>{{ detail.product.listPrice * (100 - rate) / 100 * detail.quantity }}&nbsp;€</td>
+                            <td>{{ (detail.product.listPrice * (100 - rate) / 100 * detail.quantity)|number_format(2, ',', ' ') }}&nbsp;€</td>
                             <td>{{ detail.commentField }}</td>
                         </tr>
                     {% endfor %}

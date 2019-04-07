@@ -21,13 +21,13 @@
                         <a class="has-text-weight-bold" href="{{ path('product_show', {'id': detail.product.id}) }}">{{ detail.product.name }}</a>
                     </td>
                     <td>{{ detail.product.description|truncate(30) }}</td>
-                    <td>{{ detail.product.listPrice }}&nbsp;€</td>
+                    <td>{{ detail.product.listPrice|number_format(2, ',', ' ') }}&nbsp;€</td>
                     {% if detail.request.contact.company.discount.rate <= detail.product.maxDiscountRate %}
                         {% set rate = detail.request.contact.company.discount.rate %}
                     {% else %}
                         {% set rate = detail.product.maxDiscountRate %}
                     {% endif %}
-                    <td>{{ detail.product.listPrice * (100 - rate) / 100 }}&nbsp;€</td>
+                    <td>{{ (detail.product.listPrice * (100 - rate) / 100)|number_format(2, ',', ' ') }}&nbsp;€</td>
                     <td>
                         <figure class="image is-24x24">
                             <img src="{{ detail.product.picture ?: "https://stickeramoi.com/3777-large_default/autocollant-point-interrogation-muraux.jpg" }}">
