@@ -39,6 +39,7 @@ class DoctrineEvent implements EventSubscriber
         $this->setIsActive($args);
         $this->setCreatedAt($args);
         $this->setCompanyDefaultIsCustomer($args);
+        $this->setCompanyDefaultDiscount($args);
         $this->setProductDefaultIsAvailable($args);
         $this->setProductDefaultIsOnHomePage($args);
         $this->setCommentDefaultIsOnBoard($args);
@@ -142,6 +143,18 @@ class DoctrineEvent implements EventSubscriber
     }
 
     private function setCompanyDefaultIsCustomer(LifecycleEventArgs $args)
+    {
+        $entity = $args->getObject();
+        $entityManager = $args->getObjectManager();
+
+        if ($entity instanceof Company) {
+            if (!$entity->getIsCustomer()) {
+                $entity->setIsCustomer(false);
+            }
+        } 
+    }
+
+    private function setCompanyDefaultDiscount(LifecycleEventArgs $args)
     {
         $entity = $args->getObject();
         $entityManager = $args->getObjectManager();

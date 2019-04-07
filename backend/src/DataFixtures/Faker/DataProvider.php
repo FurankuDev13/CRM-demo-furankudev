@@ -19,6 +19,7 @@ class DataProvider extends \Faker\Provider\Base
     ];
 
     protected static $discountList = [
+        '0%' => 0,
         '5%' => 5,
         '10%' => 10,
         '15%'=> 15,
