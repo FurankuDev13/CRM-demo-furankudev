@@ -20,6 +20,7 @@ class CompanyAddressTypeFormType extends AbstractType
                 'attr' => [
                     'placeholder' => "titre",
                     ],
+                'required' => true,
                 'constraints' => [
                     new NotBlank([
                         'message' => 'Le champ ne doit pas être vide'

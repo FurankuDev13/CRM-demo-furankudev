@@ -23,11 +23,13 @@ class RequestDetailType extends AbstractType
                 'label'    => "Produit",
                 'placeholder' => 'Choisir un produit',
                 'multiple'=>false,
-                'expanded' => false
+                'expanded' => false,
+                'required' => true,
             ])
             ->add('quantity', IntegerType::class, [
                 'label'    => "Quantité souhaitée",
                 'attr' => ['placeholder' => "chiffre"],
+                'required' => true,
             ])
             ->add('commentField', TextareaType::class, [
                 'label'    => "Commentaire sur ce produit",

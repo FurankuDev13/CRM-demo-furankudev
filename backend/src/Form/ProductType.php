@@ -26,6 +26,7 @@ class ProductType extends AbstractType
                 'attr' => [
                     'placeholder' => "réference",
                     ],
+                'required' => true,
                 'constraints' => [
                     new NotBlank([
                         'message' => 'Le champ ne doit pas être vide'
@@ -43,6 +44,7 @@ class ProductType extends AbstractType
                 'attr' => [
                     'placeholder' => "nom",
                     ],
+                'required' => true,
                 'constraints' => [
                     new NotBlank([
                         'message' => 'Le champ ne doit pas être vide'
@@ -60,17 +62,6 @@ class ProductType extends AbstractType
                 'attr' => [
                     'placeholder' => "description",
                     ],
-                'constraints' => [
-                    new NotBlank([
-                        'message' => 'Le champ ne doit pas être vide'
-                    ]),
-                    new Length([
-                        'min'        => 1,
-                        'max'        => 300,
-                        'minMessage' => 'Pas assez de caractères , attendu : {{ limit }}',
-                        'maxMessage' => 'Trop de caractères, attendu: {{ limit }}',
-                    ])
-                ]
             ])
             ->add('picture', UrlType::class, [
                 'label'    => "Url de l'image",
@@ -80,6 +71,7 @@ class ProductType extends AbstractType
                 'label'    => "Prix liste du produit",
                 'attr' => ['placeholder' => "montant"],
                 'currency' => 'EUR',
+                'required' => true,
             ])
             ->add('maxDiscountRate', PercentType::class, [
                 'label'    => "Taux maximum de remise autorisé",

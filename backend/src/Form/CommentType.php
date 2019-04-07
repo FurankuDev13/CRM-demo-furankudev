@@ -20,15 +20,17 @@ class CommentType extends AbstractType
     {
         $builder
             ->add('title', TextType::class, [
-                'label' => 'Intitulé' ,
-                'attr' => ['placeholder' => 'intitulé du commentaire'],
+                'label' => 'Intitulé du commentaire' ,
+                'attr' => ['placeholder' => 'titre'],
+                'required' => true,
                 'constraints' => [
                     new NotBlank(),
                 ]
             ])
             ->add('body', TextareaType::class, [
                 'label' => 'Commentaire' ,
-                'attr' => ['placeholder' => 'votre commentaire'],
+                'attr' => ['placeholder' => 'texte'],
+                'required' => true,
                 'constraints' => [
                     new NotBlank(),
                 ]

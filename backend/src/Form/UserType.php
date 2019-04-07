@@ -64,6 +64,7 @@ class UserType extends AbstractType
                 'attr' => [
                     'placeholder' => "email",
                     ],
+                'required' => true,
                 'constraints' => [
                     new NotBlank([
                         'message' => 'Le champ ne doit pas être vide'
@@ -92,6 +93,7 @@ class UserType extends AbstractType
                         'label'    => "Les rôles accordés à l'utilisateur: ",
                         'multiple'=>true,
                         'expanded' => true,
+                        'required' => true,
                         'query_builder' => function (UserRoleRepository $userRoleRepo) {
                             return $userRoleRepo->createQueryBuilder('ur')
                             ->orderBy('ur.title', 'ASC');
@@ -103,6 +105,7 @@ class UserType extends AbstractType
                         'label'    => "Les rôles accordés à l'utilisateur: ",
                         'multiple'=>true,
                         'expanded' => true,
+                        'required' => true,
                         'query_builder' => function (UserRoleRepository $userRoleRepo) {
                             return $userRoleRepo->createQueryBuilder('ur')
                             ->andWhere('ur.code != :val')

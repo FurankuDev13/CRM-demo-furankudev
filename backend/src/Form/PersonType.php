@@ -21,6 +21,7 @@ class PersonType extends AbstractType
                 'attr' => [
                     'placeholder' => "prénom",
                     ],
+                'required' => true,
                 'constraints' => [
                     new NotBlank([
                         'message' => 'Le champ ne doit pas être vide'
@@ -38,6 +39,7 @@ class PersonType extends AbstractType
                 'attr' => [
                     'placeholder' => "nom",
                     ],
+                'required' => true,
                 'constraints' => [
                     new NotBlank([
                         'message' => 'Le champ ne doit pas être vide'
@@ -55,6 +57,7 @@ class PersonType extends AbstractType
                 'attr' => [
                     'placeholder' => "téléphone",
                     ],
+                'required' => true,
                 'constraints' => [
                     new NotBlank([
                         'message' => 'Le champ ne doit pas être vide'
@@ -75,7 +78,7 @@ class PersonType extends AbstractType
                 'constraints' => [
                     new Length([
                         'min'        => 1,
-                        'max'        => 100,
+                        'max'        => 15,
                         'minMessage' => 'Pas assez de caractères , attendu : {{ limit }}',
                         'maxMessage' => 'Trop de caractères, attendu: {{ limit }}',
                     ])
