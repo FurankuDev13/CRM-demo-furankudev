@@ -3,6 +3,15 @@
  */
 import React from 'react';
 import PropTypes from 'prop-types';
+import {
+  FaAt,
+  FaLock,
+  FaRegBuilding,
+  FaRegAddressCard,
+  FaUserAlt,
+  FaPhoneSquare,
+  FaQuestionCircle,
+} from 'react-icons/fa';
 
 /**
  * local import
@@ -33,6 +42,25 @@ class Input extends React.Component {
         {element === 'input' && (
           <label className="label" htmlFor={name}>{label}
             <div className="control has-icons-left has-icons-right">
+              <span className="icon is-small is-left">
+                {
+                  (label === 'Email' && <FaAt />)
+                  || ((label === 'Mot de passe'
+                  || label === 'Confirmation mot de passe') && <FaLock />)
+                  || ((label === 'Siren de la companie'
+                  || label === 'Nom de l\'entreprise') && <FaRegBuilding />)
+                  || ((label === 'Adresse de l\'entreprise'
+                  || label === 'Code postal'
+                  || label === 'Ville') && <FaRegAddressCard />)
+                  || ((label === 'Prénom'
+                  || label === 'Nom de famille') && <FaUserAlt />)
+                  || ((label === 'Numéro de téléphone'
+                  || label === 'Numéro de téléphone professionnel'
+                  || label === 'Numéro de portable') && <FaPhoneSquare />)
+                  || ((label === 'Titre'
+                  || label === 'Question') && <FaQuestionCircle />)
+                }
+              </span>
               <input
                 id={name}
                 className="input is-secondary"

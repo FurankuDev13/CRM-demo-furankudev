@@ -18,6 +18,7 @@ import './Profilepage.scss';
 const Profilepage = ({
   firstname,
   lastname,
+  email,
   cellPhone,
   businessPhone,
   description,
@@ -32,6 +33,7 @@ const Profilepage = ({
       <h2 className="title">Mes informations</h2>
       <p><span>Prénom : </span>{firstname}</p>
       <p><span>Nom : </span>{lastname}</p>
+      <p><span>email : </span>{email}</p>
       <p><span> Numéro de portable : </span>{cellPhone}</p>
       <p><span>Numéro professionnel : </span>{businessPhone}</p>
       <button className="level-item has-text-centered button is-primary is-outlined is-medium" type="button" onClick={toggleProfileModal}>
@@ -60,6 +62,7 @@ const Profilepage = ({
 Profilepage.propTypes = {
   firstname: PropTypes.string.isRequired,
   lastname: PropTypes.string.isRequired,
+  email: PropTypes.string.isRequired,
   cellPhone: PropTypes.string,
   businessPhone: PropTypes.string.isRequired,
   description: PropTypes.string,

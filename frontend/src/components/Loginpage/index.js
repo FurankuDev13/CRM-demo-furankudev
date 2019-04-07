@@ -26,14 +26,14 @@ const Login = ({ formErrors, loginFields }) => {
     },
     {
       name: 'password',
-      label: 'mot de passe',
+      label: 'Mot de passe',
       type: 'password',
       value: password,
       placeholder: 'Saisissez votre mot de passe',
     },
   ];
   return (
-    <div id="form-container">
+    <div className="container" id="form-container">
       <div id="notification" className="notification is-danger is-hidden">
         <button
           type="button"

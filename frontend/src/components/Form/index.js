@@ -50,7 +50,7 @@ class Form extends React.Component {
               type="submit"
               className="button is-link"
             >
-              Submit
+              Soumettre
             </button>
           </div>
         </div>
@@ -65,6 +65,10 @@ Form.propTypes = {
   formOrigin: PropTypes.string.isRequired,
   submitForm: PropTypes.func.isRequired,
   children: PropTypes.node,
+};
+
+Form.defaultProps = {
+  children: null,
 };
 
 /**

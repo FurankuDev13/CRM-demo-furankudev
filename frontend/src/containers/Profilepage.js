@@ -14,10 +14,11 @@ import { toggleProfileModal } from 'src/store/reducer';
  */
 const mapStateToProps = (state) => {
   const { profile, profileModalIsActive } = state;
-  const { person, company } = profile;
+  const { person, company, email } = profile;
   return ({
     ...person,
     ...company,
+    email,
     profileModalIsActive,
   });
 };

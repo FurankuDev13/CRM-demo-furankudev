@@ -5,6 +5,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { withRouter } from 'react-router';
+import {
+  FaList,
+} from 'react-icons/fa';
 
 /**
  * Local import
@@ -22,11 +25,11 @@ const Catalog = ({
   productModalIsActive,
   toggleProductModal,
 }) => (
-  <div>
+  <div >
     <div>
       {(category !== 'Catalogue complet' && (
-        <div id="category-title">Catégorie : {category}</div>
-      )) || <div id="category-title">{category}</div>
+        <div className="has-text-weight-bold" id="category-title">Catégorie : <span className="button is-primary is-size-5 has-text-weight-bold">{category}</span></div>
+      )) || <div className="has-text-weight-bold" id="category-title"><FaList />&nbsp;  {category}</div>
       }
       <div>
         <Select
