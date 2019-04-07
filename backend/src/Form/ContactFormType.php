@@ -45,6 +45,11 @@ class ContactFormType extends AbstractType
                 'multiple'=>false,
                 'expanded' => false,
                 'required' => true,
+                'constraints' => [
+                    new NotBlank([
+                        'message' => 'Le champ ne doit pas être vide'
+                    ]),
+                ],
                 'query_builder' => function (CompanyRepository $companyRepo) {
                     return $companyRepo->createQueryBuilder('c')
                     ->andWhere('c.isActive = :val')
@@ -59,6 +64,11 @@ class ContactFormType extends AbstractType
                 'multiple'=>false,
                 'expanded' => false,
                 'required' => true,
+                'constraints' => [
+                    new NotBlank([
+                        'message' => 'Le champ ne doit pas être vide'
+                    ]),
+                ],
                 'query_builder' => function (ContactTypeRepository $contactTypeRepo) {
                     return $contactTypeRepo->createQueryBuilder('ct')
                     ->andWhere('ct.isActive = :val')

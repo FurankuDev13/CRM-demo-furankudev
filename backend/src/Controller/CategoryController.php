@@ -94,7 +94,7 @@ class CategoryController extends AbstractController
             $entityManager->flush();
 
             $this->addFlash(
-                'success',
+                'warning',
                 'La catégorie ' . $category->getName() . ' a bien été mise à jour !'
             );
             return $this->redirectToRoute('category_show', ['id' => $category->getId()]);
@@ -119,7 +119,7 @@ class CategoryController extends AbstractController
         $category->setIsActive(!$category->getIsActive());
         $notification = ($category->getIsActive() ? ' a été désarchivée' : ' a été archivée !');
         $this->addFlash(
-            'success',
+            'warning',
             'La catégorie ' . $category->getName() . $notification
         );
         $entityManager->flush();

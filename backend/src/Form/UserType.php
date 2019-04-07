@@ -28,13 +28,14 @@ class UserType extends AbstractType
         $listener = function (FormEvent $event) {
             $form = $event->getForm();
             $user = $event->getData();
+            
             if (is_null($user->getId())) {
                 $form->add('password', RepeatedType::class, [
                     'type' => PasswordType::class,
                     'invalid_message' => 'Le mot de passe indiqué doit être identique dans les deux champs',
                     'options' => ['attr' => ['class' => 'password-field', 'placeholder' => "mot de passe"]],
                     'required' => true,
-                    'first_options'  => ['label' => 'Mot de passe','empty_data' => ''],
+                    'first_options'  => ['label' => 'Mot de passe','empty_data' => 'test'],
                     'second_options' => ['label' => 'Répéter le mot de passe','empty_data' => '',],
                     'constraints' => [
                         new NotBlank([

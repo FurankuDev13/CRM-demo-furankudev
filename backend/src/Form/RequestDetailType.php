@@ -25,11 +25,21 @@ class RequestDetailType extends AbstractType
                 'multiple'=>false,
                 'expanded' => false,
                 'required' => true,
+                'constraints' => [
+                    new NotBlank([
+                        'message' => 'Le champ ne doit pas être vide'
+                    ]),
+                ]
             ])
             ->add('quantity', IntegerType::class, [
                 'label'    => "Quantité souhaitée",
                 'attr' => ['placeholder' => "chiffre"],
                 'required' => true,
+                'constraints' => [
+                    new NotBlank([
+                        'message' => 'Le champ ne doit pas être vide'
+                    ]),
+                ]
             ])
             ->add('commentField', TextareaType::class, [
                 'label'    => "Commentaire sur ce produit",

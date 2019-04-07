@@ -49,6 +49,17 @@ class CategoryType extends AbstractType
             ->add('rank', IntegerType::class, [
                 'label'    => "Ordre d'affichage de la catégorie",
                 'attr' => ['placeholder' => "chiffre"],
+                'constraints' => [
+                    new NotBlank([
+                        'message' => 'Le champ ne doit pas être vide'
+                    ]),
+                    new Length([
+                        'min'        => 1,
+                        'max'        => 100,
+                        'minMessage' => 'Pas assez de caractères , attendu : {{ limit }}',
+                        'maxMessage' => 'Trop de caractères, attendu: {{ limit }}',
+                    ])
+                ]
             ])
         ;
     }

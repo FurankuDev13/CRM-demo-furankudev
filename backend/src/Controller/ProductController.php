@@ -106,7 +106,7 @@ class ProductController extends AbstractController
             $entityManager->flush();
 
             $this->addFlash(
-                'success',
+                'warning',
                 'Le produit ' . $product->getName() . ' a bien été mis à jour !'
             );
             return $this->redirectToRoute('product_show', ['id' => $product->getId()]);
@@ -128,14 +128,41 @@ class ProductController extends AbstractController
             throw $this->createNotFoundException("Le produit indiqué n'existe pas"); 
         }
 
-        $product->setIsAvailable(!$product->getIsAvailable());
-
-        if(!$product->getIsAvailable()) {
+        if(!$product->getIsOnHomepage()) {
+            if (!$product->getIsAvailable()) {
+                $product->setIsAvailable(true);
+                $this->addFlash(
+                    'success',
+                    'Le produit ' . $product->getName() . ' a bien été indiqué comme disponible !'
+                );
+            } else {
+                $product->setIsAvailable(false);
+                $this->addFlash(
+                    'warning',
+                    'Le produit ' . $product->getName() . ' a bien été indiqué comme indisponible !'
+                );
+            }
+        } else {
             //si le produit n'est pas dispo à la vente, on ne l'affiche pas en home page front
-            $product->setIsOnHomePage(false);
+            if (!$product->getIsAvailable()) {
+                $product->setIsAvailable(true);
+                $this->addFlash(
+                    'success',
+                    'Le produit ' . $product->getName() . ' a bien été indiqué comme disponible, il apparait en vitrine !'
+                );
+            } else {
+                $product->setIsAvailable(false);
+                $product->setIsOnHomepage(false);
+                $this->addFlash(
+                    'warning',
+                    'Le produit ' . $product->getName() . ' a bien été indiqué comme indisponible et retiré de la vitrine  !'
+                );
+            }
         }
 
         $entityManager->flush();
+
+        
 
         $referer = $request->headers->get('referer');
         return $this->redirect($referer);;
@@ -174,6 +201,11 @@ class ProductController extends AbstractController
             }
         } else {
             $product->setIsOnHomePage(!$product->getIsOnHomePage());
+
+            $this->addFlash(
+                'warning',
+                'Le Produit ' . $product->getName() . 'a été retiré de la vitrine !'
+            );
         }
 
         $entityManager->flush();
@@ -194,7 +226,7 @@ class ProductController extends AbstractController
         $product->setIsActive(!$product->getIsActive());
         $notification = ($product->getIsActive() ? ' a été désarchivé' : ' a été archivé !');
         $this->addFlash(
-            'success',
+            'warning',
             'Le Produit ' . $product->getName() . $notification
         );
         $entityManager->flush();

@@ -27,6 +27,11 @@ class RequestFormType extends AbstractType
                 'multiple'=>false,
                 'expanded' => false,
                 'required' => true,
+                'constraints' => [
+                    new NotBlank([
+                        'message' => 'Le champ ne doit pas être vide'
+                    ])
+                ]
             ])
             ->add('handlingStatus', null, [
                 'label'    => "Statut de la demande",
@@ -34,6 +39,11 @@ class RequestFormType extends AbstractType
                 'multiple'=>false,
                 'expanded' => false,
                 'required' => true,
+                'constraints' => [
+                    new NotBlank([
+                        'message' => 'Le champ ne doit pas être vide'
+                    ])
+                ]
             ])
             ->add('contact', null, [
                 'label'    => "Contact émetteur de la demande",
@@ -77,6 +87,18 @@ class RequestFormType extends AbstractType
                 'attr' => [
                     'placeholder' => "texte",
                     ],
+                'required' => true,
+                'constraints' => [
+                    new NotBlank([
+                        'message' => 'Le champ ne doit pas être vide'
+                    ]),
+                    new Length([
+                        'min'        => 1,
+                        'max'        => 900,
+                        'minMessage' => 'Pas assez de caractères , attendu : {{ limit }}',
+                        'maxMessage' => 'Trop de caractères, attendu: {{ limit }}',
+                    ])
+                ]
             ])
             ->add('requestDetails', CollectionType::class, [
                 'entry_type' => RequestDetailType::class,

@@ -99,7 +99,7 @@ class UserController extends AbstractController
 
         $userForm->handleRequest($request);
         $personForm->handleRequest($request);
-
+        
         if ($userForm->isSubmitted() && $userForm->isValid()) {
             if (!$userRepo->findOneByEmail($user->getEmail())) {
                 $entityManager->persist($person);
@@ -161,7 +161,7 @@ class UserController extends AbstractController
                 $entityManager->flush();
 
                 $this->addFlash(
-                    'success',
+                    'warning',
                     "L'utilisateur " . $user->getPerson()->getFirstname() . ' ' . $user->getPerson()->getLastname() . ' a bien été mis à jour !'
                 );
                 return $this->redirectToRoute('admin_user_show', ['id' => $user->getId()]);
@@ -201,7 +201,7 @@ class UserController extends AbstractController
 
         $user->getPerson()->setIsActive(!$user->getPerson()->getIsActive());
         $this->addFlash(
-            'success',
+            'warning',
             'L\'Utilisateur ' . $user->getPerson()->getFirstname() . " " . $user->getPerson()->getLastname() . ' a été archivé !'
         );
 
@@ -234,9 +234,13 @@ class UserController extends AbstractController
 
         if ($user->getUserRoles()->count() != 0) {
             $entityManager->flush();
-        } else {
             $this->addFlash(
                 'warning',
+                "Le(s) rôle(s) de " . $user->getPerson()->getFirstname() . ' ' . $user->getPerson()->getLastname() . ' ont été mis à jour !'
+            );
+        } else {
+            $this->addFlash(
+                'danger',
                 "Le rôle de " . $user->getPerson()->getFirstname() . ' ' . $user->getPerson()->getLastname() . ' ne peut être retiré, un utilisateur doit avoir au moins un rôle !'
             );
         }

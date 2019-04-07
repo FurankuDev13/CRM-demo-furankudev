@@ -116,18 +116,25 @@ class CompanyController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->persist($company);
-            foreach($form->getData()->getCompanyAddresses() as $companyAddress) {
-                $companyAddress->setCompany($company);
-                $entityManager->persist($companyAddress);
-            }
-            $entityManager->flush();
+            if ($companyAddress->getCompanyAddressType()) {
+                $entityManager->persist($company);
+                foreach($form->getData()->getCompanyAddresses() as $companyAddress) {
+                    $companyAddress->setCompany($company);
+                    $entityManager->persist($companyAddress);
+                }
+                $entityManager->flush();
 
-            $this->addFlash(
-                'success',
-                'La société ' . $company->getName() . ' a bien été ajoutée !'
-            );
-            return $this->redirectToRoute('company_show', ['id' => $company->getId()]);
+                $this->addFlash(
+                    'success',
+                    'La société ' . $company->getName() . ' a bien été ajoutée !'
+                );
+                return $this->redirectToRoute('company_show', ['id' => $company->getId()]);
+            } else {
+                $this->addFlash(
+                    'danger',
+                    "Il est nécessaire de préciser un type d'adresse !"
+                );
+            }
         }
 
         return $this->render('company/new.html.twig', [
@@ -156,7 +163,7 @@ class CompanyController extends AbstractController
             $entityManager->flush();
 
             $this->addFlash(
-                'success',
+                'warning',
                 'La société ' . $company->getName() . ' a bien été mise à jour !'
             );
             return $this->redirectToRoute('company_show', ['id' => $company->getId()]);
@@ -224,15 +231,22 @@ class CompanyController extends AbstractController
         $companyAddressForm->handleRequest($request);
 
         if ($companyAddressForm->isSubmitted() && $companyAddressForm->isValid()) {
-            $companyAddress->setCompany($company);
-            $entityManager->persist($companyAddress);
-            $entityManager->flush();
+            if ($companyAddress->getCompanyAddressType()) {
+                $companyAddress->setCompany($company);
+                $entityManager->persist($companyAddress);
+                $entityManager->flush();
 
-            $this->addFlash(
-                'success',
-                "La nouvelle adresse a bien été ajoutée et associée à " . $company->getName()
-            );
-            return $this->redirectToRoute('company_show', ['id' => $company->getId()]);
+                $this->addFlash(
+                    'success',
+                    "La nouvelle adresse a bien été ajoutée et associée à " . $company->getName()
+                );
+                return $this->redirectToRoute('company_show', ['id' => $company->getId()]);
+            } else {
+                $this->addFlash(
+                    'danger',
+                    "Il est nécessaire de préciser un type d'adresse !"
+                );
+            }
         }
 
         return $this->render('company/new_address.html.twig', [
@@ -260,7 +274,7 @@ class CompanyController extends AbstractController
             $entityManager->flush();
 
             $this->addFlash(
-                'success',
+                'warning',
                 "L'adresse a bien été mise à jour pour la société " . $company->getName()
             );
             return $this->redirectToRoute('company_show', ['id' => $company->getId()]);
@@ -284,7 +298,7 @@ class CompanyController extends AbstractController
 
         $companyAddress->setIsActive(!$companyAddress->getIsActive());
         $this->addFlash(
-            'success',
+            'warning',
             'L\'adresse de ' . $companyAddress->getCity() . ' a été archivée !'
         );
         $entityManager->flush();
@@ -345,7 +359,7 @@ class CompanyController extends AbstractController
             $entityManager->flush();
 
             $this->addFlash(
-                'success',
+                'warning',
                 "Le commentaire a bien été mise à jour pour la société " . $company->getName()
             );
             return $this->redirectToRoute('company_show', ['id' => $company->getId(), 'index' => 2]);
@@ -399,7 +413,7 @@ class CompanyController extends AbstractController
 
         $comment->setIsActive(!$comment->getIsActive());
         $this->addFlash(
-            'success',
+            'warning',
             'Le commentaire ' . $comment->getTitle() . ' a été archivé !'
         );
 
@@ -439,6 +453,17 @@ class CompanyController extends AbstractController
             if(!is_null($file)){
                 $fileName = $fileUploader->upload($file);
                 $attachment->setPath($fileName);
+            } else {
+                $this->addFlash(
+                    'danger',
+                    "Une pièce jointe doit être uploadée !"
+                );
+                return $this->render('request/new_attachment.html.twig', [
+                    'page_title' => 'Ajouter une pièce jointe',
+                    'attachmentForm' => $attachmentForm->createView(),
+                    'request' => $demandRequest
+                ]);
+
             }
 
             $entityManager->persist($attachment);
@@ -504,8 +529,8 @@ class CompanyController extends AbstractController
             $entityManager->flush();
 
             $this->addFlash(
-                'success',
-                "La pièce jointe a bien été associée au commentaire !"
+                'warning',
+                "La pièce jointe a bien été mise à jour !"
             );
             return $this->redirectToRoute('company_show', ['id' => $company->getId(), 'index' => 2]);
         }
@@ -533,7 +558,7 @@ class CompanyController extends AbstractController
         if ($attachment) {
             $attachment->setIsActive(!$attachment->getIsActive());
             $this->addFlash(
-                'success',
+                'warning',
                 'La pièce jointe ' . $attachment->getTitle() . ' a été archivée !'
             );
 
@@ -564,7 +589,7 @@ class CompanyController extends AbstractController
         }
         if (!$allCompleted) {
             $this->addFlash(
-                'warning',
+                'danger',
                 'Toutes les demandes de la société ne sont pas Terminées, la société ne peut pas être archivée !'
             );
             $referer = $request->headers->get('referer');
@@ -595,7 +620,7 @@ class CompanyController extends AbstractController
             }
             // flash message global
             $this->addFlash(
-                'success',
+                'warning',
                 'La Société ' . $company->getName() . ' a été archivée, '.
                 'ainsi que ses ' . count($companyAddresses) . ' adresses,' . 
                 'ses ' . count($contacts) . ' personnes en contact,' . 
@@ -604,7 +629,7 @@ class CompanyController extends AbstractController
         } else {
             // flash message global
             $this->addFlash(
-                'success',
+                'warning',
                 'La Société ' . $company->getName() . ' a été désarchivée, '
             );
 

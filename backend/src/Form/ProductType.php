@@ -72,6 +72,17 @@ class ProductType extends AbstractType
                 'attr' => ['placeholder' => "montant"],
                 'currency' => 'EUR',
                 'required' => true,
+                'constraints' => [
+                    new NotBlank([
+                        'message' => 'Le champ ne doit pas être vide'
+                    ]),
+                    new Length([
+                        'min'        => 1,
+                        'max'        => 100,
+                        'minMessage' => 'Pas assez de caractères , attendu : {{ limit }}',
+                        'maxMessage' => 'Trop de caractères, attendu: {{ limit }}',
+                    ])
+                ]
             ])
             ->add('maxDiscountRate', PercentType::class, [
                 'label'    => "Taux maximum de remise autorisé",
@@ -84,6 +95,18 @@ class ProductType extends AbstractType
             ->add('rank', IntegerType::class, [
                 'label'    => "Ordre d'affichage du produit",
                 'attr' => ['placeholder' => "chiffre"],
+                'required' => true,
+                'constraints' => [
+                    new NotBlank([
+                        'message' => 'Le champ ne doit pas être vide'
+                    ]),
+                    new Length([
+                        'min'        => 1,
+                        'max'        => 100,
+                        'minMessage' => 'Pas assez de caractères , attendu : {{ limit }}',
+                        'maxMessage' => 'Trop de caractères, attendu: {{ limit }}',
+                    ])
+                ]
             ])
             ->add('isOnHomePage', CheckboxType::class, [
                 'label'    => "Affichage sur la page d'acceuil en vitrine ?",

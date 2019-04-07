@@ -169,7 +169,7 @@ class ContactController extends AbstractController
                 $entityManager->flush();
 
                 $this->addFlash(
-                    'success',
+                    'warning',
                     "Le contact " . $contact->getPerson()->getFirstname() . ' ' . $contact->getPerson()->getLastname() . ' a bien été mis à jour !'
                 );
                 return $this->redirectToRoute('contact_show', ['id' => $contact->getId()]);
@@ -205,7 +205,7 @@ class ContactController extends AbstractController
         $entityManager->flush();
 
         $this->addFlash(
-            'success',
+            'warning',
             'Le titre ' . $contactType->getTitle() . ' a bien été attribué au contact ' . $contact->getPerson()->getLastName() . ' ' . $contact->getPerson()->getFirstName() . ' !'
         );
 
@@ -226,7 +226,7 @@ class ContactController extends AbstractController
         $contact->getPerson()->setIsActive(!$contact->getPerson()->getIsActive());
         $notification = ($contact->getPerson()->getIsActive() ? ' a été désarchivé' : ' a été archivé !');
         $this->addFlash(
-            'success',
+            'warning',
             'Le Contact ' . $contact->getPerson()->getFirstname() . " " . $contact->getPerson()->getLastname() . $notification
         );
         $entityManager->flush();

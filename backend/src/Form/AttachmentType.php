@@ -35,6 +35,7 @@ class AttachmentType extends AbstractType
         ->add('path', FileType::class,[
             'label' => 'Parcourir et attacher le fichier (PDF)',
             'required' => true,
+            'empty_data' => null
         ])
         ;
     }
