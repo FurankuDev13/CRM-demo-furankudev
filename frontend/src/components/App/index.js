@@ -9,7 +9,6 @@ import classNames from 'classnames';
  * Local import
  */
 import { Route, Redirect, Switch } from 'react-router-dom';
-import './App.scss';
 import Nav from 'src/containers/Nav';
 import Homepage from 'src/containers/Homepage';
 import Customerpage from 'src/containers/Customerpage';
@@ -20,7 +19,7 @@ import Footer from 'src/components/Footer';
 import NotFound from 'src/components/NotFound';
 import QuestionForm from 'src/containers/QuestionForm';
 import Profilepage from 'src/containers/Profilepage';
-
+import './App.scss';
 /**
  * Code
  */

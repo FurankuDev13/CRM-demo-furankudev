@@ -5,6 +5,14 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
+import {
+  FaHome,
+  FaUserCircle,
+  FaAt,
+  FaSignInAlt,
+  FaSignature,
+  FaSignOutAlt,
+} from 'react-icons/fa';
 
 /**
  * Code
@@ -20,7 +28,7 @@ const Nav = ({
       <div className="navbar-brand">
         <Link to={(isLogged && '/catalog') || '/'} className="navbar-item">
           <img src="./cerberus_logo.png" alt="Logo o'Beer" />
-          <h1 className="title is-3 has-text-white">o'beer</h1>
+          <h1 className="title is-1 has-text-white has-text-weight-bold ">&nbsp;o'Beer</h1>
         </Link>
         <div
           className={classNames(
@@ -51,7 +59,7 @@ const Nav = ({
           {
           !isLogged && (
             <Link to="/" className="navbar-item is-size-4 is-active">
-              Home
+              <FaHome />&nbsp;Home
             </Link>
           )
           }
@@ -59,10 +67,10 @@ const Nav = ({
           isLogged && (
             <>
               <Link to="/profile" className="navbar-item is-size-4 is-active">
-                Mon Profil
+                <FaUserCircle />&nbsp;Mon Profil
               </Link>
               <Link to="/contact" className="navbar-item is-size-4 is-active">
-                Contacts
+                <FaAt />&nbsp;Contacts
               </Link>
             </>
           )
@@ -75,12 +83,12 @@ const Nav = ({
                 <>
                   <p className="control">
                     <Link to="/signup" id="sign-up" className="button is-transparent is-size-5">
-                      <span>S'inscrire</span>
+                      <span><FaSignature />&nbsp;S'inscrire</span>
                     </Link>
                   </p>
                   <p className="control">
                     <Link to="/login" className="button is-transparent is-size-5">
-                      <span>Se connecter</span>
+                      <span><FaSignInAlt />&nbsp;Se connecter</span>
                     </Link>
                   </p>
                 </>
@@ -88,7 +96,7 @@ const Nav = ({
               {isLogged === true && (
                 <p className="control" onClick={logOut}>
                   <a id="sign-up" className="button is-transparent is-size-5">
-                    <span>Se déconnecter</span>
+                    <span><FaSignOutAlt />&nbsp;Se déconnecter</span>
                   </a>
                 </p>
               )}

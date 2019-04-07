@@ -54,7 +54,7 @@ const Signup = ({ signupFields, formErrors }) => {
     },
     {
       name: 'companyPostalCode',
-      label: 'code postal',
+      label: 'Code postal',
       type: 'number',
       value: companyPostalCode,
       placeholder: 'Saisissez le code postal de votre entreprise',
@@ -89,28 +89,28 @@ const Signup = ({ signupFields, formErrors }) => {
     },
     {
       name: 'contactEmail',
-      label: 'email',
+      label: 'Email',
       type: 'email',
       value: contactEmail,
       placeholder: 'Saisissez votre mot de passe',
     },
     {
       name: 'contactPassword',
-      label: 'mot de passe',
+      label: 'Mot de passe',
       type: 'password',
       value: contactPassword,
       placeholder: 'Saisissez votre mot de passe',
     },
     {
       name: 'contactPasswordRepeat',
-      label: 'confirmation mot de passe',
+      label: 'Confirmation mot de passe',
       type: 'password',
       value: contactPasswordRepeat,
       placeholder: 'Confirmez votre mot de passe',
     },
   ];
   return (
-    <div id="form-container">
+    <div className="container" id="form-container">
       <div id="notification" className="notification is-danger is-hidden">
         <button
           type="button"
