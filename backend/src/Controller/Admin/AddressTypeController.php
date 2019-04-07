@@ -120,12 +120,21 @@ class AddressTypeController extends AbstractController
             throw $this->createNotFoundException("Le type indiqué n'existe pas"); 
         }
 
-        $entityManager->remove($companyAddressType);;
-        $this->addFlash(
-            'danger',
-            'Le type ' . $companyAddressType->getTitle() . ' a été supprimé ! '
-        );
-        $entityManager->flush();
+        if (!$companyAddressType->getCompanyAddresses()) {
+
+            $entityManager->remove($companyAddressType);;
+            $this->addFlash(
+                'danger',
+                'Le type ' . $companyAddressType->getTitle() . ' a été supprimé ! '
+            );
+            $entityManager->flush();
+
+        } else {
+            $this->addFlash(
+                'danger',
+                'Le type ' . $companyAddressType->getTitle() . ' ne peut être supprimé tant que des adresses y sont liées ! '
+            );
+        }
 
         $referer = $request->headers->get('referer');
 

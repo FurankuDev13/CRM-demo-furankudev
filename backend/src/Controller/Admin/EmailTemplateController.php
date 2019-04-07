@@ -120,12 +120,20 @@ class EmailTemplateController extends AbstractController
             throw $this->createNotFoundException("Le template indiqué n'existe pas"); 
         }
 
-        $entityManager->remove($emailTemplate);;
-        $this->addFlash(
-            'danger',
-            'Le template ' . $emailTemplate->getTitle() . ' a été supprimé ! '
-        );
-        $entityManager->flush();
+        if (!$emailTemplate->getEmailType()) {
+            $entityManager->remove($emailTemplate);;
+            $this->addFlash(
+                'danger',
+                'Le template ' . $emailTemplate->getTitle() . ' a été supprimé ! '
+            );
+            $entityManager->flush();
+        } else {
+            $this->addFlash(
+                'danger',
+                'Le template ' . $emailTemplate->getTitle() . " ne peut être supprimé tant qu'une notification y est associée ! "
+            );
+        }
+        
 
         $referer = $request->headers->get('referer');
 
