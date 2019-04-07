@@ -120,12 +120,20 @@ class ContactTypeController extends AbstractController
             throw $this->createNotFoundException("Le type indiqué n'existe pas"); 
         }
 
-        $entityManager->remove($contactType);;
-        $this->addFlash(
-            'danger',
-            'Le type ' . $contactType->getTitle() . ' a été supprimé ! '
-        );
+        if (!$contactType->getContacts()) {
+
+            $entityManager->remove($contactType);;
+            $this->addFlash(
+                'danger',
+                'Le type ' . $contactType->getTitle() . ' a été supprimé ! '
+            );
         $entityManager->flush();
+        } else {
+            $this->addFlash(
+                'danger',
+                'Le type ' . $contactType->getTitle() . ' ne peut être supprimé tant que des contacts y sont liées ! '
+            );
+        }
 
         $referer = $request->headers->get('referer');
 

@@ -21,6 +21,7 @@ class EmailTemplateFormType extends AbstractType
                 'attr' => [
                     'placeholder' => "nom",
                     ],
+                'required' => true,
                 'constraints' => [
                     new NotBlank([
                         'message' => 'Le champ ne doit pas être vide'
@@ -38,6 +39,7 @@ class EmailTemplateFormType extends AbstractType
                 'attr' => [
                     'placeholder' => "titre",
                     ],
+                'required' => true,
                 'constraints' => [
                     new NotBlank([
                         'message' => 'Le champ ne doit pas être vide'
@@ -55,6 +57,7 @@ class EmailTemplateFormType extends AbstractType
                 'attr' => [
                     'placeholder' => "corps",
                     ],
+                    'required' => true,
                 'constraints' => [
                     new NotBlank([
                         'message' => 'Le champ ne doit pas être vide'
@@ -72,6 +75,7 @@ class EmailTemplateFormType extends AbstractType
                 'attr' => [
                     'placeholder' => "signature",
                     ],
+                'required' => true,
                 'constraints' => [
                     new NotBlank([
                         'message' => 'Le champ ne doit pas être vide'

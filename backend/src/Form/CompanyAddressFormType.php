@@ -20,6 +20,7 @@ class CompanyAddressFormType extends AbstractType
             ->add('firstAddressField', TextType::class, [
                 'label' => 'Adresse' ,
                 'attr' => ['placeholder' => '1er champ d\'adresse'],
+                'required' => true,
                 'constraints' => [
                     new NotBlank(),
                 ]
@@ -30,7 +31,8 @@ class CompanyAddressFormType extends AbstractType
             ])
             ->add('postalCode', TextType::class, [
                 'label' => 'Code Postal' ,
-                'attr' => ['placeholder' => 'Code postal avec ou sans espace après les 2 premiers chiffres'],
+                'attr' => ['placeholder' => 'code postal avec ou sans espace après les 2 premiers chiffres'],
+                'required' => true,
                 'constraints' => [
                     new NotBlank(),
                     new Length([
@@ -43,14 +45,16 @@ class CompanyAddressFormType extends AbstractType
             ])
             ->add('city', TextType::class, [
                 'label' => 'Ville' ,
-                'attr' => ['placeholder' => 'Ville'],
+                'attr' => ['placeholder' => 'ville'],
+                'required' => true,
                 'constraints' => [
                     new NotBlank(),
                 ]
             ])
             ->add('country', TextType::class, [
                 'label' => 'Pays' ,
-                'attr' => ['placeholder' => 'Pays'],
+                'attr' => ['placeholder' => 'pays'],
+                'required' => true,
                 'constraints' => [
                     new NotBlank(),
                 ]
@@ -60,6 +64,7 @@ class CompanyAddressFormType extends AbstractType
                 'label'    => "Type d'adresse: ",
                 'multiple'=>false,
                 'expanded' => true,
+                'required' => true,
             ])
         ;
     }

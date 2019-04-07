@@ -267,7 +267,7 @@ class AppFixtures extends Fixture
         $contact1->setPerson($person3);
         $contact1->setContactType($contactType);
         $contact1->setCompany($company);
-        $contact1->setEmail('pf_e@oclock.io');
+        $contact1->setEmail('pf_p@oclock.io');
         $encodedPassword = $this->passwordEncoder->encodePassword($contact1, 'pf');
         $contact1->setPassword($encodedPassword);
         $this->manager->persist($contact1);
@@ -289,7 +289,7 @@ class AppFixtures extends Fixture
         ));
 
         //Discounts
-        $populator->addEntity(Discount::class,6, array(
+        $populator->addEntity(Discount::class,7, array(
             'rate' => function() use ($generator) { return $generator->unique()->SetDiscount(); },
             'createdAt' => function() use ($generator) { return $generator->dateTimeBetween($startDate = '-1 years', $endDate = 'now', $timezone = null) ; },
             'updatedAt' => null,
@@ -375,7 +375,7 @@ class AppFixtures extends Fixture
         ));
 
         //Request
-        $populator->addEntity(ClientRequest::class, 60, array(
+        $populator->addEntity(ClientRequest::class, 80, array(
             'title' => function() use ($generator) { return $generator->realText(50); },
             'body' => function() use ($generator) { return $generator->realText(500); },
             'createdAt' => function() use ($generator) { return $generator->dateTimeBetween($startDate = '-1 years', $endDate = 'now', $timezone = null) ; },
@@ -389,7 +389,7 @@ class AppFixtures extends Fixture
         ));
 
         //Comment
-        $populator->addEntity(Comment::class, 30, array(
+        $populator->addEntity(Comment::class, 40, array(
             'title' => function() use ($generator) { return $generator->realText(50); },
             'body' => function() use ($generator) { return $generator->realText(200); },
             'createdAt' => function() use ($generator) { return $generator->dateTimeBetween($startDate = '-1 years', $endDate = 'now', $timezone = null) ; },

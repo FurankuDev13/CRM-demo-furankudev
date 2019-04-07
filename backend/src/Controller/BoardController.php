@@ -30,6 +30,10 @@ class BoardController extends AbstractController
         $order = $request->query->get('order');
         $yearRequests = 0;
        
+        if ($index > 4) {
+            throw $this->createNotFoundException("L'index indiqué n'existe pas"); 
+        }
+
         // Statistiques
         if (!$index) {
             $infoType = $requestTypeRepo->findOneByTitle('Informations');

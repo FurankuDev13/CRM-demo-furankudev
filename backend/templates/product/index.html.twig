@@ -65,7 +65,7 @@
                             <a class="has-text-weight-bold" href="{{ path('product_show', {'id': product.id}) }}">{{ product.name }}</a>
                         </td>
                         <td>{{ product.description|truncate(30) }}</td>
-                        <td>{{ product.listPrice }}&nbsp;€</td>
+                        <td>{{ product.listPrice|number_format(2, ',', ' ') }}&nbsp;€</td>
                         <td>
                             <figure class="image is-48x48">
                                 <img src="{{ product.picture ?: "https://stickeramoi.com/3777-large_default/autocollant-point-interrogation-muraux.jpg" }}">

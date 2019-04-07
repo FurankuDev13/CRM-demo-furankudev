@@ -166,8 +166,13 @@ class RequestController extends AbstractController
             $entityManager->persist($demandRequest);
 
             foreach($form->getData()->getRequestDetails() as $requestDetail) {
-                $requestDetail->setRequest($demandRequest);
-                $entityManager->persist($requestDetail);
+                if ($requestDetail->getProduct() && $requestDetail->getQuantity()) {
+                    $requestDetail->setRequest($demandRequest);
+                    $entityManager->persist($requestDetail);
+                } else {
+                    $demandRequest->removeRequestDetail($requestDetail);
+                    $entityManager->persist($demandRequest);
+                }
             }
 
             $entityManager->flush();
@@ -203,14 +208,20 @@ class RequestController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             foreach($form->getData()->getRequestDetails() as $requestDetail) {
-                $requestDetail->setRequest($demandRequest);
-                $entityManager->persist($requestDetail);
+                if ($requestDetail->getProduct() && $requestDetail->getQuantity()) {
+                    $requestDetail->setRequest($demandRequest);
+                    $entityManager->persist($requestDetail);
+                } else {
+                    $demandRequest->removeRequestDetail($requestDetail);
+                    $entityManager->persist($demandRequest);
+                }
+                
             }
 
             $entityManager->flush();
 
             $this->addFlash(
-                'success',
+                'warning',
                 'La demande ' . $demandRequest->getTitle() . ' a bien été mise à jour !'
             );
             return $this->redirectToRoute('request_show', ['id' => $demandRequest->getId()]);
@@ -239,8 +250,8 @@ class RequestController extends AbstractController
         $entityManager->flush();
 
         $this->addFlash(
-            'success',
-            'Le status ' . $handlingStatus->getTitle() . ' a bien été attribué à la demande ' . $demandRequest->getTitle() . ' !'
+            'warning',
+            'Le statut ' . $handlingStatus->getTitle() . ' a bien été attribué à la demande ' . $demandRequest->getTitle() . ' !'
         );
 
         $referer = $request->headers->get('referer');
@@ -299,7 +310,7 @@ class RequestController extends AbstractController
             $entityManager->flush();
 
             $this->addFlash(
-                'success',
+                'warning',
                 "Le commentaire a bien été mise à jour pour la demande " . $demandRequest->getTitle()
             );
             return $this->redirectToRoute('request_show', ['id' => $demandRequest->getId(), 'index' => 2]);
@@ -353,7 +364,7 @@ class RequestController extends AbstractController
 
         $comment->setIsActive(!$comment->getIsActive());
         $this->addFlash(
-            'success',
+            'warning',
             'Le commentaire ' . $comment->getTitle() . ' a été archivé !'
         );
 
@@ -393,6 +404,17 @@ class RequestController extends AbstractController
             if(!is_null($file)){
                 $fileName = $fileUploader->upload($file);
                 $attachment->setPath($fileName);
+            } else {
+                $this->addFlash(
+                    'danger',
+                    "Une pièce jointe doit être uploadée !"
+                );
+                return $this->render('request/new_attachment.html.twig', [
+                    'page_title' => 'Ajouter une pièce jointe',
+                    'attachmentForm' => $attachmentForm->createView(),
+                    'request' => $demandRequest
+                ]);
+
             }
 
             $entityManager->persist($attachment);
@@ -457,8 +479,8 @@ class RequestController extends AbstractController
             $entityManager->flush();
 
             $this->addFlash(
-                'success',
-                "La pièce jointe a bien été associée au commentaire !"
+                'warning',
+                "La pièce jointe a bien été mise à jour !"
             );
             return $this->redirectToRoute('request_show', ['id' => $demandRequest->getId(), 'index' => 2]);
         }
@@ -486,7 +508,7 @@ class RequestController extends AbstractController
         if ($attachment) {
             $attachment->setIsActive(!$attachment->getIsActive());
             $this->addFlash(
-                'success',
+                'warning',
                 'La pièce jointe ' . $attachment->getTitle() . ' a été archivée !'
             );
 
@@ -545,7 +567,7 @@ class RequestController extends AbstractController
             $entityManager->flush();
 
             $this->addFlash(
-                'success',
+                'warning',
                 "L'élément a bien été mise à jour pour la demande " . $demandRequest->getTitle()
             );
             return $this->redirectToRoute('request_show', ['id' => $demandRequest->getId()]);
@@ -569,7 +591,7 @@ class RequestController extends AbstractController
 
         $requestDetail->setIsActive(!$requestDetail->getIsActive());
         $this->addFlash(
-            'success',
+            'warning',
             "L'élément concernant le produit "  . $requestDetail->getProduct()->getName() . ' a été archivé !'
         );
 
@@ -592,7 +614,7 @@ class RequestController extends AbstractController
         // avant d'archiver une demande, il faut vérifier qu'elle est Terminée
         if ($demandRequest->getHandlingStatus()->getTitle() != "Terminée") {
             $this->addFlash(
-                'warning',
+                'danger',
                 'La demande de la société n\'est pas Terminées, elle ne peut pas être archivée !'
             );
             $referer = $request->headers->get('referer');
@@ -602,7 +624,7 @@ class RequestController extends AbstractController
         $demandRequest->setIsActive(!$demandRequest->getIsActive());
         $notification = ($demandRequest->getIsActive() ? ' a été désarchivée' : ' a été archivée !');
         $this->addFlash(
-            'success',
+            'warning',
             'La Demande ' . $demandRequest->getTitle() . $notification
         );
         $entityManager->flush();

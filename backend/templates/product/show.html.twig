@@ -4,11 +4,11 @@
 
 {% block main %}
     <div class="container">
-        <div class="level">
-            <div class="section level-left">
+        <div class="section  level">
+            <div class="level-left">
                 <div class="level-item">
                     <h2 class="level-item subtitle has-text-info is-3">{{ product.name }}</h2>
-                    <p class="level-item button is-size-3">{{ product.listPrice }}&nbsp;€</p>
+                    <p class="level-item button is-size-3">{{ product.listPrice|number_format(2, ',', ' ') }}&nbsp;€</p>
                 </div>
                 <button class="level-item button is-info is-small is-size-4">Réf: {{ product.reference }}</button>
             </div>
@@ -94,9 +94,9 @@
                             {% else %}
                                 {% set rate = detail.product.maxDiscountRate %}
                             {% endif %}
-                            <td>{{ detail.product.listPrice * (100 - rate) / 100 }}&nbsp;€</td>
+                            <td>{{ (detail.product.listPrice * (100 - rate) / 100)|number_format(2, ',', ' ') }}&nbsp;€</td>
                             <td>{{ detail.quantity }}</td>
-                            <td>{{ detail.product.listPrice * (100 - rate) / 100 * detail.quantity }}&nbsp;€</td>
+                            <td>{{ (detail.product.listPrice * (100 - rate) / 100 * detail.quantity)|number_format(2, ',', ' ') }}&nbsp;€</td>
                             <td>{{ detail.commentField }}</td>
                         </tr>
                     {% endfor %}

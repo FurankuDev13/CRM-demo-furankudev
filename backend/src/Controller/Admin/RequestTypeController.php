@@ -120,12 +120,20 @@ class RequestTypeController extends AbstractController
             throw $this->createNotFoundException("Le type indiqué n'existe pas"); 
         }
 
-        $entityManager->remove($requestType);;
-        $this->addFlash(
-            'danger',
-            'Le type ' . $requestType->getTitle() . ' a été supprimé ! '
-        );
-        $entityManager->flush();
+        if (!$requestType->getRequests()) {
+            $entityManager->remove($requestType);;
+            $this->addFlash(
+                'danger',
+                'Le type ' . $requestType->getTitle() . ' a été supprimé ! '
+            );
+            $entityManager->flush();
+        } else {
+            $this->addFlash(
+                'danger',
+                'Le type ' . $requestType->getTitle() . ' ne peut être supprimé tant que des demandes y sont liées ! '
+            );
+        }
+        
 
         $referer = $request->headers->get('referer');
 

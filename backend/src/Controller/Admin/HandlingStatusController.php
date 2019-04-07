@@ -120,12 +120,21 @@ class HandlingStatusController extends AbstractController
             throw $this->createNotFoundException("Le statut indiqué n'existe pas"); 
         }
 
-        $entityManager->remove($handlingStatus);;
-        $this->addFlash(
-            'danger',
-            'Le statut ' . $handlingStatus->getTitle() . ' a été supprimé ! '
-        );
-        $entityManager->flush();
+        if (!$handlingStatus->getRequests()) {
+
+            $entityManager->remove($handlingStatus);;
+            $this->addFlash(
+                'danger',
+                'Le statut ' . $handlingStatus->getTitle() . ' a été supprimé ! '
+            );
+            $entityManager->flush();
+
+        } else {
+            $this->addFlash(
+                'danger',
+                'Le statut ' . $handlingStatus->getTitle() . ' ne peut être supprimé tant que des demandes y sont liées ! '
+            );
+        }
 
         $referer = $request->headers->get('referer');
 

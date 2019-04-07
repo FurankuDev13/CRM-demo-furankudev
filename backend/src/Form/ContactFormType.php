@@ -25,6 +25,7 @@ class ContactFormType extends AbstractType
                 'attr' => [
                     'placeholder' => "email",
                     ],
+                'required' => true,
                 'constraints' => [
                     new NotBlank([
                         'message' => 'Le champ ne doit pas être vide'
@@ -43,6 +44,12 @@ class ContactFormType extends AbstractType
                 'placeholder' => 'Choisir une société',
                 'multiple'=>false,
                 'expanded' => false,
+                'required' => true,
+                'constraints' => [
+                    new NotBlank([
+                        'message' => 'Le champ ne doit pas être vide'
+                    ]),
+                ],
                 'query_builder' => function (CompanyRepository $companyRepo) {
                     return $companyRepo->createQueryBuilder('c')
                     ->andWhere('c.isActive = :val')
@@ -56,6 +63,12 @@ class ContactFormType extends AbstractType
                 'placeholder' => 'Choisir un type',
                 'multiple'=>false,
                 'expanded' => false,
+                'required' => true,
+                'constraints' => [
+                    new NotBlank([
+                        'message' => 'Le champ ne doit pas être vide'
+                    ]),
+                ],
                 'query_builder' => function (ContactTypeRepository $contactTypeRepo) {
                     return $contactTypeRepo->createQueryBuilder('ct')
                     ->andWhere('ct.isActive = :val')
