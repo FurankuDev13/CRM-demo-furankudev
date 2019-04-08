@@ -30,7 +30,7 @@ class Homepage extends React.Component {
                   Beer O'clock, les meilleures bières au meilleur prix pour votre commerce !
                 </h1>
                 <p className="subtitle is-4 is-spaced">
-                Beer o'Clock c’est une grande famille, une très grande famille, qui a pour principales valeurs le partage et la bière au sens large (oui oui, on considère la bière comme une valeur). Chaque jour, ce sont 15 personnes qui travaillent main dans la main (au sens figuré bien entendu) pour proposer aux amateurs de bière des produits qu’il est difficile, voire impossible, de trouver dans les supermarchés classiques. 
+                Beer o'Clock c’est une grande famille, une très grande famille, qui a pour principales valeurs le partage et la bière au sens large (oui oui, on considère la bière comme une valeur). Chaque jour, ce sont 15 personnes qui travaillent main dans la main (au sens figuré bien entendu) pour proposer aux amateurs de bière des produits qu’il est difficile, voire impossible, de trouver dans les supermarchés classiques.
                 </p>
                 <p className="subtitle is-4 is-spaced">
                   Il y a notre acheteur de bière, notre préparateur de commande de bière, notre service client qui parle bière… que des passionnés qui sont là pour assurer votre expérience houblonnée. Mais surtout, il y a vous, qui rendez cette aventure possible depuis plus de 10 ans.
