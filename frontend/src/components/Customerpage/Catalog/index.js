@@ -25,7 +25,7 @@ const Catalog = ({
   productModalIsActive,
   toggleProductModal,
 }) => (
-  <div >
+  <div>
     <div>
       {(category !== 'Catalogue complet' && (
         <div className="has-text-weight-bold" id="category-title">Catégorie : <span className="button is-primary is-size-5 has-text-weight-bold">{category}</span></div>

@@ -3,6 +3,9 @@
  */
 import React from 'react';
 import PropTypes from 'prop-types';
+import {
+  FaEuroSign,
+} from 'react-icons/fa';
 
 /**
  * Local import
@@ -25,9 +28,9 @@ const Card = ({
     <div className="card-content">
       <div className="media">
         <div className="media-content">
-          <p className="title is-4">{name}</p>
+          <p className="title is-4 has-text-primary has-text-weight-bold">{name}</p>
           {source === 'catalog' && (
-            <p className="subtitle is-4">Prix : {listPrice} €</p>
+            <p className="subtitle is-5"><span className="has-text-weight-bold">Tarif: </span>{listPrice} €</p>
           )}
         </div>
         {source === 'catalog' && (
@@ -37,7 +40,7 @@ const Card = ({
         )}
       </div>
       {source === 'categories' && (
-        <div className="content">
+        <div className="content is-italic">
           {description}
         </div>
       )}
