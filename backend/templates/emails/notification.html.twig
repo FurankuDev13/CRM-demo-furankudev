@@ -3,7 +3,7 @@
 <br>
 <p>{{ emailTemplate. messageBody }}</p> 
 <br>
-{% if emailTemplate.emailType.title == 'Inscription - Internet' or 'Inscription - Backoffice' %}
+{% if emailTemplate.emailType.title == 'Inscription - Internet' or emailTemplate.emailType.title == 'Inscription - Backoffice' %}
     <p>Votre identifiant est <span>{{ contact.email }}</span> et votre mot de passe est <span>{{ password }}</span></p>
 {% endif %}
 
