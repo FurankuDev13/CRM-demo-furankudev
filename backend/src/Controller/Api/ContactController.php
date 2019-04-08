@@ -562,7 +562,7 @@ class ContactController extends AbstractController
             
             if ($responseCode == 200) {
                 $entityManager->flush();
-                $jsonObject = $serializer->serialize($contactRequest, 'json');
+                $jsonObject = $serializer->serialize($contactRequest, 'json', ['groups' => 'request_group']);
 
                 $emailTemplate = $emailTemplateRepo->findOneByEmailTypeTitle('Nouvelle demande - Internet');
 

@@ -23,12 +23,14 @@ class Request
     /**
      * @ORM\Column(type="string", length=128)
      * @Groups({"contact_group"})
+     * @Groups({"request_group"})
      */
     private $title;
 
     /**
      * @ORM\Column(type="text")
      * @Groups({"contact_group"})
+     * @Groups({"request_group"})
      */
     private $body;
 
@@ -56,12 +58,14 @@ class Request
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\RequestType", inversedBy="requests")
      * @ORM\JoinColumn(nullable=false)
+     * @Groups({"request_group"})
      */
     private $requestType;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Contact", inversedBy="requests", cascade={"remove"})
      * @ORM\JoinColumn(nullable=false)
+     * @Groups({"request_group"})
      */
     private $contact;
 
