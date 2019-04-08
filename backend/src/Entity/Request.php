@@ -52,6 +52,7 @@ class Request
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\HandlingStatus", inversedBy="requests")
      * @ORM\JoinColumn(nullable=false)
+     * @Groups({"request_group"})
      */
     private $handlingStatus;
 
@@ -65,7 +66,6 @@ class Request
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Contact", inversedBy="requests", cascade={"remove"})
      * @ORM\JoinColumn(nullable=false)
-     * @Groups({"request_group"})
      */
     private $contact;
 
