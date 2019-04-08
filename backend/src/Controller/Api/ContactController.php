@@ -4,6 +4,7 @@ use App\Entity\Person;
 use App\Entity\Company;
 use App\Entity\Contact;
 use App\Entity\Product;
+use App\Entity\Request as DemandRequest;
 use App\Entity\CompanyAddress;
 use Swagger\Annotations as SWG;
 use App\Repository\CompanyRepository;
@@ -503,7 +504,7 @@ class ContactController extends AbstractController
      *     description="Creates a new contact user's request, returns the contact user's request",
      *     @SWG\Schema(
      *         type="array",
-     *         @SWG\Items(ref=@Model(type=Product::class, groups={"product_group"}))
+     *         @SWG\Items(ref=@Model(type=DemandRequest::class, groups={"request_group"}))
      *     )
      * )
      *  @SWG\Parameter(
