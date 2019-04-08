@@ -15,13 +15,13 @@ const Productdetails = ({
   picture,
   reference,
 }) => (
-  <div id="product-modal" className="modal-content tile is-ancestor is-size-4 is-bold has-text-centered">
-    <div className="tile is-child box">
+  <div id="product-modal" className="modal-content columns has-background-white is-mobile is-centered has-text-centered">
+    <div className="column is-4">
       <figure className="image is-4by3">
         <img src={picture} alt={name} />
       </figure>
     </div>
-    <div className="tile is-child box">
+    <div className="column is-4">
       <p className="button title is-medium is-primary is-size-3 has-text-weight-bold is-spaced">{name}</p>
       <br />
       <p className="title is-4 has-text-primary has-text-weight-bold is-spaced">Description</p>

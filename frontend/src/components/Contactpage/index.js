@@ -28,7 +28,11 @@ const Contactpage = ({ commercial }) => (
           <p className="subtitle is-4"><span className="has-text-weight-bold"><FaPhoneSquare />&nbsp;télephone : </span>{commercial.businessPhone}</p>
           <p className="subtitle is-4"><span className="has-text-weight-bold"><FaLocationArrow />&nbsp;email : </span>{commercial.email}</p>
         </div>
-      )) || <div className="title is-2 has-text-primary has-text-weight-bold">Vous n'avez pas encore de commercial attitré.</div>
+      )) || (
+        <div className="box">
+          <div className="title is-2 has-text-primary has-text-weight-bold">Vous n'avez pas encore de commercial attitré.</div>
+        </div>
+      )
     }
     <Companyaddress />
   </div>

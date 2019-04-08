@@ -476,13 +476,13 @@ export const displayItem = itemProps => ({
 
 export const popMessage = (message, style) => {
   const div = document.createElement('div');
-  div.className = `notification is-${style} is-centered`;
+  div.className = `notification is-${style} is-centered is-size-4 has-text-centered`;
   div.innerText = message;
   const popmessage = document.getElementById('popmessage');
   popmessage.appendChild(div);
   setTimeout(() => {
     popmessage.removeChild(div);
-  }, 3000);
+  }, 5000);
 };
 /**
  * Selectors
