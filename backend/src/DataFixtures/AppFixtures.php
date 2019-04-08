@@ -215,14 +215,14 @@ class AppFixtures extends Fixture
         $this->manager->persist($person1);
 
         $person2 = new Person();
-        $person2->setFirstname('Phil');
-        $person2->setLastname('PAGAN');
+        $person2->setFirstname('Philippe');
+        $person2->setLastname('POIRON');
         $person2->setBusinessPhone('0102030405');
         $person2->setCellPhone('0102030405');
         $this->manager->persist($person2);
 
         $person3 = new Person();
-        $person3->setFirstname('PF');
+        $person3->setFirstname('Pierre-François');
         $person3->setLastname('PICOLO');
         $person3->setBusinessPhone('0102030405');
         $person3->setCellPhone('0102030405');
@@ -252,7 +252,7 @@ class AppFixtures extends Fixture
         $user2->setEmail('phil_p@oclock.io');
         $encodedPassword = $this->passwordEncoder->encodePassword($user2, 'phil');
         $user2->setPassword($encodedPassword);
-        $this->manager->persist($user2);;
+        $this->manager->persist($user2);
 
         $user3 = new User();
         $user3->setPerson($person4);
