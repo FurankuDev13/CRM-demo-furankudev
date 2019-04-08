@@ -336,7 +336,7 @@ class ContactController extends AbstractController
                             [
                                 'emailTemplate' => $emailTemplate,
                                 'contact' => $contact,
-                                'password' => $password,
+                                'password' => $contactPassword,
                             ]
                         ),
                         'text/html'
