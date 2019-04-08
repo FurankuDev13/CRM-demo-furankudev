@@ -14,6 +14,7 @@ use App\Repository\CommentRepository;
 use App\Repository\CompanyRepository;
 use App\Repository\ContactRepository;
 use App\Repository\RequestRepository;
+use App\Repository\DiscountRepository;
 use App\Entity\Request as DemandRequest;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\RequestTypeRepository;
@@ -22,9 +23,9 @@ use App\Repository\HandlingStatusRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Routing\Annotation\Route;
+use Knp\Bundle\SnappyBundle\Snappy\Response\PdfResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
-use Knp\Bundle\SnappyBundle\Snappy\Response\PdfResponse;
 
 /** 
  *  @Route("/request", name="request_") 
@@ -143,7 +144,7 @@ class RequestController extends AbstractController
     /**
      * @Route("/new", name="new", methods={"GET", "POST"})
      */
-    public function new(Request $request, EntityManagerInterface $entityManager, ContactRepository $contactRepo)
+    public function new(Request $request, EntityManagerInterface $entityManager, ContactRepository $contactRepo, DiscountRepository $discountRepo)
     {
         $demandRequest = new DemandRequest();
         $requestDetail = new RequestDetail();
@@ -173,6 +174,13 @@ class RequestController extends AbstractController
                     $demandRequest->removeRequestDetail($requestDetail);
                     $entityManager->persist($demandRequest);
                 }
+            }
+
+            $company = $demandRequest->getContact()->getCompany();
+            
+            if (!$company->getDiscount()) {
+                $noDiscount = $discountRepo->findOneByRate(0);
+                $company->setDiscount($noDiscount);
             }
 
             $entityManager->flush();

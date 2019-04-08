@@ -4,12 +4,13 @@ use App\Entity\Person;
 use App\Entity\Company;
 use App\Entity\Contact;
 use App\Entity\Product;
-use App\Entity\Request as DemandRequest;
 use App\Entity\CompanyAddress;
 use Swagger\Annotations as SWG;
 use App\Repository\CompanyRepository;
 use App\Repository\ContactRepository;
 use App\Repository\ProductRepository;
+use App\Repository\DiscountRepository;
+use App\Entity\Request as DemandRequest;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Entity\Request as ContactRequest;
 use App\Repository\ContactTypeRepository;
@@ -230,7 +231,7 @@ class ContactController extends AbstractController
      * @Security(name="Bearer")
      * 
      */
-    public function new(Request $request, SerializerInterface $serializer, EntityManagerInterface $entityManager, UserPasswordEncoderInterface $passwordEncoder, CompanyAddressTypeRepository $companyAddressTypeRepo, ContactTypeRepository $contactTypeRepo, RequestTypeRepository $requestTypeRepo, HandlingStatusRepository $handlingStatusRepo, CompanyRepository $companyRepo, ContactRepository $contactRepo, \Swift_Mailer $mailer, EmailTemplateRepository $emailTemplateRepo)
+    public function new(Request $request, SerializerInterface $serializer, EntityManagerInterface $entityManager, UserPasswordEncoderInterface $passwordEncoder, CompanyAddressTypeRepository $companyAddressTypeRepo, ContactTypeRepository $contactTypeRepo, RequestTypeRepository $requestTypeRepo, HandlingStatusRepository $handlingStatusRepo, CompanyRepository $companyRepo, ContactRepository $contactRepo, \Swift_Mailer $mailer, EmailTemplateRepository $emailTemplateRepo, DiscountRepository $discountRepo)
     {
         // $data = $serializer->deserialize($request->getContent(), Contact::class, 'json');
 
@@ -277,6 +278,12 @@ class ContactController extends AbstractController
                     $company->setName($companyName);
                     $company->setSirenNumber($companySiren);
                     $company->addCompanyAddress($companyAddress);
+
+                    if (!$company->getDiscount()) {
+                        $noDiscount = $discountRepo->findOneByRate(0);
+                        $company->setDiscount($noDiscount);
+                    }
+
                     $entityManager->persist($company);
 
                 } 
@@ -529,7 +536,7 @@ class ContactController extends AbstractController
      * @Security(name="Bearer")
      * 
      */
-    public function requestNew(Contact $contact, Request $request, EntityManagerInterface $entityManager, HandlingStatusRepository $handlingStatusRepo, RequestTypeRepository $requestTypeRepo, EmailTemplateRepository $emailTemplateRepo, SerializerInterface $serializer, \Swift_Mailer $mailer)
+    public function requestNew(Contact $contact, Request $request, EntityManagerInterface $entityManager, HandlingStatusRepository $handlingStatusRepo, RequestTypeRepository $requestTypeRepo, EmailTemplateRepository $emailTemplateRepo, DiscountRepository $discountRepo, SerializerInterface $serializer, \Swift_Mailer $mailer)
     {
         $responseCode = 400 ;
         $errorCode = 'no_data_sent';
@@ -558,6 +565,12 @@ class ContactController extends AbstractController
                 $contactRequest->setRequestType($requestType);
                 $contactRequest->setContact($contact);
                 $entityManager->persist($contactRequest);
+
+                $company = $contactRequest->getContact()->getCompany();
+                if (!$company->getDiscount()) {
+                    $noDiscount = $discountRepo->findOneByRate(0);
+                    $company->setDiscount($noDiscount);
+                }
 
                 $responseCode = 200;
             }
