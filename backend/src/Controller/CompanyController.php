@@ -16,17 +16,18 @@ use App\Repository\CommentRepository;
 use App\Repository\CompanyRepository;
 use App\Repository\ContactRepository;
 use App\Repository\RequestRepository;
+use App\Repository\DiscountRepository;
 use App\Entity\Request as DemandRequest;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Form\CompanyType as CompanyFormType;
 use App\Repository\CompanyAddressRepository;
 use App\Repository\HandlingStatusRepository;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
-use Symfony\Component\HttpFoundation\File\File;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 
 /** 
  *  @Route("/company", name="company_") 
@@ -106,7 +107,7 @@ class CompanyController extends AbstractController
     /**
      * @Route("/new", name="new", methods={"GET", "POST"})
      */
-    public function new(Request $request, EntityManagerInterface $entityManager)
+    public function new(Request $request, EntityManagerInterface $entityManager, DiscountRepository $discountRepo)
     {
         $company = new Company();
         $companyAddress = new CompanyAddress();
@@ -122,6 +123,12 @@ class CompanyController extends AbstractController
                     $companyAddress->setCompany($company);
                     $entityManager->persist($companyAddress);
                 }
+
+                if (!$company->getDiscount()) {
+                    $noDiscount = $discountRepo->findOneByRate(0);
+                    $company->setDiscount($noDiscount);
+                }
+                
                 $entityManager->flush();
 
                 $this->addFlash(
