@@ -139,6 +139,8 @@ class RequestRepository extends ServiceEntityRepository
             ->addSelect('rt')
             ->andWhere('rt = :requestType')
             ->setParameter('requestType', $requestType)
+            ->andWhere('s.title = :handlingStatusTitle')
+            ->setParameter('handlingStatusTitle', 'Terminée')
             ->andWhere('r.isActive = :isActive')
             ->setParameter('isActive', true)
             ->andWhere('r.createdAt > :last')
