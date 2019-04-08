@@ -14,6 +14,7 @@ use App\Entity\Request as ContactRequest;
 use App\Repository\ContactTypeRepository;
 use App\Repository\RequestTypeRepository;
 use Nelmio\ApiDocBundle\Annotation\Model;
+use App\Repository\EmailTemplateRepository;
 use App\Repository\HandlingStatusRepository;
 use Nelmio\ApiDocBundle\Annotation\Security;
 use Symfony\Component\HttpFoundation\Request;
@@ -228,7 +229,7 @@ class ContactController extends AbstractController
      * @Security(name="Bearer")
      * 
      */
-    public function new(Request $request, SerializerInterface $serializer, EntityManagerInterface $entityManager, UserPasswordEncoderInterface $passwordEncoder, CompanyAddressTypeRepository $companyAddressTypeRepo, ContactTypeRepository $contactTypeRepo, RequestTypeRepository $requestTypeRepo, HandlingStatusRepository $handlingStatusRepo, CompanyRepository $companyRepo, ContactRepository $contactRepo, \Swift_Mailer $mailer)
+    public function new(Request $request, SerializerInterface $serializer, EntityManagerInterface $entityManager, UserPasswordEncoderInterface $passwordEncoder, CompanyAddressTypeRepository $companyAddressTypeRepo, ContactTypeRepository $contactTypeRepo, RequestTypeRepository $requestTypeRepo, HandlingStatusRepository $handlingStatusRepo, CompanyRepository $companyRepo, ContactRepository $contactRepo, \Swift_Mailer $mailer, EmailTemplateRepository $emailTemplateRepo)
     {
         // $data = $serializer->deserialize($request->getContent(), Contact::class, 'json');
 
@@ -527,7 +528,7 @@ class ContactController extends AbstractController
      * @Security(name="Bearer")
      * 
      */
-    public function requestNew(Contact $contact, Request $request, EntityManagerInterface $entityManager, HandlingStatusRepository $handlingStatusRepo, RequestTypeRepository $requestTypeRepo, SerializerInterface $serializer, \Swift_Mailer $mailer)
+    public function requestNew(Contact $contact, Request $request, EntityManagerInterface $entityManager, HandlingStatusRepository $handlingStatusRepo, RequestTypeRepository $requestTypeRepo, EmailTemplateRepository $emailTemplateRepo, SerializerInterface $serializer, \Swift_Mailer $mailer)
     {
         $responseCode = 400 ;
         $errorCode = 'no_data_sent';
