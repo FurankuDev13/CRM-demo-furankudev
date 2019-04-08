@@ -39,7 +39,16 @@
                     <td class="level">
                         <div class="level-left">
                             {% include 'request/_handle_status_modal.html.twig' %}
-                            {% include 'company/_archive_form.html.twig' with {'notArchived': true} %}
+                            <form class="level-item" action='{{ path('request_archive', {'id': request.id}) }}' method="POST">
+                                <input class="" type="hidden" name="_method" value="PATCH">
+                                {% if request.isActive %}
+                                    {% include 'partial/_confirm_cancel_modal.html.twig' with {'message': 'Confirmation d\'Archivage'} %}
+                                    <button class="button showModalConfirm is-warning"><i class="fas fa-archive"></i></button>
+                                {% else %}
+                                    {% include 'partial/_confirm_cancel_modal.html.twig' with {'message': 'Confirmation de Désarchivage'} %}
+                                    <button class="button showModalConfirm is-success"><i class="fas fa-archive"></i></button>
+                                {% endif %}
+                            </form>
                         </div>
                     </td>
                 {% endif %}
