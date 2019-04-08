@@ -86,7 +86,7 @@ class Company
     private $user;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Comment", mappedBy="company")
+     * @ORM\OneToMany(targetEntity="App\Entity\Comment", mappedBy="company", cascade={"remove"})
      */
     private $comments;
 
