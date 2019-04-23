@@ -1,0 +1,19 @@
+<div class="modal level-item">
+    <div class="modal-background"></div>
+    <div class="modal-card">
+        <header class="modal-card-head">
+            <p class="modal-card-title">Modifier le Status de la Demande</p>
+            <button class="modal-close is-large" aria-label="close"></button>
+        </header>
+            <section class="modal-card-body has-text-centered">
+            {% for status in handlingStatuses %}
+                <form action='{{ path('request_editHandlingStatus', {'id': request.id}) }}' method="POST">
+                    <input type="hidden" name="_method" value="PATCH">
+                    <input type="hidden" name="handlingStatusId" value="{{ status.id }}">
+                    <button type="submit" class="button">{{ status.title }}</button>
+                </form>
+            {% endfor %}
+        </section>
+    </div>
+</div>
+<button class="button showModal level-item"><i class="fas fa-exchange-alt"></i></button>

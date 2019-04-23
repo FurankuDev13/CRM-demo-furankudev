@@ -1,0 +1,91 @@
+{% extends 'base_with_sidebar.html.twig' %}
+
+{% block title %}{{ parent() }} - {{ page_title }}{% endblock %}
+
+{% block sidebar %}
+    {% include 'product/_sidebar.html.twig' %}
+{% endblock %}
+
+{% block content %}
+    {% if category %}
+        {% set orderButtonsIncludePath = 'product/_order_buttons_withcategory.html.twig' %}
+    {% else %}
+        {% set orderButtonsIncludePath = 'partial/_order_buttons.html.twig' %}
+    {% endif %}
+
+        <div class="level">
+            <div class="level-left ">
+                <div class="level-item">
+                    <h2 class=" level-item subtitle has-text-info is-3">Les produits du catalogue</h2>
+                    {% if category %}
+                        <button class=" level-item button is-primary is-small is-size-4">{{ category.name }}</button>
+                    {% endif %}
+                    <button class=" level-item button is-info is-small is-size-4">{{ products|length }}</button>
+                </div>  
+            </div> 
+            <div class="level-right">
+                <input class="button level-item is-medium" type="text" id="productSearch" onkeyup="app.search('productSearch','productTable', 1)" placeholder= "&#128270; produit ..." title="">
+                <a class="level-item" href="{{ path('product_index')}}">
+                    <button class="level-item button is-primary s-small is-size-3"><i class="fas fa-sort-alpha-down"></i></button>
+                </a>
+                {% if is_granted('ROLE_SUPPORT') %}             
+                    <a class="level-item" href="{{ path('product_new')}}">
+                        <button class="level-item button is-success s-small is-size-3"><i class="fas fa-plus-circle"></i></button>
+                    </a>
+                {% endif %}
+            </div>
+        </div>
+        <table class="table is-fullwidth is-hoverable is-striped" id="productTable">
+            <thead>
+                <tr>
+                    <th>Référence&nbsp;
+                        {% include orderButtonsIncludePath with {'entity' : 'product', 'field' : 'reference'} %}
+                    </th>
+                    <th>Produit&nbsp;
+                        {% include orderButtonsIncludePath with {'entity' : 'product', 'field' : 'name'} %}
+                    </th>
+                    <th>Description&nbsp;
+                        {% include orderButtonsIncludePath with {'entity' : 'product', 'field' : 'description'} %}
+                    </th>
+                    <th>Prix liste&nbsp;
+                        {% include orderButtonsIncludePath with {'entity' : 'product', 'field' : 'listPrice'} %}
+                    </th>
+                    <th>Image</th>
+                    {% if is_granted('ROLE_SUPPORT') %}
+                        <th>Actions</th>
+                    {% endif %}
+
+                </tr>
+            </thead>
+            <tbody>
+                {% for product in products %}
+                    <tr>
+                        <td>{{ product.reference }}</td>
+                        <td>   
+                            <a class="has-text-weight-bold" href="{{ path('product_show', {'id': product.id}) }}">{{ product.name }}</a>
+                        </td>
+                        <td>{{ product.description|truncate(30) }}</td>
+                        <td>{{ product.listPrice|number_format(2, ',', ' ') }}&nbsp;€</td>
+                        <td>
+                            <figure class="image is-48x48">
+                                <img src="{{ product.picture ?: "https://stickeramoi.com/3777-large_default/autocollant-point-interrogation-muraux.jpg" }}">
+                            </figure>
+                        </td>
+                        {% if is_granted('ROLE_SUPPORT') %}
+                        <td class="level">
+                            <div class="level-left">
+                                <a class="level-item" href="{{ path('product_edit', {'id' : product.id })}}">
+                                    <button type="submit" class="button is-info"><i class="fas fa-edit"></i></button>
+                                </a>
+                                {% include 'product/_available_form.html.twig' %}
+                                {% include 'product/_onhomepage_form.html.twig' %}
+                                {% include 'product/_archive_form.html.twig' with {'notArchived': true} %}
+                            </div>
+                        </td>
+                        {% endif %}
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+{% endblock %}

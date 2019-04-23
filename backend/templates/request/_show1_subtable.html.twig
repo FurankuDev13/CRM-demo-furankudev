@@ -1,0 +1,56 @@
+<table class="table is-fullwidth is-hoverable is-striped">
+    {% if details %}
+        <thead>
+            <tr>
+                <th>Référence</th>
+                <th>Produit</th>
+                <th>Description</th>
+                <th>Prix liste</th>
+                <th>Prix vente</th>
+                <th>Image</th>
+                <th>Quantité</th>
+                <th>Commentaire</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for detail in details %}
+                <tr>
+                    <td>{{ detail.product.reference }}</td>
+                    <td>   
+                        <a class="has-text-weight-bold" href="{{ path('product_show', {'id': detail.product.id}) }}">{{ detail.product.name }}</a>
+                    </td>
+                    <td>{{ detail.product.description|truncate(30) }}</td>
+                    <td>{{ detail.product.listPrice|number_format(2, ',', ' ') }}&nbsp;€</td>
+                    {% if detail.request.contact.company.discount.rate <= detail.product.maxDiscountRate %}
+                        {% set rate = detail.request.contact.company.discount.rate %}
+                    {% else %}
+                        {% set rate = detail.product.maxDiscountRate %}
+                    {% endif %}
+                    <td>{{ (detail.product.listPrice * (100 - rate) / 100)|number_format(2, ',', ' ') }}&nbsp;€</td>
+                    <td>
+                        <figure class="image is-24x24">
+                            <img src="{{ detail.product.picture ?: "https://stickeramoi.com/3777-large_default/autocollant-point-interrogation-muraux.jpg" }}">
+                        </figure>
+                    </td>
+                    <td>{{ detail.quantity }}</td>
+                    <td>{{ detail.commentField }}</td>
+                    <td>
+                        <div class="level-left">
+                            <a class="level-item" href="{{ path('request_detail_edit', {'id' : request.id, "detail_id": detail.id}) }}">
+                                <button type="submit" class="button is-info"><i class="fas fa-edit"></i></button>
+                            </a>
+                            <form class="level-item" action='{{ path('request_detail_archive', {'id' : detail.id}) }}' method="POST">
+                                <input class="" type="hidden" name="_method" value="PATCH">
+                                {% include 'partial/_confirm_cancel_modal.html.twig' with {'message': 'Confirmation d\'Archivage'} %}
+                                <button class="button showModalConfirm is-warning"><i class="fas fa-archive"></i></button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    {% else %}
+        <p class="has-text-weight-bold has-text-centered has-text-warning is-size-4">Aucune donnée à afficher</tr>
+    {% endif %}
+</table>

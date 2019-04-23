@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html class="has-navbar-fixed-top">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>{% block title %}Cerberus CRM - Beer o'Clock{% endblock %}</title>
+        {# FICHIER CSS Bulma #}
+        <link href="{{ asset('css/bulmaswatch.min.css') }}" rel="stylesheet">
+        {# FICHIER FONTAWESOME #}
+        <script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
+        {# Bloc pour FICHIERS CSS Custom #}
+        <link href="{{ asset('css/custom.css') }}" rel="stylesheet">
+        {% block stylesheets %}{% endblock %}
+    </head>
+    <body>
+        <header>
+            {# NAVBAR #}
+            {% include "partial/_navigation.html.twig" %}
+            {# Bloc pour HEADER CUSTOM #}
+            {% block header %}{% endblock %} 
+        </header>
+
+        <main>
+            {# Bloc CONTENU #}
+            {% block main %}{% endblock %}
+        </main>
+
+        {# Bloc pour FICHIERS JS Custom #}
+        <script
+            src="https://code.jquery.com/jquery-3.3.1.min.js"
+            integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+            crossorigin="anonymous">
+        </script>
+        <script src="{{ asset('js/app_vanilla.js') }}"></script>
+        <script src="{{ asset('js/app_jquery.js') }}"></script>
+        <script type="text/javascript" src="{{ asset('node_modules/bulma-extensions/bulma-accordion/dist/js/bulma-accordion.min.js') }}"></script>
+        {% block javascripts %}{% endblock %}
+    </body>
+</html>

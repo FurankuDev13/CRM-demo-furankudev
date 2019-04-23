@@ -1,0 +1,146 @@
+{# <section class="accordions">
+    <article class="accordion is-active">
+        <div class="accordion-header toggle">
+            <div class="level-left">
+                <div class="level-item">
+                    <h2 class="level-item subtitle has-text-info is-4">Filtrer par type</h2>
+                </div>
+            </div>
+        </div>
+        <div class="accordion-body">
+            <div class="accordion-content">
+                <table class="table is-fullwidth is-hoverable">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for contactType in contactTypes %}
+                            <tr>
+                                <td>   
+                                    <a href="{{ path('contact_index', {'filter': 'contactType', 'filterName': contactType.title }) }}">
+                                        <h2 class="has-text-left subtitle has-text-primary is-6">{{ contactType.title }}</h2>
+                                    </a>
+                                </td>
+                                <td>
+                                    <button class="has-text-left button is-primary is-small is-outlined is-size-6">{{ contactType.contacts|length }}</button>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>            
+            </div>
+        </div>
+    </article>
+    <article class="accordion">
+        <div class="accordion-header">
+            <div class="level-left">
+                <div class="level-item">
+                    <h2 class="level-item subtitle has-text-info is-4">Filtrer par société</h2>
+                </div>
+            </div>
+            <button class="toggle" aria-label="toggle"></button>
+        </div>
+        <div class="accordion-body">
+            <div class="accordion-content">
+                <table class="table is-fullwidth is-hoverable">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for company in companies %}
+                            <tr>
+                                <td>   
+                                    <a href="{{ path('contact_index', {'filter': 'company', 'filterName': company.name }) }}">
+                                        <h2 class="has-text-left subtitle has-text-primary is-6">{{ company.name }}</h2>
+                                    </a>
+                                </td>
+                                <td>
+                                    <button class="has-text-left button is-primary is-small is-outlined is-size-6">{{ company.contacts|length }}</button>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </article>
+</section> #}
+
+<div class="level dropdown is-hoverable">
+    <div class="dropdown-trigger level-left">
+        <div class="level-item">
+            <h2 class="level-item subtitle has-text-info is-4">Filtrer par titre</h2>
+        </div>
+    </div>
+
+    <div class="dropdown-menu">
+        <div class="dropdown-content">
+            <table class="table is-fullwidth is-hoverable">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for contactType in contactTypes %}
+                        <tr>
+                            <td>   
+                                <a href="{{ path('contact_index', {'filter': 'contactType', 'filterName': contactType.title }) }}">
+                                    <h2 class="has-text-left subtitle has-text-primary is-6">{{ contactType.title }}</h2>
+                                </a>
+                            </td>
+                            <td>
+                                <a href="{{ path('contact_index', {'filter': 'contactType', 'filterName': contactType.title }) }}">
+                                    <button class="has-text-left button is-primary is-small is-outlined is-size-6">{{ contactType.contacts|length }}</button>
+                                </a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div class="level dropdown is-hoverable">
+    <div class="level-left">
+        <div class="level-item">
+            <h2 class="level-item subtitle has-text-info is-4">Filtrer par société</h2>
+        </div>
+    </div>
+    <div class="dropdown-menu">
+        <div class="dropdown-content">
+            <table class="table is-fullwidth is-hoverable">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for company in companies %}
+                        <tr>
+                            <td>   
+                                <a href="{{ path('contact_index', {'filter': 'company', 'filterName': company.name }) }}">
+                                    <h2 class="has-text-left subtitle has-text-primary is-6">{{ company.name }}</h2>
+                                </a>
+                            </td>
+                            <td>
+                                <a href="{{ path('contact_index', {'filter': 'company', 'filterName': company.name }) }}">
+                                    <button class="has-text-left button is-primary is-small is-outlined is-size-6">{{ company.contacts|length }}</button>
+                                </a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

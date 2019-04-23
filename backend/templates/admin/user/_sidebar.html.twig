@@ -1,0 +1,121 @@
+<div class="level dropdown is-hoverable">
+    <div class="dropdown-trigger level-left">
+        <div class="level-item">
+            <h2 class="level-item subtitle has-text-info is-4">Filtrer par statut</h2>
+        </div>
+    </div>
+
+    <div class="dropdown-menu">
+        <div class="dropdown-content">
+            <table class="table is-fullwidth is-hoverable">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>   
+                            <a href="{{ path('admin_user_index', {'isActive': true}) }}">
+                                <h2 class="has-text-left subtitle has-text-primary is-6">Actifs</h2>
+                            </a>
+                        </td>
+                        <td>
+                            <a href="{{ path('admin_user_index', {'isActive': true}) }}">
+                                <button class="has-text-left button is-primary is-small is-outlined is-size-6">{{ activeUsers|length }}</button>
+                            </a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>   
+                            <a href="{{ path('admin_user_index', {'isActive': false}) }}">
+                                <h2 class="has-text-left subtitle has-text-primary is-6">Archivés</h2>
+                            </a>
+                        </td>
+                        <td>
+                            <a href="{{ path('admin_user_index', {'isActive': false}) }}">
+                                <button class="has-text-left button is-primary is-small is-outlined is-size-6">{{ archivedUsers|length }}</button>
+                            </a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div class="level dropdown is-hoverable">
+    <div class="dropdown-trigger level-left">
+        <div class="level-item">
+            <h2 class="level-item subtitle has-text-info is-4">Filtrer par rôle</h2>
+        </div>
+    </div>
+
+    <div class="dropdown-menu">
+        <div class="dropdown-content">
+            <table class="table is-fullwidth is-hoverable">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for userRole in userRoles %}
+                        <tr>
+                            <td>   
+                                <a href="{{ path('admin_user_index', {'filter': 'userRole', 'filterName': userRole.title }) }}">
+                                    <h2 class="has-text-left subtitle has-text-primary is-6">{{ userRole.title }}</h2>
+                                </a>
+                            </td>
+                            <td>
+                                <a href="{{ path('admin_user_index', {'filter': 'userRole', 'filterName': userRole.title }) }}">
+                                    <button class="has-text-left button is-primary is-small is-outlined is-size-6">{{ userRole.users|length }}</button>
+                                </a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div class="level dropdown is-hoverable">
+    <div class="level-left">
+        <div class="level-item">
+            <h2 class="level-item subtitle has-text-info is-4">Filtrer par client</h2>
+        </div>
+    </div>
+    <div class="dropdown-menu">
+        <div class="dropdown-content">
+            <table class="table is-fullwidth is-hoverable">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for company in companies %}
+                        {% if company.user %}
+                            <tr>
+                                <td>   
+                                    <a href="{{ path('admin_user_index', {'filter': 'company', 'filterName': company.name }) }}">
+                                        <h2 class="has-text-left subtitle has-text-primary is-6">{{ company.name }}</h2>
+                                    </a>
+                                </td>
+                                <td>
+                                    <a href="{{ path('admin_user_index', {'filter': 'company', 'filterName': company.name }) }}">
+                                        <button class="has-text-left button is-primary is-small is-outlined is-size-6">1</button>
+                                    </a>
+                                </td>
+                            </tr>
+                        {% endif %}
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

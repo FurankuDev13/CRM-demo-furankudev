@@ -1,0 +1,72 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ parent() }} - {{ page_title }}{% endblock %}
+
+{% block main %}
+    <div class="container">
+        <div class="section level">
+            <div class="level-left">
+                <div class="level-item">
+                    <h2 class="level-item subtitle has-text-info is-3">{{ company.name }}</h2>
+                </div>
+                <button class="level-item button is-info is-small is-size-4">{{ company.isCustomer ? 'Client' : 'Prospect' }}</button>
+            </div>
+            {% if is_granted('ROLE_SALES') %}
+                <div class="level-right">
+                    <a class="level-item" href="{{ path('company_edit', {'id' : company.id })}}">
+                        <button type="submit" class="button is-info is-large"><i class="fas fa-edit"></i></button>
+                    </a>
+                </div>
+            {% endif %}
+        </div>
+
+        {% include 'company/_show_information.html.twig' %}
+
+        <div class="tabs is-centered">
+            <ul>
+                <li {% if index == 1 %}class="is-active"{% endif %}>
+                    <a href="{{ path('company_show', {'id': company.id, 'index' : 1}) }}">
+                        <div class="level-item">
+                            <h2 class="level-item subtitle has-text-primary is-4">Adresses&nbsp;</h2>
+                            <button class="level-item button is-primary is-small is-size-6">{{ companyAddresses|length }}</button>
+                        </div>
+                    </a>
+                </li>
+                <li>
+                    <a class="level-item" href="{{ path('company_address_new', {'id' : company.id}) }}">
+                        <button type="submit" class="level-item button is-success s-small"><i class="fas fa-plus-circle"></i></button>
+                    </a>
+                </li>
+                <li {% if index == 2 %}class="is-active"{% endif %}>
+                     <a href="{{ path('company_show', {'id': company.id, 'index' : 2}) }}">
+                        <div class="level-item">
+                            <h2 class="level-item subtitle has-text-primary is-4">Commentaires&nbsp;</h2>
+                        </div>
+                        <button class="level-item button is-primary is-small is-size-6">{{ comments|length }}</button>
+                    </a>
+                </li>
+                <li>
+                    <a class="level-item" href="{{ path('company_comment_new', {'id' : company.id}) }}">
+                        <button type="submit" class="level-item button is-success s-small"><i class="fas fa-plus-circle"></i></button>
+                    </a>
+                </li>
+                <li {% if index == 3 %}class="is-active"{% endif %}>
+                     <a href="{{ path('company_show', {'id': company.id, 'index' : 3}) }}">
+                        <div class="level-item">
+                            <h2 class="level-item subtitle has-text-primary is-4">Demandes&nbsp;</h2>
+                        </div>
+                        <button class="level-item button is-primary is-small is-size-6">{{ demands|length }}</button>
+                    </a>
+                </li>
+                <li>
+                    <a class="level-item" href="{{ path('request_new', {'company_id' : company.id}) }}">
+                        <button type="submit" class="level-item button is-success s-small"><i class="fas fa-plus-circle"></i></button>
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+        {% include 'company/_show' ~ index ~ '_subtable.html.twig' %}
+        <br>
+    </div>
+{% endblock %}

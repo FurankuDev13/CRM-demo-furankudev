@@ -1,0 +1,7 @@
+<form class="level-item" action='{{ path('admin_category_delete', {'id': category.id}) }}' method="POST">
+    <input class="" type="hidden" name="_method" value="DELETE">
+    
+        {% include 'partial/_confirm_cancel_modal.html.twig' with {'message': 'Confirmation de Suppression'} %}
+        <button class="button showModalConfirm is-danger"><i class="fas fa-bomb"></i></i></button>
+    
+</form>

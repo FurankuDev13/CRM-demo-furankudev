@@ -1,0 +1,108 @@
+{% extends 'base_with_sidebar.html.twig' %}
+
+{% block title %}{{ parent() }} - {{ page_title }}{% endblock %}
+
+{% block sidebar %}
+    {% include 'company/_sidebar.html.twig' %}
+{% endblock %}
+
+{% block content %}
+
+{% if filterType == 'Commercial' %}
+    {% set orderButtonsIncludePath = 'company/_order_buttons_withsalesuser.twig' %}
+{% elseif  filterType == 'Clients' or filterType == 'Prospects' %}
+    {% set orderButtonsIncludePath = 'company/_order_buttons_withfilter.html.twig' %}
+{% else %}
+    {% set orderButtonsIncludePath = 'partial/_order_buttons.html.twig' %}
+{% endif %}
+
+    <div class="level">
+        <div class="level-left ">
+            <div class="level-item">
+                <h2 class=" level-item subtitle has-text-info is-3">Les sociétés</h2>
+                {% if filterType == 'Commercial' %}
+                    <button class=" level-item button is-primary is-small is-size-4">{{ filterValue }}</button>
+                {% elseif  filterType == 'Clients' or filterType == 'Prospects' %}
+                    <button class=" level-item button is-primary is-small is-size-4">{{ filterValue }}</button>
+                {% endif %}
+                <button class=" level-item button is-info is-small is-size-4">{{ companies|length }}</button>
+            </div>  
+        </div> 
+        <div class="level-right">
+            <input class="button level-item is-medium" type="text" id="companySearch" onkeyup="app.search('companySearch','companyTable', 1)" placeholder= "&#128270; nom de société ..." title="">
+            <a class="level-item" href="{{ path('company_index')}}">
+                <button class="level-item button is-primary s-small is-size-3"><i class="fas fa-sort-alpha-down"></i></button>
+            </a>
+            {% if is_granted('ROLE_SALES') %}
+                <a class="level-item" href="{{ path('company_new')}}">
+                    <button type="submit" class="level-item button is-success s-small is-size-3"><i class="fas fa-plus-circle"></i></button>
+                </a>
+            {% endif %} 
+        </div>
+    </div>
+    <table class="table is-fullwidth is-hoverable is-striped" id="companyTable">
+        <thead>
+            <tr>
+                <th>Ajout&nbsp;
+                    {% include orderButtonsIncludePath with {'entity' : 'company', 'field' : 'createdAt'} %}
+                </th>
+                <th>Nom&nbsp;
+                    {% include orderButtonsIncludePath with {'entity' : 'company', 'field' : 'name'} %}
+                </th>
+                <th>Description&nbsp;
+                    {% include orderButtonsIncludePath with {'entity' : 'company', 'field' : 'description'} %}
+                </th>
+                <th>Image</th>
+                <th>Client/Prospect&nbsp;
+                    {% include orderButtonsIncludePath with {'entity' : 'company', 'field' : 'isCustomer'} %}
+                </th>
+                <th>Commercial&nbsp;
+                    {% include orderButtonsIncludePath with {'entity' : 'company', 'field' : 'user'} %}
+                </th>
+                {% if is_granted('ROLE_SALES') %}
+                    <th>Actions</th>
+                {% endif %}    
+            </tr>
+        </thead>
+        <tbody>
+            {% for company in companies %}
+                <tr class="">
+                    <td>{{ company.createdAt|date("d/m/Y") }}</td>
+                    <td>   
+                        <a class="has-text-weight-bold" href="{{ path('company_show', {'id': company.id}) }}">{{ company.name }}</a>
+                    </td>
+                    <td>{{ company.description|truncate(30) }}</td>
+                    <td>
+                        <figure class="image is-48x48">
+                            <img src="{{ company.picture ?: "https://stickeramoi.com/3777-large_default/autocollant-point-interrogation-muraux.jpg" }}">
+                        </figure>
+                    </td>
+                    <td>{{ company.isCustomer ? 'Client' : 'Prospect' }}</td>
+                    <td>
+                        {% if company.user %}
+                            <a class="has-text-weight-bold" href="{{ path('user_show', {'id': company.user.id}) }}">{{ company.user.person.firstname ~ ' ' ~ company.user.person.lastname }}</a>
+                        {% else %}
+                            {% if is_granted('ROLE_SALES') %}
+                                {% include 'partial/_add_user_modal.html.twig' %}
+                            {% else %}
+                                
+                            {% endif %}
+                        {% endif %}
+                        
+                    </td>
+                    {% if is_granted('ROLE_SALES') %}
+                        <td class="level">
+                            <div class="level-left">
+                                <a class="level-item" href="{{ path('company_edit', {'id' : company.id })}}">
+                                    <button type="submit" class="button is-info"><i class="fas fa-edit"></i></button>
+                                </a>
+                                {% include 'company/_iscustomer_form.html.twig' %}
+                                {% include 'company/_archive_form.html.twig' with {'notArchived': true} %}
+                            </div>
+                        </td>
+                    {% endif %}
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

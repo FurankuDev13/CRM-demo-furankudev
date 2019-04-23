@@ -1,0 +1,50 @@
+<table class="table is-fullwidth is-hoverable is-striped">
+    <thead>
+        <tr>
+            <th>Nom&nbsp;
+                {% include 'board/_order_buttons.html.twig' with {'index': '2', 'table': 'c', 'field' : 'name'} %}
+            </th>
+            <th>Image</th>
+            <th>Client/Prospect&nbsp;
+                {% include 'board/_order_buttons.html.twig' with {'index': '2', 'table': 'c', 'field' : 'isCustomer'} %}
+            </th>
+            <th>Demande&nbsp;
+                {% include 'board/_order_buttons.html.twig' with {'index': '2', 'table': 'r', 'field' : 'createdAt'} %}
+            </th>
+            <th>Commercial&nbsp;
+                {% include 'board/_order_buttons.html.twig' with {'index': '2', 'table': 'c', 'field' : 'user'} %}
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for company in companiesWithUnhandledRequests %}
+            <tr>
+                <td>   
+                    <a class="has-text-weight-bold" href="{{ path('company_show', {'id': company.id}) }}">{{ company.name }}</a>
+                </td>
+                <td>
+                    <figure class="image is-48x48">
+                        <img src="{{ company.picture ?: "https://stickeramoi.com/3777-large_default/autocollant-point-interrogation-muraux.jpg" }}">
+                    </figure>
+                </td>
+                <td>{{ company.isCustomer ? 'Client' : 'Prospect' }}</td>
+                <td>
+                    {% for contact in company.contacts %}
+                        {% for request in contact.requests %}
+                            <p>
+                                <a class="has-text-weight-bold" href="{{ path('request_show', {'id': request.id}) }}">{{ request.title }}</a>
+                                <span class="has-text-weight-bold">&nbsp; du {{ request.createdAt|date("d/m/Y") }}</span>
+                                {{ request.body|truncate(100) }}
+                            </p>
+                        {% endfor %}
+                    {% endfor %}
+                </td>
+                <td>
+                    {% if company.user %}
+                        <a class="" href="{{ path('user_show', {'id': company.user.id}) }}">{{ company.user.person.firstname ~ ' ' ~ company.user.person.lastname }}</a>
+                    {% endif %}
+                </td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>

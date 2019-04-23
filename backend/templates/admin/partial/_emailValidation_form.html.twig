@@ -1,0 +1,10 @@
+<form class="level-item" action='{{ path('admin_' ~ entity ~ '_archive', {'id': data.id}) }}' method="POST">
+    <input class="" type="hidden" name="_method" value="PATCH">
+    {% if notArchived %}
+        {% include 'partial/_confirm_cancel_modal.html.twig' with {'message': 'Confirmation de blocage de notification'} %}
+        <button class="button showModalConfirm is-warning"><i class="fas fa-paper-plane"></i></button>
+    {% else %}
+        {% include 'partial/_confirm_cancel_modal.html.twig' with {'message': 'Confirmation d\'activation de notification'} %}
+        <button class="button showModalConfirm is-success"><i class="fas fa-paper-plane"></i></button>
+    {% endif %}
+</form>

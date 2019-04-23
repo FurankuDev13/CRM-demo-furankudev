@@ -1,0 +1,21 @@
+<div id="app">
+    <div class="modal">
+        <div class="modal-background"></div>
+        <div class="modal-card">
+            <header class="modal-card-head">
+                <p class="modal-card-title">Attribuer un commercial à la société {{ company.name }}:</p>
+                <button class="modal-close is-large" aria-label="close"></button>
+            </header>
+                <section class="modal-card-body has-text-centered">
+                {% for salesUser in salesUsers %}
+                    <form action='{{ path('company_user_set', {'id': company.id}) }}' method="POST">
+                        <input type="hidden" name="_method" value="PATCH">
+                        <input type="hidden" name="userId" value="{{ salesUser.id }}">
+                        <button type="submit" class="button">{{ salesUser.person.firstname }} {{ salesUser.person.lastname }}</button>
+                    </form>
+                {% endfor %}
+            </section>
+        </div>
+    </div>
+    <button class="button showModal"><i class="fas fa-user-plus"></i></button>
+</div>

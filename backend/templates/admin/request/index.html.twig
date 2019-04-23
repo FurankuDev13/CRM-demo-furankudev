@@ -1,0 +1,60 @@
+{% extends 'base_without_sidebar.html.twig' %}
+
+{% block title %}{{ parent() }} - {{ page_title }}{% endblock %}
+
+{% block sidebar %}
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="level">
+        <div class="level-left ">
+            <div class="level-item">
+                <h2 class=" level-item subtitle has-text-info is-3">Les demandes archivées</h2>
+                <button class=" level-item button is-info is-small is-size-4">{{ requests|length }}</button>
+            </div>  
+        </div> 
+        <div class="level-right">
+            <input class="button level-item is-medium" type="text" id="requestSearch" onkeyup="app.search('requestSearch','requestTable', 2)" placeholder= "&#128270; titre demande..." title="">
+        </div>
+    </div>
+
+    <table class="table is-fullwidth is-hoverable is-striped" id="requestTable">
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Type</th>
+                <th>Titre</th>
+                <th>Description</th>
+                <th>Société</th>
+                <th>Actions</th>
+
+            </tr>
+        </thead>
+        <tbody>
+            {% for request in requests %}
+                <tr>
+                    <td>{{ request.createdAt|date("d/m/Y") }}</td>
+                    <td>{{ request.requestType.title }}</td>
+                    <td>   
+                        <a class="has-text-weight-bold" href="{{ path('request_show', {'id': request.id}) }}">{{ request.title }}</a>
+                    </td>
+                    <td>{{ request.body|truncate(10) }}</td>
+                    <td>   
+                        <a class="has-text-weight-bold" href="{{ path('company_show', {'id': request.contact.company.id}) }}">{{ request.contact.company.name }}</a>
+                    </td>
+                        <td class="level">
+                        {% if is_granted('ROLE_ADMIN') %}
+                            <div class="level-left">
+                                {% include 'request/_archive_form.html.twig' with {'notArchived': false} %}
+                                {% include 'admin/request/_delete_form.html.twig' %}
+                            </div>
+                        {% endif %}
+                        </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{% endblock %}

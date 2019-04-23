@@ -1,0 +1,67 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ parent() }} - {{ page_title }}{% endblock %}
+
+{% block main %}
+    <div class="container">
+        <div class="section level">
+            <div class="level-left">
+                <div class="level-item">
+                    <h2 class="level-item subtitle has-text-info is-3">{{ user.person.firstname }} {{ user.person.lastname }}</h2>
+                </div>
+                <button class="level-item button is-info is-small is-size-4">
+                    {% for role in user.userRoles %}
+                        {{ role.title }} {% if not loop.last %}, {% endif %}
+                    {% endfor %}
+                </button>
+            </div>
+            {% if is_granted('ROLE_MANAGER') %}
+                <div class="level-right">
+                    <a class="level-item" href="{{ path('admin_user_edit', {'id' : user.id })}}">
+                        <button type="submit" class="button is-info is-large"><i class="fas fa-edit"></i></button>
+                    </a>
+                </div>
+            {% endif %}
+        </div>
+        <div class="tile is-ancestor">
+            {# Début des Tiles #}
+            <div class="tile is-parent is-3 is-vertical">
+                <article class="tile is-child">
+                    <figure class="image is-4by3 has-background-primary">
+                        <img src="{{ asset('images/cerberus_logo.png') }}">
+                    </figure>
+                </article>
+            </div>
+            <div class="tile is-parent is-vertical">
+                <article class="tile is-child notification is-primary">
+                    <p class="title">Coordonnées</p>
+                    <p class="subtitle">
+                        <i class="fas fa-mobile-alt"></i> {{ user.person.cellPhone }} &nbsp;&nbsp;&nbsp;
+                        <i class="fas fa-phone"></i> {{ user.person.businessPhone }} &nbsp;&nbsp;&nbsp;
+                        <i class="fas fa-at"></i> {{ user.email }}
+                    </p>
+                </article>
+                <div class="tile">
+                    <article class="tile is-child is-8">
+                        <p class="title">Sociétés en contact</p>
+                        {% for company in user.companies %}
+                            <p class="">
+                                <a href="{{ path('company_show', {'id' : company.id}) }}">
+                                    <span class="subtitle">{{ company.name }}</span>
+                                </a>
+                            </p>
+                        {% endfor %}
+                        
+                    </article>
+                    <article class="tile is-child">
+                        <p class="title">Informations</p>
+                        <p>Enregistrement: &nbsp; <span class="has-text-weight-bold">{{ user.person.createdAt|date('d-m-Y') }}</span></p>
+                        <p>Mise à jour: &nbsp; <span class="has-text-weight-bold">{{ user.person.updatedAt|date('d-m-Y') }}</span></p>
+                    </article>
+                </div>
+            </div>
+            {# Fin des Tiles #}
+        </div>
+
+    </div>
+{% endblock %}

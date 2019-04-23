@@ -1,0 +1,85 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ parent() }} - {{ page_title }}{% endblock %}
+
+{% block main %}
+    <div class="container">
+        <div class="section level">
+            <div class="level-left ">
+                <div class="level-item">
+                    <h2 class=" level-item subtitle has-text-info is-3">Les catégories du catalogue</h2>
+                    <button class=" level-item button is-info is-small is-size-4">{{ categories|length }}</button>
+                </div>  
+            </div> 
+            <div class="level-right">
+                <input class="button level-item is-medium" type="text" id="categorySearch" onkeyup="app.search('categorySearch','categoryTable', 0)" placeholder= "&#128270; nom de catégorie ..." title="">
+                <a class="level-item" href="{{ path('category_index')}}">
+                    <button class="level-item button is-primary s-small is-size-3"><i class="fas fa-sort-alpha-down"></i></button>
+                </a>
+                {% if is_granted('ROLE_SUPPORT') %} 
+                    <a class="level-item" href="{{ path('category_new')}}">
+                        <button type="submit" class="level-item button is-success s-small is-size-3"><i class="fas fa-plus-circle"></i></button>
+                    </a>
+                {% endif %}
+            </div>
+        </div>
+        <table class="table is-fullwidth is-hoverable is-striped" id="categoryTable">
+            <thead>
+                <tr>
+                    <th>Nom&nbsp;
+                        {% include 'partial/_order_buttons.html.twig' with {'entity' : 'category', 'field' : 'name'} %}
+                    </th>
+                    <th>Description&nbsp;
+                        {% include 'partial/_order_buttons.html.twig' with {'entity' : 'category', 'field' : 'description'} %}
+                    </th>
+                    <th>Image</th>
+                    <th>Produit(s)</th>
+                    {% if is_granted('ROLE_SUPPORT') %}
+                        <th>Actions</th>
+                    {% endif %}
+                </tr>
+            </thead>
+            <tbody>
+                {% for category in categories %}
+                    <tr>
+                        <td>   
+                            <a class="has-text-weight-bold" href="{{ path('category_show', {'id': category.id}) }}">{{ category.name }}</a>
+                        </td>
+                        <td>{{ category.description|truncate(30) }}</td>
+                        <td>
+                            <figure class="image is-48x48">
+                                <img src="{{ category.picture ? : "https://stickeramoi.com/3777-large_default/autocollant-point-interrogation-muraux.jpg" }}">
+                            </figure>
+                        </td>
+                        <td> 
+                            <div class="dropdown is-hoverable">
+                                <a class="dropdown-trigger button is-primary s-small is-size-5" href="{{ path('product_index', {'category': category.name}) }}">
+                                    {{ category.products|length }}
+                                </a>
+                                <div class="dropdown-menu">
+                                    <div class="dropdown-content">
+                                        {% for product in category.products %}
+                                            <a class="dropdown-item" href="{{ path('product_show', {'id': product.id}) }}">
+                                                    {{ product.name }} - {{ product.description|truncate(30) }}
+                                                </a>
+                                        {% endfor %}  
+                                    </div>
+                                 </div>
+                            </div>
+                        </td>
+                        {% if is_granted('ROLE_SUPPORT') %}
+                            <td class="level">
+                                <div class="level-left">
+                                    <a class="level-item" href="{{ path('category_edit', {'id' : category.id })}}">
+                                        <button type="submit" class="button is-info"><i class="fas fa-edit"></i></button>
+                                    </a>
+                                    {% include 'category/_archive_form.html.twig' with {'notArchived': true} %}
+                                </div>
+                            </td>
+                        {% endif %}
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}

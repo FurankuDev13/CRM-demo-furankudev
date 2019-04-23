@@ -1,0 +1,112 @@
+security:
+    encoders:
+        App\Entity\User:
+            algorithm: bcrypt
+        App\Entity\Contact:
+            algorithm: bcrypt
+
+    # https://symfony.com/doc/current/security.html#where-do-users-come-from-user-providers
+    providers:
+        # used to reload user from session & other features (e.g. switch_user)
+        app_user_provider:
+            entity:
+                class: App\Entity\User
+                property: email
+    firewalls:
+        login:
+            pattern:  ^/api/login
+            stateless: true
+            anonymous: true
+            json_login:
+                check_path:               /api/login_check
+                success_handler:          lexik_jwt_authentication.handler.authentication_success
+                failure_handler:          lexik_jwt_authentication.handler.authentication_failure
+        api:
+            pattern:   ^/api
+            stateless: true
+            guard:
+                authenticators:
+                    - lexik_jwt_authentication.jwt_token_authenticator
+        dev:
+            pattern: ^/(_(profiler|wdt)|css|images|js)/
+            security: false
+        main:
+            anonymous: true
+            guard:
+                authenticators:
+                    - App\Security\LoginFormAuthenticator
+            logout:
+                path:   app_logout
+                target: board_index
+            
+            # activate different ways to authenticate
+
+            # http_basic: true
+            # https://symfony.com/doc/current/security.html#a-configuring-how-your-users-will-authenticate
+
+            form_login: true
+            # https://symfony.com/doc/current/security/form_login_setup.html
+
+    role_hierarchy:
+        ROLE_SALESMGR: ROLE_SALES
+        ROLE_MANAGER: [ROLE_SUPPORT, ROLE_SALESMGR]
+        ROLE_ADMIN: ROLE_MANAGER
+
+    # Easy way to control access for large sections of your site
+    # Note: Only the *first* access control that matches will be used
+    access_control:
+        # Route API pour récupérer TOKEN
+        - { path: ^/api/login_check, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+
+        # Routes API pour la documentation API
+        - { path: ^/doc/api, roles: ROLE_ADMIN }
+        - { path: ^/doc/api.json, roles: ROLE_ADMIN }
+
+        # Routes API sécurisées par le TOKEN
+        - { path: '^\/api\/[a-z]+\/[0-9]+\/[a-z]+', roles: IS_AUTHENTICATED_FULLY, methods: [GET, POST, PATCH] } #
+        - { path: '^\/api\/[a-z]+\/[0-9]+', roles: IS_AUTHENTICATED_FULLY, methods: [GET, POST, PATCH] } #
+        - { path: '^\/api\/[a-z]+\/[a-z]+', roles: IS_AUTHENTICATED_FULLY, methods: [GET, POST, PATCH] } #
+        - { path: '^\/api\/[a-z]+', roles: IS_AUTHENTICATED_FULLY, methods: [GET, POST, PATCH] } #
+        
+        # Routes Admin réservées au responsable et à l'administrateur
+        - { path: '^^\/admin\/[a-z]+\/[a-z]+\/[0-9]+\/[a-z]+', roles: ROLE_MANAGER, methods: [GET, POST, PATCH, DELETE] } #
+        - { path: '^\/admin\/[a-z]+\/[a-z]+\/[0-9]+', roles: ROLE_MANAGER, methods: [GET] } #
+        - { path: '^\/admin\/[a-z]+\/[a-z]+', roles: ROLE_MANAGER, methods: [GET, POST] } #
+
+        # Routes index et show hors Admin accessibles des commerciaux et supports
+        - { path: '^\/[a-z]+\/[0-9]+\/show', roles: [ROLE_SALES, ROLE_SUPPORT], methods: [GET] }
+        - { path: '^\/[a-z]+\/index', roles: [ROLE_SALES, ROLE_SUPPORT], methods: [GET] }
+
+        # Routes Create et Update et Get Form réservées aux supports
+        - { path: '^\/product\/[0-9]+\/[a-z]+', roles: ROLE_SUPPORT, methods: [GET, POST, PATCH] }
+        - { path: '^\/product\/new', roles: ROLE_SUPPORT, methods: [GET, POST] }
+
+        # Routes Create et Update et Get Form réservées aux supports
+        - { path: '^\/category\/[0-9]+\/[a-z]+', roles: ROLE_SUPPORT, methods: [GET, POST, PATCH] }
+        - { path: '^\/category\/new', roles: ROLE_SUPPORT, methods: [GET, POST] }
+
+        # Routes Create et Update et Get Form réservées aux commerciaux
+        - { path: '^\/company\/[0-9]+\/user\/set', roles: ROLE_SALESMGR, methods: [PATCH] }
+        - { path: '^\/company\/[0-9]+\/[a-z]+\/[0-9]+\/[a-z]+', roles: ROLE_SALES, methods: [GET, POST, PATCH] }
+        - { path: '^\/company\/[0-9]+\/[a-z]+\/[a-z]+', roles: ROLE_SALES, methods: [GET, POST, PATCH] }
+        - { path: '^\/company\/[0-9]+\/[a-z]+', roles: ROLE_SALES, methods: [GET, POST, PATCH] }
+        - { path: '^\/company\/[a-z]+\/[0-9]+\/[a-z]+', roles: ROLE_SALES, methods: [GET, POST, PATCH] }
+        - { path: '^\/company\/new', roles: ROLE_SALES, methods: [GET, POST] }
+        
+        # Routes Create et Update et Get Form réservées aux commerciaux
+        - { path: '^\/contact\/[0-9]+\/[a-z]+', roles: ROLE_SALES, methods: [GET, POST, PATCH] }
+        - { path: '^\/contact\/new', roles: ROLE_SALES, methods: [GET, POST] }
+
+        # Routes pour les demandes qui sont accessibles aux supports et commerciaux
+        - { path: '^\/[a-z]+\/[0-9]+\/[a-z]+\/[0-9]+\/[a-z]+', roles: [ROLE_SALES, ROLE_SUPPORT], methods: [GET, POST, PATCH] } 
+        - { path: '^\/[a-z]+\/[0-9]+\/[a-z]+', roles: [ROLE_SALES, ROLE_SUPPORT], methods: [GET, POST, PATCH] } 
+        - { path: '^\/[a-z]+\/[a-z]+\/[a-z]+\/[0-9]+', roles: [ROLE_SALES, ROLE_SUPPORT], methods: [GET, POST, PATCH] } 
+        - { path: '^\/[a-z]+\/[a-z]+', roles: [ROLE_SALES, ROLE_SUPPORT], methods: [GET, POST] }
+
+        # Routes login et logout
+        - { path: '^\/login', roles: IS_AUTHENTICATED_ANONYMOUSLY, methods: [GET, POST] } #
+        - { path: '^\/logout', roles: IS_AUTHENTICATED_FULLY, methods: [GET] } #
+
+        # Routes du tableau de bord accessible aux supports et commerciaux
+        - { path: '^\/', roles: [ROLE_SALES, ROLE_SUPPORT], methods: [GET] } #
+

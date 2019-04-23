@@ -1,0 +1,95 @@
+{% extends 'base_with_sidebar.html.twig' %}
+
+{% block title %}{{ parent() }} - {{ page_title }}{% endblock %}
+
+{% block sidebar %}
+    {% include 'request/_sidebar.html.twig' %}
+{% endblock %}
+
+{% block content %}
+{% if filterId %}
+    {% set orderButtonsIncludePath = 'request/_order_buttons_withfilter.twig' %}
+{% else %}
+    {% set orderButtonsIncludePath = 'request/_order_buttons.html.twig' %}
+{% endif %}
+        <div class="level">
+            <div class="level-left ">
+                <div class="level-item">
+                    <h2 class=" level-item subtitle has-text-info is-3">Les demandes</h2>
+                    {% if filter %}
+                        <button class=" level-item button is-primary is-small is-size-4">{{ filterId }}</button>
+                    {% endif %}
+                    <button class=" level-item button is-info is-small is-size-4">{{ requests|length }}</button>
+                </div>  
+            </div> 
+            <div class="level-right">
+                <input class="button level-item is-medium" type="text" id="requestSearch" onkeyup="app.search('requestSearch','requestTable', 2)" placeholder= "&#128270; titre demande..." title="">
+                <a class="level-item" href="{{ path('request_index')}}">
+                    <button class="level-item button is-primary s-small is-size-3"><i class="fas fa-sort-alpha-down"></i></button>
+                </a>
+                <a class="level-item" href="{{ path('request_new')}}">
+                    <button type="submit" class="level-item button is-success s-small is-size-3"><i class="fas fa-plus-circle"></i></button>
+                </a>
+            </div>
+        </div>
+
+        <table class="table is-fullwidth is-hoverable is-striped" id="requestTable">
+            <thead>
+                <tr>
+                    <th>Date 
+                        {% include orderButtonsIncludePath with {'table': 'r', 'field' : 'createdAt'} %}
+                    </th>
+                    <th>Type 
+                        {% include orderButtonsIncludePath with {'table': 'r', 'field' : 'requestType'} %}
+                    </th>
+                    <th>Titre 
+                        {% include orderButtonsIncludePath with {'table': 'r', 'field' : 'title'} %}
+                    </th>
+                    <th>Description 
+                        {% include orderButtonsIncludePath with {'table': 'r', 'field' : 'body'} %}
+                    </th>
+                    
+                    <th>Contact 
+                        {% include orderButtonsIncludePath with {'table': 'p', 'field' : 'lastname'} %}
+                    </th>
+                    <th>Société 
+                        {% include orderButtonsIncludePath with {'table': 'c', 'field' : 'name'} %}
+                    </th>
+                    <th>Traitement 
+                        {% include orderButtonsIncludePath with {'table': 'r', 'field' : 'handlingStatus'} %}
+                    </th>
+                    {% if is_granted('ROLE_SALES') %}
+                        <th>Actions</th>
+                    {% endif %}    
+
+                </tr>
+            </thead>
+            <tbody>
+                {% for request in requests %}
+                    <tr>
+                        <td>{{ request.createdAt|date("d/m/Y") }}</td>
+                        <td>{{ request.requestType.title }}</td>
+                        <td>   
+                            <a class="has-text-weight-bold" href="{{ path('request_show', {'id': request.id}) }}">{{ request.title }}</a>
+                        </td>
+                        <td>{{ request.body|truncate(10) }}</td>
+                        <td>   
+                            <a class="has-text-weight-bold" href="{{ path('contact_show', {'id': request.contact.id}) }}">{{ request.contact.person.lastname }}</a>
+                        </td>
+                        <td>   
+                            <a class="has-text-weight-bold" href="{{ path('company_show', {'id': request.contact.company.id}) }}">{{ request.contact.company.name }}</a>
+                        </td>
+                        <td>{{ request.handlingStatus.title }}</td>
+                        {% if is_granted('ROLE_SALES') %}
+                            <td class="level">
+                                <div class="level-left">
+                                    {% include 'request/_handle_status_modal.html.twig' %}
+                                    {% include 'request/_archive_form.html.twig' with {'notArchived': true} %}
+                                </div>
+                            </td>
+                        {% endif %}
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+{% endblock %}

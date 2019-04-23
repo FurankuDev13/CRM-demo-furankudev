@@ -1,0 +1,82 @@
+<div class="level dropdown is-hoverable">
+    <div class="dropdown-trigger level-left">
+        <div class="level-item">
+            <h2 class="level-item subtitle has-text-info is-4">Filtrer par type</h2>
+        </div>
+    </div>
+
+    <div class="dropdown-menu">
+        <div class="dropdown-content">
+            <table class="table is-fullwidth is-hoverable">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                        <tr>
+                            <td>   
+                                <a href="{{ path('company_index', {'filter': 'Prospects'}) }}">
+                                    <h2 class="has-text-left subtitle has-text-primary is-6">Prospect</h2>
+                                </a>
+                            </td>
+                            <td>
+                                <a href="{{ path('company_index', {'filter': 'Prospects'}) }}">
+                                    <button class="has-text-left button is-primary is-small is-outlined is-size-6">{{ prospects|length }}</button>
+                                </a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>   
+                                <a href="{{ path('company_index', {'filter': 'Clients'}) }}">
+                                    <h2 class="has-text-left subtitle has-text-primary is-6">Client</h2>
+                                </a>
+                            </td>
+                            <td>
+                                <a href="{{ path('company_index', {'filter': 'Clients'}) }}">
+                                    <button class="has-text-left button is-primary is-small is-outlined is-size-6">{{ customers|length }}</button>
+                                </a>
+                            </td>
+                        </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div class="level dropdown is-hoverable">
+    <div class="level-left">
+        <div class="level-item">
+            <h2 class="level-item subtitle has-text-info is-4">Filtrer par commercial</h2>
+        </div>
+    </div>
+    <div class="dropdown-menu">
+        <div class="dropdown-content">
+            <table class="table is-fullwidth is-hoverable">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for salesUser in salesUsers %}
+                        <tr>
+                            <td>   
+                                <a href="{{ path('company_index', {'filter': 'Commercial', 'salesUser': salesUser.id}) }}">
+                                    <h2 class="has-text-left subtitle has-text-primary is-6">{{ salesUser.person.firstname }} {{ salesUser.person.lastname }}</h2>
+                                </a>
+                            </td>
+                            <td>
+                                <a href="{{ path('company_index', {'filter': 'Commercial', 'salesUser': salesUser.id}) }}">
+                                    <button class="has-text-left button is-primary is-small is-outlined is-size-6">{{ salesUser.companies|length }}</button>
+                                </a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

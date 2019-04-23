@@ -1,0 +1,30 @@
+<div class="level-left">
+    <div class="level-item">
+        <h2 class="level-item subtitle has-text-info is-4">Filtrer par catégorie</h2>
+    </div>
+</div>
+
+<table class="table is-fullwidth is-hoverable">
+    <thead>
+        <tr>
+            <th></th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for category in categories %}
+            <tr>
+                <td>   
+                    <a href="{{ path('product_index', {'category': category.name}) }}">
+                        <h2 class="has-text-left subtitle has-text-primary is-6">{{ category.name }}</h2>
+                    </a>
+                </td>
+                <td>
+                    <a href="{{ path('product_index', {'category': category.name}) }}">
+                        <button class="has-text-left button is-primary is-small is-outlined is-size-6">{{ category.products|length }}</button>
+                    </a>
+                </td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>

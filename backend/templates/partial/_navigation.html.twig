@@ -1,0 +1,147 @@
+<section class="hero is-primary navbar is-fixed-top">
+    <!-- Hero head: will stick at the top -->
+    <div class="hero-head">
+        <nav class="navbar">
+            <div class="container">
+                <div class="navbar-brand">
+                    <a class="navbar-item" href="{{ path('board_index')}}">
+                        <img src="{{ asset('images/cerberus_logo.png') }}" alt="CerberusCRM">
+                        <h1 class="title is-3 has-text-white">&nbsp; Cerberus CRM</h1>
+                    </a>
+                    <span class="navbar-burger burger" data-target="navbarMenuHero9">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    </span>
+                </div>
+                <div id="navbarMenuHero9" class="navbar-menu">
+                        <div class="navbar-end">
+                            <a class="navbar-item {{ (app.request.attributes.get('_route') == 'board_index') ? 'is-active' }}" href="{{ path('board_index')}}">
+                                <i class="fas fa-chalkboard"></i>&nbsp;Tableau de bord
+                            </a>
+                            <div class="navbar-item has-dropdown is-hoverable">
+                                <a class="navbar-link {{ (app.request.attributes.get('_route') == 'product_index' or app.request.attributes.get('_route') == 'category_index') ? 'is-active' }} " href="{{ path('product_index')}}">
+                                <i class="fas fa-store"></i>&nbsp;Catalogue
+                                </a>
+
+                                <div class="navbar-dropdown">
+                                    <a class="navbar-item {{ (app.request.attributes.get('_route') == 'product_index') ? 'is-active' }} " href="{{ path('product_index')}}">
+                                        Produits
+                                    </a>
+                                    <a class="navbar-item {{ (app.request.attributes.get('_route') == 'category_index') ? 'is-active' }} " href="{{ path('category_index')}}">
+                                        Catégories
+                                    </a>
+                                </div>
+                            </div>
+                            <a class="navbar-item {{ (app.request.attributes.get('_route') == 'company_index') ? 'is-active' }} " href="{{ path('company_index')}}">
+                                <i class="fas fa-building"></i>&nbsp;Sociétés
+                            </a>
+                            <a class="navbar-item {{ (app.request.attributes.get('_route') == 'request_index') ? 'is-active' }} " href="{{ path('request_index')}}">
+                                <i class="fas fa-tasks"></i>&nbsp;Demandes
+                            </a>
+                            <a class="navbar-item {{ (app.request.attributes.get('_route') == 'contact_index') ? 'is-active' }} " href="{{ path('contact_index')}}">
+                                <i class="fas fa-id-card-alt"></i>&nbsp;Contacts
+                            </a>
+                            {% if is_granted('ROLE_MANAGER') %}
+                                <div class="navbar-item has-dropdown is-hoverable">
+                                    <a class="navbar-link has-text-warning" href="{{ path('admin_user_index')}}">
+                                    <i class="fas fa-cogs"></i>&nbsp;Admin
+                                    </a>
+                                    <div class="navbar-dropdown">
+                                        <a class="navbar-item {{ (app.request.attributes.get('_route') == 'admin_user_index') ? 'is-active' }} " href="{{ path('admin_user_index')}}">
+                                            Utilisateurs
+                                        </a>
+                                        <a class="navbar-item {{ (app.request.attributes.get('_route') == 'admin_contactType_index') ? 'is-active' }} " href="{{ path('admin_contactType_index')}}">
+                                            Types de contacts
+                                        </a>
+                                        <a class="navbar-item {{ (app.request.attributes.get('_route') == 'admin_addressType_index') ? 'is-active' }} " href="{{ path('admin_addressType_index')}}">
+                                            Types d'adresses
+                                        </a>
+                                        <a class="navbar-item {{ (app.request.attributes.get('_route') == 'admin_requestType_index') ? 'is-active' }} " href="{{ path('admin_requestType_index')}}">
+                                            Types de demande
+                                        </a>
+                                        <a class="navbar-item {{ (app.request.attributes.get('_route') == 'admin_handlingStatus_index') ? 'is-active' }} " href="{{ path('admin_handlingStatus_index')}}">
+                                            Statuts de traitement
+                                        </a>
+                                        <a class="navbar-item {{ (app.request.attributes.get('_route') == 'admin_emailType_index') ? 'is-active' }} " href="{{ path('admin_emailType_index')}}">
+                                            Notifications
+                                        </a>
+                                        <a class="navbar-item {{ (app.request.attributes.get('_route') == 'admin_emailTemplate_index') ? 'is-active' }} " href="{{ path('admin_emailTemplate_index')}}">
+                                            Templates des notifications
+                                        </a>
+                                    </div>
+                                </div>
+                            {% endif %}
+                            {% if is_granted('ROLE_ADMIN') %}
+                                <div class="navbar-item has-dropdown is-hoverable">
+                                    <a class="navbar-link has-text-warning" href="{{ path('admin_product_index')}}">
+                                    <i class="fas fa-archive"></i>&nbsp;Archives
+                                    </a>
+                                    <div class="navbar-dropdown">
+                                        <a class="navbar-item {{ (app.request.attributes.get('_route') == 'admin_product_index') ? 'is-active' }} " href="{{ path('admin_product_index')}}">
+                                            Produits
+                                        </a>
+                                        <a class="navbar-item {{ (app.request.attributes.get('_route') == 'admin_category_index') ? 'is-active' }} " href="{{ path('admin_category_index')}}">
+                                            Catégories
+                                        </a>
+                                        <a class="navbar-item {{ (app.request.attributes.get('_route') == 'admin_company_index') ? 'is-active' }} " href="{{ path('admin_company_index')}}">
+                                            Sociétés
+                                        </a>
+                                        <a class="navbar-item {{ (app.request.attributes.get('_route') == 'admin_request_index') ? 'is-active' }} " href="{{ path('admin_request_index')}}">
+                                            Demandes
+                                        </a>
+                                        <a class="navbar-item {{ (app.request.attributes.get('_route') == 'admin_contact_index') ? 'is-active' }} " href="{{ path('admin_contact_index')}}">
+                                            Contacts
+                                        </a>
+                                    </div>
+                                </div>
+                            {% endif %}
+                            {% if is_granted('ROLE_ADMIN') %}
+                                <a class="navbar-item has-text-warning" href="{{ path('app.swagger_ui')}}" target="_blank">
+                                    <i class="fas fa-book"></i>&nbsp;Doc API
+                                </a>
+                            {% endif %}
+                            <div class="navbar-item">
+                                <div class="buttons">
+                                {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+                                    <a class="button is-light" href="{{ path('app_logout') }}">
+                                        <i class="fas fa-sign-out-alt"></i>&nbsp;Déconnexion
+                                    </a>
+                                {% else %}
+                                    <a class="button is-light has-text-warning" href="{{ path('app_login') }}">
+                                        <i class="fas fa-sign-in-alt"></i>&nbsp;Connexion
+                                    </a>
+                                {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    <!-- Hero footer: will stick at the bottom -->
+    <div class="hero-foot">
+        <div class="box has-background-info">
+            <p class="title has-text-centered is-6"><span class="has-text-weight-bold">
+                {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+                    <i class="fas fa-user-tie"></i>&nbsp;
+                    {{ app.user.person.firstname }} {{ app.user.person.lastname }}</span> - 
+                        {% for role in app.user.userRoles %}
+                            {{ role.title }} {% if not loop.last %}, {% endif %}
+                            
+                        {% endfor %}
+                {% else %}
+                    </span> Veuillez vous connecter
+                {% endif %}
+            </p>
+            {% for label, messages in app.flashes %}
+                {% for message in messages %}
+                    <div class="notification has-text-centered has-text-weight-bold is-size-3 is-{{ label }}">
+                        <button class="delete"></button>
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endfor %}
+        </div>
+    </div>
+</section>

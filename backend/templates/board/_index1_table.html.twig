@@ -1,0 +1,43 @@
+<table class="table is-fullwidth is-hoverable is-striped">
+    <thead>
+        <tr>
+            <th>Date d'inscription&nbsp;
+                {% include 'board/_order_buttons.html.twig' with {'index': '1', 'table': 'c', 'field' : 'createdAt'} %}
+            </th>
+            <th>Nom&nbsp;
+                {% include 'board/_order_buttons.html.twig' with {'index': '1', 'table': 'c', 'field' : 'name'} %}
+            </th>
+            <th>Description&nbsp;
+                {% include 'board/_order_buttons.html.twig' with {'index': '1', 'table': 'c', 'field' : 'description'} %}
+            </th>
+            <th>Image</th>
+            <th>Commercial</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for company in orphanCompanies %}
+            <tr>
+                <td>{{ company.createdAt|date("d/m/Y") }}</td>
+                <td>   
+                    <a class="has-text-weight-bold" href="{{ path('company_show', {'id': company.id}) }}">{{ company.name }}</a>
+                </td>
+                <td>{{ company.description|truncate(30) }}</td>
+                <td>
+                    <figure class="image is-48x48">
+                        <img src="{{ company.picture ?: "https://stickeramoi.com/3777-large_default/autocollant-point-interrogation-muraux.jpg" }}">
+                    </figure>
+                </td>
+                <td>
+                    {% if is_granted('ROLE_SALESMGR') %}
+                        {% include 'partial/_add_user_modal.html.twig' %}
+                    {% else %}
+                        <button type="submit" class="button is-danger"><i class="fas fa-shield-alt"></i></button> 
+                    {% endif %}
+                </td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+
+

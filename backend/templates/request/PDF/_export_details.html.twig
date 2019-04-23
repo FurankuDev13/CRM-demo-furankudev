@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html class="has-navbar-fixed-top">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Cerberus CRM - Beer o'Clock</title>
+        {# FICHIER CSS Bulma #}
+        <link href="{{ asset('css/bulmaswatch.min.css') }}" rel="stylesheet">
+        {# FICHIER FONTAWESOME #}
+        <script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
+        {# Bloc pour FICHIERS CSS Custom #}
+    </head>
+    <body>
+        <header>
+            <a class="navbar-item" href="{{ path('board_index')}}">
+                <img src="{{ asset('images/cerberus_logo.png') }}" alt="CerberusCRM">
+                <h1 class="title is-3 has-text-white">&nbsp; Cerberus CRM</h1>
+            </a>
+        </header>
+
+        <main>
+            {# Bloc CONTENU #}
+            <div class="container">
+                <table class="table is-fullwidth is-hoverable is-striped">
+                    {% if details %}
+                        <thead>
+                            <tr>
+                                <th>Référence</th>
+                                <th>Produit</th>
+                                <th>Description</th>
+                                <th>Tarif</th>
+                                <th>Image</th>
+                                <th>Quantité</th>
+                                <th>Commentaire</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for detail in details %}
+                                <tr>
+                                    <td>{{ detail.product.reference }}</td>
+                                    <td>   
+                                        <a class="has-text-weight-bold" href="{{ path('product_show', {'id': detail.product.id}) }}">{{ detail.product.name }}</a>
+                                    </td>
+                                    <td>{{ detail.product.description|truncate(30) }}</td>
+                                    <td>{{ detail.product.listPrice|number_format(2, ',', ' ') }}&nbsp;€</td>
+                                    <td>
+                                        <figure class="image is-24x24">
+                                            <img src="{{ detail.product.picture ?: "https://stickeramoi.com/3777-large_default/autocollant-point-interrogation-muraux.jpg" }}">
+                                        </figure>
+                                    </td>
+                                    <td>{{ detail.quantity }}</td>
+                                    <td>{{ detail.commentField }}</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    {% else %}
+                        <p class="has-text-weight-bold has-text-centered has-text-warning is-size-4">Aucune donnée à afficher</tr>
+                    {% endif %}
+                </table>
+            </div>
+        </main>
+    </body>
+</html>
+
